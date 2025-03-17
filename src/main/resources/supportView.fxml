@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.ImageInput?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<StackPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.controller.SupportViewController">
+   <children>
+      <AnchorPane>
+         <children>
+            <HBox fx:id="vboxSlogan" alignment="TOP_CENTER" prefWidth="800.0" styleClass="slogan" stylesheets="@Styles.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <HBox prefWidth="200.0">
+                     <children>
+                        <VBox prefHeight="87.0" prefWidth="189.0">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#displayConfigurationView" prefHeight="49.0" prefWidth="52.0" styleClass="configuration" stylesheets="@Styles.css" text="Button">
+                                 <effect>
+                                    <ImageInput>
+                                       <source>
+                                          <Image url="file:/D:/Proyectos/Proyectos%20Java/AlmacenMipyme/src/main/resources/com/marcosoft/almacenfx/images/gears.png" />
+                                       </source>
+                                    </ImageInput>
+                                 </effect>
+                                 <VBox.margin>
+                                    <Insets left="5.0" top="5.0" />
+                                 </VBox.margin>
+                              </Button>
+                              <Label text="Marco A. Romero Albanez" textFill="#323131" wrapText="true">
+                                 <font>
+                                    <Font name="SansSerif Bold Italic" size="14.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="5.0" top="15.0" />
+                                 </VBox.margin>
+                              </Label>
+                           </children>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="87.0" prefWidth="432.0" styleClass="title" stylesheets="@Styles.css" text="Soporte" textFill="WHITE">
+                     <font>
+                        <Font name="Constantia Bold Italic" size="60.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Label>
+                  <HBox alignment="TOP_RIGHT" prefWidth="200.0">
+                     <children>
+                        <VBox alignment="TOP_CENTER" onMouseClicked="#licenseInformation" prefHeight="87.0" prefWidth="141.0" styleClass="menuIndex" stylesheets="@Styles.css">
+                           <children>
+                              <Label text="Renovar Licencia">
+                                 <font>
+                                    <Font name="SansSerif Bold" size="16.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets right="5.0" top="20.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+                                 <children>
+                                    <Label text="30 Días" textFill="#38ff01">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets right="5.0" />
+                                 </VBox.margin>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+               <effect>
+                  <DropShadow />
+               </effect>
+            </HBox>
+            <VBox alignment="TOP_CENTER" prefHeight="500.0" styleClass="index" stylesheets="@Styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="88.0">
+               <children>
+                  <Button ellipsisString="" mnemonicParsing="false" onAction="#switchToExistency" prefWidth="127.0" styleClass="btnIndex" stylesheets="@Styles.css" text="Existencias">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#switchToRegistry" styleClass="btnIndex" stylesheets="@Styles.css" text="Registros">
+                     <font>
+                        <Font name="System Bold" size="17.0" />
+                     </font>
+                  </Button>
+                  <Button disable="true" mnemonicParsing="false" styleClass="btnIndex" stylesheets="@Styles.css" text="Soporte">
+                     <font>
+                        <Font name="System Bold" size="17.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </Button>
+               </children>
+            </VBox>
+            <Label fx:id="txtWelcome" alignment="TOP_CENTER" layoutX="159.0" layoutY="181.0" prefHeight="386.0" prefWidth="361.0" stylesheets="@Styles.css" text="text test 1234 JGH" textAlignment="CENTER" wrapText="true" AnchorPane.leftAnchor="150.0">
+               <font>
+                  <Font name="Constantia" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="258.0" layoutY="132.0" text="Bienvenido" AnchorPane.leftAnchor="250.0">
+               <font>
+                  <Font name="Constantia Bold" size="30.0" />
+               </font>
+            </Label>
+            <VBox alignment="TOP_CENTER" layoutX="546.0" layoutY="273.0" prefHeight="130.0" prefWidth="245.0" spacing="5.0" AnchorPane.rightAnchor="22.0" AnchorPane.topAnchor="273.0">
+               <children>
+                  <Label text="Soporte" underline="true">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <HBox alignment="CENTER_LEFT">
+                     <children>
+                        <ImageView fitHeight="28.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/whatsapp.png" />
+                           </image>
+                        </ImageView>
+                        <Label text="+53 5550 5961">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT">
+                     <children>
+                        <ImageView fitHeight="28.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/Linkedin.png" />
+                           </image>
+                        </ImageView>
+                        <Label accessibleRole="HYPERLINK" text="Marco Antonio Romero Albanez">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT">
+                     <children>
+                        <ImageView fitHeight="32.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/facebook.png" />
+                           </image>
+                        </ImageView>
+                        <Label text="Marcus12 (Romero´s Tech Solutions)">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <ImageView fitHeight="166.0" fitWidth="245.0" layoutX="538.0" layoutY="98.0" pickOnBounds="true" preserveRatio="true" styleClass="logoImage">
+               <image>
+                  <Image url="@images/RTS_logo.png" />
+               </image>
+               <effect>
+                  <DropShadow />
+               </effect>
+            </ImageView>
+            <Label fx:id="versionLabel" layoutX="678.0" layoutY="559.0" text="Version: 5.0.0.0" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="30.0" />
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>

@@ -1,0 +1,159 @@
+2025-03-17 00:52:12.486698-04:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "\000d\000a    create table [*]user (\000d\000a        user_id bigint not null,\000d\000a        name varchar(25) not null,\000d\000a        password varchar(255) not null,\000d\000a        primary key (user_id)\000d\000a    )"; se esperaba "identifier"
+Syntax error in SQL statement "\000d\000a    create table [*]user (\000d\000a        user_id bigint not null,\000d\000a        name varchar(25) not null,\000d\000a        password varchar(255) not null,\000d\000a        primary key (user_id)\000d\000a    )"; expected "identifier"; SQL statement:
+
+    create table user (
+        user_id bigint not null,
+        name varchar(25) not null,
+        password varchar(255) not null,
+        primary key (user_id)
+    ) [42001-232]
+2025-03-17 00:52:25.835913-04:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "\000d\000a    create table [*]user (\000d\000a        user_id bigint not null,\000d\000a        name varchar(25) not null,\000d\000a        password varchar(255) not null,\000d\000a        primary key (user_id)\000d\000a    )"; se esperaba "identifier"
+Syntax error in SQL statement "\000d\000a    create table [*]user (\000d\000a        user_id bigint not null,\000d\000a        name varchar(25) not null,\000d\000a        password varchar(255) not null,\000d\000a        primary key (user_id)\000d\000a    )"; expected "identifier"; SQL statement:
+
+    create table user (
+        user_id bigint not null,
+        name varchar(25) not null,
+        password varchar(255) not null,
+        primary key (user_id)
+    ) [42001-232]
+2025-03-17 00:54:22.763718-04:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "\000d\000a    create table [*]user (\000d\000a        user_id bigint not null,\000d\000a        name varchar(25) not null,\000d\000a        password varchar(255) not null,\000d\000a        primary key (user_id)\000d\000a    )"; se esperaba "identifier"
+Syntax error in SQL statement "\000d\000a    create table [*]user (\000d\000a        user_id bigint not null,\000d\000a        name varchar(25) not null,\000d\000a        password varchar(255) not null,\000d\000a        primary key (user_id)\000d\000a    )"; expected "identifier"; SQL statement:
+
+    create table user (
+        user_id bigint not null,
+        name varchar(25) not null,
+        password varchar(255) not null,
+        primary key (user_id)
+    ) [42001-232]
+2025-03-17 15:53:00 database: flush
+org.h2.message.DbException: Error General : "java.lang.IllegalStateException: The write format 3 is larger than the supported format 1, and the file was not opened in read-only mode [1.4.199/5]"
+General error: "java.lang.IllegalStateException: The write format 3 is larger than the supported format 1, and the file was not opened in read-only mode [1.4.199/5]" [50000-199]
+	at org.h2.message.DbException.get(DbException.java:194)
+	at org.h2.message.DbException.convert(DbException.java:347)
+	at org.h2.mvstore.db.MVTableEngine$1.uncaughtException(MVTableEngine.java:90)
+	at org.h2.mvstore.MVStore.handleException(MVStore.java:2787)
+	at org.h2.mvstore.MVStore.panic(MVStore.java:441)
+	at org.h2.mvstore.MVStore.<init>(MVStore.java:404)
+	at org.h2.mvstore.MVStore$Builder.open(MVStore.java:3343)
+	at org.h2.mvstore.db.MVTableEngine$Store.open(MVTableEngine.java:162)
+	at org.h2.mvstore.db.MVTableEngine.init(MVTableEngine.java:95)
+	at org.h2.engine.Database.getPageStore(Database.java:2739)
+	at org.h2.engine.Database.open(Database.java:769)
+	at org.h2.engine.Database.openDatabase(Database.java:319)
+	at org.h2.engine.Database.<init>(Database.java:313)
+	at org.h2.engine.Engine.openSession(Engine.java:69)
+	at org.h2.engine.Engine.openSession(Engine.java:201)
+	at org.h2.engine.Engine.createSessionAndValidate(Engine.java:178)
+	at org.h2.engine.Engine.createSession(Engine.java:161)
+	at org.h2.engine.Engine.createSession(Engine.java:31)
+	at org.h2.engine.SessionRemote.connectEmbeddedOrServer(SessionRemote.java:336)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:169)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:148)
+	at org.h2.Driver.connect(Driver.java:69)
+	at org.jkiss.dbeaver.model.impl.jdbc.JDBCConnectionOpener.run(JDBCConnectionOpener.java:109)
+	at org.jkiss.dbeaver.model.impl.jdbc.JDBCConnectionOpener.run(JDBCConnectionOpener.java:83)
+	at org.jkiss.dbeaver.model.impl.jdbc.JDBCDataSource.openConnection(JDBCDataSource.java:214)
+	at org.jkiss.dbeaver.model.impl.jdbc.JDBCDataSource.openConnection(JDBCDataSource.java:133)
+	at org.jkiss.dbeaver.ext.generic.model.GenericDataSource.openConnection(GenericDataSource.java:160)
+	at org.jkiss.dbeaver.ext.h2.model.H2DataSource.openConnection(H2DataSource.java:74)
+	at org.jkiss.dbeaver.model.impl.jdbc.JDBCExecutionContext.connect(JDBCExecutionContext.java:124)
+	at org.jkiss.dbeaver.model.impl.jdbc.JDBCRemoteInstance.initializeMainContext(JDBCRemoteInstance.java:106)
+	at org.jkiss.dbeaver.model.impl.jdbc.JDBCRemoteInstance.<init>(JDBCRemoteInstance.java:61)
+	at org.jkiss.dbeaver.model.impl.jdbc.JDBCDataSource.initializeRemoteInstance(JDBCDataSource.java:125)
+	at org.jkiss.dbeaver.ext.generic.model.GenericDataSource.<init>(GenericDataSource.java:125)
+	at org.jkiss.dbeaver.ext.h2.model.H2DataSource.<init>(H2DataSource.java:43)
+	at org.jkiss.dbeaver.ext.h2.model.H2MetaModel.createDataSourceImpl(H2MetaModel.java:56)
+	at org.jkiss.dbeaver.ext.generic.GenericDataSourceProvider.openDataSource(GenericDataSourceProvider.java:57)
+	at org.jkiss.dbeaver.registry.DataSourceDescriptor.openDataSource(DataSourceDescriptor.java:1417)
+	at org.jkiss.dbeaver.registry.DataSourceDescriptor.connect0(DataSourceDescriptor.java:1280)
+	at org.jkiss.dbeaver.registry.DataSourceDescriptor.connect(DataSourceDescriptor.java:1070)
+	at org.jkiss.dbeaver.runtime.jobs.ConnectJob.run(ConnectJob.java:78)
+	at org.jkiss.dbeaver.runtime.jobs.ConnectJob.runSync(ConnectJob.java:109)
+	at org.jkiss.dbeaver.ui.actions.datasource.DataSourceHandler.connectToDataSource(DataSourceHandler.java:123)
+	at org.jkiss.dbeaver.ui.actions.datasource.UIServiceConnectionsImpl.initConnection(UIServiceConnectionsImpl.java:87)
+	at org.jkiss.dbeaver.model.DBUtils.initDataSource(DBUtils.java:2461)
+	at org.jkiss.dbeaver.model.navigator.DBNDataSource.initializeNode(DBNDataSource.java:159)
+	at org.jkiss.dbeaver.model.navigator.DBNDatabaseNode.getChildren(DBNDatabaseNode.java:226)
+	at org.jkiss.dbeaver.model.navigator.DBNDatabaseNode.getChildren(DBNDatabaseNode.java:1)
+	at org.jkiss.dbeaver.model.navigator.DBNUtils.getNodeChildrenFiltered(DBNUtils.java:92)
+	at org.jkiss.dbeaver.ui.navigator.database.load.TreeLoadService.evaluate(TreeLoadService.java:49)
+	at org.jkiss.dbeaver.ui.navigator.database.load.TreeLoadService.evaluate(TreeLoadService.java:1)
+	at org.jkiss.dbeaver.ui.LoadingJob.run(LoadingJob.java:88)
+	at org.jkiss.dbeaver.model.runtime.AbstractJob.run(AbstractJob.java:119)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientException: Error General : "java.lang.IllegalStateException: The write format 3 is larger than the supported format 1, and the file was not opened in read-only mode [1.4.199/5]"
+General error: "java.lang.IllegalStateException: The write format 3 is larger than the supported format 1, and the file was not opened in read-only mode [1.4.199/5]" [50000-199]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:502)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:427)
+	... 53 more
+Caused by: java.lang.IllegalStateException: The write format 3 is larger than the supported format 1, and the file was not opened in read-only mode [1.4.199/5]
+	at org.h2.mvstore.DataUtils.newIllegalStateException(DataUtils.java:883)
+	at org.h2.mvstore.MVStore.readStoreHeader(MVStore.java:705)
+	at org.h2.mvstore.MVStore.<init>(MVStore.java:401)
+	... 47 more
+2025-03-17 15:53:00 database: opening D:/Proyectos/Proyectos Spring/storageSoftware/data/StorageDatabase
+org.h2.message.DbException: Archivo corrupto mientras se leía el registro: null. Solución Posible: use la herramienta de recuperación (recovery tool)
+File corrupted while reading record: null. Possible solution: use the recovery tool [90030-199]
+	at org.h2.message.DbException.get(DbException.java:194)
+	at org.h2.mvstore.db.MVTableEngine$Store.convertIllegalStateException(MVTableEngine.java:205)
+	at org.h2.mvstore.db.MVTableEngine$Store.open(MVTableEngine.java:173)
+	at org.h2.mvstore.db.MVTableEngine.init(MVTableEngine.java:95)
+	at org.h2.engine.Database.getPageStore(Database.java:2739)
+	at org.h2.engine.Database.open(Database.java:769)
+	at org.h2.engine.Database.openDatabase(Database.java:319)
+	at org.h2.engine.Database.<init>(Database.java:313)
+	at org.h2.engine.Engine.openSession(Engine.java:69)
+	at org.h2.engine.Engine.openSession(Engine.java:201)
+	at org.h2.engine.Engine.createSessionAndValidate(Engine.java:178)
+	at org.h2.engine.Engine.createSession(Engine.java:161)
+	at org.h2.engine.Engine.createSession(Engine.java:31)
+	at org.h2.engine.SessionRemote.connectEmbeddedOrServer(SessionRemote.java:336)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:169)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:148)
+	at org.h2.Driver.connect(Driver.java:69)
+	at org.jkiss.dbeaver.model.impl.jdbc.JDBCConnectionOpener.run(JDBCConnectionOpener.java:109)
+	at org.jkiss.dbeaver.model.impl.jdbc.JDBCConnectionOpener.run(JDBCConnectionOpener.java:83)
+	at org.jkiss.dbeaver.model.impl.jdbc.JDBCDataSource.openConnection(JDBCDataSource.java:214)
+	at org.jkiss.dbeaver.model.impl.jdbc.JDBCDataSource.openConnection(JDBCDataSource.java:133)
+	at org.jkiss.dbeaver.ext.generic.model.GenericDataSource.openConnection(GenericDataSource.java:160)
+	at org.jkiss.dbeaver.ext.h2.model.H2DataSource.openConnection(H2DataSource.java:74)
+	at org.jkiss.dbeaver.model.impl.jdbc.JDBCExecutionContext.connect(JDBCExecutionContext.java:124)
+	at org.jkiss.dbeaver.model.impl.jdbc.JDBCRemoteInstance.initializeMainContext(JDBCRemoteInstance.java:106)
+	at org.jkiss.dbeaver.model.impl.jdbc.JDBCRemoteInstance.<init>(JDBCRemoteInstance.java:61)
+	at org.jkiss.dbeaver.model.impl.jdbc.JDBCDataSource.initializeRemoteInstance(JDBCDataSource.java:125)
+	at org.jkiss.dbeaver.ext.generic.model.GenericDataSource.<init>(GenericDataSource.java:125)
+	at org.jkiss.dbeaver.ext.h2.model.H2DataSource.<init>(H2DataSource.java:43)
+	at org.jkiss.dbeaver.ext.h2.model.H2MetaModel.createDataSourceImpl(H2MetaModel.java:56)
+	at org.jkiss.dbeaver.ext.generic.GenericDataSourceProvider.openDataSource(GenericDataSourceProvider.java:57)
+	at org.jkiss.dbeaver.registry.DataSourceDescriptor.openDataSource(DataSourceDescriptor.java:1417)
+	at org.jkiss.dbeaver.registry.DataSourceDescriptor.connect0(DataSourceDescriptor.java:1280)
+	at org.jkiss.dbeaver.registry.DataSourceDescriptor.connect(DataSourceDescriptor.java:1070)
+	at org.jkiss.dbeaver.runtime.jobs.ConnectJob.run(ConnectJob.java:78)
+	at org.jkiss.dbeaver.runtime.jobs.ConnectJob.runSync(ConnectJob.java:109)
+	at org.jkiss.dbeaver.ui.actions.datasource.DataSourceHandler.connectToDataSource(DataSourceHandler.java:123)
+	at org.jkiss.dbeaver.ui.actions.datasource.UIServiceConnectionsImpl.initConnection(UIServiceConnectionsImpl.java:87)
+	at org.jkiss.dbeaver.model.DBUtils.initDataSource(DBUtils.java:2461)
+	at org.jkiss.dbeaver.model.navigator.DBNDataSource.initializeNode(DBNDataSource.java:159)
+	at org.jkiss.dbeaver.model.navigator.DBNDatabaseNode.getChildren(DBNDatabaseNode.java:226)
+	at org.jkiss.dbeaver.model.navigator.DBNDatabaseNode.getChildren(DBNDatabaseNode.java:1)
+	at org.jkiss.dbeaver.model.navigator.DBNUtils.getNodeChildrenFiltered(DBNUtils.java:92)
+	at org.jkiss.dbeaver.ui.navigator.database.load.TreeLoadService.evaluate(TreeLoadService.java:49)
+	at org.jkiss.dbeaver.ui.navigator.database.load.TreeLoadService.evaluate(TreeLoadService.java:1)
+	at org.jkiss.dbeaver.ui.LoadingJob.run(LoadingJob.java:88)
+	at org.jkiss.dbeaver.model.runtime.AbstractJob.run(AbstractJob.java:119)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientConnectionException: Archivo corrupto mientras se leía el registro: null. Solución Posible: use la herramienta de recuperación (recovery tool)
+File corrupted while reading record: null. Possible solution: use the recovery tool [90030-199]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:617)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:427)
+	... 48 more
+Caused by: java.lang.IllegalStateException: The write format 3 is larger than the supported format 1, and the file was not opened in read-only mode [1.4.199/5]
+	at org.h2.mvstore.DataUtils.newIllegalStateException(DataUtils.java:883)
+	at org.h2.mvstore.MVStore.readStoreHeader(MVStore.java:705)
+	at org.h2.mvstore.MVStore.<init>(MVStore.java:401)
+	at org.h2.mvstore.MVStore$Builder.open(MVStore.java:3343)
+	at org.h2.mvstore.db.MVTableEngine$Store.open(MVTableEngine.java:162)
+	... 45 more

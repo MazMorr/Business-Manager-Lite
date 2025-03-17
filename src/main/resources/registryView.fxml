@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.ImageInput?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<StackPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.controller.RegistryViewController">
+   <children>
+      <AnchorPane>
+         <children>
+            <HBox fx:id="vboxSlogan" alignment="TOP_CENTER" prefWidth="800.0" styleClass="slogan" stylesheets="@Styles.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <HBox prefWidth="200.0">
+                     <children>
+                        <VBox prefHeight="87.0" prefWidth="190.0">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#displayConfigurationView" prefHeight="49.0" prefWidth="52.0" styleClass="configuration" stylesheets="@Styles.css" text="Button">
+                                 <effect>
+                                    <ImageInput>
+                                       <source>
+                                          <Image url="file:/D:/Proyectos/Proyectos%20Java/AlmacenMipyme/src/main/resources/com/marcosoft/almacenfx/images/gears.png" />
+                                       </source>
+                                    </ImageInput>
+                                 </effect>
+                                 <VBox.margin>
+                                    <Insets left="5.0" top="5.0" />
+                                 </VBox.margin>
+                              </Button>
+                              <Label text="Marco A. Romero Albanez" textFill="#323131" wrapText="true">
+                                 <font>
+                                    <Font name="SansSerif Bold Italic" size="14.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets left="5.0" top="15.0" />
+                                 </VBox.margin>
+                              </Label>
+                           </children>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="87.0" prefWidth="432.0" styleClass="title" stylesheets="@Styles.css" text="Registros" textFill="WHITE">
+                     <font>
+                        <Font name="Constantia Bold Italic" size="60.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Label>
+                  <HBox alignment="TOP_RIGHT" prefWidth="200.0">
+                     <children>
+                        <VBox alignment="TOP_CENTER" prefHeight="87.0" prefWidth="150.0">
+                           <children>
+                              <Label text="Balance USD">
+                                 <font>
+                                    <Font name="SansSerif Bold" size="16.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets top="20.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+                                 <children>
+                                    <Label text="17000000" textFill="#38ff01">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="17000000" textFill="RED">
+                                       <font>
+                                          <Font name="SansSerif Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+               <effect>
+                  <DropShadow />
+               </effect>
+            </HBox>
+            <VBox alignment="TOP_CENTER" prefHeight="500.0" prefWidth="120.0" styleClass="index" stylesheets="@Styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="88.0">
+               <children>
+                  <Button ellipsisString="" mnemonicParsing="false" onAction="#switchToExistency" styleClass="btnIndex" stylesheets="@Styles.css" text="Existencias">
+                     <font>
+                        <Font name="System Bold" size="17.0" />
+                     </font>
+                  </Button>
+                  <Button disable="true" mnemonicParsing="false" styleClass="btnIndex" stylesheets="@Styles.css" text="Registros">
+                     <font>
+                        <Font name="System Bold" size="17.0" />
+                     </font>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#switchToSupport" styleClass="btnIndex" stylesheets="@Styles.css" text="Soporte">
+                     <font>
+                        <Font name="System Bold" size="17.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </Button>
+               </children>
+            </VBox>
+            <TableView fx:id="tblView" editable="true" layoutX="148.0" layoutY="93.0" onMouseClicked="#selected" prefHeight="397.0" prefWidth="669.0" styleClass="table" stylesheets="@Styles.css" tableMenuButtonVisible="true" AnchorPane.leftAnchor="125.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="90.0">
+              <columns>
+                <TableColumn prefWidth="113.0" style="-fx-background-color: #90b7f1; -fx-border-color: #eee;" text="Nombre" />
+                  <TableColumn prefWidth="90.0" style="-fx-background-color: #90b7f1; -fx-border-color: #eee;" text="Categoría" />
+                  <TableColumn prefWidth="61.0" style="-fx-background-color: #90b7f1; -fx-border-color: #eee;" text="Cantidad" />
+                  <TableColumn prefWidth="104.0" style="-fx-background-color: #90b7f1; -fx-border-color: #eee;" text="Fecha" />
+                  <TableColumn prefWidth="73.0" style="-fx-background-color: #90b7f1; -fx-border-color: #eee;" text="Precio" />
+                  <TableColumn prefWidth="71.0" style="-fx-background-color: #90b7f1; -fx-border-color: #eee;" text="Moneda" />
+                  <TableColumn prefWidth="90.0" style="-fx-background-color: #90b7f1; -fx-border-color: #eee;" text="buy/sell" />
+              </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TableView>
+            <Button layoutX="668.0" layoutY="490.0" mnemonicParsing="false" styleClass="btnExistency" stylesheets="@Styles.css" text="Eliminar Registro" AnchorPane.rightAnchor="5.0" />
+            <HBox layoutX="126.0" layoutY="490.0" prefHeight="40.0" prefWidth="171.0" AnchorPane.leftAnchor="125.0">
+               <children>
+                  <Label text="Filtrar por: ">
+                     <font>
+                        <Font name="SansSerif Regular" size="14.0" />
+                     </font>
+                  </Label>
+                  <Button mnemonicParsing="false" onAction="#displayRegistryfilterView" prefHeight="28.0" prefWidth="95.0" styleClass="btnExistency" stylesheets="@Styles.css" text="Filtros" textAlignment="CENTER" />
+               </children>
+            </HBox>
+            <MenuButton layoutX="414.0" layoutY="490.0" mnemonicParsing="false" styleClass="btnPrize" stylesheets="@Styles.css" text="Gráficos" textFill="#eeeeee" AnchorPane.leftAnchor="430.0">
+              <items>
+                <MenuItem mnemonicParsing="false" text="Action 1" />
+                <MenuItem mnemonicParsing="false" text="Action 2" />
+              </items>
+            </MenuButton>
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>

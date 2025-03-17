@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<StackPane styleClass="background" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.controller.SellViewController">
+   <children>
+      <AnchorPane prefHeight="240.0" prefWidth="490.0" stylesheets="@Styles.css">
+         <children>
+            <VBox alignment="TOP_CENTER" layoutX="359.0" layoutY="28.0" prefHeight="148.0" prefWidth="205.0" AnchorPane.rightAnchor="5.0">
+               <children>
+                  <HBox prefHeight="43.0" prefWidth="205.0" spacing="13.0">
+                     <children>
+                        <ProgressIndicator fx:id="progressSellProduct" prefHeight="59.0" prefWidth="34.0" progress="0.0" />
+                        <Button mnemonicParsing="false" onAction="#sellProduct" prefHeight="30.0" prefWidth="132.0" styleClass="btnExistency" stylesheets="@Styles.css" text="Vender Producto" textAlignment="CENTER" />
+                     </children>
+                  </HBox>
+                  <HBox>
+                     <children>
+                        <Label fx:id="txtDebugForm" alignment="TOP_CENTER" prefHeight="73.0" prefWidth="205.0" text="Rellene los campos" textAlignment="CENTER" wrapText="true" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font name="SansSerif Bold" size="12.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox layoutX="14.0" layoutY="14.0" prefHeight="225.0" prefWidth="258.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
+               <children>
+                  <Label text="Nombre de Producto Seleccionado:">
+                     <font>
+                        <Font name="SansSerif Bold" size="13.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="txtFieldName" editable="false" prefHeight="28.0" promptText="Nombre del Producto" styleClass="inputForm" stylesheets="@Styles.css">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </TextField>
+                  <HBox />
+                  <Label text="Cantidad Vendida:">
+                     <font>
+                        <Font name="SansSerif Bold" size="13.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="15.0" />
+                     </VBox.margin>
+                  </Label>
+                  <TextField fx:id="txtFieldAmount" onKeyTyped="#setTextChangedAmount" onMouseClicked="#setTextChangedAmount" onMouseEntered="#setTextChangedAmount" prefHeight="28.0" promptText="Cantidad" styleClass="inputForm" stylesheets="@Styles.css" />
+                  <Label text="Precio total de la Transacción:">
+                     <font>
+                        <Font name="SansSerif Bold" size="13.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="15.0" />
+                     </VBox.margin>
+                  </Label>
+                  <HBox>
+                     <children>
+                        <TextField fx:id="txtFieldPrice" onKeyTyped="#setTextChangedPrice" onMouseClicked="#setTextChangedPrice" onMouseEntered="#setTextChangedPrice" prefHeight="28.0" prefWidth="182.0" promptText="Precio" styleClass="inputForm" stylesheets="@Styles.css" />
+                        <MenuButton mnemonicParsing="false" prefHeight="28.0" prefWidth="109.0" styleClass="btnCreateAccount" stylesheets="@Styles.css" text="Moneda" textFill="#eeeeee">
+                           <items>
+                              <RadioMenuItem fx:id="rmiCUP" mnemonicParsing="false" selected="true" text="CUP">
+                                 <toggleGroup>
+                                    <ToggleGroup fx:id="coin" />
+                                 </toggleGroup>
+                              </RadioMenuItem>
+                              <RadioMenuItem fx:id="rmiUSD" mnemonicParsing="false" text="USD" toggleGroup="$coin" />
+                              <RadioMenuItem fx:id="rmiEUR" mnemonicParsing="false" text="EUR" toggleGroup="$coin" />
+                              <RadioMenuItem fx:id="rmiMLC" mnemonicParsing="false" text="MLC" toggleGroup="$coin" />
+                           </items>
+                           <font>
+                              <Font size="10.0" />
+                           </font>
+                        </MenuButton>
+                     </children>
+                  </HBox>
+                  <Label text="Fecha de Transacción:">
+                     <font>
+                        <Font name="SansSerif Bold" size="13.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="15.0" />
+                     </VBox.margin>
+                  </Label>
+                  <HBox>
+                     <children>
+                        <DatePicker fx:id="txtFieldDate" editable="false" prefHeight="28.0" prefWidth="274.0" promptText="Fecha de la transacción" showWeekNumbers="true" styleClass="inputForm" stylesheets="@Styles.css" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>

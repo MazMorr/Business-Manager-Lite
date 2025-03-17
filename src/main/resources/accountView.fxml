@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import java.net.URL?>
+<StackPane prefHeight="350.0" prefWidth="450.0" styleClass="index" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.controller.ClientController">
+   <children>
+      <AnchorPane id="AnchorPane" prefHeight="350.0" prefWidth="450.0" styleClass="index">
+          <stylesheets>
+              <URL value="@Styles.css" />
+          </stylesheets>
+         <children>
+            <HBox alignment="CENTER" layoutX="125.0" prefHeight="64.0" prefWidth="323.0" styleClass="slogan" stylesheets="@Styles.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Label styleClass="title" stylesheets="@Styles.css" text="Inicie Sesión">
+                     <font>
+                        <Font name="Constantia Bold Italic" size="40.0" />
+                     </font>
+                  </Label>
+               </children>
+               <effect>
+                  <DropShadow />
+               </effect>
+            </HBox>
+            <VBox layoutX="109.0" layoutY="88.0" prefHeight="248.0" prefWidth="232.0">
+               <children>
+                  <Label styleClass="txtUser" stylesheets="@Styles.css" text="Usuario:">
+                     <font>
+                        <Font name="System Italic" size="14.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="txtFieldName" promptText="Introduzca su nombre de usuario" />
+                  <Label styleClass="txtPassword" stylesheets="@Styles.css" text="Contraseña:">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <PasswordField fx:id="txtFieldPassword" promptText="Introduzca su contraseña" />
+                  <HBox alignment="CENTER" prefHeight="45.0" prefWidth="232.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#enterApplication" prefHeight="30.0" prefWidth="80.0" styleClass="btnCreateAccount" stylesheets="@Styles.css" text="Entrar">
+                           <font>
+                              <Font name="SansSerif Regular" size="14.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets bottom="10.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Hyperlink onAction="#switchToCreateAccount" text="¿No tienes cuenta? Crea una aquí" visited="true" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#switchToCreateAccount" prefHeight="30.0" prefWidth="120.0" styleClass="btnCreateAccount" stylesheets="@Styles.css" text="Crear Cuenta">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>

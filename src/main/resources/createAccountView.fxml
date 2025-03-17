@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import java.net.URL?>
+<StackPane prefHeight="350.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.controller.CreateAccountViewController">
+   <children>
+      <AnchorPane id="AnchorPane" prefHeight="350.0" prefWidth="450.0" styleClass="index">
+          <stylesheets>
+              <URL value="@Styles.css" />
+          </stylesheets>
+         <children>
+            <HBox alignment="CENTER" layoutX="5.0" prefHeight="64.0" prefWidth="323.0" styleClass="slogan" stylesheets="@Styles.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Label styleClass="title" stylesheets="@Styles.css" text="Regístrese">
+                     <font>
+                        <Font name="Constantia Bold Italic" size="40.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Label>
+               </children>
+               <effect>
+                  <DropShadow />
+               </effect>
+            </HBox>
+            <VBox layoutX="14.0" layoutY="71.0" prefHeight="246.0" prefWidth="248.0" AnchorPane.leftAnchor="15.0">
+               <children>
+                  <Label text="Nombre de Usuario:">
+                     <font>
+                        <Font name="System Italic" size="14.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="txtFieldUserName" onKeyTyped="#txtFieldTypingUserName" prefHeight="25.0" prefWidth="295.0" promptText="De 4-16 carácteres" />
+                  <Label text="Contraseña:">
+                     <font>
+                        <Font name="System Italic" size="14.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="4.0" />
+                     </VBox.margin>
+                  </Label>
+                  <TextField fx:id="txtFieldPassword" onKeyTyped="#txtFieldTypingPassword" promptText="De 4-10 carácteres " />
+                  <Label text="Confirmar Contraseña:">
+                     <font>
+                        <Font name="System Italic" size="14.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="4.0" />
+                     </VBox.margin></Label>
+                  <PasswordField fx:id="passFieldPasswordConfirmed" onKeyTyped="#txtFieldTypingPassword" promptText="De 4-10 carácteres" />
+                  <Label text="Compañía Asociada (OPCIONAL):">
+                     <font>
+                        <Font name="System Italic" size="14.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="4.0" />
+                     </VBox.margin>
+                  </Label>
+                  <TextField fx:id="txtFieldPassword1" onKeyTyped="#txtFieldTypingPassword" promptText="De 4-16 carácteres " />
+               </children>
+            </VBox>
+            <Label layoutX="28.0" layoutY="328.0" text="Advertencia: En caso de olvidar su contraseña perderá toda su información" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+               <font>
+                  <Font size="13.0" />
+               </font></Label>
+            <VBox layoutX="267.0" layoutY="82.0" prefHeight="200.0" prefWidth="154.0">
+               <children>
+                  <HBox alignment="TOP_CENTER" prefHeight="60.0" prefWidth="329.0">
+                     <children>
+                        <ProgressIndicator fx:id="percentageBar" prefHeight="36.0" prefWidth="42.0" progress="0.0">
+                           <HBox.margin>
+                              <Insets right="5.0" />
+                           </HBox.margin>
+                        </ProgressIndicator>
+                        <Button mnemonicParsing="false" onAction="#createAccount" styleClass="btnCreateAccount" stylesheets="@Styles.css" text="Crear Cuenta">
+                           <font>
+                              <Font name="System Bold Italic" size="14.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets right="15.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="8.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <Label fx:id="txtDebugForm" alignment="TOP_CENTER" prefHeight="132.0" prefWidth="154.0" text="Ingrese su nombre de usuario" textAlignment="CENTER" wrapText="true" VBox.vgrow="ALWAYS">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+            <Button layoutX="-17.0" layoutY="11.0" mnemonicParsing="false" onAction="#goBack" prefHeight="63.0" styleClass="btnGoBackCreateAccount" stylesheets="@Styles.css" text="&lt;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <font>
+                  <Font size="34.0" />
+               </font>
+            </Button>
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>
