@@ -3,9 +3,11 @@ package com.marcosoft.storageSoftware.service.impl;
 import com.marcosoft.storageSoftware.model.Client;
 import com.marcosoft.storageSoftware.repository.ClientRepository;
 import com.marcosoft.storageSoftware.service.ClientService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository clientRepository;

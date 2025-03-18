@@ -3,9 +3,11 @@ package com.marcosoft.storageSoftware.service.impl;
 import com.marcosoft.storageSoftware.model.TransactionType;
 import com.marcosoft.storageSoftware.repository.TransactionTypeRepository;
 import com.marcosoft.storageSoftware.service.TransactionTypeService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class TransactionTypeServiceImpl implements TransactionTypeService {
 
     private final TransactionTypeRepository transactionTypeRepository;

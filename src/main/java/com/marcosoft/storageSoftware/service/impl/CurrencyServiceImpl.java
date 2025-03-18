@@ -3,9 +3,11 @@ package com.marcosoft.storageSoftware.service.impl;
 import com.marcosoft.storageSoftware.model.Currency;
 import com.marcosoft.storageSoftware.repository.CurrencyRepository;
 import com.marcosoft.storageSoftware.service.CurrencyService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class CurrencyServiceImpl implements CurrencyService {
 
     private final CurrencyRepository currencyRepository;

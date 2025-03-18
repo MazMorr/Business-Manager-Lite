@@ -13,9 +13,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table(name="Configuration")
 public class Configuration {
+
     @Id
-    @OneToOne
-    @JoinColumn(name = "client_id")
+    private Long id;
+
+    @ManyToOne
     private Client client;
 
     @Column(name="dark_mode", unique = true)

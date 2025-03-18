@@ -4,9 +4,11 @@ import com.marcosoft.storageSoftware.model.Client;
 import com.marcosoft.storageSoftware.model.Configuration;
 import com.marcosoft.storageSoftware.repository.ConfigurationRepository;
 import com.marcosoft.storageSoftware.service.ConfigurationService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ConfigurationServiceImpl implements ConfigurationService {
 
     private final ConfigurationRepository configurationRepository;

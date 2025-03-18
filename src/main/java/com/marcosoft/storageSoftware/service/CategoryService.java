@@ -9,9 +9,12 @@ public interface CategoryService {
     List<Category> getAllCategories();
 
     Category getCategoryById(Long id);
+
     Category getCategoryByName(String name);
 
     Category saveCategory(Category category);
 
     void deleteCategoryById(Long id);
+
+    Category findOrCreateCategory(String categoryName);
 }

@@ -3,9 +3,11 @@ package com.marcosoft.storageSoftware.service.impl;
 import com.marcosoft.storageSoftware.model.Wallet;
 import com.marcosoft.storageSoftware.repository.WalletRepository;
 import com.marcosoft.storageSoftware.service.WalletService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class WalletServiceImpl implements WalletService {
 
     private final WalletRepository walletRepository;
