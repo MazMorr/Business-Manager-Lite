@@ -8,7 +8,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<StackPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.controller.ExistencyViewController">
+<StackPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.controller.StockViewController">
    <children>
       <AnchorPane>
          <children>
@@ -22,7 +22,7 @@
                                  <effect>
                                     <ImageInput>
                                        <source>
-                                          <Image url="file:/D:/Proyectos/Proyectos%20Java/AlmacenMipyme/src/main/resources/com/marcosoft/almacenfx/images/gears.png" />
+                                          <Image url="file:D:\Proyectos\Proyectos Spring\storageSoftware\src\main\resources\images\gears.png" />
                                        </source>
                                     </ImageInput>
                                  </effect>

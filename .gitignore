@@ -32,9 +32,3 @@ build/
 ### VS Code ###
 .vscode/
 !/src/main/resources/StorageDatabase.trace.db
-!/javafx-sdk-22.0.1/
-!/javafx-sdk-22.0.1/bin/
-!/javafx-sdk-22.0.1/legal/
-!/javafx-sdk-22.0.1/lib/
-!/javafx-sdk-22.0.1/src.zip
-!/javafx-sdk-22.0.1/lib/javafx-swt.jar

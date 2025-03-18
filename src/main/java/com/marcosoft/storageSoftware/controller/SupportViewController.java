@@ -36,7 +36,7 @@ public class SupportViewController {
 
     @FXML
     private void switchToExistency(ActionEvent event) throws IOException {
-        sceneSwitcher.setRoot(event, "/existencyView.fxml");
+        sceneSwitcher.setRoot(event, "/stockView.fxml");
         windowShowing.closeAllWindows();
     }
 

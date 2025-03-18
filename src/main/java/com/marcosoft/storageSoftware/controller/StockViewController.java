@@ -12,7 +12,7 @@ import javafx.scene.control.TableView;
 
 import java.io.IOException;
 
-public class ExistencyViewController  {
+public class StockViewController {
     
     @FXML Button btnFilter;
     @FXML TableView<Client> tblExistency;
@@ -21,7 +21,7 @@ public class ExistencyViewController  {
     private final WindowShowing windowShowing;
     private final SceneSwitcher sceneSwitcher;
 
-    public ExistencyViewController() {
+    public StockViewController() {
         windowShowing= new WindowShowing();
         sceneSwitcher= new SceneSwitcher();
     }
@@ -62,7 +62,7 @@ public class ExistencyViewController  {
     @FXML
     private void displayFilterView(ActionEvent event) throws IOException {
         String errorMessage= "Ya hay una ventana de filtros para existencias abierta";
-        String fxmlPath="/filterExistencyView.fxml";
+        String fxmlPath= "/filterStockView.fxml";
         int aux=2;
         windowShowing.displayAssistance(windowShowing.isFilterViewShowing(), fxmlPath, errorMessage, aux);
     }

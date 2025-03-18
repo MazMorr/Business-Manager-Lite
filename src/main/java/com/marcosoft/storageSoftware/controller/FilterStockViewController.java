@@ -14,7 +14,7 @@ import java.util.ResourceBundle;
  *
  * @author MazMorr
  */
-public class FilterExistencyViewController implements Initializable {
+public class FilterStockViewController implements Initializable {
 
         
     @FXML

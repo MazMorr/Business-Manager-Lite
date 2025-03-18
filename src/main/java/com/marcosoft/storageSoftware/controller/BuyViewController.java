@@ -1,15 +1,17 @@
 package com.marcosoft.storageSoftware.controller;
 
 import com.marcosoft.storageSoftware.model.*;
-import com.marcosoft.storageSoftware.repository.CategoryRepository;
-import com.marcosoft.storageSoftware.repository.ProductRepository;
-import com.marcosoft.storageSoftware.repository.TransactionRepository;
+import com.marcosoft.storageSoftware.service.CategoryService;
+import com.marcosoft.storageSoftware.service.ProductService;
+import com.marcosoft.storageSoftware.service.TransactionService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
 import java.math.BigDecimal;
 import java.net.URL;
@@ -19,8 +21,10 @@ import java.util.ResourceBundle;
 /**
  * Controller class for handling the Buy View.
  */
+@Controller
 public class BuyViewController implements Initializable {
 
+    //ID from the fxml objects
     @FXML
     private Label txtDebugForm;
     @FXML
@@ -34,33 +38,28 @@ public class BuyViewController implements Initializable {
     @FXML
     private ProgressIndicator percentageBar;
 
-    private final CategoryRepository categoryRepository;
-    private final TransactionRepository transactionRepository;
-    private final ProductRepository productRepository;
+    //Services
+    @Autowired
+    private ProductService productService;
+    @Autowired
+    private CategoryService categoryService;
+    @Autowired
+    private TransactionService transactionService;
 
-    private double percentageDate = 0, percentageName = 0, percentageSubCategory = 0, percentagePrize = 0, percentageAmount = 0;
-    private boolean dateIsSetted = false, nameIsSetted = false, subCategoryIsSetted = false, prizeIsSetted = false, amountIsSetted = false;
-
-    /**
-     * Constructor for BuyViewController.
-     *
-     * @param categoryRepository the category repository
-     * @param transactionRepository the transaction repository
-     * @param productRepository the product repository
-     */
-    public BuyViewController(CategoryRepository categoryRepository, TransactionRepository transactionRepository, ProductRepository productRepository) {
-        this.categoryRepository = categoryRepository;
-        this.transactionRepository = transactionRepository;
-        this.productRepository = productRepository;
-    }
+    //Variables for the logic
+    private double percentageDate = 0, percentageName = 0, percentageSubCategory = 0,
+            percentagePrize = 0, percentageAmount = 0;
+    private boolean dateIsSet = false, nameIsSet = false, subCategoryIsSet = false,
+            priceIsSet = false, amountIsSet = false;
 
     /**
      * Handles changes in the product name text field.
      */
     @FXML
     private void setTextChangedName() {
-        updateProgress(txtFieldName.getLength() != 0, "Nombre de su producto.", percentageName, nameIsSetted);
-        nameIsSetted = txtFieldName.getLength() != 0;
+        updateProgress(txtFieldName.getLength() != 0, "Nombre de su producto.",
+                percentageName, nameIsSet);
+        nameIsSet = txtFieldName.getLength() != 0;
     }
 
     /**
@@ -68,8 +67,9 @@ public class BuyViewController implements Initializable {
      */
     @FXML
     private void setTextChangedSubCategory() {
-        updateProgress(txtFieldSubCategory.getLength() != 0, "Categoría del producto.", percentageSubCategory, subCategoryIsSetted);
-        subCategoryIsSetted = txtFieldSubCategory.getLength() != 0;
+        updateProgress(txtFieldSubCategory.getLength() != 0, "Categoría del producto.",
+                percentageSubCategory, subCategoryIsSet);
+        subCategoryIsSet = txtFieldSubCategory.getLength() != 0;
     }
 
     /**
@@ -81,8 +81,9 @@ public class BuyViewController implements Initializable {
             txtDebugForm.setText("Solo se permiten números decimales.");
             txtFieldPrize.setText(txtFieldPrize.getText().replaceAll("[^\\d.]", ""));
         }
-        updateProgress(txtFieldPrize.getLength() != 0, "Recuerde seleccionar el tipo de moneda en el botón: Moneda.", percentagePrize, prizeIsSetted);
-        prizeIsSetted = txtFieldPrize.getLength() != 0;
+        updateProgress(txtFieldPrize.getLength() != 0,
+                "Recuerde seleccionar el tipo de moneda en el botón: Moneda.", percentagePrize, priceIsSet);
+        priceIsSet = txtFieldPrize.getLength() != 0;
     }
 
     /**
@@ -94,8 +95,9 @@ public class BuyViewController implements Initializable {
             txtDebugForm.setText("Solo se permiten números enteros.");
             txtFieldAmount.setText(txtFieldAmount.getText().replaceAll("[^\\d]", ""));
         }
-        updateProgress(txtFieldAmount.getLength() != 0, "Cantidad de ese mismo producto.", percentageAmount, amountIsSetted);
-        amountIsSetted = txtFieldAmount.getLength() != 0;
+        updateProgress(txtFieldAmount.getLength() != 0, "Cantidad de ese mismo producto.",
+                percentageAmount, amountIsSet);
+        amountIsSet = txtFieldAmount.getLength() != 0;
     }
 
     /**
@@ -103,17 +105,17 @@ public class BuyViewController implements Initializable {
      */
     @FXML
     private void setTextClickedDate() {
-        updateProgress(txtFieldDate.getValue() != null, "Seleccione la fecha en el botón de la derecha.", percentageDate, dateIsSetted);
-        dateIsSetted = txtFieldDate.getValue() != null;
+        updateProgress(txtFieldDate.getValue() != null, "Seleccione la fecha en el botón de la derecha.", percentageDate, dateIsSet);
+        dateIsSet = txtFieldDate.getValue() != null;
     }
 
     /**
      * Updates the progress indicator based on the provided conditions.
      *
-     * @param condition the condition to check
-     * @param debugText the debug text to display
+     * @param condition  the condition to check
+     * @param debugText  the debug text to display
      * @param percentage the percentage to update
-     * @param isSetted the flag indicating if the condition is set
+     * @param isSetted   the flag indicating if the condition is set
      */
     private void updateProgress(boolean condition, String debugText, double percentage, boolean isSetted) {
         txtDebugForm.setText(debugText);
@@ -147,10 +149,10 @@ public class BuyViewController implements Initializable {
         percentageSubCategory = 0;
         percentagePrize = 0;
         percentageAmount = 0;
-        nameIsSetted = false;
-        subCategoryIsSetted = false;
-        prizeIsSetted = false;
-        amountIsSetted = false;
+        nameIsSet = false;
+        subCategoryIsSet = false;
+        priceIsSet = false;
+        amountIsSet = false;
         percentageBar.setProgress(percentageName + percentageDate + percentageSubCategory + percentageAmount + percentagePrize);
     }
 
@@ -185,9 +187,9 @@ public class BuyViewController implements Initializable {
             Product product = new Product(null, productName, category);
             Transaction transaction = createTransaction(product, price, quantity, date);
 
-            categoryRepository.save(category);
-            productRepository.save(product);
-            transactionRepository.save(transaction);
+            categoryService.saveCategory(category);
+            productService.saveProduct(product);
+            transactionService.saveTransaction(transaction);
 
             clean();
             txtDebugForm.setText("Producto añadido exitosamente");
@@ -207,22 +209,22 @@ public class BuyViewController implements Initializable {
      * @return the found or created category
      */
     private Category findOrCreateCategory(String categoryName) {
-        Category existingCategory = categoryRepository.findByCategoryName(categoryName);
+        Category existingCategory = categoryService.getCategoryByName(categoryName);
         if (existingCategory != null) {
             return existingCategory;
         }
         Category newCategory = new Category(null, categoryName);
-        categoryRepository.save(newCategory);
+        categoryService.saveCategory(newCategory);
         return newCategory;
     }
 
     /**
      * Creates a new transaction based on the provided product, price, quantity, and date.
      *
-     * @param product the product
-     * @param price the price
+     * @param product  the product
+     * @param price    the price
      * @param quantity the quantity
-     * @param date the date
+     * @param date     the date
      * @return the created transaction
      */
     private Transaction createTransaction(Product product, BigDecimal price, int quantity, LocalDate date) {
@@ -311,7 +313,7 @@ public class BuyViewController implements Initializable {
      * Toggles the visibility of the provided menu items.
      *
      * @param visible the visibility state to set
-     * @param items the menu items to toggle
+     * @param items   the menu items to toggle
      */
     private void toggleVisibility(boolean visible, MenuItem... items) {
         for (MenuItem item : items) {
@@ -326,8 +328,8 @@ public class BuyViewController implements Initializable {
      */
     public void setSubcategory(String subcategory) {
         txtFieldSubCategory.setText(subcategory);
-        if (!subCategoryIsSetted) {
-            subCategoryIsSetted = true;
+        if (!subCategoryIsSet) {
+            subCategoryIsSet = true;
             percentageSubCategory += 0.2;
             percentageBar.setProgress(percentageName + percentageDate + percentageSubCategory + percentageAmount + percentagePrize);
         }
@@ -385,14 +387,14 @@ public class BuyViewController implements Initializable {
      * Initializes the controller class.
      *
      * @param url the location used to resolve relative paths for the root object, or null if the location is not known
-     * @param rb the resources used to localize the root object, or null if the root object was not localized
+     * @param rb  the resources used to localize the root object, or null if the root object was not localized
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         txtFieldDate.setValue(LocalDate.now());
         percentageDate += 0.2;
         percentageBar.setProgress(percentageName + percentageDate + percentageSubCategory + percentageAmount + percentagePrize);
-        dateIsSetted = true;
+        dateIsSet = true;
     }
 
     /**
