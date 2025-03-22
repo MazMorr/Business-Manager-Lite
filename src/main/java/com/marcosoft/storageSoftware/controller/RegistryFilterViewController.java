@@ -5,6 +5,7 @@
 package com.marcosoft.storageSoftware.controller;
 
 import javafx.fxml.Initializable;
+import org.springframework.stereotype.Controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -14,6 +15,7 @@ import java.util.ResourceBundle;
  *
  * @author Usuario
  */
+@Controller
 public class RegistryFilterViewController implements Initializable {
 
     /**

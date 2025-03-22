@@ -1,9 +1,7 @@
 package com.marcosoft.storageSoftware.controller;
 
 import com.marcosoft.storageSoftware.model.*;
-import com.marcosoft.storageSoftware.service.CategoryService;
-import com.marcosoft.storageSoftware.service.ProductService;
-import com.marcosoft.storageSoftware.service.TransactionService;
+import com.marcosoft.storageSoftware.repository.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -37,17 +35,21 @@ public class BuyViewController implements Initializable {
     @FXML
     private ProgressIndicator percentageBar;
 
-    @Autowired
-    private ProductService productService;
-    @Autowired
-    private CategoryService categoryService;
-    @Autowired
-    private TransactionService transactionService;
-
     private double percentageDate = 0, percentageName = 0, percentageSubCategory = 0,
             percentagePrize = 0, percentageAmount = 0;
     private boolean dateIsSet = false, nameIsSet = false, subCategoryIsSet = false,
             priceIsSet = false, amountIsSet = false;
+
+    @Autowired
+    private ProductRepository productRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
+    @Autowired
+    private ClientRepository clientRepository;
+    @Autowired
+    private TransactionTypeRepository transactionTypeRepository;
+    @Autowired
+    private TransactionRepository transactionRepository;
 
     @FXML
     private void setTextChangedName() {
@@ -142,13 +144,30 @@ public class BuyViewController implements Initializable {
                 return;
             }
 
+            //Assignations of attributes to the registry
             String productName = txtFieldName.getText();
             String categoryName = txtFieldSubCategory.getText();
             BigDecimal price = new BigDecimal(txtFieldPrice.getText());
-            int quantity = Integer.parseInt(txtFieldAmount.getText());
+            Integer stock = Integer.parseInt(txtFieldAmount.getText());
             LocalDate date = txtFieldDate.getValue();
+            Product product = productRepository.findByProductName(productName);
+            TransactionType transactionType = transactionTypeRepository.findByTransactionName("compra");
+            Client client = clientRepository.findByIsClientActive(true);
 
-            productService.addProduct(productName, categoryName, price, quantity, date, getSelectedCurrency());
+            if (product != null) {
+                stock += product.getQuantityInStorage();
+                productRepository.updateQuantityInStorageByProductName(stock, productName);
+                Transaction transaction = new Transaction(null, price, stock, date, getSelectedCurrency(),
+                        client, product, transactionType);
+                transactionRepository.save(transaction);
+            } else {
+                Product newProduct = new Product(null, productName,
+                        categoryRepository.findByCategoryName(categoryName), stock);
+                Transaction transaction = new Transaction(null, price, stock, date, getSelectedCurrency(),
+                        client, newProduct, transactionType);
+                productRepository.save(newProduct);
+                transactionRepository.save(transaction);
+            }
 
             clean();
             txtDebugForm.setText("Producto añadido exitosamente");

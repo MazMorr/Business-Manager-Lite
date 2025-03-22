@@ -18,39 +18,37 @@ import java.time.LocalDate;
 @Table(name = "Transaction")
 public class Transaction implements Serializable {
 
-    //****** Faltan los sequence generator *******
     //Attributes
     @Id
     @SequenceGenerator(name = "transaction_sequence", sequenceName = "transaction_sequence",
             initialValue = 1, allocationSize = 1
     )
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "transaction_sequence")
-    @Column(name = "id_transaction", nullable = false, unique = true)
+    @Column(name = "transaction_id", nullable = false, unique = true)
     private Long transactionId;
 
-    @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal price;
+    @Column(name = "transaction_price", nullable = false, precision = 10, scale = 2)
+    private BigDecimal transactionPrice;
 
-    @Column(nullable = false)
-    private Integer stock;
+    @Column(name = "transaction_stock", nullable = false)
+    private Integer transactionStock;
 
-    @Column(nullable = false)
-    private LocalDate date;
-
-    @ManyToOne
-    @JoinColumn(name = "id_moneda", nullable = false)
-    private Currency currency;
+    @Column(name = "transaction_date", nullable = false)
+    private LocalDate transactionDate;
 
     @ManyToOne
-    @JoinColumn(name = "id_client", nullable = false)
-    private Client idClient;
+    @JoinColumn(name = "moneda_id", nullable = false)
+    private Currency currencyId;
 
     @ManyToOne
-    @JoinColumn(name = "id_product", nullable = false)
-    private Product idProduct;
+    @JoinColumn(name = "client_id", nullable = false)
+    private Client clientId;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product productId;
 
     @ManyToOne
     @JoinColumn(name = "tipo_transaccion", nullable = false)
     private TransactionType transactionType;
-
 }

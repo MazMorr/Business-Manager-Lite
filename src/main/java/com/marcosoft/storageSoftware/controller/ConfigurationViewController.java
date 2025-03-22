@@ -8,6 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
 import java.net.URL;
@@ -18,6 +19,7 @@ import java.util.ResourceBundle;
  *
  * @author MazMorr
  */
+@Controller
 public class ConfigurationViewController implements Initializable {
     
     @FXML private Button btnAdjustAdjust;

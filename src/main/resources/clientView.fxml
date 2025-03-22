@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import java.net.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<?import java.net.URL?>
-<StackPane prefHeight="350.0" prefWidth="450.0" styleClass="index" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.controller.ClientController">
+
+<StackPane prefHeight="350.0" prefWidth="450.0" styleClass="index" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.controller.ClientViewController">
    <children>
       <AnchorPane id="AnchorPane" prefHeight="350.0" prefWidth="450.0" styleClass="index">
           <stylesheets>
@@ -57,18 +58,23 @@
                         <Insets top="5.0" />
                      </VBox.margin>
                   </HBox>
-                  <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0">
+                  <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Hyperlink onAction="#switchToCreateAccount" text="¿No tienes cuenta? Crea una aquí" visited="true" />
+                        <Label fx:id="txtDebugForm" alignment="TOP_CENTER" prefHeight="54.0" prefWidth="232.0" textAlignment="CENTER" wrapText="true" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#switchToCreateAccount" prefHeight="30.0" prefWidth="120.0" styleClass="btnCreateAccount" stylesheets="@Styles.css" text="Crear Cuenta">
+                        <Button mnemonicParsing="false" onAction="#switchToCreateClient" prefHeight="30.0" prefWidth="120.0" styleClass="btnCreateAccount" stylesheets="@Styles.css" text="Crear Cuenta">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>
                         </Button>
+                     </children>
+                  </HBox>
+                  <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Hyperlink onAction="#switchToCreateClient" text="¿No tienes cuenta? Crea una aquí" visited="true" />
                      </children>
                   </HBox>
                </children>
