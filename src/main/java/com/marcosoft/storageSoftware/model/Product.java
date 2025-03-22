@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 /**
  * @author MazMorr
@@ -20,7 +22,6 @@ import java.io.Serializable;
 @Table(name = "Producto")
 public class Product implements Serializable {
 
-    //****** Faltan los sequence generator *******
     //Atributes
     @Id
     @SequenceGenerator(name = "product_sequence", sequenceName = "product_sequence",
@@ -34,8 +35,9 @@ public class Product implements Serializable {
     private String productName;
 
     @ManyToOne
-    @JoinColumn(name = "id_category", nullable = false)
+    @JoinColumn(name = "category_id", nullable = false)
     private Category idCategory;
 
-
+    @Column(name="quantity", nullable = false)
+    private Integer quantityInStorage;
 }

@@ -18,7 +18,7 @@ public class SupportViewController {
     private Label txtWelcome, versionLabel;
     public boolean configurationShowing;
     @Setter
-    private ClientController accountController;
+    private ClientViewController accountController;
     private final WindowShowing windowShowing;
     private final SceneSwitcher sceneSwitcher;
 

@@ -25,4 +25,10 @@ public class Client {
 
     @Column(name = "password", nullable = false)
     private String clientPassword;
+
+    @Column(name="client_company")
+    private String clientCompany;
+
+    @Column(name="is_client_active", nullable = false)
+    private Boolean isClientActive;
 }

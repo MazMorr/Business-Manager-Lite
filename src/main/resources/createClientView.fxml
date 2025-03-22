@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <?import java.net.URL?>
-<StackPane prefHeight="350.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.controller.CreateAccountViewController">
+<StackPane prefHeight="350.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.controller.CreateClientViewController">
    <children>
       <AnchorPane id="AnchorPane" prefHeight="350.0" prefWidth="450.0" styleClass="index">
           <stylesheets>
@@ -61,7 +61,7 @@
                         <Insets top="4.0" />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="txtFieldPassword1" onKeyTyped="#txtFieldTypingPassword" promptText="De 4-16 carácteres " />
+                  <TextField fx:id="txtFieldCompany" onKeyTyped="#txtFieldTypingCompany" promptText="De 4-16 carácteres " />
                </children>
             </VBox>
             <Label layoutX="28.0" layoutY="328.0" text="Advertencia: En caso de olvidar su contraseña perderá toda su información" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
