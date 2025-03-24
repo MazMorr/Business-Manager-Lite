@@ -1,6 +1,6 @@
 package com.marcosoft.storageSoftware;
 
-import com.marcosoft.storageSoftware.logic.SpringFXMLLoader;
+import com.marcosoft.storageSoftware.util.SpringFXMLLoader;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;

@@ -1,4 +1,4 @@
-package com.marcosoft.storageSoftware.logic;
+package com.marcosoft.storageSoftware.util;
 
 import javafx.fxml.FXMLLoader;
 import org.springframework.context.ApplicationContext;

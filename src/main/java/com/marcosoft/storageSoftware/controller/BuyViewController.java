@@ -2,6 +2,7 @@ package com.marcosoft.storageSoftware.controller;
 
 import com.marcosoft.storageSoftware.model.*;
 import com.marcosoft.storageSoftware.repository.*;
+import com.marcosoft.storageSoftware.service.impl.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -41,15 +42,15 @@ public class BuyViewController implements Initializable {
             priceIsSet = false, amountIsSet = false;
 
     @Autowired
-    private ProductRepository productRepository;
+    ProductServiceImpl productServiceImpl;
     @Autowired
-    private CategoryRepository categoryRepository;
+    CategoryServiceImpl categoryServiceImpl;
     @Autowired
-    private ClientRepository clientRepository;
+    ClientServiceImpl clientServiceImpl;
     @Autowired
-    private TransactionTypeRepository transactionTypeRepository;
+    TransactionTypeServiceImpl transactionTypeServiceImpl;
     @Autowired
-    private TransactionRepository transactionRepository;
+    TransactionServiceImpl transactionServiceImpl;
 
     @FXML
     private void setTextChangedName() {
@@ -150,23 +151,23 @@ public class BuyViewController implements Initializable {
             BigDecimal price = new BigDecimal(txtFieldPrice.getText());
             Integer stock = Integer.parseInt(txtFieldAmount.getText());
             LocalDate date = txtFieldDate.getValue();
-            Product product = productRepository.findByProductName(productName);
-            TransactionType transactionType = transactionTypeRepository.findByTransactionName("compra");
-            Client client = clientRepository.findByIsClientActive(true);
+            Product product = productServiceImpl.findByProductName(productName);
+            TransactionType transactionType = transactionTypeServiceImpl.findByTransactionTypeName("compra");
+            Client client = clientServiceImpl.findByIsClientActive(true);
 
             if (product != null) {
                 stock += product.getQuantityInStorage();
-                productRepository.updateQuantityInStorageByProductName(stock, productName);
+                productServiceImpl.updateQuantityInStorageByProductName(stock, productName);
                 Transaction transaction = new Transaction(null, price, stock, date, getSelectedCurrency(),
                         client, product, transactionType);
-                transactionRepository.save(transaction);
+                transactionServiceImpl.save(transaction);
             } else {
                 Product newProduct = new Product(null, productName,
-                        categoryRepository.findByCategoryName(categoryName), stock);
+                        categoryServiceImpl.findByCategoryName(categoryName), stock);
                 Transaction transaction = new Transaction(null, price, stock, date, getSelectedCurrency(),
                         client, newProduct, transactionType);
-                productRepository.save(newProduct);
-                transactionRepository.save(transaction);
+                productServiceImpl.save(newProduct);
+                transactionServiceImpl.save(transaction);
             }
 
             clean();

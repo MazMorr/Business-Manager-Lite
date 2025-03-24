@@ -1,8 +1,8 @@
 
 package com.marcosoft.storageSoftware.controller;
 
-import com.marcosoft.storageSoftware.logic.SceneSwitcher;
-import com.marcosoft.storageSoftware.logic.WindowShowing;
+import com.marcosoft.storageSoftware.util.SceneSwitcher;
+import com.marcosoft.storageSoftware.util.WindowShowing;
 import com.marcosoft.storageSoftware.model.Client;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;

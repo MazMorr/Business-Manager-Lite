@@ -45,7 +45,7 @@
                   <PasswordField fx:id="txtFieldPassword" promptText="Introduzca su contraseña" />
                   <HBox alignment="CENTER" prefHeight="45.0" prefWidth="232.0">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#enterApplication" prefHeight="30.0" prefWidth="80.0" styleClass="btnCreateAccount" stylesheets="@Styles.css" text="Entrar">
+                        <Button defaultButton="true" mnemonicParsing="false" onAction="#enterApplication" prefHeight="30.0" prefWidth="80.0" styleClass="btnCreateAccount" stylesheets="@Styles.css" text="Entrar">
                            <font>
                               <Font name="SansSerif Regular" size="14.0" />
                            </font>

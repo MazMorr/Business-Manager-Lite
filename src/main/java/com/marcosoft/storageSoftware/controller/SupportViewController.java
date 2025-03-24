@@ -1,7 +1,7 @@
 package com.marcosoft.storageSoftware.controller;
 
-import com.marcosoft.storageSoftware.logic.SceneSwitcher;
-import com.marcosoft.storageSoftware.logic.WindowShowing;
+import com.marcosoft.storageSoftware.util.SceneSwitcher;
+import com.marcosoft.storageSoftware.util.WindowShowing;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;

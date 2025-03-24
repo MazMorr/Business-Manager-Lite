@@ -1,7 +1,7 @@
 package com.marcosoft.storageSoftware.controller;
 
-import com.marcosoft.storageSoftware.logic.SceneSwitcher;
-import com.marcosoft.storageSoftware.logic.WindowShowing;
+import com.marcosoft.storageSoftware.util.SceneSwitcher;
+import com.marcosoft.storageSoftware.util.WindowShowing;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -14,6 +14,8 @@ import java.util.ResourceBundle;
 
 @Controller
 public class RegistryViewController implements Initializable {
+
+
     private final WindowShowing windowShowing;
     private final SceneSwitcher sceneSwitcher;
     

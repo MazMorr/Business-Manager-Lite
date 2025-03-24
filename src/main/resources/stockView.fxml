@@ -2,13 +2,12 @@
 
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.effect.DropShadow?>
-<?import javafx.scene.effect.ImageInput?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<StackPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.controller.StockViewController">
+
+<StackPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.controller.StockViewController">
    <children>
       <AnchorPane>
          <children>
@@ -127,22 +126,22 @@
                <children>
                   <VBox spacing="10.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#displayBuyView" styleClass="btnExistency" stylesheets="@Styles.css" text="Agregar Producto">
+                        <Button mnemonicParsing="false" onAction="#displayBuyView" styleClass="btnStock" stylesheets="@Styles.css" text="Agregar Producto">
                            <VBox.margin>
                               <Insets top="5.0" />
                            </VBox.margin>
                         </Button>
-                        <Button mnemonicParsing="false" onAction="#displaySellView" styleClass="btnExistency" stylesheets="@Styles.css" text="Vender Producto " />
+                        <Button mnemonicParsing="false" onAction="#displaySellView" styleClass="btnStock" stylesheets="@Styles.css" text="Vender Producto " />
                      </children>
                   </VBox>
                   <VBox alignment="TOP_CENTER" prefHeight="161.0" prefWidth="205.0" spacing="10.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#changeProduct" styleClass="btnExistency" stylesheets="@Styles.css" text="Cambiar Producto">
+                        <Button mnemonicParsing="false" onAction="#changeProduct" styleClass="btnStock" stylesheets="@Styles.css" text="Cambiar Producto">
                            <VBox.margin>
                               <Insets top="5.0" />
                            </VBox.margin>
                         </Button>
-                        <Button mnemonicParsing="false" onAction="#displaySellView" styleClass="btnExistency" stylesheets="@Styles.css" text="Eliminar Producto" />
+                        <Button mnemonicParsing="false" onAction="#displaySellView" styleClass="btnStock" stylesheets="@Styles.css" text="Eliminar Producto" />
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                            <children>
                               <ImageView fitHeight="47.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
@@ -174,7 +173,7 @@
                                     <Font name="SansSerif Regular" size="14.0" />
                                  </font>
                               </Label>
-                              <Button fx:id="btnFilter" mnemonicParsing="false" onAction="#displayFilterView" styleClass="btnExistency" stylesheets="@Styles.css" text="Filtro">
+                              <Button fx:id="btnFilter" mnemonicParsing="false" onAction="#displayFilterView" styleClass="btnStock" stylesheets="@Styles.css" text="Filtro">
                                  <HBox.margin>
                                     <Insets top="5.0" />
                                  </HBox.margin>
