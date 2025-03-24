@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<?import java.net.URL?>
-<StackPane prefHeight="350.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.controller.CreateClientViewController">
+
+<StackPane prefHeight="350.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.controller.CreateClientViewController">
    <children>
       <AnchorPane id="AnchorPane" prefHeight="350.0" prefWidth="450.0" styleClass="index">
           <stylesheets>
@@ -77,7 +78,7 @@
                               <Insets right="5.0" />
                            </HBox.margin>
                         </ProgressIndicator>
-                        <Button mnemonicParsing="false" onAction="#createAccount" styleClass="btnCreateAccount" stylesheets="@Styles.css" text="Crear Cuenta">
+                        <Button defaultButton="true" mnemonicParsing="false" onAction="#createAccount" styleClass="btnCreateAccount" stylesheets="@Styles.css" text="Crear Cuenta">
                            <font>
                               <Font name="System Bold Italic" size="14.0" />
                            </font>

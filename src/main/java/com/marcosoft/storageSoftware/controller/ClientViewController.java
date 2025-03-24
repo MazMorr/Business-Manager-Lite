@@ -1,8 +1,8 @@
 package com.marcosoft.storageSoftware.controller;
 
-import com.marcosoft.storageSoftware.logic.WindowShowing;
+import com.marcosoft.storageSoftware.service.impl.ClientServiceImpl;
+import com.marcosoft.storageSoftware.util.WindowShowing;
 import com.marcosoft.storageSoftware.Main;
-import com.marcosoft.storageSoftware.repository.ClientRepository;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -34,7 +34,7 @@ public class ClientViewController {
     private Label txtDebugForm;
 
     @Autowired
-    private ClientRepository clientRepository;
+    ClientServiceImpl clientServiceImpl;
 
     @Autowired
     public ClientViewController(WindowShowing windowShowing) {
@@ -44,7 +44,7 @@ public class ClientViewController {
     //Intentar crear servicios y dentro de esos servicios hacer la logica donde se introduce el getText y toeso que el probblema es javafx
     @FXML
     private void enterApplication(ActionEvent event) {
-        if (clientRepository.existsByClientNameAndClientPassword(txtFieldName.getText(), txtFieldPassword.getText())) {
+        if (clientServiceImpl.existsByClientNameAndClientPassword(txtFieldName.getText(), txtFieldPassword.getText())) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/supportView.fxml"));
                 Parent root = loader.load();

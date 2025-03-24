@@ -21,7 +21,7 @@
                                  <effect>
                                     <ImageInput>
                                        <source>
-                                          <Image url="file:/D:/Proyectos/Proyectos%20Java/AlmacenMipyme/src/main/resources/com/marcosoft/almacenfx/images/gears.png" />
+                                          <Image url="file:D:\Proyectos\Proyectos Spring\storageSoftware\src\main\resources\images\gears.png" />
                                        </source>
                                     </ImageInput>
                                  </effect>

@@ -3,12 +3,9 @@ package com.marcosoft.storageSoftware.controller;
 
 import com.marcosoft.storageSoftware.Main;
 import com.marcosoft.storageSoftware.model.Client;
-import com.marcosoft.storageSoftware.repository.ClientRepository;
+import com.marcosoft.storageSoftware.service.impl.ClientServiceImpl;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.ProgressIndicator;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -29,15 +26,15 @@ public class CreateClientViewController {
     private Label txtDebugForm;
 
     @Autowired
-    ClientRepository clientRepository;
+    ClientServiceImpl clientServiceImpl;
 
     public boolean userNameIsSet, passwordIsSet, confirmedPasswordIsSet, companyIsSet;
-    public double percentageName = 0, percentagePassword = 0, percentageConfirmedPassword =0, percentageCompany = 0;
+    public double percentageName = 0, percentagePassword = 0, percentageConfirmedPassword = 0, percentageCompany = 0;
 
     @FXML
     private void createAccount() throws IOException {
 
-        if (clientRepository.existsByClientName(txtFieldUserName.getText())) {
+        if (clientServiceImpl.existsByClientName(txtFieldUserName.getText())) {
 
             txtDebugForm.setTextFill(RED);
             txtDebugForm.setText("EStá intentando crear una cuenta que ya existe");
@@ -51,9 +48,22 @@ public class CreateClientViewController {
                     txtFieldCompany.getText(),
                     false
             );
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
 
-            clientRepository.save(client);
+            alert.setTitle("Alerta");
+            alert.setHeaderText("Información de creación de la cuenta");
+            if (txtFieldCompany.getText() != null) {
+                alert.setContentText("Usted ha creado la cuenta con nombre " + txtFieldUserName.getText() +
+                        " perteneciente la compañía " + txtFieldCompany.getText() + " \n¡Por favor no olvidar su contraseña!");
+            } else {
+                alert.setContentText("Usted ha creado la cuenta con nombre " + txtFieldUserName.getText()
+                        + " \n¡Por favor no olvidar su contraseña!");
+            }
+            alert.showAndWait();
 
+            clientServiceImpl.save(client);
+
+            goBack();
 
         }
     }
@@ -96,27 +106,27 @@ public class CreateClientViewController {
     public void txtFieldTypingPassword() {
         if (txtFieldPassword.getLength() > 16 || passFieldPasswordConfirmed.getLength() > 16) {
             txtDebugForm.setTextFill(RED);
-            if(confirmedPasswordIsSet){
+            if (confirmedPasswordIsSet) {
                 txtDebugForm.setText("La contraseña confirmada debe exceder los 16 carácteres");
-                confirmedPasswordIsSet=false;
-                percentageConfirmedPassword-=0.25;
-            } else if(passwordIsSet){
+                confirmedPasswordIsSet = false;
+                percentageConfirmedPassword -= 0.25;
+            } else if (passwordIsSet) {
                 txtDebugForm.setText("La contraseña debe exceder los 16 carácteres");
-                passwordIsSet=false;
-                percentagePassword-=0.25;
+                passwordIsSet = false;
+                percentagePassword -= 0.25;
             }
 
         } else if (txtFieldPassword.getLength() < 4 || passFieldPasswordConfirmed.getLength() < 4) {
             txtDebugForm.setTextFill(ORANGERED);
             txtDebugForm.setText("La contraseña debe tener al menos 4 caracteres");
-            if(confirmedPasswordIsSet){
+            if (confirmedPasswordIsSet) {
                 txtDebugForm.setText("La contraseña confirmada debe tener al menos 4 carácteres");
-                confirmedPasswordIsSet=false;
-                percentageConfirmedPassword-=0.25;
-            } else if(passwordIsSet){
+                confirmedPasswordIsSet = false;
+                percentageConfirmedPassword -= 0.25;
+            } else if (passwordIsSet) {
                 txtDebugForm.setText("La contraseña debe tener al menos 4 caracteres");
-                passwordIsSet=false;
-                percentagePassword-=0.25;
+                passwordIsSet = false;
+                percentagePassword -= 0.25;
             }
 
         } else if (txtFieldPassword.getText().equals(passFieldPasswordConfirmed.getText()) && !passwordIsSet) {

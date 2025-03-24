@@ -1,4 +1,4 @@
-package com.marcosoft.storageSoftware.logic;
+package com.marcosoft.storageSoftware.util;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;

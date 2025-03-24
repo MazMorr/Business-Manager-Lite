@@ -17,7 +17,7 @@ public class Configuration {
     @Id
     private Long id;
 
-    @ManyToOne
+    @OneToOne
     private Client client;
 
     @Column(name="dark_mode", unique = true)

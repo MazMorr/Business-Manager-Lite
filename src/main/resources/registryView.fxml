@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.effect.ImageInput?>
 <?import javafx.scene.image.Image?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
 <StackPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.controller.RegistryViewController">
    <children>
       <AnchorPane>
@@ -21,7 +30,7 @@
                                  <effect>
                                     <ImageInput>
                                        <source>
-                                          <Image url="file:/D:/Proyectos/Proyectos%20Java/AlmacenMipyme/src/main/resources/com/marcosoft/almacenfx/images/gears.png" />
+                                          <Image url="file:D:\Proyectos\Proyectos Spring\storageSoftware\src\main\resources\images\gears.png" />
                                        </source>
                                     </ImageInput>
                                  </effect>
@@ -123,7 +132,7 @@
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
-            <Button layoutX="668.0" layoutY="490.0" mnemonicParsing="false" styleClass="btnExistency" stylesheets="@Styles.css" text="Eliminar Registro" AnchorPane.rightAnchor="5.0" />
+            <Button layoutX="668.0" layoutY="490.0" mnemonicParsing="false" styleClass="btnStock" stylesheets="@Styles.css" text="Eliminar Registro" AnchorPane.rightAnchor="5.0" />
             <HBox layoutX="126.0" layoutY="490.0" prefHeight="40.0" prefWidth="171.0" AnchorPane.leftAnchor="125.0">
                <children>
                   <Label text="Filtrar por: ">
@@ -131,7 +140,7 @@
                         <Font name="SansSerif Regular" size="14.0" />
                      </font>
                   </Label>
-                  <Button mnemonicParsing="false" onAction="#displayRegistryfilterView" prefHeight="28.0" prefWidth="95.0" styleClass="btnExistency" stylesheets="@Styles.css" text="Filtros" textAlignment="CENTER" />
+                  <Button mnemonicParsing="false" onAction="#displayRegistryfilterView" prefHeight="28.0" prefWidth="95.0" styleClass="btnStock" stylesheets="@Styles.css" text="Filtros" textAlignment="CENTER" />
                </children>
             </HBox>
             <MenuButton layoutX="414.0" layoutY="490.0" mnemonicParsing="false" styleClass="btnPrize" stylesheets="@Styles.css" text="Gráficos" textFill="#eeeeee" AnchorPane.leftAnchor="430.0">
