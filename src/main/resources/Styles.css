@@ -1,21 +1,21 @@
 .slogan{
-    -fx-background-color:  #48e;
+    -fx-background-color:  #2f27ce;
 }
 
 .index{
-    -fx-background-color: linear-gradient(rgb(204, 218, 250), rgb(233, 239, 255));
+    -fx-background-color: #dedcff;
     -fx-pref-width: 120;
 }
 
 .btnIndex{
-    -fx-border-color: gray;
     -fx-pref-width: 120;
     -fx-pref-height: 55;
-    -fx-font-size: 18;
+    -fx-font-weight: 900;
+    -fx-font-size: 17;
     -fx-text-alignment: center;
     -fx-font-family: sans-serif;
-    -fx-background-color: rgb(149, 183, 255);
-    -fx-text-fill: #eee;
+    -fx-background-color: #6059ff;
+    -fx-text-fill: #050315;
 }
 
 .btnIndex:hover{
@@ -23,41 +23,20 @@
     -fx-cursor: hand;
 }
 
-.btnCreateAccount{
-    -fx-background-color: rgb(149, 183, 255);
-    -fx-text-fill: #eee;
-    -fx-font-size: 14;
-    -fx-font-family: sans-serif;
-    -fx-border-color: gray;
-}
 
 .btnGoBackCreateAccount{
-    -fx-background-color: #48e;
-    -fx-text-fill: #eee;
+    -fx-background-color: #2f27ce;
+    -fx-text-fill: #050315;
     -fx-font-family: sans-serif;
-    -fx-font-size: 30;
-}
-.btnGoBackCreateAccount:hover{
-    -fx-cursor: hand;
-    -fx-opacity: 0.6;
 }
 
-.btnCreateAccount:hover{
-    -fx-opacity: 0.6;
-    
-    -fx-font-size: 14;
-    -fx-font-family: sans-serif;
+.btnGoBackCreateAccount:hover{
     -fx-cursor: hand;
-    -fx-border-radius: 5;
-    -fx-background-radius: 5;
+    -fx-opacity: 0.5;
 }
 
 .txtPassword{
     -fx-font-style: Italic;
-}
-
-.logoImage{
-    -fx-background-radius: 50;
 }
 
 .title{
@@ -67,32 +46,22 @@
 }
 
 .btnStock{
-    -fx-background-color: rgb(149, 183, 255);
-    -fx-text-fill: #eee;
+    -fx-background-color: #6059ff;
+    -fx-text-fill: #050315;
     -fx-font-size: 14;
     -fx-font-family: sans-serif;
-    -fx-border-color: gray;
+    -fx-font-weight: 800;
 }
+
 .btnStock:hover{
     -fx-opacity: 0.6;
     -fx-cursor: hand;
-    -fx-border-radius: 5;
-    -fx-background-radius: 5;
 }
+
 .background{
     -fx-background-color: linear-gradient(rgb(204, 218, 250), rgb(233, 239, 255));
 }
-.btnPrize{
-    -fx-background-color: rgb(149, 183, 255);
-    -fx-font-size: 15;
-    -fx-font-family: sans-serif;
-    -fx-border-color: gray;
-}
-.btnPrize:hover{
-    -fx-opacity: 0.6;
-    -fx-cursor: hand;
-    
-}
+
 .inputForm{
     -fx-border-color: gray;
     -fx-font-family: sans-serif;
@@ -100,12 +69,65 @@
 
 .table{
     -fx-background-color: #e4e3e3;
-    -fx-background-radius: 10;
+    
 }
+
 .configuration{
+    -fx-background-color: #2f27ce;
     -fx-cursor:hand;
+    -fx-font-weight: 900;
 }
+
+.configuration:hover{
+    -fx-opacity: 0.6;
+    
+}
+
 .menuIndex:hover{
     -fx-cursor: hand;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 10.0, 0.0, 0.0, 0.0);
+}
+
+.filters{
+    -fx-background-color: #6059ff;
+    -fx-font-size: 14;
+    -fx-font-family: sans-serif;
+    -fx-background-radius: 50;
+    -fx-font-weight: 600;
+}
+
+.filters:hover{
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 10.0, 0.0, 0.0, 0.0);
+    -fx-opacity: 0.6;
+}
+
+.rightIndex{
+    -fx-background-color: #dedcff;
+}
+
+.crudOperations{
+    -fx-background-color: #fbfbfe;
+    -fx-font-size: 12;
+}
+
+.background{
+    -fx-background-color: #fbfbfe;
+}
+
+.clientName{
+    -fx-font-weight: 900;
+}
+
+.progressBar{
+    -fx-background-color: #6059ff;
+}
+
+.btnDelete{
+    -fx-background-color: rgb(197, 0, 0);
+    -fx-cursor: hand;
+}
+
+.btnDelete:hover{
+    -fx-opacity: 0.6;
 }

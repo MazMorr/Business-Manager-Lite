@@ -57,4 +57,14 @@ public class ClientServiceImpl implements ClientService {
     public void updateIsClientActiveByClientName(Boolean isActive, String name) {
         clientRepository.updateIsClientActiveByClientName(isActive, name);
     }
+
+    @Override
+    public Client getByClientNameAndClientPassword(String clientName, String clientPassword) {
+        return clientRepository.findByClientNameAndClientPassword(clientName,clientPassword);
+    }
+
+    @Override
+    public boolean existsByIsClientActive(Boolean isClientActive) {
+        return clientRepository.existsByIsClientActive(isClientActive);
+    }
 }

@@ -9,7 +9,9 @@ import java.io.InputStream;
 
 @Component
 public class SpringFXMLLoader {
+
     private final ApplicationContext context;
+    private FXMLLoader loader;
 
     public SpringFXMLLoader(ApplicationContext context) {
         this.context = context;
@@ -20,10 +22,17 @@ public class SpringFXMLLoader {
             if (fxmlStream == null) {
                 throw new IOException("Cannot load FXML file: " + fxmlPath);
             }
-            FXMLLoader loader = new FXMLLoader();
+            loader = new FXMLLoader();
             loader.setControllerFactory(context::getBean);
             loader.setLocation(getClass().getResource(fxmlPath));
             return loader.load(fxmlStream);
         }
+    }
+
+    public <T> T getController(Class<T> controllerClass) {
+        if (loader == null) {
+            throw new IllegalStateException("FXMLLoader has not been initialized. Call load() first.");
+        }
+        return loader.getController();
     }
 }

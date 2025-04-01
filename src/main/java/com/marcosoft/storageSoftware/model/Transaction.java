@@ -36,9 +36,8 @@ public class Transaction implements Serializable {
     @Column(name = "transaction_date", nullable = false)
     private LocalDate transactionDate;
 
-    @ManyToOne
-    @JoinColumn(name = "moneda_id", nullable = false)
-    private Currency currencyId;
+    @Column(name = "currency_name", nullable = false)
+    private String currencyName;
 
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)
