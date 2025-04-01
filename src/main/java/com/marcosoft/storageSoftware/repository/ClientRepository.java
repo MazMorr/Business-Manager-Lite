@@ -25,5 +25,4 @@ public interface ClientRepository extends CrudRepository<Client, Long> {
 
     boolean existsByIsClientActive(Boolean isClientActive);
 
-
 }
