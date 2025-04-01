@@ -23,15 +23,13 @@ import java.util.ResourceBundle;
 public class ConfigurationViewController implements Initializable {
 
     @FXML
-    private Button btnAdjustAdjust, btnStockAdjust, btnRegistryAdjust, btnSupportAdjust;
-    @FXML
-    private MenuButton mbAppTheme, mbUsers, mbLanguage, mbResolution;
-    @FXML
-    private MenuItem miChangeUser;
+    private MenuButton mbAppTheme, mbLanguage, mbResolution;
     @FXML
     private RadioMenuItem rdmiDarkTheme, rdmiLightTheme;
     @FXML
-    private Label txtTitleAdjust, txtUser, txtCompany;
+    private Label txtUser, txtCompany;
+    @FXML
+    private ToggleGroup rdmiTheme,rdmiLanguage, rdmiResolution;
 
     @Autowired
     ClientServiceImpl clientServiceImpl;

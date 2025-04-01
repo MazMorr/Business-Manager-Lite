@@ -5,7 +5,10 @@ import com.marcosoft.storageSoftware.util.WindowShowing;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
@@ -15,14 +18,19 @@ import java.util.ResourceBundle;
 @Controller
 public class RegistryViewController implements Initializable {
 
-
     private final WindowShowing windowShowing;
-    private final SceneSwitcher sceneSwitcher;
-    
+
+    @FXML
+    private TableView tblView;
+    @FXML
+    private HBox vboxSlogan1;
+
     public RegistryViewController(){
         windowShowing= new WindowShowing();
-        sceneSwitcher= new SceneSwitcher();
     }
+
+    @Autowired
+    private SceneSwitcher sceneSwitcher;
 
     @FXML 
     private void switchToSupport(ActionEvent event) throws IOException {
@@ -60,6 +68,9 @@ public class RegistryViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
-    
+    }
+
+    @FXML
+    public void switchToWallet(ActionEvent actionEvent) {
+    }
 }

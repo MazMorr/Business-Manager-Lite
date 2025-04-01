@@ -14,4 +14,6 @@ public interface ClientService {
     Boolean existsByClientNameAndClientPassword(String name, String password);
     Client findByIsClientActive(Boolean isActive);
     void updateIsClientActiveByClientName(Boolean isActive, String name);
+    Client getByClientNameAndClientPassword(String clientName, String clientPassword);
+    boolean existsByIsClientActive(Boolean isClientActive);
 }

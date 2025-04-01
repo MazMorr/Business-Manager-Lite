@@ -22,4 +22,8 @@ public interface ClientRepository extends CrudRepository<Client, Long> {
     @Modifying
     @Query("update Client c set c.isClientActive = ?1 where c.clientName = ?2")
     int updateIsClientActiveByClientName(Boolean isClientActive, String clientName);
+
+    boolean existsByIsClientActive(Boolean isClientActive);
+
+
 }

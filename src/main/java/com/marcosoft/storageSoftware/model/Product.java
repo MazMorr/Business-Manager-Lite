@@ -1,7 +1,9 @@
-
 package com.marcosoft.storageSoftware.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +11,7 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.util.Objects;
 
 /**
  * @author MazMorr
@@ -19,25 +21,39 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "Producto")
+@Table(name = "Product")
 public class Product implements Serializable {
 
     //Atributes
     @Id
-    @SequenceGenerator(name = "product_sequence", sequenceName = "product_sequence",
-            initialValue = 1, allocationSize = 1
-    )
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_sequence")
-    @Column(name = "product_id", nullable = false, unique = true)
-    private Long productId;
-
     @Column(nullable = false, length = 20)
     private String productName;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
-    private Category idCategory;
+    @Column(name = "category", nullable = false)
+    private String categoryName;
 
     @Column(name="quantity", nullable = false)
     private Integer quantityInStorage;
+
+    @Column(name= "price_per_unit", nullable = false, scale = 2, precision = 10)
+    private BigDecimal pricePerUnit;
+
+    @Column(name="currency", nullable = false)
+    private String currencyName;
+
+    @Column(name="stored_in", nullable = false)
+    private String storedIn;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return Objects.equals(productName, product.productName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(productName);
+    }
 }

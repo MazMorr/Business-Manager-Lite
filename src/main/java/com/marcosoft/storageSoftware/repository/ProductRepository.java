@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public interface ProductRepository extends CrudRepository<Product, Long> {
+public interface ProductRepository extends CrudRepository<Product, String> {
     @Query("select count(p) from Product p where p.quantityInStorage = ?1")
     long countByQuantityInStorage(Integer quantityInStorage);
 
@@ -18,4 +18,8 @@ public interface ProductRepository extends CrudRepository<Product, Long> {
     @Modifying
     @Query("update Product p set p.quantityInStorage = ?1 where p.productName = ?2")
     int updateQuantityInStorageByProductName(Integer quantityInStorage, String productName);
+
+    void deleteByProductName(String productName);
+
+
 }

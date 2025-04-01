@@ -6,9 +6,8 @@ import java.util.List;
 
 public interface ProductService {
     Product save(Product product);
-    Product getProductById(Long id);
     List<Product> getAllProducts();
-    void deleteById(Long id);
-    Product findByProductName(String name);
+    void deleteByProductName(String productName);
+    Product getByProductName(String name);
     void updateQuantityInStorageByProductName(Integer stock, String name);
 }

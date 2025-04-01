@@ -7,12 +7,14 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.RadioMenuItem?>
 <?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane prefHeight="245.0" prefWidth="330.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.controller.ConfigurationViewController">
+<StackPane prefHeight="300.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.controller.ConfigurationViewController">
    <children>
       <AnchorPane prefWidth="330.0">
          <children>
@@ -20,7 +22,7 @@
                <children>
                   <HBox alignment="CENTER_LEFT">
                      <children>
-                        <MenuButton fx:id="mbLanguage" alignment="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" styleClass="btnPrize" stylesheets="@Styles.css" text="Idioma" textAlignment="CENTER" textFill="#eeeeee" wrapText="true" HBox.hgrow="ALWAYS">
+                        <MenuButton fx:id="mbLanguage" alignment="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" styleClass="btnStock" stylesheets="@Styles.css" text="Idioma" textAlignment="CENTER" textFill="#eeeeee" wrapText="true" HBox.hgrow="ALWAYS">
                           <items>
                               <RadioMenuItem mnemonicParsing="false" onAction="#switchLanguageToSpanish" selected="true" text="Español">
                                  <toggleGroup>
@@ -30,7 +32,7 @@
                               <RadioMenuItem mnemonicParsing="false" onAction="#switchLanguageToEnglish" text="English" toggleGroup="$rdmiLanguage" />
                           </items>
                         </MenuButton>
-                        <Button mnemonicParsing="false" onAction="#closeSession" prefHeight="40.0" prefWidth="140.0" styleClass="btnPrize" stylesheets="@Styles.css" text="Cerrar Sesión" textFill="#eeeeee">
+                        <Button mnemonicParsing="false" onAction="#closeSession" prefHeight="40.0" prefWidth="140.0" styleClass="btnStock" stylesheets="@Styles.css" text="Cerrar Sesión" textFill="#eeeeee">
                            <HBox.margin>
                               <Insets left="30.0" />
                            </HBox.margin>
@@ -39,13 +41,13 @@
                   </HBox>
                   <HBox>
                      <children>
-                        <MenuButton alignment="CENTER" contentDisplay="BOTTOM" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" styleClass="btnPrize" stylesheets="@Styles.css" text="Importar" textFill="#eeeeee">
+                        <MenuButton alignment="CENTER" contentDisplay="BOTTOM" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" styleClass="btnStock" stylesheets="@Styles.css" text="Importar" textFill="#eeeeee">
                           <items>
                             <MenuItem mnemonicParsing="false" text="Action 1" />
                             <MenuItem mnemonicParsing="false" text="Action 2" />
                           </items>
                         </MenuButton>
-                        <MenuButton alignment="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" styleClass="btnPrize" stylesheets="@Styles.css" text="Exportar" textAlignment="CENTER" textFill="#eeeeee">
+                        <MenuButton alignment="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" styleClass="btnStock" stylesheets="@Styles.css" text="Exportar" textAlignment="CENTER" textFill="#eeeeee">
                           <items>
                             <MenuItem mnemonicParsing="false" text="Exportar Base de Datos" />
                             <MenuItem mnemonicParsing="false" text="Action 2" />
@@ -57,7 +59,7 @@
                      </children></HBox>
                   <HBox alignment="CENTER_LEFT">
                      <children>
-                        <MenuButton fx:id="mbAppTheme" alignment="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" styleClass="btnPrize" stylesheets="@Styles.css" text="Tema" textAlignment="CENTER" textFill="#eeeeee" wrapText="true" HBox.hgrow="ALWAYS">
+                        <MenuButton fx:id="mbAppTheme" alignment="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" styleClass="btnStock" stylesheets="@Styles.css" text="Tema" textAlignment="CENTER" textFill="#eeeeee" wrapText="true" HBox.hgrow="ALWAYS">
                           <items>
                               <RadioMenuItem fx:id="rdmiLightTheme" mnemonicParsing="false" selected="true" text="Modo Claro">
                                  <toggleGroup>
@@ -67,7 +69,7 @@
                               <RadioMenuItem fx:id="rdmiDarkTheme" mnemonicParsing="false" text="Modo Oscuro" toggleGroup="$rdmiTheme" />
                           </items>
                         </MenuButton>
-                        <MenuButton fx:id="mbResolution" alignment="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" styleClass="btnPrize" stylesheets="@Styles.css" text="Resolución" textAlignment="CENTER" textFill="#eeeeee" wrapText="true" HBox.hgrow="ALWAYS">
+                        <MenuButton fx:id="mbResolution" alignment="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" styleClass="btnStock" stylesheets="@Styles.css" text="Resolución" textAlignment="CENTER" textFill="#eeeeee" wrapText="true" HBox.hgrow="ALWAYS">
                           <items>
                               <RadioMenuItem mnemonicParsing="false" selected="true" text="800x600">
                                  <toggleGroup>
@@ -85,8 +87,22 @@
                   </HBox>
                </children>
             </VBox>
-            <Label fx:id="txtUser" layoutX="10.0" layoutY="6.0" text="Usuario: " />
-            <Label fx:id="txtCompany" layoutX="10.0" layoutY="23.0" text="Compañía: " />
+            <Label fx:id="txtUser" layoutX="10.0" layoutY="6.0" prefHeight="17.0" prefWidth="119.0" text="Usuario: ">
+               <graphic>
+                  <ImageView fitHeight="19.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@images/Avatar.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Label>
+            <Label fx:id="txtCompany" layoutX="11.0" layoutY="25.0" text="Compañía: ">
+               <graphic>
+                  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@images/company.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Label>
          </children>
       </AnchorPane>
    </children>
