@@ -1,9 +1,6 @@
 package com.marcosoft.storageSoftware.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,7 +23,7 @@ public class Product implements Serializable {
 
     //Atributes
     @Id
-    @Column(nullable = false, length = 20)
+    @Column(name= "product_name",nullable = false, length = 20)
     private String productName;
 
     @Column(name = "category", nullable = false)
@@ -35,11 +32,17 @@ public class Product implements Serializable {
     @Column(name="quantity", nullable = false)
     private Integer quantityInStorage;
 
-    @Column(name= "price_per_unit", nullable = false, scale = 2, precision = 10)
-    private BigDecimal pricePerUnit;
+    @Column(name= "buy_price",nullable = true, scale = 2, precision = 10)
+    private BigDecimal buyPrice;
 
-    @Column(name="currency", nullable = false)
-    private String currencyName;
+    @Column(name="currency_buy_name", nullable = true)
+    private String currencyBuyName;
+
+    @Column(name = "sell_price",nullable = true, scale = 2, precision = 10)
+    private BigDecimal sellPrice;
+
+    @Column(name="currency_sell_name", nullable = true)
+    private String currencySellName;
 
     @Column(name="stored_in", nullable = false)
     private String storedIn;
@@ -56,4 +59,7 @@ public class Product implements Serializable {
     public int hashCode() {
         return Objects.hash(productName);
     }
+
+    @ManyToOne
+    private Client client;
 }

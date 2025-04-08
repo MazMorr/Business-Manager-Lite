@@ -2,11 +2,12 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckMenuItem?>
 <?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.RadioMenuItem?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -27,7 +28,7 @@
    <children>
       <AnchorPane styleClass="background" stylesheets="@Styles.css">
          <children>
-            <HBox alignment="TOP_RIGHT" layoutX="582.0" layoutY="-6.0" prefHeight="69.0" prefWidth="222.0" styleClass="slogan" stylesheets="@Styles.css" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <HBox alignment="TOP_RIGHT" layoutX="582.0" layoutY="-6.0" prefHeight="70.0" prefWidth="222.0" styleClass="slogan" stylesheets="@Styles.css" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <VBox alignment="TOP_CENTER" prefHeight="47.0" prefWidth="143.0">
                      <children>
@@ -51,9 +52,9 @@
                   </VBox>
                </children>
             </HBox>
-            <HBox prefHeight="69.0" prefWidth="220.0" styleClass="slogan" stylesheets="@Styles.css" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <HBox prefHeight="70.0" prefWidth="220.0" styleClass="slogan" stylesheets="@Styles.css" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <Label fx:id="txtClientName" contentDisplay="TOP" prefHeight="77.0" prefWidth="116.0" styleClass="clientName" stylesheets="@Styles.css" text="Marco A. Romero" textFill="#eeeeee" wrapText="true">
+                  <Label fx:id="txtClientName" contentDisplay="TOP" prefHeight="69.0" prefWidth="172.0" styleClass="clientName" stylesheets="@Styles.css" text="Marco A. Romeros" textFill="#eeeeee" wrapText="true">
                      <font>
                         <Font name="SansSerif Regular" size="14.0" />
                      </font>
@@ -70,7 +71,7 @@
                   </Label>
                </children>
             </HBox>
-            <HBox alignment="TOP_CENTER" layoutY="6.0" prefHeight="47.0" prefWidth="800.0" styleClass="slogan" stylesheets="@Styles.css" AnchorPane.leftAnchor="220.0" AnchorPane.rightAnchor="220.0" AnchorPane.topAnchor="0.0">
+            <HBox alignment="TOP_CENTER" layoutY="6.0" prefHeight="70.0" prefWidth="800.0" styleClass="slogan" stylesheets="@Styles.css" AnchorPane.leftAnchor="220.0" AnchorPane.rightAnchor="220.0" AnchorPane.topAnchor="0.0">
                <children>
                   <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="68.0" prefWidth="421.0" styleClass="title" stylesheets="@Styles.css" text="Existencias" textFill="#eeeeee">
                      <font>
@@ -82,7 +83,7 @@
                   </Label>
                </children>
             </HBox>
-            <VBox layoutX="-9.0" layoutY="88.0" styleClass="index" stylesheets="@Styles.css" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="69.0">
+            <VBox layoutX="-9.0" layoutY="88.0" styleClass="index" stylesheets="@Styles.css" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="70.0">
                <children>
                   <Button disable="true" ellipsisString="" mnemonicParsing="false" styleClass="btnIndex" stylesheets="@Styles.css" text="Existencias">
                      <font>
@@ -124,24 +125,26 @@
                   </Button>
                </children>
             </VBox>
-            <TableView fx:id="tblStock" editable="true" layoutX="125.0" layoutY="115.0" onMouseClicked="#selectProduct" prefHeight="475.0" prefWidth="410.0" styleClass="table" stylesheets="@Styles.css" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="125.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="115.0">
+            <TableView fx:id="tblStock" editable="true" layoutX="125.0" layoutY="115.0" onMouseClicked="#selectProduct" prefHeight="580.0" prefWidth="648.0" styleClass="table" stylesheets="@Styles.css" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="125.0" AnchorPane.rightAnchor="250.0" AnchorPane.topAnchor="115.0">
                <columns>
-                  <TableColumn fx:id="nameTable" prefWidth="138.0" text="Nombre" />
-                  <TableColumn fx:id="productTypeTable" prefWidth="81.0" text="Categoría" />
-                  <TableColumn fx:id="amountTable" prefWidth="59.0" text="Cantidad" />
-                  <TableColumn fx:id="pricePerUnitTable" prefWidth="91.0" text="Precio Compra" />
-                  <TableColumn fx:id="currencyTable" prefWidth="54.0" text="Moneda" />
-                  <TableColumn fx:id="storedInTable" prefWidth="96.0" text="Almacenado en" />
+                  <TableColumn fx:id="nameColumn" prefWidth="125.0" sortable="false" text="Nombre" />
+                  <TableColumn fx:id="categoryColumn" prefWidth="76.0" sortable="false" text="Categoría" />
+                  <TableColumn fx:id="amountColumn" prefWidth="75.0" sortable="false" text="Cantidad" />
+                  <TableColumn fx:id="buyColumn" prefWidth="76.0" sortable="false" text="Invertido" />
+                  <TableColumn fx:id="currencyBuyColumn" prefWidth="45.0" sortable="false" text="\$" />
+                  <TableColumn fx:id="sellColumn" prefWidth="71.0" text="Venta" />
+                  <TableColumn fx:id="currencySellColumn" prefWidth="45.0" text="\$" />
+                  <TableColumn fx:id="storedInColumn" prefWidth="135.0" sortable="false" text="Almacenado" />
                </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
-            <HBox layoutX="125.0" layoutY="88.0" prefHeight="36.0" prefWidth="443.0" spacing="10.0" AnchorPane.leftAnchor="126.0" AnchorPane.rightAnchor="455.0" AnchorPane.topAnchor="75.0">
+            <HBox layoutX="125.0" layoutY="88.0" prefHeight="36.0" prefWidth="534.0" spacing="5.0" AnchorPane.leftAnchor="126.0" AnchorPane.rightAnchor="364.0" AnchorPane.topAnchor="75.0">
                <children>
-                  <Label prefHeight="35.0" prefWidth="88.0" text="Filtrar por:">
+                  <Label prefHeight="35.0" prefWidth="82.0" text="Filtrado:">
                      <font>
-                        <Font name="SansSerif Regular" size="14.0" />
+                        <Font name="SansSerif Bold" size="14.0" />
                      </font>
                      <HBox.margin>
                         <Insets />
@@ -154,7 +157,7 @@
                         </ImageView>
                      </graphic>
                   </Label>
-                  <TextField prefHeight="25.0" prefWidth="113.0" promptText="Nombre" styleClass="inputForm" stylesheets="@Styles.css">
+                  <TextField fx:id="txtFilterName" onKeyTyped="#txtFilterNameChanged" prefHeight="25.0" prefWidth="94.0" promptText="Nombre" styleClass="inputForm" stylesheets="@Styles.css">
                      <HBox.margin>
                         <Insets top="7.0" />
                      </HBox.margin>
@@ -167,25 +170,38 @@
                      <HBox.margin>
                         <Insets left="5.0" top="5.0" />
                      </HBox.margin>
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
                   </MenuButton>
                   <MenuButton mnemonicParsing="false" styleClass="filters" stylesheets="@Styles.css" text="Cantidad" textFill="#050315">
                     <items>
-                      <MenuItem mnemonicParsing="false" text="Action 1" />
-                      <MenuItem mnemonicParsing="false" text="Action 2" />
+                        <CheckMenuItem mnemonicParsing="false" text="Ninguno" />
+                        <CheckMenuItem mnemonicParsing="false" />
+                        <CheckMenuItem mnemonicParsing="false" text="Unspecified Action" />
                     </items>
                      <HBox.margin>
-                        <Insets left="5.0" top="5.0" />
+                        <Insets top="5.0" />
+                     </HBox.margin>
+                  </MenuButton>
+                  <MenuButton mnemonicParsing="false" styleClass="filters" stylesheets="@Styles.css" text="Ubicación" textFill="#050315">
+                     <items>
+                        <MenuItem mnemonicParsing="false" text="Action 1" />
+                        <MenuItem mnemonicParsing="false" text="Action 2" />
+                     </items>
+                     <HBox.margin>
+                        <Insets top="5.0" />
                      </HBox.margin>
                   </MenuButton>
                </children>
             </HBox>
-            <VBox alignment="TOP_CENTER" layoutX="544.0" layoutY="-1.0" prefHeight="699.0" prefWidth="295.0" styleClass="rightIndex" stylesheets="@Styles.css" AnchorPane.bottomAnchor="130.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="69.0">
+            <VBox alignment="TOP_CENTER" layoutX="544.0" layoutY="-1.0" prefHeight="501.0" prefWidth="245.0" styleClass="rightIndex" stylesheets="@Styles.css" AnchorPane.bottomAnchor="130.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="70.0">
                <children>
-                  <TabPane maxHeight="482.0" prefHeight="482.0" prefWidth="284.0" styleClass="crudOperations" stylesheets="@Styles.css" tabClosingPolicy="UNAVAILABLE">
+                  <TabPane maxHeight="491.0" prefHeight="491.0" prefWidth="233.0" styleClass="crudOperations" stylesheets="@Styles.css" tabClosingPolicy="UNAVAILABLE">
                     <tabs>
-                      <Tab style="-fx-background-color: #6059ff; -fx-font-weight: 800;" styleClass="tabPane" text="Agregar">
+                      <Tab fx:id="addPane" onSelectionChanged="#addPaneChanged" text="Agregar">
                         <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="406.0" prefWidth="284.0">
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="406.0" prefWidth="233.0">
                                  <children>
                                     <VBox layoutX="31.0" layoutY="7.0" prefHeight="360.0" prefWidth="274.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                                        <children>
@@ -199,16 +215,19 @@
                                              <VBox.margin>
                                                 <Insets top="5.0" />
                                              </VBox.margin></Label>
-                                          <MenuButton mnemonicParsing="false" prefHeight="24.0" prefWidth="275.0" styleClass="progressBar" stylesheets="@Styles.css">
+                                          <MenuButton mnemonicParsing="false" popupSide="RIGHT" prefHeight="24.0" prefWidth="275.0" styleClass="progressBar" stylesheets="@Styles.css">
                                             <items>
                                               <MenuItem mnemonicParsing="false" text="Bebidas" />
-                                              <MenuItem mnemonicParsing="false" text="Action 2" />
+                                              <MenuItem mnemonicParsing="false" text="Cárnicos" />
+                                                <MenuItem mnemonicParsing="false" text="Cereales" />
+                                                <MenuItem mnemonicParsing="false" text="Confitería" />
+                                                <MenuItem mnemonicParsing="false" text="Lácteos" />
                                             </items>
                                              <contextMenu>
                                                 <ContextMenu />
                                              </contextMenu>
                                              <graphic>
-                                                <TextField fx:id="txtAddProductCategory" onInputMethodTextChanged="#addProductCategoryChanged" onKeyTyped="#addProductStoredInChanged" prefHeight="28.0" prefWidth="582.0" promptText="Categoría de su producto" styleClass="inputForm" stylesheets="@Styles.css" />
+                                                <TextField fx:id="txtAddProductCategory" onInputMethodTextChanged="#addProductCategoryChanged" onKeyTyped="#addProductStoredInChanged" prefHeight="25.0" prefWidth="582.0" promptText="Categoría de su producto" styleClass="inputForm" stylesheets="@Styles.css" />
                                              </graphic>
                                              <padding>
                                                 <Insets bottom="-5.0" left="-9.0" top="-4.0" />
@@ -218,24 +237,24 @@
                                              <VBox.margin>
                                                 <Insets top="5.0" />
                                              </VBox.margin></Label>
-                                          <TextField fx:id="txtAddProductQuantity" onInputMethodTextChanged="#addProductQuantityChanged" onKeyTyped="#addProductStoredInChanged" prefHeight="28.0" prefWidth="215.0" promptText="Cantidad en existencias del producto" styleClass="inputForm" stylesheets="@Styles.css" />
+                                          <TextField fx:id="txtAddProductQuantity" onInputMethodTextChanged="#addProductQuantityChanged" onKeyTyped="#addProductStoredInChanged" prefHeight="25.0" prefWidth="215.0" promptText="Cantidad a almacenar" styleClass="inputForm" stylesheets="@Styles.css" />
                                           <Label text="Precio de compra por unidad:">
                                              <VBox.margin>
                                                 <Insets top="5.0" />
                                              </VBox.margin></Label>
-                                          <MenuButton mnemonicParsing="false" styleClass="progressBar" stylesheets="@Styles.css">
+                                          <MenuButton mnemonicParsing="false" popupSide="RIGHT" styleClass="progressBar" stylesheets="@Styles.css">
                                             <items>
-                                                <RadioMenuItem fx:id="rmiCUP" mnemonicParsing="false" selected="true" text="CUP">
+                                                <RadioMenuItem fx:id="rmiBuyCUP" mnemonicParsing="false" selected="true" text="CUP">
                                                    <toggleGroup>
-                                                      <ToggleGroup fx:id="currency" />
+                                                      <ToggleGroup fx:id="buyCurrency" />
                                                    </toggleGroup>
                                                 </RadioMenuItem>
-                                                <RadioMenuItem fx:id="rmiUSD" mnemonicParsing="false" text="USD" toggleGroup="$currency" />
-                                                <RadioMenuItem fx:id="rmiMLC" mnemonicParsing="false" text="MLC" toggleGroup="$currency" />
-                                                <RadioMenuItem fx:id="rmiEUR" mnemonicParsing="false" text="EUR" toggleGroup="$currency" />
+                                                <RadioMenuItem fx:id="rmiBuyUSD" mnemonicParsing="false" text="USD" toggleGroup="$buyCurrency" />
+                                                <RadioMenuItem fx:id="rmiBuyMLC" mnemonicParsing="false" text="MLC" toggleGroup="$buyCurrency" />
+                                                <RadioMenuItem fx:id="rmiBuyEUR" mnemonicParsing="false" text="EUR" toggleGroup="$buyCurrency" />
                                             </items>
                                              <graphic>
-                                                <TextField fx:id="txtAddProductPricePerUnit" onInputMethodTextChanged="#addProductPricePerUnitChanged" onKeyTyped="#addProductStoredInChanged" prefHeight="25.0" prefWidth="311.0" promptText="Precio de 1 unidad del producto" styleClass="inputForm" stylesheets="@Styles.css">
+                                                <TextField fx:id="txtAddProductBuyPrice" onInputMethodTextChanged="#addProductBuyPrice" prefHeight="25.0" prefWidth="311.0" promptText="Dinero invertido por unidad" styleClass="inputForm" stylesheets="@Styles.css">
                                                    <tooltip>
                                                       <Tooltip text="Precio al que deseas vender cada unidad del producto  (en la zona de ventas este precio puede ser cambiado)" wrapText="true">
                                                          <font>
@@ -249,12 +268,43 @@
                                                 <Insets bottom="-5.0" left="-9.0" top="-4.0" />
                                              </padding>
                                           </MenuButton>
-                                          <Label text="Almacenado en:">
+                                          <Label text="Precio de venta por unidad:">
                                              <VBox.margin>
                                                 <Insets top="5.0" />
                                              </VBox.margin>
                                           </Label>
-                                          <TextField fx:id="txtAddProductStoredIn" onInputMethodTextChanged="#addProductStoredInChanged" onKeyTyped="#addProductStoredInChanged" prefHeight="28.0" promptText="Donde vas a almacenar el producto" styleClass="inputForm" stylesheets="@Styles.css" />
+                                          <MenuButton mnemonicParsing="false" popupSide="RIGHT" styleClass="progressBar" stylesheets="@Styles.css">
+                                             <items>
+                                                <RadioMenuItem fx:id="rmiSellCUP" mnemonicParsing="false" selected="true" text="CUP">
+                                                   <toggleGroup>
+                                                      <ToggleGroup fx:id="sellCurrency" />
+                                                   </toggleGroup>
+                                                </RadioMenuItem>
+                                                <RadioMenuItem fx:id="rmiSellUSD" mnemonicParsing="false" text="USD" toggleGroup="$sellCurrency" />
+                                                <RadioMenuItem fx:id="rmiSellMLC" mnemonicParsing="false" text="MLC" toggleGroup="$sellCurrency" />
+                                                <RadioMenuItem fx:id="rmiSellEUR" mnemonicParsing="false" text="EUR" toggleGroup="$sellCurrency" />
+                                             </items>
+                                             <graphic>
+                                                <TextField fx:id="txtAddProductSellPrice" onInputMethodTextChanged="#addProductSellPrice" prefHeight="25.0" prefWidth="311.0" promptText="Precio de venta por unidad" styleClass="inputForm" stylesheets="@Styles.css">
+                                                   <tooltip>
+                                                      <Tooltip text="Precio al que deseas vender cada unidad del producto  (en la zona de ventas este precio puede ser cambiado)" wrapText="true">
+                                                         <font>
+                                                            <Font size="14.0" />
+                                                         </font>
+                                                      </Tooltip>
+                                                   </tooltip>
+                                                </TextField>
+                                             </graphic>
+                                             <padding>
+                                                <Insets bottom="-5.0" left="-9.0" top="-4.0" />
+                                             </padding>
+                                          </MenuButton>
+                                          <Label text="Almacenarlo en:">
+                                             <VBox.margin>
+                                                <Insets top="5.0" />
+                                             </VBox.margin>
+                                          </Label>
+                                          <TextField fx:id="txtAddProductStoredIn" onInputMethodTextChanged="#addProductStoredInChanged" onKeyTyped="#addProductStoredInChanged" prefHeight="25.0" promptText="Donde vas a almacenarlo" styleClass="inputForm" stylesheets="@Styles.css" />
                                         <Button mnemonicParsing="false" onAction="#addOrUpgradeProduct" prefHeight="33.0" prefWidth="331.0" styleClass="btnStock" stylesheets="@Styles.css" text="Actualizar o Agregar">
                                              <tooltip>
                                                 <Tooltip consumeAutoHidingEvents="false" text="Si el nombre y la categoria coinciden con algún producto ya registrado, este se actualizará y en caso diferente se agregará al registro" wrapText="true">
@@ -274,20 +324,15 @@
                                                 <Insets top="10.0" />
                                              </VBox.margin>
                                           </Button>
-                                          <ProgressBar fx:id="progressBar" prefHeight="16.0" prefWidth="372.0" progress="0.0" styleClass="progressBar" stylesheets="@Styles.css">
-                                             <padding>
-                                                <Insets bottom="4.0" left="4.0" right="4.0" />
-                                             </padding>
-                                          </ProgressBar>
-                                          <Label fx:id="txtAddDebugForm" alignment="TOP_LEFT" prefHeight="95.0" prefWidth="274.0" text="En esta zona puede actualizar los productos existentes si el nombre, la categoria y el almacenamiento coinciden, en caso contrario se agregará el producto al registro" wrapText="true">
+                                          <Label fx:id="txtAddDebugForm" alignment="TOP_LEFT" prefHeight="86.0" prefWidth="223.0" text="Puede actualizar los productos existentes si el nombre y el almacenamiento coinciden, en caso contrario se agregará el producto" textAlignment="CENTER" wrapText="true">
                                              <padding>
                                                 <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                              </padding>
                                              <VBox.margin>
-                                                <Insets top="10.0" />
+                                                <Insets />
                                              </VBox.margin>
                                              <font>
-                                                <Font size="13.0" />
+                                                <Font name="System Bold" size="13.0" />
                                              </font></Label>
                                           <Button mnemonicParsing="false" onAction="#cleanForm" prefHeight="30.0" prefWidth="275.0" styleClass="btnStock" stylesheets="@Styles.css" text="Limpiar Formulario">
                                              <graphic>
@@ -298,7 +343,7 @@
                                                 </ImageView>
                                              </graphic>
                                              <VBox.margin>
-                                                <Insets top="10.0" />
+                                                <Insets />
                                              </VBox.margin>
                                           </Button>
                                        </children>
@@ -317,36 +362,24 @@
                               <Tooltip text="MIra papo esto es para comprar" />
                            </tooltip>
                       </Tab>
-                      <Tab style="-fx-background-color: #6059ff; -fx-font-weight: 800;" text="Vender">
+                      <Tab fx:id="sellPane" onSelectionChanged="#sellPaneChanged" text="Vender">
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                  <children>
                                     <VBox prefHeight="231.0" prefWidth="157.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                                        <children>
                                           <Label text="Nombre:" />
-                                          <TextField prefHeight="25.0" prefWidth="215.0" styleClass="inputForm" stylesheets="@Styles.css" />
-                                          <Label text="Categoria:" />
-                                          <HBox>
-                                             <children>
-                                                <MenuButton mnemonicParsing="false" prefHeight="25.0" prefWidth="401.0" styleClass="progressBar" stylesheets="@Styles.css">
-                                                   <items>
-                                                      <MenuItem mnemonicParsing="false" text="Action 1" />
-                                                      <MenuItem mnemonicParsing="false" text="Action 2" />
-                                                   </items>
-                                                   <contextMenu>
-                                                      <ContextMenu />
-                                                   </contextMenu>
-                                                   <graphic>
-                                                      <TextField prefHeight="28.0" prefWidth="582.0" styleClass="inputForm" stylesheets="@Styles.css" />
-                                                   </graphic>
-                                                   <padding>
-                                                      <Insets bottom="-5.0" left="-9.0" right="-1.0" top="-4.0" />
-                                                   </padding>
-                                                </MenuButton>
-                                             </children>
-                                          </HBox>
-                                          <Label text="Cantidad:" />
-                                          <TextField prefHeight="28.0" prefWidth="215.0" styleClass="inputForm" stylesheets="@Styles.css" />
+                                          <TextField fx:id="txtSellProductSellName" editable="false" opacity="0.4" prefHeight="25.0" prefWidth="215.0" promptText="Nombre del producto" styleClass="inputForm" stylesheets="@Styles.css" />
+                                          <Label text="Categoria:">
+                                             <VBox.margin>
+                                                <Insets top="5.0" />
+                                             </VBox.margin></Label>
+                                          <TextField fx:id="txtSellProductSellCategory" editable="false" opacity="0.4" prefHeight="25.0" prefWidth="582.0" promptText="Categoria del producto" styleClass="inputForm" stylesheets="@Styles.css" />
+                                          <Label text="Cantidad:">
+                                             <VBox.margin>
+                                                <Insets top="5.0" />
+                                             </VBox.margin></Label>
+                                          <TextField fx:id="txtSellProductSellQuantity" prefHeight="25.0" prefWidth="215.0" promptText="Cantidad a vender" styleClass="inputForm" stylesheets="@Styles.css" />
                                           <Label text="Precio de venta por unidad: ">
                                              <VBox.margin>
                                                 <Insets top="5.0" />
@@ -355,14 +388,45 @@
                                                 <Font name="System Bold" size="12.0" />
                                              </font>
                                           </Label>
-                                          <TextField styleClass="inputForm" stylesheets="@Styles.css" />
-                                          <Label prefHeight="17.0" prefWidth="56.0" text="Candela">
+                                          <MenuButton mnemonicParsing="false" popupSide="RIGHT" styleClass="progressBar" stylesheets="@Styles.css">
+                                             <items>
+                                                <RadioMenuItem fx:id="radioSellCUP" mnemonicParsing="false" selected="true" text="CUP">
+                                                   <toggleGroup>
+                                                      <ToggleGroup fx:id="sellCurrencyInSell" />
+                                                   </toggleGroup>
+                                                </RadioMenuItem>
+                                                <RadioMenuItem fx:id="radioSellUSD" mnemonicParsing="false" text="USD" toggleGroup="$sellCurrencyInSell" />
+                                                <RadioMenuItem fx:id="radioSellMLC" mnemonicParsing="false" text="MLC" toggleGroup="$sellCurrencyInSell" />
+                                                <RadioMenuItem fx:id="radioSellEUR" mnemonicParsing="false" text="EUR" toggleGroup="$sellCurrencyInSell" />
+                                             </items>
+                                             <graphic>
+                                                <TextField fx:id="txtSellProductSellPrice" onInputMethodTextChanged="#addProductSellPrice" prefHeight="25.0" prefWidth="311.0" promptText="Precio real por unidad" styleClass="inputForm" stylesheets="@Styles.css">
+                                                   <tooltip>
+                                                      <Tooltip text="Precio al que deseas vender cada unidad del producto  (en la zona de ventas este precio puede ser cambiado)" wrapText="true">
+                                                         <font>
+                                                            <Font size="14.0" />
+                                                         </font>
+                                                      </Tooltip>
+                                                   </tooltip>
+                                                </TextField>
+                                             </graphic>
+                                             <padding>
+                                                <Insets bottom="-5.0" left="-9.0" top="-4.0" />
+                                             </padding>
+                                          </MenuButton>
+                                          <Label prefHeight="17.0" prefWidth="107.0" text="Almacenamiento:">
                                              <VBox.margin>
                                                 <Insets top="5.0" />
                                              </VBox.margin>
                                           </Label>
-                                          <TextField styleClass="inputForm" stylesheets="@Styles.css" />
-                                          <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="317.0" styleClass="btnStock" stylesheets="@Styles.css" text="Vender">
+                                          <TextField fx:id="txtSellProductSellStored" prefHeight="25.0" promptText="Donde extrae el producto" styleClass="inputForm" stylesheets="@Styles.css" />
+                                          <Label text="Fecha de venta:">
+                                             <VBox.margin>
+                                                <Insets top="5.0" />
+                                             </VBox.margin>
+                                          </Label>
+                                          <DatePicker fx:id="txtSellProductDatePicker" prefHeight="27.0" prefWidth="238.0" showWeekNumbers="true" />
+                                          <Button mnemonicParsing="false" onAction="#sellProduct" prefHeight="26.0" prefWidth="317.0" styleClass="btnStock" stylesheets="@Styles.css" text="Vender">
                                              <VBox.margin>
                                                 <Insets top="5.0" />
                                              </VBox.margin>
@@ -374,7 +438,22 @@
                                                 </ImageView>
                                              </graphic>
                                           </Button>
-                                          <Label fx:id="txtSellDebugForm" alignment="TOP_LEFT" prefHeight="158.0" prefWidth="293.0" wrapText="true" />
+                                          <Label fx:id="txtSellDebugForm" alignment="TOP_LEFT" prefHeight="149.0" prefWidth="225.0" text="Seleccione un producto de la tabla y gestione la cantidad vendida para acto seguido presionar el botón &quot;vender&quot;" textAlignment="CENTER" wrapText="true">
+                                             <font>
+                                                <Font name="System Bold" size="14.0" />
+                                             </font>
+                                             <padding>
+                                                <Insets top="5.0" />
+                                             </padding></Label>
+                                          <Button mnemonicParsing="false" onAction="#cleanForm" prefHeight="30.0" prefWidth="275.0" styleClass="btnStock" stylesheets="@Styles.css" text="Limpiar Formulario">
+                                             <graphic>
+                                                <ImageView fitHeight="19.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@images/alert%20(2).png" />
+                                                   </image>
+                                                </ImageView>
+                                             </graphic>
+                                          </Button>
                                        </children>
                                     </VBox>
                                  </children></AnchorPane>
@@ -389,14 +468,14 @@
                       </Tab>
                     </tabs>
                      <VBox.margin>
-                        <Insets left="5.0" right="5.0" top="10.0" />
+                        <Insets left="5.0" right="5.0" top="5.0" />
                      </VBox.margin>
                   </TabPane>
                </children>
             </VBox>
             <VBox layoutY="632.0" prefHeight="55.0" prefWidth="120.0" styleClass="index" stylesheets="@Styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#displayConfigurationView" prefHeight="60.0" styleClass="btnIndex" stylesheets="@Styles.css" text="Ajustes">
+                  <Button mnemonicParsing="false" onAction="#switchToConfiguration" prefHeight="60.0" styleClass="btnIndex" stylesheets="@Styles.css" text="Ajustes">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin>
@@ -415,39 +494,47 @@
                   </Button>
                </children>
             </VBox>
-            <VBox alignment="TOP_CENTER" layoutX="741.0" layoutY="542.0" prefHeight="130.0" prefWidth="295.0" styleClass="rightIndex" stylesheets="@Styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <VBox alignment="TOP_CENTER" layoutX="741.0" layoutY="542.0" prefHeight="130.0" prefWidth="243.0" styleClass="rightIndex" stylesheets="@Styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <children>
                   <AnchorPane prefHeight="159.0" prefWidth="284.0" styleClass="crudOperations" stylesheets="@Styles.css">
                      <children>
-                        <Label layoutX="84.0" layoutY="14.0" text="Zona de alertas:">
-                           <font>
-                              <Font name="System Bold" size="14.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="19.0" layoutY="46.0" prefHeight="29.0" prefWidth="214.0" text="Advertencia:" wrapText="true">
-                           <graphic>
-                              <ImageView fitHeight="25.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@images/warning.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                           <font>
-                              <Font name="System Bold" size="14.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="19.0" layoutY="79.0" prefHeight="28.0" prefWidth="214.0" text="Alerta mayor:">
-                           <graphic>
-                              <ImageView fitHeight="25.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@images/Alert.PNG" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                           <font>
-                              <Font name="System Bold" size="14.0" />
-                           </font>
-                        </Label>
+                        <VBox layoutX="7.0" layoutY="11.0" prefHeight="99.0" prefWidth="220.0">
+                           <children>
+                              <HBox alignment="CENTER" prefWidth="200.0">
+                                 <children>
+                                    <Label text="Zona de avisos:">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <Label fx:id="txtWarning" prefHeight="29.0" prefWidth="214.0" text="Advertencia:" wrapText="true">
+                                 <graphic>
+                                    <ImageView fitHeight="25.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/warning.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="txtAlert" prefHeight="28.0" prefWidth="214.0" text="Alerta superior:">
+                                 <graphic>
+                                    <ImageView fitHeight="25.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/Alert.PNG" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
                      </children>
                      <VBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -455,9 +542,9 @@
                   </AnchorPane>
                </children>
             </VBox>
-            <Button layoutX="625.0" layoutY="76.0" mnemonicParsing="false" onAction="#removeProduct" prefHeight="28.0" prefWidth="99.0" styleClass="btnDelete" stylesheets="@Styles.css" text="Eliminar" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="76.0">
+            <Button layoutX="625.0" layoutY="76.0" mnemonicParsing="false" onAction="#removeProduct" prefHeight="25.0" prefWidth="99.0" styleClass="btnDelete" stylesheets="@Styles.css" text="Eliminar" AnchorPane.rightAnchor="250.0" AnchorPane.topAnchor="76.0">
                <graphic>
-                  <ImageView fitHeight="27.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@images/trash.png" />
                      </image>

@@ -49,7 +49,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Client findByIsClientActive(Boolean isActive) {
+    public Client getByIsClientActive(Boolean isActive) {
         return clientRepository.findByIsClientActive(isActive);
     }
 

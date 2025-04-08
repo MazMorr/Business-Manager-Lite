@@ -1,4 +1,3 @@
-
 package com.marcosoft.storageSoftware.controller;
 
 import com.marcosoft.storageSoftware.Main;
@@ -54,7 +53,8 @@ public class CreateClientViewController {
             alert.setHeaderText("Información de creación de la cuenta");
             if (txtFieldCompany.getText() != null) {
                 alert.setContentText("Usted ha creado la cuenta con nombre " + txtFieldUserName.getText() +
-                        " perteneciente la compañía " + txtFieldCompany.getText() + " \n¡Por favor no olvidar su contraseña!");
+                        " perteneciente la compañía " + txtFieldCompany.getText() +
+                        " \n¡Por favor no olvidar su contraseña!");
             } else {
                 alert.setContentText("Usted ha creado la cuenta con nombre " + txtFieldUserName.getText()
                         + " \n¡Por favor no olvidar su contraseña!");
@@ -70,9 +70,8 @@ public class CreateClientViewController {
 
     @FXML
     public void txtFieldTypingUserName() {
-
         if (txtFieldUserName.getLength() > 16) {
-            txtDebugForm.setText("El Nombre de Usuario no puede exceder los 16 carácteres");
+            txtDebugForm.setText("El nombre de usuario no puede superar los 16 caracteres. Por favor, ingrese un nombre más corto.");
             txtDebugForm.setTextFill(RED);
             if (userNameIsSet) {
                 percentageName -= 0.5;
@@ -80,8 +79,16 @@ public class CreateClientViewController {
             }
 
         } else if (txtFieldUserName.getLength() < 4) {
-            txtDebugForm.setText("El Nombre de Usuario debe tener al menos 4 carácteres");
+            txtDebugForm.setText("El nombre de usuario debe tener al menos 4 caracteres. Por favor, ingrese un nombre más largo.");
             txtDebugForm.setTextFill(ORANGERED);
+            if (userNameIsSet) {
+                percentageName -= 0.5;
+                userNameIsSet = false;
+            }
+
+        } else if (clientServiceImpl.existsByClientName(txtFieldUserName.getText())) {
+            txtDebugForm.setText("El nombre de usuario ya está en uso. Por favor, elija un nombre diferente.");
+            txtDebugForm.setTextFill(RED);
             if (userNameIsSet) {
                 percentageName -= 0.5;
                 userNameIsSet = false;
@@ -89,10 +96,9 @@ public class CreateClientViewController {
 
         } else if (!userNameIsSet && txtFieldUserName.getLength() > 3 && txtFieldUserName.getLength() < 16) {
             txtDebugForm.setTextFill(GREEN);
-            txtDebugForm.setText("El nombre de usuario es permitido");
+            txtDebugForm.setText("El nombre de usuario está disponible.");
             userNameIsSet = true;
             percentageName += 0.5;
-
         }
         percentageBar.setProgress(percentageName + percentagePassword);
     }
@@ -107,27 +113,31 @@ public class CreateClientViewController {
         if (txtFieldPassword.getLength() > 16 || passFieldPasswordConfirmed.getLength() > 16) {
             txtDebugForm.setTextFill(RED);
             if (confirmedPasswordIsSet) {
-                txtDebugForm.setText("La contraseña confirmada debe exceder los 16 carácteres");
+                txtDebugForm.setText("La confirmación de la contraseña no puede superar los 16 caracteres. Por favor, revise su entrada.");
                 confirmedPasswordIsSet = false;
                 percentageConfirmedPassword -= 0.25;
             } else if (passwordIsSet) {
-                txtDebugForm.setText("La contraseña debe exceder los 16 carácteres");
+                txtDebugForm.setText("La contraseña no puede superar los 16 caracteres. Por favor, revise su entrada.");
                 passwordIsSet = false;
                 percentagePassword -= 0.25;
             }
 
         } else if (txtFieldPassword.getLength() < 4 || passFieldPasswordConfirmed.getLength() < 4) {
             txtDebugForm.setTextFill(ORANGERED);
-            txtDebugForm.setText("La contraseña debe tener al menos 4 caracteres");
+            txtDebugForm.setText("La contraseña debe tener al menos 4 caracteres. Por favor, ingrese una contraseña más larga.");
             if (confirmedPasswordIsSet) {
-                txtDebugForm.setText("La contraseña confirmada debe tener al menos 4 carácteres");
+                txtDebugForm.setText("La confirmación de la contraseña debe tener al menos 4 caracteres. Por favor, revise su entrada.");
                 confirmedPasswordIsSet = false;
                 percentageConfirmedPassword -= 0.25;
             } else if (passwordIsSet) {
-                txtDebugForm.setText("La contraseña debe tener al menos 4 caracteres");
+                txtDebugForm.setText("La contraseña debe tener al menos 4 caracteres. Por favor, revise su entrada.");
                 passwordIsSet = false;
                 percentagePassword -= 0.25;
             }
+
+        } else if (txtFieldPassword.getLength() >= 4 && passFieldPasswordConfirmed.getLength() == 0) {
+            txtDebugForm.setTextFill(ORANGERED);
+            txtDebugForm.setText("Por favor, confirme su contraseña ingresándola nuevamente en el campo de confirmación.");
 
         } else if (txtFieldPassword.getText().equals(passFieldPasswordConfirmed.getText()) && !passwordIsSet) {
             if ((txtFieldPassword.getLength() > 3 && txtFieldPassword.getLength() < 16) && (passFieldPasswordConfirmed.getLength() > 3 && passFieldPasswordConfirmed.getLength() < 16)) {
@@ -136,7 +146,7 @@ public class CreateClientViewController {
                 percentagePassword += 0.25;
                 percentageConfirmedPassword += 0.25;
 
-                txtDebugForm.setText("Las contraseñas coinciden");
+                txtDebugForm.setText("Las contraseñas coinciden. Puede continuar.");
                 txtDebugForm.setTextFill(GREEN);
             }
 
@@ -144,12 +154,11 @@ public class CreateClientViewController {
             if (passwordIsSet) {
                 passwordIsSet = false;
                 percentagePassword -= 0.5;
-                txtDebugForm.setText("Las contraseñas no coinciden");
+                txtDebugForm.setText("Las contraseñas no coinciden. Por favor, asegúrese de que ambas contraseñas sean iguales.");
                 txtDebugForm.setTextFill(RED);
             }
         }
         percentageBar.setProgress(percentageName + percentagePassword + percentageConfirmedPassword);
-
     }
 
     @FXML

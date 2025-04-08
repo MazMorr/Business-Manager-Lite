@@ -13,96 +13,172 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="300.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.controller.ConfigurationViewController">
+<StackPane prefHeight="700.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.controller.ConfigurationViewController">
    <children>
       <AnchorPane prefWidth="330.0">
          <children>
-            <VBox alignment="TOP_CENTER" layoutX="10.0" layoutY="52.0" prefHeight="179.0" prefWidth="310.0" spacing="20.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="52.0">
+            <VBox alignment="TOP_CENTER" layoutX="342.0" layoutY="227.0" prefHeight="293.0" prefWidth="201.0" spacing="20.0">
                <children>
-                  <HBox alignment="CENTER_LEFT">
-                     <children>
-                        <MenuButton fx:id="mbLanguage" alignment="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" styleClass="btnStock" stylesheets="@Styles.css" text="Idioma" textAlignment="CENTER" textFill="#eeeeee" wrapText="true" HBox.hgrow="ALWAYS">
-                          <items>
-                              <RadioMenuItem mnemonicParsing="false" onAction="#switchLanguageToSpanish" selected="true" text="Español">
-                                 <toggleGroup>
-                                    <ToggleGroup fx:id="rdmiLanguage" />
-                                 </toggleGroup>
-                              </RadioMenuItem>
-                              <RadioMenuItem mnemonicParsing="false" onAction="#switchLanguageToEnglish" text="English" toggleGroup="$rdmiLanguage" />
-                          </items>
-                        </MenuButton>
-                        <Button mnemonicParsing="false" onAction="#closeSession" prefHeight="40.0" prefWidth="140.0" styleClass="btnStock" stylesheets="@Styles.css" text="Cerrar Sesión" textFill="#eeeeee">
-                           <HBox.margin>
-                              <Insets left="30.0" />
-                           </HBox.margin>
-                        </Button>
-                     </children>
-                  </HBox>
-                  <HBox>
-                     <children>
-                        <MenuButton alignment="CENTER" contentDisplay="BOTTOM" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" styleClass="btnStock" stylesheets="@Styles.css" text="Importar" textFill="#eeeeee">
-                          <items>
-                            <MenuItem mnemonicParsing="false" text="Action 1" />
-                            <MenuItem mnemonicParsing="false" text="Action 2" />
-                          </items>
-                        </MenuButton>
-                        <MenuButton alignment="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" styleClass="btnStock" stylesheets="@Styles.css" text="Exportar" textAlignment="CENTER" textFill="#eeeeee">
-                          <items>
-                            <MenuItem mnemonicParsing="false" text="Exportar Base de Datos" />
-                            <MenuItem mnemonicParsing="false" text="Action 2" />
-                          </items>
-                           <HBox.margin>
-                              <Insets left="30.0" />
-                           </HBox.margin>
-                        </MenuButton>
-                     </children></HBox>
-                  <HBox alignment="CENTER_LEFT">
-                     <children>
-                        <MenuButton fx:id="mbAppTheme" alignment="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" styleClass="btnStock" stylesheets="@Styles.css" text="Tema" textAlignment="CENTER" textFill="#eeeeee" wrapText="true" HBox.hgrow="ALWAYS">
-                          <items>
-                              <RadioMenuItem fx:id="rdmiLightTheme" mnemonicParsing="false" selected="true" text="Modo Claro">
-                                 <toggleGroup>
-                                    <ToggleGroup fx:id="rdmiTheme" />
-                                 </toggleGroup>
-                              </RadioMenuItem>
-                              <RadioMenuItem fx:id="rdmiDarkTheme" mnemonicParsing="false" text="Modo Oscuro" toggleGroup="$rdmiTheme" />
-                          </items>
-                        </MenuButton>
-                        <MenuButton fx:id="mbResolution" alignment="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" styleClass="btnStock" stylesheets="@Styles.css" text="Resolución" textAlignment="CENTER" textFill="#eeeeee" wrapText="true" HBox.hgrow="ALWAYS">
-                          <items>
-                              <RadioMenuItem mnemonicParsing="false" selected="true" text="800x600">
-                                 <toggleGroup>
-                                    <ToggleGroup fx:id="rdmiResolution" />
-                                 </toggleGroup>
-                              </RadioMenuItem>
-                              <RadioMenuItem mnemonicParsing="false" text="1280x720" toggleGroup="$rdmiResolution" />
-                              <RadioMenuItem mnemonicParsing="false" text="1920x1980" toggleGroup="$rdmiResolution" />
-                          </items>
-                           <HBox.margin>
-                              <Insets left="30.0" />
-                           </HBox.margin>
-                        </MenuButton>
-                     </children>
-                  </HBox>
+                  <MenuButton fx:id="mbLanguage" alignment="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" styleClass="btnStock" stylesheets="@Styles.css" text="Idioma" textAlignment="CENTER" textFill="#eeeeee" wrapText="true">
+                    <items>
+                        <RadioMenuItem mnemonicParsing="false" onAction="#switchLanguageToSpanish" selected="true" text="Español">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="rdmiLanguage" />
+                           </toggleGroup>
+                        </RadioMenuItem>
+                        <RadioMenuItem mnemonicParsing="false" onAction="#switchLanguageToEnglish" text="English" toggleGroup="$rdmiLanguage" />
+                    </items>
+                  </MenuButton>
+                  <MenuButton alignment="CENTER" contentDisplay="BOTTOM" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" styleClass="btnStock" stylesheets="@Styles.css" text="Importar" textFill="#eeeeee">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Action 1" />
+                      <MenuItem mnemonicParsing="false" text="Action 2" />
+                    </items>
+                  </MenuButton>
+                  <MenuButton alignment="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" styleClass="btnStock" stylesheets="@Styles.css" text="Exportar" textAlignment="CENTER" textFill="#eeeeee">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Exportar Base de Datos" />
+                      <MenuItem mnemonicParsing="false" text="Action 2" />
+                    </items>
+                  </MenuButton>
+                  <MenuButton fx:id="mbAppTheme" alignment="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" styleClass="btnStock" stylesheets="@Styles.css" text="Tema" textAlignment="CENTER" textFill="#eeeeee" wrapText="true">
+                    <items>
+                        <RadioMenuItem fx:id="rdmiLightTheme" mnemonicParsing="false" selected="true" text="Modo Claro">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="rdmiTheme" />
+                           </toggleGroup>
+                        </RadioMenuItem>
+                        <RadioMenuItem fx:id="rdmiDarkTheme" mnemonicParsing="false" text="Modo Oscuro" toggleGroup="$rdmiTheme" />
+                    </items>
+                  </MenuButton>
+                  <MenuButton fx:id="mbResolution" alignment="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" styleClass="btnStock" stylesheets="@Styles.css" text="Resolución" textAlignment="CENTER" textFill="#eeeeee" wrapText="true">
+                    <items>
+                        <RadioMenuItem mnemonicParsing="false" selected="true" text="800x600">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="rdmiResolution" />
+                           </toggleGroup>
+                        </RadioMenuItem>
+                        <RadioMenuItem mnemonicParsing="false" text="1280x720" toggleGroup="$rdmiResolution" />
+                        <RadioMenuItem mnemonicParsing="false" text="1920x1980" toggleGroup="$rdmiResolution" />
+                    </items>
+                  </MenuButton>
                </children>
             </VBox>
-            <Label fx:id="txtUser" layoutX="10.0" layoutY="6.0" prefHeight="17.0" prefWidth="119.0" text="Usuario: ">
-               <graphic>
-                  <ImageView fitHeight="19.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/Avatar.png" />
-                     </image>
-                  </ImageView>
-               </graphic></Label>
-            <Label fx:id="txtCompany" layoutX="11.0" layoutY="25.0" text="Compañía: ">
+            <Label fx:id="txtClientCompany" layoutX="231.0" layoutY="96.0" prefHeight="46.0" prefWidth="140.0" text="Compañía: ">
                <graphic>
                   <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@images/company.png" />
                      </image>
                   </ImageView>
-               </graphic></Label>
+               </graphic>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font></Label>
+            <VBox alignment="TOP_CENTER" layoutY="195.0" prefHeight="500.0" prefWidth="120.0" styleClass="index" stylesheets="@Styles.css" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="70.0">
+               <children>
+                  <Button ellipsisString="" mnemonicParsing="false" onAction="#switchToStock" styleClass="btnIndex" stylesheets="@Styles.css" text="Existencias">
+                     <font>
+                        <Font name="System Bold" size="17.0" />
+                     </font>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#switchToRegistry" styleClass="btnIndex" stylesheets="@Styles.css" text="Registros">
+                     <font>
+                        <Font name="System Bold" size="17.0" />
+                     </font>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#switchToWallet" styleClass="btnIndex" stylesheets="@Styles.css" text="Billetera">
+                     <font>
+                        <Font name="System Bold" size="17.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#switchToSupport" styleClass="btnIndex" stylesheets="@Styles.css" text="Soporte">
+                     <font>
+                        <Font name="System Bold" size="17.0" />
+                     </font>
+                  </Button>
+               </children>
+            </VBox>
+            <HBox alignment="TOP_CENTER" layoutX="86.0" layoutY="14.0" prefHeight="70.0" prefWidth="800.0" styleClass="slogan" stylesheets="@Styles.css" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="68.0" prefWidth="421.0" styleClass="title" stylesheets="@Styles.css" text="Ajustes" textFill="#eeeeee">
+                     <font>
+                        <Font name="Constantia Bold Italic" size="60.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox layoutX="66.0" layoutY="91.0" prefHeight="70.0" prefWidth="220.0" styleClass="slogan" stylesheets="@Styles.css" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Label fx:id="txtClientName" contentDisplay="TOP" prefHeight="70.0" prefWidth="172.0" styleClass="clientName" stylesheets="@Styles.css" text="Marco A. Romeros" textFill="#eeeeee" wrapText="true">
+                     <font>
+                        <Font name="SansSerif Regular" size="14.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="47.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/Avatar.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox alignment="TOP_RIGHT" layoutX="802.0" layoutY="14.0" prefHeight="70.0" prefWidth="222.0" styleClass="slogan" stylesheets="@Styles.css" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <VBox alignment="TOP_CENTER" prefHeight="47.0" prefWidth="143.0">
+                     <children>
+                        <Label text="Balance Total USD" textFill="#eeeeee">
+                           <font>
+                              <Font name="SansSerif Bold" size="16.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </Label>
+                        <Label text="17000000" textFill="#38ff01">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <HBox.margin>
+                        <Insets right="5.0" top="5.0" />
+                     </HBox.margin>
+                  </VBox>
+               </children>
+            </HBox>
+            <VBox layoutY="650.0" prefHeight="55.0" prefWidth="120.0" styleClass="index" stylesheets="@Styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+               <children>
+                  <Button disable="true" mnemonicParsing="false" prefHeight="60.0" styleClass="btnIndex" stylesheets="@Styles.css" text="Ajustes">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <graphic>
+                        <ImageView fitHeight="32.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/gears.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+               </children>
+            </VBox>
+            <Button layoutX="838.0" layoutY="118.0" mnemonicParsing="false" onAction="#closeSession" prefHeight="40.0" prefWidth="140.0" styleClass="btnStock" stylesheets="@Styles.css" text="Cerrar Sesión" textFill="#eeeeee" />
          </children>
       </AnchorPane>
    </children>

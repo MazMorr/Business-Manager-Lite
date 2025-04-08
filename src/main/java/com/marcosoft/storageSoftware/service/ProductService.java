@@ -10,4 +10,5 @@ public interface ProductService {
     void deleteByProductName(String productName);
     Product getByProductName(String name);
     void updateQuantityInStorageByProductName(Integer stock, String name);
+    List<Product> getAllProductsByClient_IsClientActive(Boolean isClientActive);
 }

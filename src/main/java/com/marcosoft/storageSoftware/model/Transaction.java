@@ -18,17 +18,15 @@ import java.time.LocalDate;
 @Table(name = "Transaction")
 public class Transaction implements Serializable {
 
-    //Attributes
     @Id
-    @SequenceGenerator(name = "transaction_sequence", sequenceName = "transaction_sequence",
-            initialValue = 1, allocationSize = 1
-    )
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "transaction_sequence")
-    @Column(name = "transaction_id", nullable = false, unique = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long transactionId;
 
     @Column(name = "transaction_price", nullable = false, precision = 10, scale = 2)
     private BigDecimal transactionPrice;
+
+    @Column(name="category_name", nullable = false)
+    private String categoryName;
 
     @Column(name = "transaction_stock", nullable = false)
     private Integer transactionStock;
@@ -43,11 +41,13 @@ public class Transaction implements Serializable {
     @JoinColumn(name = "client_id", nullable = false)
     private Client clientId;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product productId;
+    @Column(name = "product_name", nullable = false)
+    private String productName;
 
-    @ManyToOne
-    @JoinColumn(name = "tipo_transaccion", nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "transaction_type", nullable = false)
     private TransactionType transactionType;
+
+    @Column(name= "storage", nullable = false)
+    private String transactionStorage;
 }
