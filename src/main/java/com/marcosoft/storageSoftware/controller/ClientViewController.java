@@ -80,7 +80,7 @@ public class ClientViewController {
                     windowShowing.closeAllWindows();
                     if (showAlert()) {
                         clientServiceImpl.updateIsClientActiveByClientName(false,
-                                clientServiceImpl.findByIsClientActive(true).getClientName());
+                                clientServiceImpl.getByIsClientActive(true).getClientName());
                         stage.close();
                     } else {
                         e.consume();
@@ -125,9 +125,8 @@ public class ClientViewController {
     @FXML
     public void initialize() {
         if (clientServiceImpl.existsByIsClientActive(true)) {
-            clientServiceImpl.updateIsClientActiveByClientName(false, clientServiceImpl.
-                    getByClientNameAndClientPassword(txtFieldName.getText(), txtFieldPassword.getText())
-                    .getClientName());
+            clientServiceImpl.updateIsClientActiveByClientName(false,
+                    clientServiceImpl.getByIsClientActive(true).getClientName());
         }
     }
 }

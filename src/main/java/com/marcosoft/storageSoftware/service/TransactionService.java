@@ -9,4 +9,5 @@ public interface TransactionService {
     Transaction getTransactionById(Long id);
     List<Transaction> getAllTransactions();
     void deleteById(Long id);
+    List<Transaction> getByClientId_IsClientActiveOrderByTransactionIdAsc(Boolean isClientActive);
 }

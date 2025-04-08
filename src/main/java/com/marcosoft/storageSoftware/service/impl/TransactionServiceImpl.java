@@ -38,4 +38,9 @@ public class TransactionServiceImpl implements TransactionService {
     public void deleteById(Long id) {
         transactionRepository.deleteById(id);
     }
+
+    @Override
+    public List<Transaction> getByClientId_IsClientActiveOrderByTransactionIdAsc(Boolean isClientActive) {
+        return transactionRepository.findByClientId_IsClientActiveOrderByTransactionIdAsc(isClientActive);
+    }
 }

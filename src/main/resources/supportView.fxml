@@ -18,7 +18,7 @@
          <children>
             <VBox prefHeight="55.0" prefWidth="120.0" styleClass="index" stylesheets="@Styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#displayConfigurationView" prefHeight="60.0" styleClass="btnIndex" stylesheets="@Styles.css" text="Ajustes">
+                  <Button mnemonicParsing="false" onAction="#switchToConfiguration" prefHeight="60.0" styleClass="btnIndex" stylesheets="@Styles.css" text="Ajustes">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin>
@@ -70,7 +70,7 @@
                <children>
                   <VBox prefHeight="11.0" prefWidth="171.0">
                      <children>
-                        <Label contentDisplay="TOP" prefHeight="77.0" prefWidth="116.0" styleClass="clientName" stylesheets="@Styles.css" text="Marco A. Romero" textFill="#eeeeee" wrapText="true">
+                        <Label fx:id="txtClientName" contentDisplay="TOP" prefHeight="77.0" prefWidth="116.0" styleClass="clientName" stylesheets="@Styles.css" text="Marco A. Romero" textFill="#eeeeee" wrapText="true">
                            <font>
                               <Font name="SansSerif Regular" size="14.0" />
                            </font>
@@ -106,7 +106,7 @@
             </HBox>
             <VBox alignment="TOP_CENTER" prefHeight="500.0" styleClass="index" stylesheets="@Styles.css" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="70.0">
                <children>
-                  <Button ellipsisString="" mnemonicParsing="false" onAction="#switchToExistency" prefWidth="127.0" styleClass="btnIndex" stylesheets="@Styles.css" text="Existencias">
+                  <Button ellipsisString="" mnemonicParsing="false" onAction="#switchToStock" prefWidth="127.0" styleClass="btnIndex" stylesheets="@Styles.css" text="Existencias">
                      <font>
                         <Font name="System Bold" size="17.0" />
                      </font>
@@ -203,7 +203,10 @@
                   <DropShadow />
                </effect>
             </ImageView>
-            <Label fx:id="versionLabel" layoutX="678.0" layoutY="559.0" text="Version: 5.0.0.0" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="30.0" />
+            <Label fx:id="versionLabel" layoutX="678.0" layoutY="559.0" text="Version: 5.0.0.0" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="30.0">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font></Label>
          </children>
       </AnchorPane>
    </children>

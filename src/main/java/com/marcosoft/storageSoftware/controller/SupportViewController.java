@@ -1,5 +1,6 @@
 package com.marcosoft.storageSoftware.controller;
 
+import com.marcosoft.storageSoftware.service.impl.ClientServiceImpl;
 import com.marcosoft.storageSoftware.util.SceneSwitcher;
 import com.marcosoft.storageSoftware.util.SpringFXMLLoader;
 import com.marcosoft.storageSoftware.util.WindowShowing;
@@ -24,7 +25,7 @@ import org.springframework.stereotype.Controller;
 public class SupportViewController {
 
     @FXML
-    private Label txtWelcome, versionLabel;
+    private Label txtWelcome, versionLabel, txtClientName;
     public boolean configurationShowing;
     @Setter
     private ClientViewController accountController;
@@ -37,6 +38,8 @@ public class SupportViewController {
 
     @Autowired
     private SceneSwitcher sceneSwitcher;
+    @Autowired
+    ClientServiceImpl clientServiceImpl;
 
     public SupportViewController() {
         windowShowing = new WindowShowing();
@@ -48,33 +51,28 @@ public class SupportViewController {
 
     @FXML
     private void switchToRegistry(ActionEvent event) throws IOException {
-        try{
+        try {
             sceneSwitcher.setRoot(event, "/registryView.fxml");
             windowShowing.closeAllWindows();
-        } catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     @FXML
-    private void switchToExistency(ActionEvent event) throws IOException {
+    private void switchToStock(ActionEvent event) throws IOException {
         try {
             sceneSwitcher.setRoot(event, "/stockView.fxml");
             windowShowing.closeAllWindows();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 
     @FXML
-    private void displayConfigurationView(ActionEvent event) throws IOException {
-        String errorMessage = "Ya hay una ventana de Configuración abierta";
-        String fxmlPath = "/configurationView.fxml";
-        int aux = 3;
-        windowShowing.displayAssistance(windowShowing.isConfigurationShowing(), fxmlPath, errorMessage, aux);
+    private void switchToConfiguration(ActionEvent event) throws IOException {
+        sceneSwitcher.setRoot(event, "/configurationView.fxml");
+        windowShowing.closeAllWindows();
     }
 
     @FXML
@@ -98,10 +96,18 @@ public class SupportViewController {
                 "y ganancias de venta. Cualquier problema con el rendimiento de la aplicación por favor contactad " +
                 "por cualquiera de las vías mostradas a la derecha. ¡Gracias por confiar en nosotros!"
         );
+        txtClientName.setText(clientServiceImpl.getByIsClientActive(true).getClientName());
     }
 
     @FXML
-    public void switchToWallet(ActionEvent actionEvent) {
+    public void switchToWallet(ActionEvent event) {
+        try {
+            sceneSwitcher.setRoot(event, "/walletView.fxml");
+            windowShowing.closeAllWindows();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 
 }

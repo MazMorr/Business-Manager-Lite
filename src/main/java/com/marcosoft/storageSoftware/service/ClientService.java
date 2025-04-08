@@ -12,7 +12,7 @@ public interface ClientService {
     void deleteByClientId(Long id);
     Boolean existsByClientName(String name);
     Boolean existsByClientNameAndClientPassword(String name, String password);
-    Client findByIsClientActive(Boolean isActive);
+    Client getByIsClientActive(Boolean isActive);
     void updateIsClientActiveByClientName(Boolean isActive, String name);
     Client getByClientNameAndClientPassword(String clientName, String clientPassword);
     boolean existsByIsClientActive(Boolean isClientActive);
