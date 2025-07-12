@@ -1,12 +1,11 @@
 package com.marcosoft.storageSoftware.controller;
 
-import com.marcosoft.storageSoftware.model.Product;
-import com.marcosoft.storageSoftware.model.Transaction;
-import com.marcosoft.storageSoftware.model.TransactionType;
+import com.marcosoft.storageSoftware.domain.Investment;
+import com.marcosoft.storageSoftware.domain.Product;
+import com.marcosoft.storageSoftware.model.RegistryType;
 import com.marcosoft.storageSoftware.repository.ClientRepository;
 import com.marcosoft.storageSoftware.service.impl.ClientServiceImpl;
 import com.marcosoft.storageSoftware.service.impl.ProductServiceImpl;
-import com.marcosoft.storageSoftware.service.impl.TransactionServiceImpl;
 import com.marcosoft.storageSoftware.util.SceneSwitcher;
 import com.marcosoft.storageSoftware.util.WindowShowing;
 import javafx.collections.FXCollections;
@@ -17,7 +16,6 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
-import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,29 +26,25 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
+
+import javafx.collections.transformation.FilteredList;
 
 @Controller
 public class StockViewController {
 
     private static final Logger logger = LoggerFactory.getLogger(StockViewController.class);
 
-    //FXML objects initialization
     @FXML
     private TableView<Product> tblStock;
     @FXML
-    private TableColumn nameColumn, amountColumn, currencySellColumn, currencyBuyColumn, storedInColumn, sellColumn, buyColumn,
-            categoryColumn;
+    private TableColumn nameColumn, amountColumn, currencySellColumn, currencyBuyColumn, storedInColumn, sellColumn, buyColumn, categoryColumn;
     @FXML
-    private TextField txtAddProductCategory, txtAddProductName, txtAddProductStoredIn, txtAddProductQuantity,
-            txtAddProductBuyPrice, txtAddProductSellPrice, txtSellProductSellCategory, txtFilterName,
-            txtSellProductSellName, txtSellProductSellStored, txtSellProductSellQuantity, txtSellProductSellPrice;
+    private TextField txtAddProductCategory, txtAddProductName, txtAddProductStoredIn, txtAddProductQuantity, txtAddProductBuyPrice, txtAddProductSellPrice, txtSellProductSellCategory, txtFilterName, txtSellProductSellName, txtSellProductSellStored, txtSellProductSellQuantity, txtSellProductSellPrice;
     @FXML
     private DatePicker txtSellProductDatePicker;
     @FXML
-    private RadioMenuItem rmiSellCUP, rmiSellMLC, rmiSellUSD, rmiSellEUR, rmiBuyMLC, rmiBuyCUP, rmiBuyEUR, rmiBuyUSD,
-            radioSellUSD, radioSellEUR, radioSellCUP, radioSellMLC;
+    private RadioMenuItem rmiSellCUP, rmiSellMLC, rmiSellUSD, rmiSellEUR, rmiBuyMLC, rmiBuyCUP, rmiBuyEUR, rmiBuyUSD, radioSellUSD, radioSellEUR, radioSellCUP, radioSellMLC;
     @FXML
     private ToggleGroup sellCurrency, buyCurrency, sellCurrencyInSell;
     @FXML
@@ -58,12 +52,10 @@ public class StockViewController {
     @FXML
     private Tab sellPane, addPane;
 
-    //The table products and WindowShowing instantiation
     private final WindowShowing windowShowing;
-    TransactionType transactionType;
     private ObservableList<Product> products;
+    private FilteredList<Product> filteredProducts;
 
-    //Things that are auto administrated by Spring framework
     @Autowired
     ProductServiceImpl productServiceImpl;
     @Autowired
@@ -72,7 +64,6 @@ public class StockViewController {
     ClientServiceImpl clientServiceImpl;
     @Autowired
     TransactionServiceImpl transactionServiceImpl;
-
     @Autowired
     private ClientRepository clientRepository;
 
@@ -82,34 +73,34 @@ public class StockViewController {
 
     @FXML
     private void switchToSupport(ActionEvent event) throws IOException {
-        sceneSwitcher.setRoot(event, "/supportView.fxml");
+        sceneSwitcher.setRootWithEvent(event, "/supportView.fxml");
         windowShowing.closeAllWindows();
     }
 
     @FXML
     private void switchToRegistry(ActionEvent event) throws IOException {
-        sceneSwitcher.setRoot(event, "/registryView.fxml");
+        sceneSwitcher.setRootWithEvent(event, "/registryView.fxml");
         windowShowing.closeAllWindows();
     }
 
     @FXML
     private void switchToConfiguration(ActionEvent event) throws IOException {
-        sceneSwitcher.setRoot(event, "/configurationView.fxml");
+        sceneSwitcher.setRootWithEvent(event, "/configurationView.fxml");
         windowShowing.closeAllWindows();
     }
 
     @FXML
     private void switchToWallet(ActionEvent event) throws IOException {
-        sceneSwitcher.setRoot(event, "/walletView.fxml");
+        sceneSwitcher.setRootWithEvent(event, "/walletView.fxml");
         windowShowing.closeAllWindows();
     }
 
     @FXML
     public void initialize() {
         products = FXCollections.observableArrayList();
-        tblStock.setItems(products);
+        filteredProducts = new FilteredList<>(products, p -> true);
+        tblStock.setItems(filteredProducts);
 
-        // Configuración de columnas
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("productName"));
         amountColumn.setCellValueFactory(new PropertyValueFactory<>("quantityInStorage"));
         categoryColumn.setCellValueFactory(new PropertyValueFactory<>("categoryName"));
@@ -119,35 +110,34 @@ public class StockViewController {
         currencySellColumn.setCellValueFactory(new PropertyValueFactory<>("currencySellName"));
         storedInColumn.setCellValueFactory(new PropertyValueFactory<>("storedIn"));
 
-        // Placeholder para tabla vacía
         Label placeholder = new Label("No hay productos registrados");
         placeholder.setPadding(new Insets(20));
         tblStock.setPlaceholder(placeholder);
 
-        // Configurar colores dinámicos para las filas
         tblStock.setRowFactory(tv -> new TableRow<>() {
             @Override
             protected void updateItem(Product product, boolean empty) {
                 super.updateItem(product, empty);
-
                 if (product == null || empty) {
-                    setStyle(""); // Restart style for empty lines
+                    setStyle("");
+                } else if (product.getQuantityInStorage() < 4) {
+                    setStyle("-fx-background-color: #ffcccc;");
+                } else if (product.getQuantityInStorage() < 10) {
+                    setStyle("-fx-background-color: #ffaa00;");
                 } else {
-                    if (product.getQuantityInStorage() < 4) {
-                        setStyle("-fx-background-color: #ffcccc;"); // Red for more than 4
-                    } else if (product.getQuantityInStorage() < 10) {
-                        setStyle("-fx-background-color: #ffaa00;"); // Orange for less than 10
-                    } else {
-                        setStyle(""); // Without style for more quantities than 10
-                    }
+                    setStyle("");
                 }
             }
         });
 
-        // Cargar productos existentes y actualizar contadores
-        loadProductsAsync();
-        updateCounters();
+        txtFilterName.textProperty().addListener((obs, oldVal, newVal) -> {
+            filteredProducts.setPredicate(product -> {
+                if (newVal == null || newVal.isEmpty()) return true;
+                return product.getProductName().toLowerCase().contains(newVal.toLowerCase());
+            });
+        });
 
+        loadProductsAsync();
         txtClientName.setText(clientServiceImpl.getByIsClientActive(true).getClientName());
         addPane.setStyle("-fx-opacity: 0.6; -fx-background-color: #6059ff; -fx-font-weight: 800;");
         sellPane.setStyle("-fx-opacity: 1; -fx-background-color: #6059ff; -fx-font-weight: 800;");
@@ -156,143 +146,117 @@ public class StockViewController {
 
     @FXML
     public void selectProduct(MouseEvent event) {
-        Product p = this.tblStock.getSelectionModel().getSelectedItem();
+        Product p = tblStock.getSelectionModel().getSelectedItem();
+        if (p == null) return;
+        txtAddProductName.setText(p.getProductName());
+        txtAddProductQuantity.setText(String.valueOf(p.getQuantityInStorage()));
+        txtAddProductBuyPrice.setText(String.valueOf(p.getBuyPrice()));
+        txtAddProductSellPrice.setText(String.valueOf(p.getSellPrice()));
+        txtAddProductCategory.setText(p.getCategoryName());
+        txtAddProductStoredIn.setText(p.getStoredIn());
+        selectCurrencyRadio(rmiBuyCUP, rmiBuyUSD, rmiBuyEUR, rmiBuyMLC, p.getCurrencyBuyName());
+        selectCurrencyRadio(rmiSellCUP, rmiSellUSD, rmiSellEUR, rmiSellMLC, p.getCurrencySellName());
+        txtSellProductSellCategory.setText(p.getCategoryName());
+        txtSellProductSellName.setText(p.getProductName());
+        txtSellProductSellPrice.setText(String.valueOf(p.getSellPrice()));
+        txtSellProductSellStored.setText(p.getStoredIn());
+        txtSellProductSellQuantity.setText("0");
+        selectCurrencyRadio(radioSellCUP, radioSellUSD, radioSellEUR, radioSellMLC, p.getCurrencySellName());
+    }
 
-        if (p != null) {
-            this.txtAddProductName.setText(p.getProductName());
-            this.txtAddProductQuantity.setText(String.valueOf(p.getQuantityInStorage()));
-            this.txtAddProductBuyPrice.setText(String.valueOf(p.getBuyPrice()));
-            this.txtAddProductSellPrice.setText(String.valueOf(p.getSellPrice()));
-            this.txtAddProductCategory.setText(p.getCategoryName());
-            this.txtAddProductStoredIn.setText(p.getStoredIn());
-            switch (p.getCurrencyBuyName()) {
-                case "CUP" -> this.rmiBuyCUP.setSelected(true);
-                case "USD" -> this.rmiBuyUSD.setSelected(true);
-                case "EUR" -> this.rmiBuyEUR.setSelected(true);
-                case "MLC" -> this.rmiBuyMLC.setSelected(true);
-            }
-            switch (p.getCurrencySellName()) {
-                case "CUP" -> this.rmiSellCUP.setSelected(true);
-                case "USD" -> this.rmiSellUSD.setSelected(true);
-                case "EUR" -> this.rmiSellEUR.setSelected(true);
-                case "MLC" -> this.rmiSellMLC.setSelected(true);
-            }
-
-            this.txtSellProductSellCategory.setText(p.getCategoryName());
-            this.txtSellProductSellName.setText(p.getProductName());
-            this.txtSellProductSellPrice.setText(String.valueOf(p.getSellPrice()));
-            this.txtSellProductSellStored.setText(p.getStoredIn());
-            this.txtSellProductSellQuantity.setText("0");
-            switch (p.getCurrencySellName()) {
-                case "CUP" -> this.radioSellCUP.setSelected(true);
-                case "MLC" -> this.radioSellMLC.setSelected(true);
-                case "EUR" -> this.radioSellEUR.setSelected(true);
-                case "USD" -> this.radioSellUSD.setSelected(true);
-            }
-        }
+    private void selectCurrencyRadio(RadioMenuItem cup, RadioMenuItem usd, RadioMenuItem eur, RadioMenuItem mlc, String value) {
+        cup.setSelected("CUP".equals(value));
+        usd.setSelected("USD".equals(value));
+        eur.setSelected("EUR".equals(value));
+        mlc.setSelected("MLC".equals(value));
     }
 
     @FXML
     public void addOrUpgradeProduct(ActionEvent actionEvent) {
         try {
-            String name = txtAddProductName.getText();
-            Integer quantity = Integer.parseInt(txtAddProductQuantity.getText());
-            BigDecimal buyPrice = new BigDecimal(txtAddProductBuyPrice.getText());
-            BigDecimal sellPrice = new BigDecimal(txtAddProductSellPrice.getText());
-            String category = txtAddProductCategory.getText();
-            String buyCurrency = getSelectedBuyCurrency();
-            String sellCurrency = getSelectedSellCurrency();
-            String storedIn = txtAddProductStoredIn.getText();
-
-            // Crear producto auxiliar
-            Product product = new Product(name, category, quantity, buyPrice, buyCurrency, sellPrice, sellCurrency,
-                    storedIn, clientServiceImpl.getByIsClientActive(true));
-
-            // Validar el producto
+            Product product = buildProductFromForm();
             productServiceImpl.validateProductInputs(product);
-
-            // Verificar si el producto ya existe
-            boolean isNewProduct = !productServiceImpl.productExists(name);
-
-            // Usar el servicio para crear o actualizar el producto
+            boolean isNewProduct = !productServiceImpl.productExists(product.getProductName());
             Product updatedProduct = productServiceImpl.createOrUpdateProduct(product);
 
-            // Registrar la transacción
-            Transaction transaction = new Transaction();
-            transaction.setTransactionPrice(buyPrice.multiply(new BigDecimal(quantity)));
-            transaction.setTransactionStock(quantity);
-            transaction.setTransactionDate(txtSellProductDatePicker.getValue());
-            transaction.setCurrencyName(buyCurrency);
-            transaction.setClientId(clientServiceImpl.getByIsClientActive(true));
-            transaction.setProductName(name);
-            transaction.setCategoryName(category);
-            transaction.setTransactionType(isNewProduct ? TransactionType.ADD : TransactionType.UPDATE); // Enum para tipo de transacción
-            transaction.setTransactionStorage(txtAddProductStoredIn.getText());
-            transactionServiceImpl.save(transaction);
+            Investment investment = new Investment();
+            investment.setTransactionPrice(product.getBuyPrice().multiply(new BigDecimal(product.getQuantityInStorage())));
+            investment.setTransactionStock(product.getQuantityInStorage());
+            investment.setTransactionDate(txtSellProductDatePicker.getValue());
+            investment.setCurrencyName(product.getCurrencyBuyName());
+            investment.setClientId(clientServiceImpl.getByIsClientActive(true));
+            investment.setProductName(product.getProductName());
+            investment.setCategoryName(product.getCategoryName());
+            investment.setTransactionType(isNewProduct ? RegistryType.ADD : RegistryType.UPDATE);
+            investment.setTransactionStorage(product.getStoredIn());
+            transactionServiceImpl.save(investment);
 
-            // Actualizar la lista de productos en la tabla
             if (isNewProduct) {
                 products.add(updatedProduct);
             } else {
-                int index = products.indexOf(updatedProduct);
-                products.set(index, updatedProduct);
+                for (int i = 0; i < products.size(); i++) {
+                    if (products.get(i).getProductName().equals(updatedProduct.getProductName())) {
+                        products.set(i, updatedProduct);
+                        break;
+                    }
+                }
             }
-
-            // Refrescar la tabla
-            tblStock.refresh();
+            updateCounters();
             showAlert("Éxito", isNewProduct ? "Producto agregado correctamente." : "Producto actualizado correctamente.", Alert.AlertType.INFORMATION);
-
-        } catch (IllegalArgumentException e) {
-            showAlert("Error", e.getMessage(), Alert.AlertType.ERROR);
+            cleanForm(null);
         } catch (Exception e) {
             logger.error("Error al procesar la acción: {}", e.getMessage(), e);
-            showAlert("Error", "Ocurrió un error inesperado: " + e.getMessage(), Alert.AlertType.ERROR);
+            showAlert("Error", "Ocurrió un error: " + e.getMessage(), Alert.AlertType.ERROR);
         }
+    }
+
+    private Product buildProductFromForm() {
+        String name = txtAddProductName.getText();
+        Integer quantity = Integer.parseInt(txtAddProductQuantity.getText());
+        BigDecimal buyPrice = new BigDecimal(txtAddProductBuyPrice.getText());
+        BigDecimal sellPrice = new BigDecimal(txtAddProductSellPrice.getText());
+        String category = txtAddProductCategory.getText();
+        String buyCurrency = getSelectedBuyCurrency();
+        String sellCurrency = getSelectedSellCurrency();
+        String storedIn = txtAddProductStoredIn.getText();
+        return new Product(name, category, quantity, buyPrice, buyCurrency, sellPrice, sellCurrency, storedIn, clientServiceImpl.getByIsClientActive(true));
     }
 
     @FXML
     public void removeProduct(ActionEvent actionEvent) {
-        Product selectedProduct = this.tblStock.getSelectionModel().getSelectedItem();
-
+        Product selectedProduct = tblStock.getSelectionModel().getSelectedItem();
         if (selectedProduct == null) {
             showAlert("Error", "Por favor, selecciona un producto de la tabla para eliminarlo.", Alert.AlertType.ERROR);
             return;
         }
-
-        // Mostrar confirmación
         boolean confirmed = showConfirmationDialog(
                 "Confirmación de eliminación",
                 "¿Estás seguro de que deseas eliminar el producto?",
                 "Producto: " + selectedProduct.getProductName() +
-                        "\nCategoría: " + selectedProduct.getCategoryName() +
                         "\nCantidad: " + selectedProduct.getQuantityInStorage() +
                         "\nPrecio de compra: " + selectedProduct.getBuyPrice() +
                         "\nTipo de moneda para compra: " + selectedProduct.getCurrencyBuyName() +
-                        "\nPrecio de venta: " + selectedProduct.getSellPrice() +
-                        "\nTipo de moneda para la venta: " + selectedProduct.getCurrencySellName() +
-                        "\nAlmacenamiento: " + selectedProduct.getStoredIn()
+                        "\nAlmacenado en: " + selectedProduct.getStoredIn()
         );
-
         if (confirmed) {
             try {
-                // Usar el servicio para eliminar el producto
-                Transaction transaction = new Transaction();
-                transaction.setTransactionStorage(selectedProduct.getStoredIn());
-                transaction.setTransactionDate(LocalDate.now());
-                transaction.setTransactionStock(selectedProduct.getQuantityInStorage());
-                transaction.setTransactionPrice(selectedProduct.getBuyPrice());
-                transaction.setTransactionType(TransactionType.DELETE);
-                transaction.setCategoryName(selectedProduct.getCategoryName());
-                transaction.setClientId(clientServiceImpl.getByIsClientActive(true));
-                transaction.setProductName(selectedProduct.getProductName());
-                transaction.setCurrencyName(selectedProduct.getCurrencyBuyName());
-                transactionServiceImpl.save(transaction);
+                Investment investment = new Investment();
+                investment.setTransactionStorage(selectedProduct.getStoredIn());
+                investment.setTransactionDate(LocalDate.now());
+                investment.setTransactionStock(selectedProduct.getQuantityInStorage());
+                investment.setTransactionPrice(selectedProduct.getBuyPrice());
+                investment.setTransactionType(RegistryType.DELETE);
+                investment.setCategoryName(selectedProduct.getCategoryName());
+                investment.setClientId(clientServiceImpl.getByIsClientActive(true));
+                investment.setProductName(selectedProduct.getProductName());
+                investment.setCurrencyName(selectedProduct.getCurrencyBuyName());
+                transactionServiceImpl.save(investment);
 
                 productServiceImpl.deleteByProductName(selectedProduct.getProductName());
                 products.remove(selectedProduct);
-                this.tblStock.refresh();
                 updateCounters();
                 showAlert("Éxito", "El producto ha sido eliminado correctamente.", Alert.AlertType.INFORMATION);
+                cleanForm(null);
             } catch (Exception e) {
                 logger.error("Error al eliminar el producto", e);
                 showAlert("Error", "Ocurrió un error al intentar eliminar el producto: " + e.getMessage(), Alert.AlertType.ERROR);
@@ -301,54 +265,70 @@ public class StockViewController {
     }
 
     @FXML
-    public void addProductQuantityChanged(Event event) {
-        handleFieldChange(txtAddProductQuantity, "\\d*", "Solo se permiten números enteros en la cantidad.");
-    }
+    public void sellProduct(ActionEvent actionEvent) {
+        try {
+            String productName = txtSellProductSellName.getText();
+            Integer sellQuantity = Integer.parseInt(txtSellProductSellQuantity.getText());
+            BigDecimal sellPrice = new BigDecimal(txtSellProductSellPrice.getText());
+            String storedIn = txtSellProductSellStored.getText();
+            LocalDate date = txtSellProductDatePicker.getValue();
 
-    @FXML
-    public void addProductBuyPrice(Event event) {
-        handleFieldChange(txtAddProductBuyPrice, "\\d*(\\.\\d*)?",
-                "Solo se permiten números decimales en el precio.");
+            Product product = productServiceImpl.getByProductName(productName);
+            if (product == null) throw new IllegalArgumentException("Producto no encontrado.");
 
-    }
+            if (sellQuantity > product.getQuantityInStorage()) {
+                throw new IllegalArgumentException("La cantidad a vender excede la cantidad almacenada.");
+            } else if (sellQuantity < 1) {
+                showAlert("Error", "No puede vender 0 unidades de un producto, o usar valores negativos.", Alert.AlertType.ERROR);
+                return;
+            }
 
-    @FXML
-    public void addProductSellPrice() {
-        handleFieldChange(txtAddProductSellPrice, "\\d*(\\.\\d*)?",
-                "Solo se permiten números decimales en el precio.");
-    }
+            int newQuantity = product.getQuantityInStorage() - sellQuantity;
+            product.setQuantityInStorage(newQuantity);
+            productServiceImpl.createOrUpdateProduct(product);
 
-    @FXML
-    public void addProductNameChanged(Event event) {
-        boolean isValid = !txtAddProductName.getText().isEmpty();
-    }
+            Investment investment = new Investment();
+            investment.setTransactionPrice(sellPrice.multiply(new BigDecimal(sellQuantity)));
+            investment.setTransactionStock(sellQuantity);
+            investment.setTransactionDate(date);
+            investment.setCurrencyName(product.getCurrencySellName());
+            investment.setClientId(clientServiceImpl.getByIsClientActive(true));
+            investment.setProductName(product.getProductName());
+            investment.setTransactionStorage(product.getStoredIn());
+            investment.setCategoryName(product.getCategoryName());
+            investment.setTransactionType(RegistryType.SALE);
+            transactionServiceImpl.save(investment);
 
-    @FXML
-    public void addProductCategoryChanged(Event event) {
-        boolean isValid = !txtAddProductCategory.getText().isEmpty();
-    }
-
-    @FXML
-    public void addProductStoredInChanged(Event event) {
-        boolean isValid = !txtAddProductStoredIn.getText().isEmpty();
+            for (int i = 0; i < products.size(); i++) {
+                if (products.get(i).getProductName().equals(product.getProductName())) {
+                    products.set(i, product);
+                    break;
+                }
+            }
+            updateCounters();
+            showAlert("Éxito", "La venta se ha registrado correctamente.", Alert.AlertType.INFORMATION);
+            cleanForm(null);
+        } catch (Exception e) {
+            logger.error("Error al procesar la venta: {}", e.getMessage(), e);
+            showAlert("Error", "Ocurrió un error inesperado: " + e.getMessage(), Alert.AlertType.ERROR);
+        }
     }
 
     @FXML
     public void cleanForm(ActionEvent actionEvent) {
-        this.txtAddProductName.setText("");
-        this.txtAddProductQuantity.setText("");
-        this.txtAddProductBuyPrice.setText("");
-        this.txtAddProductSellPrice.setText("");
-        this.txtAddProductCategory.setText("");
-        this.txtAddProductStoredIn.setText("");
-        this.rmiBuyCUP.setSelected(true);
-        this.rmiSellCUP.setSelected(true);
-
-        this.txtSellProductSellName.setText("");
-        this.txtSellProductSellStored.setText("");
-        this.txtSellProductSellQuantity.setText("");
-        this.txtSellProductSellPrice.setText("");
-        this.txtSellProductSellCategory.setText("");
+        txtAddProductName.clear();
+        txtAddProductQuantity.clear();
+        txtAddProductBuyPrice.clear();
+        txtAddProductSellPrice.clear();
+        txtAddProductCategory.clear();
+        txtAddProductStoredIn.clear();
+        rmiBuyCUP.setSelected(true);
+        rmiSellCUP.setSelected(true);
+        txtSellProductSellName.clear();
+        txtSellProductSellStored.clear();
+        txtSellProductSellQuantity.clear();
+        txtSellProductSellPrice.clear();
+        txtSellProductSellCategory.clear();
     }
 
     private boolean showConfirmationDialog(String title, String header, String content) {
@@ -356,7 +336,6 @@ public class StockViewController {
         alert.setTitle(title);
         alert.setHeaderText(header);
         alert.setContentText(content);
-
         return alert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK;
     }
 
@@ -384,48 +363,26 @@ public class StockViewController {
         alert.showAndWait();
     }
 
-    private void handleFieldChange(TextField field, String regex, String errorMessage) {
-        String text = field.getText();
-        boolean isValid = text.matches(regex);
-
-        if (!isValid) {
-            showAlert("Error", errorMessage, Alert.AlertType.ERROR);
-            field.setText(text.replaceAll("[^\\d.]", "")); // Ajustar según el regex
-        }
-
-        isValid = !field.getText().isEmpty();
-    }
-
     private void loadProductsAsync() {
         Task<List<Product>> task = new Task<>() {
             @Override
             protected List<Product> call() {
-                // Obtener productos del servicio
                 return productServiceImpl.getAllProductsByClient_IsClientActive(true);
             }
         };
-
         task.setOnSucceeded(event -> {
             List<Product> loadedProducts = task.getValue();
-            if (loadedProducts == null || loadedProducts.isEmpty()) {
-                logger.info("No se encontraron productos para el cliente activo.");
-            } else {
-                // Limpia la lista observable antes de agregar nuevos productos
-                products.clear();
+            products.clear();
+            if (loadedProducts != null) {
                 products.addAll(loadedProducts);
-                tblStock.refresh();
-                updateCounters();
             }
+            updateCounters();
         });
-
         new Thread(task).start();
     }
 
     private void updateCounters() {
-        //Integer variables
-        int warning = 0;
-        int alert = 0;
-
+        int warning = 0, alert = 0;
         for (Product product : products) {
             if (product.getQuantityInStorage() < 4) {
                 alert++;
@@ -433,7 +390,6 @@ public class StockViewController {
                 warning++;
             }
         }
-
         txtAlert.setText("Alertas: " + alert);
         txtWarning.setText("Advertencias: " + warning);
     }
@@ -450,84 +406,14 @@ public class StockViewController {
         addPane.setStyle("-fx-opacity: 1; -fx-background-color: #6059ff; -fx-font-weight: 800;");
     }
 
-    @FXML
-    void txtFilterNameChanged(InputMethodEvent event) {
-        String filterText = txtFilterName.getText();
 
-        if (filterText == null || filterText.isEmpty()) {
-            // Si el campo de texto está vacío, muestra todos los productos
-            tblStock.setItems(products);
-        } else {
-            // Filtra los productos por el nombre
-            ObservableList<Product> filteredProducts = FXCollections.observableArrayList();
-            for (Product product : products) {
-                if (product.getProductName().toLowerCase().contains(filterText.toLowerCase())) {
-                    filteredProducts.add(product);
-                }
-            }
-            tblStock.setItems(filteredProducts);
-        }
+    @FXML
+    public void addProductSellPrice(Event event) {
     }
 
     @FXML
-    public void sellProduct(ActionEvent actionEvent) {
-        try {
-
-            // Obtener los valores ingresados por el usuario
-            String productName = txtSellProductSellName.getText();
-            Integer sellQuantity = Integer.parseInt(txtSellProductSellQuantity.getText());
-            BigDecimal sellPrice = new BigDecimal(txtSellProductSellPrice.getText());
-            String storedIn = txtSellProductSellStored.getText();
-            LocalDate date = txtSellProductDatePicker.getValue();
-
-            // Validar que los campos no estén vacíos
-            if (productName.isEmpty() || storedIn.isEmpty()) {
-                throw new IllegalArgumentException("Todos los campos son obligatorios.");
-            }
-
-            // Buscar el producto en la lista
-            Product product = productServiceImpl.getByProductName(productName);
-            if (product == null) {
-                throw new IllegalArgumentException("El producto no existe.");
-            }
-
-            // Validar que la cantidad a vender no exceda la cantidad almacenada
-            if (sellQuantity > product.getQuantityInStorage()) {
-                throw new IllegalArgumentException("La cantidad a vender excede la cantidad almacenada.");
-            }
-            if (sellQuantity < 1) {
-                // Actualizar la cantidad en almacenamiento
-                int newQuantity = product.getQuantityInStorage() - sellQuantity;
-                product.setQuantityInStorage(newQuantity);
-                productServiceImpl.createOrUpdateProduct(product);
-                tblStock.refresh();
-
-                // Registrar la transacción
-                Transaction transaction = new Transaction();
-                transaction.setTransactionPrice(sellPrice.multiply(new BigDecimal(sellQuantity)));
-                transaction.setTransactionStock(sellQuantity);
-                transaction.setTransactionDate(date);
-                transaction.setCurrencyName(product.getCurrencySellName());
-                transaction.setClientId(clientServiceImpl.getByIsClientActive(true));
-                transaction.setProductName(product.getProductName());
-                transaction.setTransactionStorage(product.getStoredIn());
-                transaction.setCategoryName(product.getCategoryName());
-                transaction.setTransactionType(TransactionType.SALE); // Enum para tipo de transacción
-                transactionServiceImpl.save(transaction);
-
-                // Refresh the table and show succeed
-                tblStock.refresh();
-                showAlert("Éxito", "La venta se ha registrado correctamente.", Alert.AlertType.INFORMATION);
-            } else {
-                showAlert("Error", "No puede vender 0 unidades de un producto, o usar valores negativos" +
-                        " por favor introduzca correctamente los datos", Alert.AlertType.ERROR);
-            }
-
-        } catch (IllegalArgumentException e) {
-            showAlert("Error", e.getMessage(), Alert.AlertType.ERROR);
-        } catch (Exception e) {
-            logger.error("Error al procesar la venta: {}", e.getMessage(), e);
-            showAlert("Error", "Ocurrió un error inesperado: " + e.getMessage(), Alert.AlertType.ERROR);
-        }
+    public void txtFilterNameChanged(Event event) {
     }
+
+
 }

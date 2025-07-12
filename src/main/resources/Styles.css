@@ -1,90 +1,113 @@
 /* ========================= */
-/* VARIABLES DE COLORES      */
+/* PALETA DE COLORES         */
 /* ========================= */
-/* 
-Color grisáceo para bordes: #b0b0b0
-Color de fondo claro: #dedcff
-Color de texto oscuro: #050315
-Color de fondo para botones: #6059ff
-Color de fondo para configuraciones: #2f27ce
-Color de fondo para eliminar: rgb(197, 0, 0)
-Color de fondo general: #fbfbfe
+/*
+Azul principal:      #2563eb
+Azul oscuro:         #1e293b
+Azul claro:          #60a5fa
+Gris claro:          #f3f4f6
+Gris medio:          #cbd5e1
+Gris oscuro:         #64748b
+Rojo alerta:         #ef4444
+Verde éxito:         #22c55e
+Blanco:              #ffffff
+Negro:               #0f172a
 */
 
 /* ========================= */
 /* ESTILOS GENERALES         */
 /* ========================= */
 .background {
-    -fx-background-color: #fbfbfe;
+    -fx-background-color: #f3f4f6;
+}
+
+.text-field{
+    -fx-border-color: #7baff0;
+    -fx-font-family: 'Segoe UI', sans-serif;
+    -fx-padding: 6 10;
+    -fx-font-size: 14;
+    -fx-background-color: #fff;
+    -fx-text-fill: #0f172a;
+    -fx-border-width: 1.5;
+}
+
+.menu-button{
+    -fx-text-fill: #ffffff;
 }
 
 .clientName {
     -fx-font-weight: 900;
+    -fx-text-fill: #ffffff;
 }
 
 .progressBar {
-    -fx-background-color: #6059ff;
+    -fx-background-color: #2563eb;
 }
 
 /* ========================= */
 /* BOTONES                   */
 /* ========================= */
-.btnIndex {
-    -fx-pref-width: 120;
-    -fx-pref-height: 55;
+.btnIndex, .btnStock, .btnGoBackCreateAccount, .btnDelete {
+    -fx-font-family: 'Segoe UI', sans-serif;
     -fx-font-weight: 900;
-    -fx-font-size: 17;
-    -fx-text-alignment: center;
-    -fx-font-family: sans-serif;
-    -fx-background-color: #6059ff;
-    -fx-text-fill: #050315;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(30,41,59,0.08), 4, 0, 0, 2);
+    -fx-border-width: 0;
+}
+
+.btnIndex {
+    -fx-background-radius: 0;
+    -fx-pref-width: 150;
+    -fx-pref-height: 55;
+    -fx-font-size: 16;
+    -fx-font-weight: 1200;
+    -fx-background-color: linear-gradient(to bottom, #2563eb, #60a5fa);
+    -fx-text-fill: #fff;
 }
 
 .btnIndex:hover {
-    -fx-opacity: 0.6;
-    -fx-cursor: hand;
+    -fx-opacity: 0.85;
+    -fx-background-color: #1e40af;
 }
 
 .btnGoBackCreateAccount {
-    -fx-background-color: #2f27ce;
-    -fx-text-fill: #050315;
-    -fx-font-family: sans-serif;
+    -fx-background-color: #1e293b;
+    -fx-text-fill: #fff;
+    -fx-font-size: 15;
 }
 
 .btnGoBackCreateAccount:hover {
-    -fx-cursor: hand;
-    -fx-opacity: 0.5;
+    -fx-opacity: 0.85;
+    -fx-background-color: #334155;
 }
 
 .btnStock {
-    -fx-background-color: #6059ff;
-    -fx-text-fill: #050315;
+    -fx-background-color: linear-gradient(to bottom,#60a5fa,#2563eb);
+    -fx-text-fill: #fff;
     -fx-font-size: 15;
-    -fx-font-family: sans-serif;
-    -fx-font-weight: 800;
 }
 
 .btnStock:hover {
-    -fx-opacity: 0.6;
-    -fx-cursor: hand;
+    -fx-opacity: 0.85;
+    -fx-background-color: #1e40af;
 }
 
 .btnDelete {
-    -fx-background-color: rgb(197, 0, 0);
-    -fx-cursor: hand;
+    -fx-background-color: #ef4444;
+    -fx-text-fill: #fff;
+    -fx-font-size: 15;
 }
 
 .btnDelete:hover {
-    -fx-opacity: 0.6;
+    -fx-opacity: 0.85;
+    -fx-background-color: #b91c1c;
 }
 
 /* ========================= */
 /* FORMULARIOS               */
 /* ========================= */
-.inputForm {
-    -fx-border-color: gray;
-    -fx-font-family: sans-serif;
-}
+
 
 .txtPassword {
     -fx-font-style: italic;
@@ -94,86 +117,74 @@ Color de fondo general: #fbfbfe
 /* TÍTULOS                   */
 /* ========================= */
 .title {
-    -fx-text-fill: #eee;
-    -fx-font-family: sans-serif;
-    -fx-animated: 1;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: 700;
+    -fx-font-family: 'Segoe UI', sans-serif;
+    -fx-font-size: 50;
+    -fx-padding: 8 0 8 0;
 }
 
 /* ========================= */
 /* TABLAS                    */
 /* ========================= */
 .table {
-    -fx-background-color: #e4e3e3;
+    -fx-background-color: #e3ecff;
+     -fx-border-color: #2563eb;
+     -fx-background-radius: 10;
+     -fx-border-radius: 10;
+     -fx-border-width: 2;
 }
 
 /* Encabezados de las columnas */
-.table .column-header {
-    -fx-background-color: #6059ff; /* Mantener el encabezado como está */
+.table-view .column-header .label, .table-view .filler {
+    -fx-background-color: linear-gradient(to bottom, #60a5fa, #2563eb); /* Azul claro a azul principal */
+    -fx-border-color: transparent transparent #60a5fa transparent;
     -fx-font-size: 14;
-    -fx-font-family: sans-serif;
-    -fx-text-fill: #050315;
-    -fx-border-color: #b0b0b0; /* Color grisáceo para el borde */
-    -fx-border-width: 0 1px 0 1px; /* Borde inferior y lateral izquierdo */
+    -fx-font-family: 'Segoe UI', sans-serif;
+    -fx-text-fill: #fff;
+    -fx-border-width: 0 1px 0 1px; 
 }
 
 /* Fondo de las filas */
-.table-row-cell {
-    -fx-border-color: #b0b0b0; /* Color grisáceo para el borde */
-    -fx-border-width: 0 1px 0 1px; /* Solo bordes derecho e izquierdo */
-    -fx-background-color: #f9f9f9; /* Fondo mucho más claro para las filas */
-    -fx-font-weight: 700; /* Peso del texto en 700 */
-    -fx-text-fill: #050315; /* Color del texto predeterminado */
-}
-
-/* Fondo de las filas llenas */
-.table-row-cell:filled {
-    -fx-background-color: #f9f9f9; /* Fondo claro */
-    -fx-font-weight: 700; /* Peso del texto en 700 */
+.table-view .table-row-cell {
+    -fx-border-color: #cbd5e1;
+    -fx-border-width: 0 0 1px 0;
+    -fx-background-color: #fff;
+    -fx-font-weight: 500;
+    -fx-text-fill: #1e293b;
+    -fx-font-size: 14;
 }
 
 /* Fondo al pasar el cursor sobre una fila */
-.table-row-cell:filled:hover {
-    -fx-background-color: #e6e6e6; /* Fondo ligeramente más oscuro al pasar el cursor */
-    -fx-cursor: hand;
+.table-view .table-row-cell:hover {
+    -fx-background-color: #e0e7ef;
 }
 
 /* Fondo de la fila seleccionada */
-.table-row-cell:filled:selected {
-    -fx-background-color: #c5c5c5; /* Fondo más oscuro para la fila seleccionada */
-    -fx-text-fill: #000000; /* Texto mucho más oscuro */
-    -fx-font-weight: 700; /* Peso del texto en 700 */
+.table-view .table-row-cell:selected {
+    -fx-background-color: #2563eb;
+    -fx-text-fill: #fff;
+    -fx-font-weight: 700;
 }
 
 /* Fondo de las celdas vacías */
-.table-row-cell:empty {
-    -fx-background-color: #f9f9f9; /* Fondo claro para celdas vacías */
-    -fx-font-weight: 700; /* Peso del texto en 700 */
-}
-
-/* Fondo al pasar el cursor sobre una celda vacía */
-.table-row-cell:empty:hover {
-    -fx-background-color: #e6e6e6; /* Fondo ligeramente más oscuro al pasar el cursor */
-    -fx-cursor: hand;
-}
-
-/* Fondo de la celda vacía seleccionada */
-.table-row-cell:empty:selected {
-    -fx-background-color: #dcdcdc; /* Fondo más oscuro para la celda seleccionada */
-    -fx-text-fill: #000000; /* Texto mucho más oscuro */
-    -fx-font-weight: 700; /* Peso del texto en 700 */
+.table-view .table-row-cell:empty {
+    -fx-background-color: #f3f4f6;
 }
 
 /* ========================= */
 /* CONFIGURACIÓN             */
 /* ========================= */
 .configuration {
-    -fx-background-color: #2f27ce;
+    -fx-background-color: #1e293b;
     -fx-cursor: hand;
     -fx-font-weight: 900;
+    -fx-text-fill: #fff;
 }
 
 .configuration:hover {
-    -fx-opacity: 0.6;
+    -fx-opacity: 0.85;
+    -fx-background-color: #334155;
 }
 
 /* ========================= */
@@ -181,44 +192,111 @@ Color de fondo general: #fbfbfe
 /* ========================= */
 .menuIndex:hover {
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 10.0, 0.0, 0.0, 0.0);
+    -fx-effect: dropshadow(gaussian, rgba(30,41,59,0.15), 10, 0, 0, 0);
 }
 
 /* ========================= */
 /* FILTROS                   */
 /* ========================= */
 .filters {
-    -fx-background-color: #6059ff;
+    -fx-background-color: #2563eb;
     -fx-font-size: 14;
-    -fx-font-family: sans-serif;
-    -fx-background-radius: 50;
+    -fx-font-family: 'Segoe UI', sans-serif;
     -fx-font-weight: 700;
+    -fx-text-fill: #fff;
 }
 
 .filters:hover {
-    -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 10.0, 0.0, 0.0, 0.0);
-    -fx-opacity: 0.6;
+    -fx-effect: dropshadow(gaussian, rgba(30,41,59,0.15), 10, 0, 0, 0);
+    -fx-opacity: 0.85;
 }
 
 /* ========================= */
 /* SECCIONES ADICIONALES     */
 /* ========================= */
 .slogan {
-    -fx-background-color: #2f27ce;
+    -fx-background-color: linear-gradient(to right,#2563eb, #60a5fa);
+    -fx-text-fill: #fff;
 }
 
-.index {
-    -fx-background-color: #dedcff;
-    -fx-pref-width: 120;
+.index, .rightIndex {
+    -fx-background-color: #e0e7ef;
 }
-
-.rightIndex {
-    -fx-background-color: #dedcff;
+.rightIndex .label{
+    -fx-text-fill: #1e293b;
+    -fx-font-size: 14;
+    -fx-font-weight: 700;
 }
-
 .crudOperations {
-    -fx-background-color: #fbfbfe;
+    -fx-background-color: #f3f4f6;
     -fx-font-size: 13;
+    -fx-border-color: #2563eb;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 10;
+    -fx-font-family: 'Segoe UI', sans-serif;
     -fx-font-weight: 800;
+}
+
+/* ========================= */
+/* TABPANE                   */
+/* ========================= */
+.tab-pane {
+    -fx-background-color: #f3f4f6;
+    -fx-border-color: #2563eb;
+    -fx-border-width: 2;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-padding: 8;
+}
+
+.tab-pane .tab-header-area {
+    -fx-background-color: #2563eb;
+    -fx-background-radius: 10 10 0 0;
+    -fx-padding: 0 0 0 0;
+}
+
+.tab-pane .tab-header-background {
+    -fx-background-color: transparent;
+}
+
+.tab-pane .tab {
+    -fx-background-color: transparent;
+
+}
+
+.tab-pane .tab-label {
+    -fx-font-family: 'Segoe UI', sans-serif;
+    -fx-font-size: 15;
+    -fx-font-weight: 700;
+    -fx-text-fill: #fff;
+}
+
+.tab-pane .tab:selected .tab-label {
+    -fx-text-fill: #2563eb;
+    -fx-background-color: #fff;
+}
+
+.tab-pane .tab:selected {
+    -fx-background-color: #fff;
+    -fx-background-radius: 8 8 0 0;
+}
+
+.tab-pane .tab:hover .tab-label {
+    -fx-text-fill: #60a5fa;
+}
+
+.tab-pane .tab-content-area {
+    -fx-background-color: #fff;
+    -fx-background-radius: 0 0 10 10;
+}
+
+.tab-pane:focused {
+    -fx-focus-color: transparent !important;
+    -fx-faint-focus-color: transparent !important;
+    -fx-border-color: transparent !important;
+    -fx-background-insets: 0 !important;
+    -fx-border-width: 0 !important;
+    -fx-outline: none !important;
 }

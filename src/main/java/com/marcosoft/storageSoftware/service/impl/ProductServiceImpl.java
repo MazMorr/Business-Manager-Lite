@@ -1,6 +1,6 @@
 package com.marcosoft.storageSoftware.service.impl;
 
-import com.marcosoft.storageSoftware.model.Product;
+import com.marcosoft.storageSoftware.domain.Product;
 import com.marcosoft.storageSoftware.repository.ProductRepository;
 import com.marcosoft.storageSoftware.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,25 +31,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    @Transactional
-    public void deleteByProductName(String productName) {
-        productRepository.deleteByProductName(productName);
-    }
-
-    @Override
     public Product getByProductName(String name) {
         return productRepository.findByProductName(name);
     }
 
-    @Override
-    public void updateQuantityInStorageByProductName(Integer stock, String name) {
-        productRepository.updateQuantityInStorageByProductName(stock, name);
-    }
-
-    @Override
-    public List<Product> getAllProductsByClient_IsClientActive(Boolean isClientActive) {
-        return productRepository.findByClient_IsClientActive(isClientActive);
-    }
 
     public boolean productExists(String productName) {
         return productRepository.findByProductName(productName) != null;
@@ -57,16 +42,11 @@ public class ProductServiceImpl implements ProductService {
 
     public Product createOrUpdateProduct(Product product) {
         validateProductInputs(product); // Validar entradas
-        Product existingProduct = productRepository.findByProductName(product.getProductName());
+        Product existingProduct = productRepository.findById(product.getId()).orElse(null);
         if (existingProduct != null) {
             // Actualizar producto existente
-            existingProduct.setCategoryName(product.getCategoryName());
-            existingProduct.setQuantityInStorage(product.getQuantityInStorage());
-            existingProduct.setBuyPrice(product.getBuyPrice());
-            existingProduct.setSellPrice(product.getSellPrice());
-            existingProduct.setCurrencyBuyName(product.getCurrencyBuyName());
-            existingProduct.setCurrencySellName(product.getCurrencySellName());
-            existingProduct.setStoredIn(product.getStoredIn());
+            existingProduct.setProductName(product.getProductName());
+            existingProduct.setClient(product.getClient());
             return productRepository.save(existingProduct);
         } else {
             // Crear nuevo producto
@@ -77,21 +57,6 @@ public class ProductServiceImpl implements ProductService {
     public void validateProductInputs(Product product) {
         if (product.getProductName() == null || product.getProductName().isEmpty()) {
             throw new IllegalArgumentException("El nombre del producto no puede estar vacío");
-        }
-        if (product.getQuantityInStorage() == null || product.getQuantityInStorage() < 0) {
-            throw new IllegalArgumentException("La cantidad debe ser un número entero válido");
-        }
-        if (product.getBuyPrice() == null || product.getBuyPrice().compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("El precio de compra debe ser un número válido");
-        }
-        if (product.getSellPrice() == null || product.getSellPrice().compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("El precio de venta debe ser un número válido");
-        }
-        if (product.getCategoryName() == null || product.getCategoryName().isEmpty()) {
-            throw new IllegalArgumentException("La categoría no puede estar vacía");
-        }
-        if (product.getStoredIn() == null || product.getStoredIn().isEmpty()) {
-            throw new IllegalArgumentException("El lugar de almacenamiento no puede estar vacío");
         }
     }
 }

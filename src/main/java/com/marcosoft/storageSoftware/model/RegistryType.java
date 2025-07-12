@@ -7,7 +7,7 @@ package com.marcosoft.storageSoftware.model;
 /**
  * @author MazMorr
  */
-public enum TransactionType {
+public enum RegistryType {
     ADD, // Agregar producto
     UPDATE, // Actualizar producto
     SALE, // Venta de producto

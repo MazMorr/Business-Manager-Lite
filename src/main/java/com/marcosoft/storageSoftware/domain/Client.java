@@ -1,4 +1,4 @@
-package com.marcosoft.storageSoftware.model;
+package com.marcosoft.storageSoftware.domain;
 
 import jakarta.persistence.*;
 import lombok.*;

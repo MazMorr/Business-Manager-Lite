@@ -1,6 +1,6 @@
 package com.marcosoft.storageSoftware.service.impl;
 
-import com.marcosoft.storageSoftware.model.Client;
+import com.marcosoft.storageSoftware.domain.Client;
 import com.marcosoft.storageSoftware.repository.ClientRepository;
 import com.marcosoft.storageSoftware.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
 package com.marcosoft.storageSoftware.repository;
 
-import com.marcosoft.storageSoftware.model.Client;
+import com.marcosoft.storageSoftware.domain.Client;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

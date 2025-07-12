@@ -1,6 +1,6 @@
 package com.marcosoft.storageSoftware.repository;
 
-import com.marcosoft.storageSoftware.model.Configuration;
+import com.marcosoft.storageSoftware.domain.Configuration;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

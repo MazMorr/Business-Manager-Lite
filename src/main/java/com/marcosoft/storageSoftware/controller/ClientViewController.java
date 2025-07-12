@@ -28,15 +28,16 @@ public class ClientViewController {
     private SpringFXMLLoader springFXMLLoader;
 
     private final WindowShowing windowShowing;
+
     @FXML
     private TextField txtFieldName;
+    @FXML
+    private PasswordField txtFieldPassword;
     @FXML
     private Label txtDebugForm;
 
     @Autowired
     ClientServiceImpl clientServiceImpl;
-    @FXML
-    private PasswordField txtFieldPassword;
 
     @Autowired
     public ClientViewController(WindowShowing windowShowing) {
@@ -45,19 +46,24 @@ public class ClientViewController {
 
     @FXML
     private void enterApplication(ActionEvent event) {
-        if (clientServiceImpl.existsByClientNameAndClientPassword(txtFieldName.getText(), txtFieldPassword.getText())) {
+        String username = txtFieldName.getText();
+        String password = txtFieldPassword.getText();
+
+        if (username == null || username.isBlank() || password == null || password.isBlank()) {
+            showError("Por favor, ingrese usuario y contraseña.");
+            return;
+        }
+
+        if (clientServiceImpl.existsByClientNameAndClientPassword(username, password)) {
             try {
-                System.out.println("Usuario autenticado. Cargando la vista de soporte...");
-                clientServiceImpl.updateIsClientActiveByClientName(true, txtFieldName.getText());
+                clientServiceImpl.updateIsClientActiveByClientName(true, username);
 
                 // Usar SpringFXMLLoader para cargar el archivo FXML
                 Parent root = (Parent) springFXMLLoader.load("/supportView.fxml");
-                System.out.println("Vista de soporte cargada correctamente.");
 
                 // Obtener el controlador del archivo FXML cargado
                 SupportViewController primaryController = springFXMLLoader.getController(SupportViewController.class);
                 primaryController.setAccountController(this);
-                System.out.println("Controlador configurado correctamente.");
 
                 // Obtener la ventana actual
                 Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -69,18 +75,14 @@ public class ClientViewController {
                 stage.getIcons().add(new Image(getClass().getResource("/images/RTS_logo.png").toString()));
                 stage.setTitle("Almacenamiento");
                 stage.centerOnScreen();
-
-                // Establecer el tamaño mínimo de la ventana
-                stage.setMinWidth(999);
-                stage.setMinHeight(699);
-
+                stage.setMinWidth(1000);
+                stage.setMinHeight(650);
 
                 // Manejar el cierre de la ventana
                 stage.setOnCloseRequest(e -> {
                     windowShowing.closeAllWindows();
                     if (showAlert()) {
-                        clientServiceImpl.updateIsClientActiveByClientName(false,
-                                clientServiceImpl.getByIsClientActive(true).getClientName());
+                        clientServiceImpl.updateIsClientActiveByClientName(false, username);
                         stage.close();
                     } else {
                         e.consume();
@@ -90,43 +92,50 @@ public class ClientViewController {
                 // Mostrar la nueva ventana y cerrar la actual
                 stage.show();
                 currentStage.close();
-                System.out.println("Nueva ventana mostrada correctamente.");
 
             } catch (IOException e) {
-                txtDebugForm.setText("Ha ocurrido un error desconocido");
-                txtDebugForm.setTextFill(RED);
+                showError("Ha ocurrido un error al cargar la aplicación.");
                 e.printStackTrace();
             }
         } else {
-            txtDebugForm.setText("Usuario o contraseña incorrecta");
-            txtDebugForm.setTextFill(RED);
+            showError("Usuario o contraseña incorrecta.");
         }
     }
 
+    private void showError(String message) {
+        txtDebugForm.setText(message);
+        txtDebugForm.setTextFill(RED);
+    }
+
     private boolean showAlert() {
-        // Create an alert
         Alert alert = new Alert(AlertType.CONFIRMATION);
-        alert.setTitle("Confirmation Alert");
+        alert.setTitle("Confirmación");
         alert.setHeaderText("¿Seguro que quiere salir?");
-        alert.setContentText("Asegurese de tener todo en orden antes de cerrar la aplicación por favor");
+        alert.setContentText("Asegúrese de tener todo en orden antes de cerrar la aplicación, por favor.");
 
-        // Show the alert and wait for the user to respond
         Optional<ButtonType> result = alert.showAndWait();
-
-        // Return true if the user clicked OK, false if they clicked Cancel
         return result.isPresent() && result.get() == ButtonType.OK;
     }
 
     @FXML
     private void switchToCreateClient() {
+        clearFields();
         Main.setRoot("createClientView");
+    }
+
+    private void clearFields() {
+        txtFieldName.clear();
+        txtFieldPassword.clear();
+        txtDebugForm.setText("");
     }
 
     @FXML
     public void initialize() {
+        // Cierra cualquier sesión activa previa
         if (clientServiceImpl.existsByIsClientActive(true)) {
             clientServiceImpl.updateIsClientActiveByClientName(false,
                     clientServiceImpl.getByIsClientActive(true).getClientName());
         }
+        clearFields();
     }
 }
