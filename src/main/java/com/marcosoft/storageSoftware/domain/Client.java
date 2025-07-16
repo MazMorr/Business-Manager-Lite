@@ -13,13 +13,6 @@ import lombok.*;
 public class Client {
 
     @Id
-    @SequenceGenerator(name = "client_sequence", sequenceName = "client_sequence",
-            initialValue = 1, allocationSize = 1
-    )
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "client_sequence")
-    @Column(name = "client_id", nullable = false, unique = true)
-    private Long clientId;
-
     @Column(name = "name", nullable = false, length = 25)
     private String clientName;
 

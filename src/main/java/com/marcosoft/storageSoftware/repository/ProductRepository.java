@@ -11,8 +11,6 @@ import java.util.List;
 
 @Repository
 public interface ProductRepository extends CrudRepository<Product, Long> {
-    @Query("select count(p) from Product p where p.quantityInStorage = ?1")
-    long countByQuantityInStorage(Integer quantityInStorage);
 
     Product findByProductName(String productName);
 

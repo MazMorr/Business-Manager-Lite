@@ -8,11 +8,11 @@ public interface ClientService {
 
     Client save(Client client);
 
-    Client getClientById(Long id);
+    Client getClientByName(String name);
 
     List<Client> getAllClients();
 
-    void deleteByClientId(Long id);
+    void deleteByClientName(String name);
 
     Boolean existsByClientName(String name);
 

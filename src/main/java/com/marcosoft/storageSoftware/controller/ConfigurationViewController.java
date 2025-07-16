@@ -67,7 +67,7 @@ public class ConfigurationViewController implements Initializable {
 
     @FXML
     public void switchToStock(ActionEvent event) {
-        sceneSwitcher.setRootWithEvent(event, "/stockView.fxml");
+        sceneSwitcher.setRootWithEvent(event, "/investmentView.fxml");
         windowShowing.closeAllWindows();
     }
 

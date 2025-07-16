@@ -3,7 +3,6 @@
 /* ========================= */
 /*
 Azul principal:      #2563eb
-Azul oscuro:         #1e293b
 Azul claro:          #60a5fa
 Gris claro:          #f3f4f6
 Gris medio:          #cbd5e1
@@ -32,16 +31,38 @@ Negro:               #0f172a
 }
 
 .menu-button{
+    -fx-background-color: linear-gradient(to bottom,#60a5fa,#2563eb);
     -fx-text-fill: #ffffff;
+}
+
+.menu-button .arrow{
+    -fx-background-color: #ffffff;
+}
+
+.menu-button:hover{
+    -fx-cursor: hand;
+}
+
+.date-picker .arrow-button {
+    -fx-background-color: linear-gradient(to bottom,#60a5fa,#2563eb);
+    -fx-background-radius: 0 4px 4px 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 5px 10px;
+}
+
+.date-picker .arrow-button:hover {
+    -fx-background-color: #e0e0e0;
+}
+
+.date-picker .arrow {
+    -fx-background-color: #ffffff;
+
 }
 
 .clientName {
     -fx-font-weight: 900;
     -fx-text-fill: #ffffff;
-}
-
-.progressBar {
-    -fx-background-color: #2563eb;
 }
 
 /* ========================= */
@@ -62,7 +83,7 @@ Negro:               #0f172a
     -fx-pref-height: 55;
     -fx-font-size: 16;
     -fx-font-weight: 1200;
-    -fx-background-color: linear-gradient(to bottom, #2563eb, #60a5fa);
+    -fx-background-color: linear-gradient(to bottom,#60a5fa,#2563eb);
     -fx-text-fill: #fff;
 }
 
@@ -199,7 +220,7 @@ Negro:               #0f172a
 /* FILTROS                   */
 /* ========================= */
 .filters {
-    -fx-background-color: #2563eb;
+    -fx-background-color: linear-gradient(to bottom,#60a5fa,#2563eb);
     -fx-font-size: 14;
     -fx-font-family: 'Segoe UI', sans-serif;
     -fx-font-weight: 700;
@@ -207,8 +228,8 @@ Negro:               #0f172a
 }
 
 .filters:hover {
-    -fx-effect: dropshadow(gaussian, rgba(30,41,59,0.15), 10, 0, 0, 0);
-    -fx-opacity: 0.85;
+    -fx-background-color: #60a5fa;
+    -fx-cursor: hand;
 }
 
 /* ========================= */
@@ -295,8 +316,4 @@ Negro:               #0f172a
 .tab-pane:focused {
     -fx-focus-color: transparent !important;
     -fx-faint-focus-color: transparent !important;
-    -fx-border-color: transparent !important;
-    -fx-background-insets: 0 !important;
-    -fx-border-width: 0 !important;
-    -fx-outline: none !important;
 }

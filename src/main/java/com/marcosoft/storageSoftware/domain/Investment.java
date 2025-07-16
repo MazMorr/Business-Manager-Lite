@@ -22,14 +22,14 @@ public class Investment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long investmentId;
 
-    @Column(name = "transaction_price", nullable = false, precision = 10, scale = 2)
-    private BigDecimal investmentPrice;
+    @Column(name = "product_name", nullable = false)
+    private String productName;
+
+    @Column(name = "transaction_price", nullable = false)
+    private Double investmentPrice;
 
     @ManyToOne
     private Currency currency;
-
-    @Column(name = "product_name", nullable = false)
-    private String productName;
 
     @Column(name = "amount", nullable = false)
     private Integer amount;

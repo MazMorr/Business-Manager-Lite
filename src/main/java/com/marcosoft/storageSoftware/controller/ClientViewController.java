@@ -1,5 +1,6 @@
 package com.marcosoft.storageSoftware.controller;
 
+import com.marcosoft.storageSoftware.model.UserLogged;
 import com.marcosoft.storageSoftware.service.impl.ClientServiceImpl;
 import com.marcosoft.storageSoftware.util.SpringFXMLLoader;
 import com.marcosoft.storageSoftware.util.WindowShowing;
@@ -38,7 +39,8 @@ public class ClientViewController {
 
     @Autowired
     ClientServiceImpl clientServiceImpl;
-
+    @Autowired
+    UserLogged userLogged;
     @Autowired
     public ClientViewController(WindowShowing windowShowing) {
         this.windowShowing = windowShowing;
@@ -57,6 +59,7 @@ public class ClientViewController {
         if (clientServiceImpl.existsByClientNameAndClientPassword(username, password)) {
             try {
                 clientServiceImpl.updateIsClientActiveByClientName(true, username);
+                userLogged.setName(username);
 
                 // Usar SpringFXMLLoader para cargar el archivo FXML
                 Parent root = (Parent) springFXMLLoader.load("/supportView.fxml");
@@ -75,7 +78,7 @@ public class ClientViewController {
                 stage.getIcons().add(new Image(getClass().getResource("/images/RTS_logo.png").toString()));
                 stage.setTitle("Almacenamiento");
                 stage.centerOnScreen();
-                stage.setMinWidth(1000);
+                stage.setMinWidth(1100);
                 stage.setMinHeight(650);
 
                 // Manejar el cierre de la ventana

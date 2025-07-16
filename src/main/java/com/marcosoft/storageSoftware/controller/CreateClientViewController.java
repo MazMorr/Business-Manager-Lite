@@ -44,7 +44,6 @@ public class CreateClientViewController {
         }
 
         Client client = new Client(
-                null,
                 txtFieldUserName.getText(),
                 txtFieldPassword.getText(),
                 txtFieldCompany.getText(),

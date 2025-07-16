@@ -24,8 +24,8 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Client getClientById(Long id) {
-        return clientRepository.findById(id).orElse(null);
+    public Client getClientByName(String name) {
+        return clientRepository.findById(name).orElse(null);
     }
 
     @Override
@@ -34,8 +34,8 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void deleteByClientId(Long id) {
-        clientRepository.deleteById(id);
+    public void deleteByClientName(String name) {
+        clientRepository.deleteById(name);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client getByClientNameAndClientPassword(String clientName, String clientPassword) {
-        return clientRepository.findByClientNameAndClientPassword(clientName,clientPassword);
+        return clientRepository.findByClientNameAndClientPassword(clientName, clientPassword);
     }
 
     @Override

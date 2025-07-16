@@ -1,5 +1,6 @@
 package com.marcosoft.storageSoftware.service.impl;
 
+import com.marcosoft.storageSoftware.domain.Client;
 import com.marcosoft.storageSoftware.domain.Warehouse;
 import com.marcosoft.storageSoftware.repository.WarehouseRepository;
 import com.marcosoft.storageSoftware.service.WarehouseRegistryService;
@@ -34,5 +35,15 @@ public class WarehouseServiceImpl implements WarehouseService {
     @Override
     public void deleteWarehouseById(Long id) {
         warehouseRepository.deleteById(id);
+    }
+
+    @Override
+    public Warehouse getWarehouseByWarehouseNameAndClient(String warehouseName, Client client) {
+        return warehouseRepository.findByWarehouseNameAndClient(warehouseName,client);
+    }
+
+    @Override
+    public List<Warehouse> getWarehousesByClient(Client client) {
+        return warehouseRepository.findAllByClient(client);
     }
 }

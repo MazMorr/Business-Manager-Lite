@@ -2,12 +2,12 @@ package com.marcosoft.storageSoftware.controller;
 
 import com.marcosoft.storageSoftware.domain.Investment;
 import com.marcosoft.storageSoftware.service.impl.ClientServiceImpl;
+import com.marcosoft.storageSoftware.service.impl.InvestmentServiceImpl;
 import com.marcosoft.storageSoftware.util.SceneSwitcher;
 import com.marcosoft.storageSoftware.util.WindowShowing;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -22,7 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
 @Controller
@@ -48,7 +47,7 @@ public class RegistryViewController implements Initializable {
     @Autowired
     private ClientServiceImpl clientServiceImpl;
     @Autowired
-    private TransactionServiceImpl transactionServiceImpl;
+    private InvestmentServiceImpl investmentService;
     @Autowired
     private SceneSwitcher sceneSwitcher;
 
@@ -104,7 +103,7 @@ public class RegistryViewController implements Initializable {
 
     @FXML
     private void switchToStock(ActionEvent event) {
-        switchView(event, "/stockView.fxml");
+        switchView(event, "/investmentView.fxml");
     }
 
     private void switchView(ActionEvent event, String fxml) {
@@ -124,25 +123,6 @@ public class RegistryViewController implements Initializable {
     }
 
     private void loadTransactionsAsync() {
-        Task<List<Investment>> task = new Task<>() {
-            @Override
-            protected List<Investment> call() {
-                return transactionServiceImpl.getByClientId_IsClientActiveOrderByTransactionIdAsc(true);
-            }
-        };
-
-        task.setOnSucceeded(event -> {
-            List<Investment> loadedInvestments = task.getValue();
-            investments.clear();
-            if (loadedInvestments != null) {
-                investments.addAll(loadedInvestments);
-            }
-        });
-
-        task.setOnFailed(event -> {
-            logger.error("Error al cargar transacciones: {}", task.getException().getMessage(), task.getException());
-        });
-
-        new Thread(task).start();
+        //TODO
     }
 }

@@ -39,24 +39,4 @@ public class ProductServiceImpl implements ProductService {
     public boolean productExists(String productName) {
         return productRepository.findByProductName(productName) != null;
     }
-
-    public Product createOrUpdateProduct(Product product) {
-        validateProductInputs(product); // Validar entradas
-        Product existingProduct = productRepository.findById(product.getId()).orElse(null);
-        if (existingProduct != null) {
-            // Actualizar producto existente
-            existingProduct.setProductName(product.getProductName());
-            existingProduct.setClient(product.getClient());
-            return productRepository.save(existingProduct);
-        } else {
-            // Crear nuevo producto
-            return productRepository.save(product);
-        }
-    }
-
-    public void validateProductInputs(Product product) {
-        if (product.getProductName() == null || product.getProductName().isEmpty()) {
-            throw new IllegalArgumentException("El nombre del producto no puede estar vacío");
-        }
-    }
 }

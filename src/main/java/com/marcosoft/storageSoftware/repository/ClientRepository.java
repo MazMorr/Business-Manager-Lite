@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public interface ClientRepository extends CrudRepository<Client, Long> {
+public interface ClientRepository extends CrudRepository<Client, String> {
 
     Client findByClientNameAndClientPassword(String clientName, String clientPassword);
 
