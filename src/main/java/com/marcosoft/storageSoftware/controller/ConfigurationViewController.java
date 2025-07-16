@@ -1,7 +1,7 @@
 package com.marcosoft.storageSoftware.controller;
 
 import com.marcosoft.storageSoftware.Main;
-import com.marcosoft.storageSoftware.model.Client;
+import com.marcosoft.storageSoftware.domain.Client;
 import com.marcosoft.storageSoftware.service.impl.ClientServiceImpl;
 import com.marcosoft.storageSoftware.util.SceneSwitcher;
 import com.marcosoft.storageSoftware.util.WindowShowing;
@@ -12,7 +12,6 @@ import javafx.scene.control.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -68,41 +67,25 @@ public class ConfigurationViewController implements Initializable {
 
     @FXML
     public void switchToStock(ActionEvent event) {
-        try {
-            sceneSwitcher.setRoot(event, "/stockView.fxml");
-            windowShowing.closeAllWindows();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        sceneSwitcher.setRootWithEvent(event, "/investmentView.fxml");
+        windowShowing.closeAllWindows();
     }
 
     @FXML
     public void switchToWallet(ActionEvent event) {
-        try {
-            sceneSwitcher.setRoot(event, "/walletView.fxml");
-            windowShowing.closeAllWindows();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        sceneSwitcher.setRootWithEvent(event, "/walletView.fxml");
+        windowShowing.closeAllWindows();
     }
 
     @FXML
     public void switchToSupport(ActionEvent event) {
-        try {
-            sceneSwitcher.setRoot(event, "/supportView.fxml");
-            windowShowing.closeAllWindows();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        sceneSwitcher.setRootWithEvent(event, "/supportView.fxml");
+        windowShowing.closeAllWindows();
     }
 
     @FXML
     public void switchToRegistry(ActionEvent event) {
-        try {
-            sceneSwitcher.setRoot(event, "/registryView.fxml");
-            windowShowing.closeAllWindows();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        sceneSwitcher.setRootWithEvent(event, "/registryView.fxml");
+        windowShowing.closeAllWindows();
     }
 }

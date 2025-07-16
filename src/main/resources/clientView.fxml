@@ -35,7 +35,7 @@
                   <DropShadow />
                </effect>
             </HBox>
-            <VBox layoutX="109.0" layoutY="79.0" prefHeight="257.0" prefWidth="300.0" AnchorPane.leftAnchor="75.0" AnchorPane.rightAnchor="75.0">
+            <VBox layoutX="109.0" layoutY="79.0" prefHeight="257.0" prefWidth="300.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="75.0" AnchorPane.rightAnchor="75.0" AnchorPane.topAnchor="85.0">
                <children>
                   <Label styleClass="txtUser" stylesheets="@Styles.css" text="Usuario:">
                      <font>
@@ -55,7 +55,7 @@
                         <Font name="System Bold" size="14.0" />
                      </font>
                      <VBox.margin>
-                        <Insets top="5.0" />
+                        <Insets top="2.0" />
                      </VBox.margin>
                   </Label>
                   <PasswordField fx:id="txtFieldPassword" promptText="Introduzca su contraseña" styleClass="inputForm" stylesheets="@Styles.css">
@@ -78,7 +78,7 @@
                         </Tooltip>
                      </tooltip>
                      <VBox.margin>
-                        <Insets top="10.0" />
+                        <Insets top="5.0" />
                      </VBox.margin>
                   </Button>
                   <Label fx:id="txtDebugForm" alignment="TOP_CENTER" prefHeight="62.0" prefWidth="300.0" text="Si no posee una cuenta recuerde crearla, ¡Es Gratis!" textAlignment="CENTER" textFill="#ff1300" wrapText="true">

@@ -1,6 +1,6 @@
 package com.marcosoft.storageSoftware.service.impl;
 
-import com.marcosoft.storageSoftware.model.Client;
+import com.marcosoft.storageSoftware.domain.Client;
 import com.marcosoft.storageSoftware.repository.ClientRepository;
 import com.marcosoft.storageSoftware.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +24,8 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Client getClientById(Long id) {
-        return clientRepository.findById(id).orElse(null);
+    public Client getClientByName(String name) {
+        return clientRepository.findById(name).orElse(null);
     }
 
     @Override
@@ -34,8 +34,8 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void deleteByClientId(Long id) {
-        clientRepository.deleteById(id);
+    public void deleteByClientName(String name) {
+        clientRepository.deleteById(name);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client getByClientNameAndClientPassword(String clientName, String clientPassword) {
-        return clientRepository.findByClientNameAndClientPassword(clientName,clientPassword);
+        return clientRepository.findByClientNameAndClientPassword(clientName, clientPassword);
     }
 
     @Override

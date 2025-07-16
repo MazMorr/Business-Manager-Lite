@@ -1,85 +1,61 @@
 package com.marcosoft.storageSoftware.controller;
 
-import com.marcosoft.storageSoftware.model.Product;
-import com.marcosoft.storageSoftware.model.Transaction;
+import com.marcosoft.storageSoftware.domain.Investment;
 import com.marcosoft.storageSoftware.service.impl.ClientServiceImpl;
-import com.marcosoft.storageSoftware.service.impl.TransactionServiceImpl;
+import com.marcosoft.storageSoftware.service.impl.InvestmentServiceImpl;
 import com.marcosoft.storageSoftware.util.SceneSwitcher;
 import com.marcosoft.storageSoftware.util.WindowShowing;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.awt.*;
-import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
 @Controller
 public class RegistryViewController implements Initializable {
 
-    ObservableList<Transaction> transactions;
+    private static final Logger logger = LoggerFactory.getLogger(RegistryViewController.class);
+
+    private ObservableList<Investment> investments;
+    private FilteredList<Investment> filteredInvestments;
 
     @FXML
-    private TableView<Transaction> tblRegistry;
+    private TableView<Investment> tblRegistry;
     @FXML
     public TextField txtFilterName;
     @FXML
-    private TableColumn quantityColumn, currencyColumn, nameColumn, dateColumn, categoryColumn,
+    private TableColumn<?, ?> quantityColumn, currencyColumn, nameColumn, dateColumn, categoryColumn,
             priceColumn, transactionTypeColumn, storedInColumn;
     @FXML
     private Label txtClientName;
 
     @Autowired
-    WindowShowing windowShowing;
+    private WindowShowing windowShowing;
     @Autowired
-    ClientServiceImpl clientServiceImpl;
+    private ClientServiceImpl clientServiceImpl;
     @Autowired
-    TransactionServiceImpl transactionServiceImpl;
+    private InvestmentServiceImpl investmentService;
     @Autowired
     private SceneSwitcher sceneSwitcher;
 
-    @FXML
-    private void switchToSupport(ActionEvent event) throws IOException {
-        sceneSwitcher.setRoot(event, "/supportView.fxml");
-        windowShowing.closeAllWindows();
-    }
-
-    @Deprecated
-    private void switchToExistency(ActionEvent event) throws IOException {
-        sceneSwitcher.setRoot(event, "/stockView.fxml");
-        windowShowing.closeAllWindows();
-    }
-
-    @FXML
-    private void switchToConfiguration(ActionEvent event) throws IOException {
-        sceneSwitcher.setRoot(event, "/configurationView.fxml");
-        windowShowing.closeAllWindows();
-    }
-
-    @FXML
-    private void selected(MouseEvent event) {
-        Transaction transaction = tblRegistry.getSelectionModel().getSelectedItem();
-    }
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        transactions = FXCollections.observableArrayList();
-        tblRegistry.setItems(transactions);
+        investments = FXCollections.observableArrayList();
+        filteredInvestments = new FilteredList<>(investments, t -> true);
+        tblRegistry.setItems(filteredInvestments);
 
         // Configuración de columnas
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("productName"));
@@ -96,55 +72,57 @@ public class RegistryViewController implements Initializable {
         placeholder.setPadding(new Insets(20));
         tblRegistry.setPlaceholder(placeholder);
 
-        // Cargar productos existentes y actualizar contadores
-        loadProductsAsync();
+        // Filtro reactivo por nombre
+        txtFilterName.textProperty().addListener((obs, oldVal, newVal) -> {
+            filteredInvestments.setPredicate(transaction -> {
+                if (newVal == null || newVal.isEmpty()) return true;
+                String name = transaction.getProductName();
+                return name != null && name.toLowerCase().contains(newVal.toLowerCase());
+            });
+        });
+
+        loadTransactionsAsync();
 
         txtClientName.setText(clientServiceImpl.getByIsClientActive(true).getClientName());
     }
 
     @FXML
-    public void switchToWallet(ActionEvent event) {
-        try {
-            sceneSwitcher.setRoot(event, "/walletView.fxml");
-            windowShowing.closeAllWindows();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void switchToSupport(ActionEvent event) {
+        switchView(event, "/supportView.fxml");
+    }
+
+    @FXML
+    private void switchToConfiguration(ActionEvent event) {
+        switchView(event, "/configurationView.fxml");
+    }
+
+    @FXML
+    private void switchToWallet(ActionEvent event) {
+        switchView(event, "/walletView.fxml");
+    }
+
+    @FXML
+    private void switchToStock(ActionEvent event) {
+        switchView(event, "/investmentView.fxml");
+    }
+
+    private void switchView(ActionEvent event, String fxml) {
+        sceneSwitcher.setRootWithEvent(event, fxml);
+        windowShowing.closeAllWindows();
+    }
+
+    @FXML
+    private void selected(MouseEvent event) {
+        // Puedes implementar lógica adicional aquí si lo necesitas
+        Investment investment = tblRegistry.getSelectionModel().getSelectedItem();
     }
 
     @FXML
     public void txtFilterNameChanged(KeyEvent event) {
+        // Ya no es necesario, el filtro es reactivo con el listener en initialize()
     }
 
-    @FXML
-    public void switchToStock(ActionEvent event) {
-        try {
-            sceneSwitcher.setRoot(event, "/stockView.fxml");
-            windowShowing.closeAllWindows();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void loadProductsAsync() {
-        Task<java.util.List<Transaction>> task = new Task<>() {
-            @Override
-            protected java.util.List<Transaction> call() {
-                // Obtener transacciones del servicio
-                return transactionServiceImpl.getByClientId_IsClientActiveOrderByTransactionIdAsc(true);
-            }
-        };
-
-        task.setOnSucceeded(event -> {
-            List<Transaction> loadedTrasactions = task.getValue();
-
-            // Limpia la lista observable antes de agregar nuevos productos
-            transactions.clear();
-            transactions.addAll(loadedTrasactions);
-            tblRegistry.refresh();
-
-        });
-
-        new Thread(task).start();
+    private void loadTransactionsAsync() {
+        //TODO
     }
 }

@@ -1,4 +1,4 @@
-package com.marcosoft.storageSoftware.model;
+package com.marcosoft.storageSoftware.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -19,6 +19,9 @@ public class Configuration {
 
     @OneToOne
     private Client client;
+
+    @Column(name="window_mode", unique = true)
+    private Boolean windowMode;
 
     @Column(name="dark_mode", unique = true)
     private Boolean darkMode;
