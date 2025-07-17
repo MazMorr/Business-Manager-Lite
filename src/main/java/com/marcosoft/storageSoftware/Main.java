@@ -12,7 +12,13 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import java.io.IOException;
 
-@SpringBootApplication(scanBasePackages = "com.marcosoft.storageSoftware")
+@SpringBootApplication(scanBasePackages = {
+        "com.marcosoft.storageSoftware.controller",
+        "com.marcosoft.storageSoftware.service.impl",
+        "com.marcosoft.storageSoftware.repository",
+        "com.marcosoft.storageSoftware.util",
+        "com.marcosoft.storagesoftware.model"
+})
 public class Main extends Application {
 
     private static ConfigurableApplicationContext context;

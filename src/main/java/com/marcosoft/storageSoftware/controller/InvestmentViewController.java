@@ -239,11 +239,10 @@ public class InvestmentViewController {
                 currencyService.getCurrencyByName(currency),
                 amount,
                 receivedDate,
-                clientService.getClientByName(userLogged.getName())
+                clientService.getClientByName(userLogged.getName()),
+                false
         );
-
         investmentService.save(investment);
-
         initializeTableValues();
         cleanForm(null);
     }
