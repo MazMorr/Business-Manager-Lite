@@ -48,7 +48,7 @@
 
                      </graphic>
                      <graphic>
-                        <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
+                        <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true">
                            <image>
                               <Image url="@images/goods.png" />
                            </image>
@@ -62,12 +62,12 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToInventory" styleClass="btnIndex" stylesheets="@Styles.css" text="Inventario">
+                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" styleClass="btnIndex" stylesheets="@Styles.css" text="Inventario">
                      <font>
                         <Font name="System Bold" size="17.0" />
                      </font>
                      <graphic>
-                        <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
+                        <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true">
                            <image>
                               <Image url="@images/agreement.png" />
                            </image>
@@ -81,12 +81,12 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToWarehouse" styleClass="btnIndex" stylesheets="@Styles.css" text="Almacenes">
+                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" styleClass="btnIndex" stylesheets="@Styles.css" text="Almacenes">
                      <font>
                         <Font name="System Bold" size="17.0" />
                      </font>
                      <graphic>
-                        <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
+                        <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true">
                            <image>
                               <Image url="@images/warehouse.png" />
                            </image>
@@ -111,26 +111,7 @@
 
                      </graphic>
                      <graphic>
-                        <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
-                           <image>
-                              <Image url="@images/monitoring.png" />
-                           </image>
-                           <effect>
-                              <InnerShadow choke="1.0">
-                                 <color>
-                                    <Color red="1.0" green="1.0" blue="1.0" />
-                                 </color>
-                              </InnerShadow>
-                           </effect>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToBalance" styleClass="btnIndex" stylesheets="@Styles.css" text="Balance">
-                     <font>
-                        <Font name="System Bold" size="17.0" />
-                     </font>
-                     <graphic>
-                        <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
+                        <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true">
                            <image>
                               <Image url="@images/interest-rate.png" />
                            </image>
@@ -152,7 +133,7 @@
 
                      </graphic>
                      <graphic>
-                        <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
+                        <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true">
                            <image>
                               <Image url="@images/support.png" />
                            </image>
@@ -168,7 +149,7 @@
                   </Button>
                </children>
             </VBox>
-            <TableView fx:id="tblInvestment" editable="true" layoutX="159.0" layoutY="115.0" onMouseClicked="#selectInventory" prefHeight="445.0" prefWidth="550.0" styleClass="table" stylesheets="@Styles.css" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="310.0" AnchorPane.topAnchor="220.0">
+            <TableView fx:id="tblInvestment" editable="true" layoutX="159.0" layoutY="115.0" onMouseClicked="#selectInventory" prefHeight="445.0" prefWidth="550.0" styleClass="table" stylesheets="@Styles.css" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="311.0" AnchorPane.topAnchor="220.0">
                <columns>
                   <TableColumn fx:id="idColumn" prefWidth="41.0" text="ID" />
                   <TableColumn fx:id="nameColumn" prefWidth="129.0" sortable="false" text="Nombre" />
@@ -193,7 +174,7 @@
                      <graphic>
                                  </graphic>
                      <graphic>
-                        <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@images/settings.png" />
                            </image>
@@ -269,7 +250,7 @@
                               <TextField fx:id="txtMaxFilterPrice" prefWidth="70.0" text="0.00" />
                            </children>
                            <VBox.margin>
-                              <Insets top="2.0" />
+                              <Insets top="1.0" />
                            </VBox.margin>
                         </HBox>
                      </children>
@@ -308,7 +289,7 @@
                               <TextField fx:id="txtMaxFilterAmount" prefWidth="70.0" text="0" />
                            </children>
                            <VBox.margin>
-                              <Insets top="2.0" />
+                              <Insets top="1.0" />
                            </VBox.margin>
                         </HBox>
                      </children>
@@ -408,9 +389,9 @@
                                                 </Tooltip>
                                              </tooltip>
                                              <graphic>
-                                                <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
-                                                      <Image url="@images/add.png" />
+                                                      <Image url="@images/icons8-inventory-24.png" />
                                                    </image>
                                                    <effect>
                                                       <InnerShadow choke="1.0">
@@ -438,9 +419,9 @@
                                           </Label>
                                        </children>
                                     </VBox>
-                                    <Button layoutX="62.0" layoutY="457.0" mnemonicParsing="false" onAction="#cleanForm" prefHeight="30.0" prefWidth="275.0" styleClass="btnStock" stylesheets="@Styles.css" text="Limpiar Campos" AnchorPane.bottomAnchor="48.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                                    <Button layoutX="62.0" layoutY="457.0" mnemonicParsing="false" onAction="#cleanForm" prefHeight="30.0" prefWidth="275.0" styleClass="btnStock" stylesheets="@Styles.css" text="Limpiar Formulario" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
                                        <graphic>
-                                          <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@images/alert%20(2).png" />
                                              </image>
@@ -454,19 +435,12 @@
                                           </ImageView>
                                        </graphic>
                                     </Button>
-                                    <Button layoutX="42.0" layoutY="483.0" mnemonicParsing="false" onAction="#removeProduct" prefHeight="30.0" prefWidth="281.0" style="-fx-background-color: linear-gradient(to bottom, #eb5050, #ec3030);" styleClass="btnDelete" stylesheets="@Styles.css" text="Eliminar Registro" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                                    <Button layoutX="42.0" layoutY="483.0" mnemonicParsing="false" onAction="#removeProduct" prefHeight="30.0" prefWidth="281.0" style="-fx-background-color: linear-gradient(to bottom, #eb5050, #ec3030);" styleClass="btnDelete" stylesheets="@Styles.css" text="Eliminar Registro" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
                                        <graphic>
-                                          <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@images/trash.png" />
                                              </image>
-                                             <effect>
-                                                <InnerShadow choke="1.0">
-                                                   <color>
-                                                      <Color red="1.0" green="1.0" blue="1.0" />
-                                                   </color>
-                                                </InnerShadow>
-                                             </effect>
                                           </ImageView>
                                        </graphic>
                                        <font>

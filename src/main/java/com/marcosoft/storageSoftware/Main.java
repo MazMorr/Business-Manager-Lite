@@ -8,8 +8,6 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import java.io.IOException;
@@ -20,7 +18,7 @@ import java.io.IOException;
         "com.marcosoft.storageSoftware.repository",
         "com.marcosoft.storageSoftware.util",
         "com.marcosoft.storagesoftware.model"
-}, exclude = {CacheAutoConfiguration.class, SecurityAutoConfiguration.class})
+})
 public class Main extends Application {
 
     private static ConfigurableApplicationContext context;
