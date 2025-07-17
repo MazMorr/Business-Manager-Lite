@@ -98,7 +98,7 @@ public class RegistryViewController implements Initializable {
 
     @FXML
     private void switchToWallet(ActionEvent event) {
-        switchView(event, "/walletView.fxml");
+        switchView(event, "/warehouseView.fxml");
     }
 
     @FXML

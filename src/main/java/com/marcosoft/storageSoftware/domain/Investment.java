@@ -41,4 +41,7 @@ public class Investment {
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;
 
+    @Column(name = "is_assigned")
+    private Boolean isAssigned;
+
 }

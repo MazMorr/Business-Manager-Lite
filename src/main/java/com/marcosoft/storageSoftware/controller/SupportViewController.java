@@ -11,7 +11,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.text.Font;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -77,7 +76,7 @@ public class SupportViewController {
 
     @FXML
     public void switchToWallet(ActionEvent event) {
-        switchView(event, "/walletView.fxml");
+        switchView(event, "/warehouseView.fxml");
     }
 
     private void switchView(ActionEvent event, String fxml) {

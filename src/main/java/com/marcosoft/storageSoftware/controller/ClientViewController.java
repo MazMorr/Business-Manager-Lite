@@ -5,6 +5,7 @@ import com.marcosoft.storageSoftware.service.impl.ClientServiceImpl;
 import com.marcosoft.storageSoftware.util.SpringFXMLLoader;
 import com.marcosoft.storageSoftware.util.WindowShowing;
 import com.marcosoft.storageSoftware.Main;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -134,11 +135,14 @@ public class ClientViewController {
 
     @FXML
     public void initialize() {
-        // Cierra cualquier sesión activa previa
-        if (clientServiceImpl.existsByIsClientActive(true)) {
-            clientServiceImpl.updateIsClientActiveByClientName(false,
-                    clientServiceImpl.getByIsClientActive(true).getClientName());
-        }
-        clearFields();
+        Platform.runLater(()-> {
+            // Cierra cualquier sesión activa previa
+            if (clientServiceImpl.existsByIsClientActive(true)) {
+                clientServiceImpl.updateIsClientActiveByClientName(false,
+                        clientServiceImpl.getByIsClientActive(true).getClientName());
+            }
+            clearFields();
+        });
+
     }
 }

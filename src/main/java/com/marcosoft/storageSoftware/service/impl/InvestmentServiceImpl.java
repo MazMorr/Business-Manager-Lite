@@ -34,4 +34,9 @@ public class InvestmentServiceImpl implements InvestmentService {
     public void deleteInvestmentById(Long id) {
         investmentRepository.deleteById(id);
     }
+
+    @Override
+    public List<Investment> getAllInvestmentsByIsAssigned(Boolean isAssigned) {
+        return (List<Investment>) investmentRepository.findByIsAssigned(isAssigned);
+    }
 }

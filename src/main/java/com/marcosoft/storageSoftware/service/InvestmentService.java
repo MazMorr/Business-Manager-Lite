@@ -12,4 +12,6 @@ public interface InvestmentService {
     List<Investment> getAllInvestments();
 
     void deleteInvestmentById(Long id);
+
+    List<Investment> getAllInvestmentsByIsAssigned(Boolean isAssigned);
 }

@@ -41,23 +41,24 @@ Negro:               #0f172a
 
 .menu-button:hover{
     -fx-cursor: hand;
+    -fx-background-color: #60a5fa;
 }
-
+.date-picker{
+    -fx-background-radius: 0 4px 4px 0;
+}
 .date-picker .arrow-button {
     -fx-background-color: linear-gradient(to bottom,#60a5fa,#2563eb);
     -fx-background-radius: 0 4px 4px 0;
-    -fx-border-color: transparent;
-    -fx-border-width: 0;
     -fx-padding: 5px 10px;
 }
 
 .date-picker .arrow-button:hover {
-    -fx-background-color: #e0e0e0;
+    -fx-background-color: #60a5fa;
+    -fx-cursor:hand;
 }
 
 .date-picker .arrow {
     -fx-background-color: #ffffff;
-
 }
 
 .clientName {
@@ -82,7 +83,7 @@ Negro:               #0f172a
     -fx-pref-width: 150;
     -fx-pref-height: 55;
     -fx-font-size: 16;
-    -fx-font-weight: 1200;
+    -fx-font-weigh: 1200;
     -fx-background-color: linear-gradient(to bottom,#60a5fa,#2563eb);
     -fx-text-fill: #fff;
 }
@@ -190,6 +191,51 @@ Negro:               #0f172a
 
 /* Fondo de las celdas vacías */
 .table-view .table-row-cell:empty {
+    -fx-background-color: #f3f4f6;
+}
+
+.tree-table {
+    -fx-background-color: #e3ecff;
+     -fx-border-color: #2563eb;
+     -fx-background-radius: 10;
+     -fx-border-radius: 10;
+     -fx-border-width: 2;
+}
+
+/* Encabezados de las columnas */
+.tree-table-view .column-header .label, .table-view .filler {
+    -fx-background-color: linear-gradient(to bottom, #60a5fa, #2563eb); /* Azul claro a azul principal */
+    -fx-border-color: transparent transparent #60a5fa transparent;
+    -fx-font-size: 14;
+    -fx-font-family: 'Segoe UI', sans-serif;
+    -fx-text-fill: #fff;
+    -fx-border-width: 0 1px 0 1px;
+}
+
+/* Fondo de las filas */
+.tree-table-view .table-row-cell {
+    -fx-border-color: #cbd5e1;
+    -fx-border-width: 0 0 1px 0;
+    -fx-background-color: #fff;
+    -fx-font-weight: 500;
+    -fx-text-fill: #1e293b;
+    -fx-font-size: 14;
+}
+
+/* Fondo al pasar el cursor sobre una fila */
+.tree-table-view .table-row-cell:hover {
+    -fx-background-color: #e0e7ef;
+}
+
+/* Fondo de la fila seleccionada */
+.tree-table-view .table-row-cell:selected {
+    -fx-background-color: #2563eb;
+    -fx-text-fill: #fff;
+    -fx-font-weight: 700;
+}
+
+/* Fondo de las celdas vacías */
+.tree-table-view .table-row-cell:empty {
     -fx-background-color: #f3f4f6;
 }
 

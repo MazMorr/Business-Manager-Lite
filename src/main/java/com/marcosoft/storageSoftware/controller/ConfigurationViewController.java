@@ -73,7 +73,7 @@ public class ConfigurationViewController implements Initializable {
 
     @FXML
     public void switchToWallet(ActionEvent event) {
-        sceneSwitcher.setRootWithEvent(event, "/walletView.fxml");
+        sceneSwitcher.setRootWithEvent(event, "/warehouseView.fxml");
         windowShowing.closeAllWindows();
     }
 
