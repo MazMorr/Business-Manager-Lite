@@ -30,6 +30,30 @@ Negro:               #0f172a
     -fx-border-width: 1.5;
 }
 
+.button{
+    -fx-background-color: linear-gradient(to bottom,#60a5fa,#2563eb);
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: 800;
+    -fx-font-size: 16;
+}
+
+.btnRight{
+    -fx-background-radius: 0px 20px 0px 0px;
+}
+
+.btnRight:hover{
+    -fx-opacity: 0.8;
+}
+
+.btnLeft{
+    -fx-background-radius: 20px 0px 0px 0px;
+}
+
+.button:hover{
+    -fx-cursor: hand;
+    -fx-background-color: #60a5fa;
+}
+
 .menu-button{
     -fx-background-color: linear-gradient(to bottom,#60a5fa,#2563eb);
     -fx-text-fill: #ffffff;
@@ -43,9 +67,11 @@ Negro:               #0f172a
     -fx-cursor: hand;
     -fx-background-color: #60a5fa;
 }
+
 .date-picker{
     -fx-background-radius: 0 4px 4px 0;
 }
+
 .date-picker .arrow-button {
     -fx-background-color: linear-gradient(to bottom,#60a5fa,#2563eb);
     -fx-background-radius: 0 4px 4px 0;
@@ -129,8 +155,6 @@ Negro:               #0f172a
 /* ========================= */
 /* FORMULARIOS               */
 /* ========================= */
-
-
 .txtPassword {
     -fx-font-style: italic;
 }
@@ -150,11 +174,20 @@ Negro:               #0f172a
 /* TABLAS                    */
 /* ========================= */
 .table {
-    -fx-background-color: #e3ecff;
      -fx-border-color: #2563eb;
      -fx-background-radius: 10;
      -fx-border-radius: 10;
      -fx-border-width: 2;
+}
+
+.table-view{
+    -fx-background-color: linear-gradient(to bottom,#f3f4f6 ,#e0e7ef );
+    -fx-padding: 2px 4px 2px 4px;
+}
+
+.tree-table-view{
+    -fx-background-color: linear-gradient(to bottom, #f3f4f6 ,#e0e7ef );
+    -fx-padding: 2px 4px 2px 4px;
 }
 
 /* Encabezados de las columnas */
@@ -192,14 +225,6 @@ Negro:               #0f172a
 /* Fondo de las celdas vacías */
 .table-view .table-row-cell:empty {
     -fx-background-color: #f3f4f6;
-}
-
-.tree-table {
-    -fx-background-color: #e3ecff;
-     -fx-border-color: #2563eb;
-     -fx-background-radius: 10;
-     -fx-border-radius: 10;
-     -fx-border-width: 2;
 }
 
 /* Encabezados de las columnas */
@@ -289,11 +314,13 @@ Negro:               #0f172a
 .index, .rightIndex {
     -fx-background-color: #e0e7ef;
 }
+
 .rightIndex .label{
     -fx-text-fill: #1e293b;
     -fx-font-size: 14;
     -fx-font-weight: 700;
 }
+
 .crudOperations {
     -fx-background-color: #f3f4f6;
     -fx-font-size: 13;
@@ -330,7 +357,6 @@ Negro:               #0f172a
 
 .tab-pane .tab {
     -fx-background-color: transparent;
-
 }
 
 .tab-pane .tab-label {

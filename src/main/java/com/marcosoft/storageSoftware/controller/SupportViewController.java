@@ -50,7 +50,8 @@ public class SupportViewController {
     }
 
     private void initWelcomeLabels() {
-        txtWelcomeTitle.setText("Bienvenido, "+ userLogged.getName());
+        versionLabel.setText("1.0.3");
+        txtWelcomeTitle.setText("Bienvenido, " + userLogged.getName());
         txtWelcome.setText("Este software fue desarrollado con un único objetivo en mente, " +
                 "´Obtener un control eficiente de los recursos dentro de su negocio´. " +
                 "Este software presenta una licencia de uso y su comercialización fuera de fuentes oficiales" +
@@ -97,5 +98,4 @@ public class SupportViewController {
         );
         alert.showAndWait();
     }
-
 }

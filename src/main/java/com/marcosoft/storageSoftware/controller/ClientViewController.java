@@ -42,6 +42,7 @@ public class ClientViewController {
     ClientServiceImpl clientServiceImpl;
     @Autowired
     UserLogged userLogged;
+
     @Autowired
     public ClientViewController(WindowShowing windowShowing) {
         this.windowShowing = windowShowing;
@@ -135,7 +136,7 @@ public class ClientViewController {
 
     @FXML
     public void initialize() {
-        Platform.runLater(()-> {
+        Platform.runLater(() -> {
             // Cierra cualquier sesión activa previa
             if (clientServiceImpl.existsByIsClientActive(true)) {
                 clientServiceImpl.updateIsClientActiveByClientName(false,
