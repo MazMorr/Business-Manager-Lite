@@ -5,6 +5,7 @@ import com.marcosoft.storageSoftware.domain.Investment;
 import com.marcosoft.storageSoftware.model.InvestmentObservableList;
 import com.marcosoft.storageSoftware.model.UserLogged;
 import com.marcosoft.storageSoftware.service.impl.*;
+import com.marcosoft.storageSoftware.util.ParseDataTypes;
 import com.marcosoft.storageSoftware.util.SceneSwitcher;
 import com.marcosoft.storageSoftware.util.WindowShowing;
 import javafx.application.Platform;
@@ -35,6 +36,8 @@ public class InvestmentViewController {
     // ============================
     // DEPENDENCY INJECTION
     // ============================
+    @Autowired
+    private ParseDataTypes parseDataTypes;
     @Autowired
     private UserLogged userLogged;
     @Autowired
@@ -81,34 +84,8 @@ public class InvestmentViewController {
     @FXML
     private TableColumn<InvestmentObservableList, Double> priceColumn;
     @FXML
-    private MenuButton mbCurrency, mbFilterId;
+    private MenuButton mbCurrency;
 
-    // ============================
-    // MÉTODOS DE NAVEGACIÓN
-    // ============================
-    @FXML
-    public void switchToConfiguration(ActionEvent actionEvent) {
-        switchView(actionEvent, "/configurationView.fxml");
-    }
-
-    @FXML
-    public void switchToSupport(ActionEvent actionEvent) {
-        switchView(actionEvent, "/supportView.fxml");
-    }
-
-    @FXML
-    public void switchToRegistry(ActionEvent actionEvent) {
-        switchView(actionEvent, "/registryView.fxml");
-    }
-
-    private void switchView(ActionEvent actionEvent, String fxmlPath) {
-        try {
-            sceneSwitcher.setRootWithEvent(actionEvent, fxmlPath);
-        } catch (Exception e) {
-            logger.error("Error al cambiar de vista", e);
-            showAlert("Error al cambiar de vista: " + e.getMessage());
-        }
-    }
 
     // ============================
     // INICIALIZACIÓN
@@ -120,7 +97,6 @@ public class InvestmentViewController {
             setupTextFieldListeners();
             setupTableSelectionListener();
             updateCurrencyMenu();
-            updateIdFilterMenu();
             txtClientName.setText(userLogged.getName());
             initCurrencyDefaultValues();
         });
@@ -207,10 +183,10 @@ public class InvestmentViewController {
             return;
         }
 
-        Long investmentId = parseLong(txtId.getText());
+        Long investmentId = parseDataTypes.parseLong(txtId.getText());
         String productName = txtAddProductName.getText();
-        Double price = parseDouble(txtAddInvestmentPrice.getText());
-        Integer amount = parseInt(txtAddProductAmount.getText());
+        Double price = parseDataTypes.parseDouble(txtAddInvestmentPrice.getText());
+        Integer amount = parseDataTypes.parseInt(txtAddProductAmount.getText());
         LocalDate receivedDate = txtAddInvestmentDate.getValue();
         String currency = txtAddInvestmentCurrency.getText();
 
@@ -249,7 +225,7 @@ public class InvestmentViewController {
 
     @FXML
     public void removeProduct(ActionEvent actionEvent) {
-        Long investmentId = parseLong(txtId.getText());
+        Long investmentId = parseDataTypes.parseLong(txtId.getText());
         if (investmentId == null) {
             showAlert("Debes seleccionar un registro para eliminar.");
             return;
@@ -297,14 +273,13 @@ public class InvestmentViewController {
     // ============================
     // FILTRADO DE TABLA
     // ============================
-// Filtro optimizado usando Streams (Java 8+)
     private void filterInvestmentTable() {
         String id = txtFilterId.getText().trim();
         String name = txtFilterName.getText().trim().toLowerCase();
-        Integer minAmount = parseInt(txtMinFilterAmount.getText());
-        Integer maxAmount = parseInt(txtMaxFilterAmount.getText());
-        Double minPrice = parseDouble(txtMinFilterPrice.getText());
-        Double maxPrice = parseDouble(txtMaxFilterPrice.getText());
+        Integer minAmount = parseDataTypes.parseInt(txtMinFilterAmount.getText());
+        Integer maxAmount = parseDataTypes.parseInt(txtMaxFilterAmount.getText());
+        Double minPrice = parseDataTypes.parseDouble(txtMinFilterPrice.getText());
+        Double maxPrice = parseDataTypes.parseDouble(txtMaxFilterPrice.getText());
 
         Predicate<InvestmentObservableList> filter = investment -> {
             boolean matches = true;
@@ -359,24 +334,6 @@ public class InvestmentViewController {
         }
     }
 
-    private void updateIdFilterMenu() {
-        mbFilterId.getItems().clear();
-        List<Investment> investmentList = investmentService.getAllInvestments();
-        int listLength = investmentList.toArray().length;
-
-        if (listLength > 10) {
-            listLength = 10;
-        }
-
-        for (int i = 0; i < listLength; i++) {
-            MenuItem item = new MenuItem(String.valueOf(investmentList.get(i).getInvestmentId()));
-            item.setOnAction(e -> {
-                txtFilterId.setText(item.getText());
-            });
-            mbFilterId.getItems().add(item);
-        }
-    }
-
     // ============================
     // UTILIDADES
     // ============================
@@ -384,30 +341,6 @@ public class InvestmentViewController {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setContentText(message);
         alert.showAndWait();
-    }
-
-    private Long parseLong(String value) {
-        try {
-            return (value == null || value.isEmpty()) ? null : Long.parseLong(value);
-        } catch (NumberFormatException e) {
-            return null;
-        }
-    }
-
-    private Double parseDouble(String value) {
-        try {
-            return (value == null || value.isEmpty()) ? null : Double.parseDouble(value);
-        } catch (NumberFormatException e) {
-            return null;
-        }
-    }
-
-    private Integer parseInt(String value) {
-        try {
-            return (value == null || value.isEmpty()) ? null : Integer.parseInt(value);
-        } catch (NumberFormatException e) {
-            return null;
-        }
     }
 
     @FXML
@@ -419,5 +352,47 @@ public class InvestmentViewController {
         txtAddProductAmount.setText(String.valueOf(selectedInvestment.getAmount()));
         txtAddInvestmentCurrency.setText(selectedInvestment.getCurrency());
         txtAddInvestmentPrice.setText(String.valueOf(selectedInvestment.getPrice()));
+    }
+
+    // ============================
+    // MÉTODOS DE NAVEGACIÓN
+    // ============================
+    @FXML
+    public void switchToConfiguration(ActionEvent actionEvent) {
+        switchView(actionEvent, "/configurationView.fxml");
+    }
+
+    @FXML
+    public void switchToSupport(ActionEvent actionEvent) {
+        switchView(actionEvent, "/supportView.fxml");
+    }
+
+    @FXML
+    public void switchToRegistry(ActionEvent actionEvent) {
+        switchView(actionEvent, "/registryView.fxml");
+    }
+
+    @FXML
+    public void switchToWarehouse(ActionEvent actionEvent) {
+        switchView(actionEvent, "/warehouseView.fxml");
+    }
+
+    @FXML
+    public void switchToBalance(ActionEvent actionEvent) {
+        switchView(actionEvent, "/balanceView.fxml");
+    }
+
+    @FXML
+    public void switchToInventory(ActionEvent actionEvent) {
+        switchView(actionEvent, "/inventoryView.fxml");
+    }
+
+    private void switchView(ActionEvent actionEvent, String fxmlPath) {
+        try {
+            sceneSwitcher.setRootWithEvent(actionEvent, fxmlPath);
+        } catch (Exception e) {
+            logger.error("Error al cambiar de vista", e);
+            showAlert("Error al cambiar de vista: " + e.getMessage());
+        }
     }
 }

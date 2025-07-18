@@ -51,6 +51,12 @@ public class CreateClientViewController {
         );
         clientServiceImpl.save(client);
 
+        Alert alert = getAlert(txtFieldCompany, txtFieldUserName);
+        alert.showAndWait();
+        goBack();
+    }
+
+    private static Alert getAlert(TextField txtFieldCompany, TextField txtFieldUserName) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Cuenta creada");
         alert.setHeaderText("Información de creación de la cuenta");
@@ -62,8 +68,7 @@ public class CreateClientViewController {
             alert.setContentText("Usted ha creado la cuenta con nombre " + txtFieldUserName.getText()
                     + ".\n¡Por favor no olvide su contraseña!");
         }
-        alert.showAndWait();
-        goBack();
+        return alert;
     }
 
     @FXML
@@ -96,14 +101,12 @@ public class CreateClientViewController {
             setPasswordState(false, false, "La contraseña no puede superar los 16 caracteres.", RED);
         } else if (password.length() < 4) {
             setPasswordState(false, false, "La contraseña debe tener al menos 4 caracteres.", ORANGERED);
-        } else if (confirm.length() > 0 && !password.equals(confirm)) {
+        } else if (!confirm.isEmpty() && !password.equals(confirm)) {
             setPasswordState(true, false, "Las contraseñas no coinciden.", RED);
-        } else if (password.length() >= 4 && password.length() <= 16 && password.equals(confirm) && confirm.length() >= 4) {
+        } else if (password.equals(confirm)) {
             setPasswordState(true, true, "Las contraseñas coinciden. Puede continuar.", GREEN);
-        } else if (password.length() >= 4 && confirm.isEmpty()) {
-            setPasswordState(true, false, "Por favor, confirme su contraseña.", GREEN);
         } else {
-            setPasswordState(false, false, "", BLACK);
+            setPasswordState(true, false, "Por favor, confirme su contraseña.", GREEN);
         }
         updateProgress();
     }

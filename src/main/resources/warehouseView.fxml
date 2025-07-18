@@ -40,7 +40,7 @@
                         <Font name="System Bold" size="17.0" />
                      </font>
                      <graphic>
-                        <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true">
+                        <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
                            <image>
                               <Image url="@images/goods.png" />
                            </image>
@@ -54,12 +54,12 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" styleClass="btnIndex" stylesheets="@Styles.css" text="Inventario">
+                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToInventory" styleClass="btnIndex" stylesheets="@Styles.css" text="Inventario">
                      <font>
                         <Font name="System Bold" size="17.0" />
                      </font>
                      <graphic>
-                        <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true">
+                        <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
                            <image>
                               <Image url="@images/agreement.png" />
                            </image>
@@ -78,7 +78,7 @@
                         <Font name="System Bold" size="17.0" />
                      </font>
                      <graphic>
-                        <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true">
+                        <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
                            <image>
                               <Image url="@images/warehouse.png" />
                            </image>
@@ -100,7 +100,26 @@
                         <Insets />
                      </VBox.margin>
                      <graphic>
-                        <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true">
+                        <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
+                           <image>
+                              <Image url="@images/monitoring.png" />
+                           </image>
+                           <effect>
+                              <InnerShadow choke="1.0">
+                                 <color>
+                                    <Color red="1.0" green="1.0" blue="1.0" />
+                                 </color>
+                              </InnerShadow>
+                           </effect>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToBalance" styleClass="btnIndex" stylesheets="@Styles.css" text="Balance">
+                     <font>
+                        <Font name="System Bold" size="17.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
                            <image>
                               <Image url="@images/interest-rate.png" />
                            </image>
@@ -119,7 +138,7 @@
                         <Font name="System Bold" size="17.0" />
                      </font>
                      <graphic>
-                        <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true">
+                        <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
                            <image>
                               <Image url="@images/support.png" />
                            </image>
@@ -137,7 +156,7 @@
             </VBox>
             <Button alignment="CENTER_LEFT" mnemonicParsing="false" onAction="#switchToConfiguration" prefHeight="60.0" styleClass="btnIndex" stylesheets="@Styles.css" text="Ajustes" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
                <graphic>
-                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@images/settings.png" />
                      </image>
@@ -154,7 +173,7 @@
                   <Font size="14.0" />
                </font>
             </Button>
-            <Label fx:id="txtClientName" contentDisplay="TOP" prefHeight="69.0" prefWidth="172.0" styleClass="clientName" stylesheets="@Styles.css" text="Marco A. Romeros" textFill="#eeeeee" wrapText="true">
+            <Label fx:id="txtClientName" contentDisplay="TOP" prefHeight="69.0" prefWidth="172.0" styleClass="clientName" stylesheets="@Styles.css" text="Marco A. Romeros" textFill="#eeeeee" wrapText="true" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
                <font>
                   <Font name="SansSerif Regular" size="14.0" />
                </font>
@@ -166,28 +185,120 @@
                   </ImageView>
                </graphic>
             </Label>
-            <TableView fx:id="tvInvestments" layoutX="597.0" layoutY="238.0" prefHeight="400.0" prefWidth="460.0" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="630.0" AnchorPane.topAnchor="160.0">
-              <columns>
-                <TableColumn fx:id="tcIdInvestment" prefWidth="92.0" text="ID Inversión" />
-                <TableColumn fx:id="tcProductName" prefWidth="123.0" text="Producto" />
-                  <TableColumn fx:id="tcProductAmount" prefWidth="76.0" text="Cantidad" />
-                  <TableColumn fx:id="tcProductDate" prefWidth="75.0" text="Fecha" />
-              </columns>
-               <columnResizePolicy>
-                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-               </columnResizePolicy>
-            </TableView>
-            <TreeTableView fx:id="ttvWarehouse" layoutX="160.0" layoutY="163.0" prefHeight="400.0" prefWidth="460.0" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="160.0" AnchorPane.topAnchor="160.0">
-              <columns>
-                <TreeTableColumn fx:id="ttcIdWarehouse" prefWidth="91.0" text="ID Almacen" />
-                <TreeTableColumn fx:id="ttcWarehouseName" prefWidth="174.0" text="Almacen" />
-                  <TreeTableColumn fx:id="ttcProductName" prefWidth="87.0" text="Producto" />
-                  <TreeTableColumn fx:id="ttcProductAmount" prefWidth="75.0" text="Cantidad" />
-              </columns>
-               <columnResizePolicy>
-                  <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-               </columnResizePolicy>
-            </TreeTableView>
+            <HBox layoutX="137.0" layoutY="133.0" prefHeight="355.0" prefWidth="583.0" spacing="20.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="170.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="100.0">
+               <children>
+                  <VBox prefHeight="1000.0" prefWidth="1000.0" spacing="1.0" style="-fx-background-radius: 20;" styleClass="rightIndex">
+                     <children>
+                        <HBox prefHeight="35.0" prefWidth="460.0">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#addWarehouse" prefHeight="35.0" prefWidth="450.0" styleClass="btnLeft" text="Agregar Almacén">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                                 <graphic>
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
+                                       <image>
+                                          <Image url="@images/add.png" />
+                                       </image>
+                                       <effect>
+                                          <InnerShadow choke="1.0">
+                                             <color>
+                                                <Color red="1.0" green="1.0" blue="1.0" />
+                                             </color>
+                                          </InnerShadow>
+                                       </effect>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button mnemonicParsing="false" onAction="#deleteWarehouse" prefHeight="35.0" prefWidth="450.0" style="-fx-background-color: linear-gradient(to bottom, #eb5050, #ec3030);" styleClass="btnRight" text="Eliminar Almacén">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                                 <graphic>
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
+                                       <image>
+                                          <Image url="@images/trash.png" />
+                                       </image>
+                                       <effect>
+                                          <InnerShadow choke="1.0">
+                                             <color>
+                                                <Color red="1.0" green="1.0" blue="1.0" />
+                                             </color>
+                                          </InnerShadow>
+                                       </effect>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </HBox>
+                        <TreeTableView fx:id="ttvWarehouse" prefHeight="450.0" prefWidth="460.0" style="-fx-border-color: #2563eb; -fx-border-radius: 0px 0px 20px 20px; -fx-background-radius: 0px 0px 20px 20px;" VBox.vgrow="ALWAYS">
+                          <columns>
+                            <TreeTableColumn fx:id="ttcWarehouseName" prefWidth="115.0" text="Almacen" />
+                              <TreeTableColumn fx:id="ttcProductName" prefWidth="151.0" text="Producto" />
+                              <TreeTableColumn fx:id="ttcProductAmount" prefWidth="84.0" text="Cantidad" />
+                          </columns>
+                           <columnResizePolicy>
+                              <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TreeTableView>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="1000.0" prefWidth="1000.0" spacing="1.0" style="-fx-background-radius: 20;" styleClass="rightIndex">
+                     <children>
+                        <HBox prefHeight="40.0" prefWidth="460.0">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#reassignProduct" prefHeight="35.0" prefWidth="450.0" styleClass="btnLeft" text="Reasignar Producto">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                                 <graphic>
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/process.png" />
+                                       </image>
+                                       <effect>
+                                          <InnerShadow choke="1.0">
+                                             <color>
+                                                <Color red="1.0" green="1.0" blue="1.0" />
+                                             </color>
+                                          </InnerShadow>
+                                       </effect>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button mnemonicParsing="false" onAction="#assignInvestment" prefHeight="35.0" prefWidth="450.0" styleClass="btnRight" text="Asignar Inversión">
+                                 <graphic>
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
+                                       <image>
+                                          <Image url="@images/enter.png" />
+                                       </image>
+                                       <effect>
+                                          <InnerShadow choke="1.0" radius="68.5" width="255.0">
+                                             <color>
+                                                <Color red="1.0" green="1.0" blue="1.0" />
+                                             </color>
+                                          </InnerShadow>
+                                       </effect>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </HBox>
+                        <TableView fx:id="tvInvestments" prefHeight="1000.0" prefWidth="460.0" style="-fx-border-color: #2563eb; -fx-background-radius: 0px 0px 20px 20px; -fx-border-radius: 0px 0px 20px 20px;">
+                          <columns>
+                            <TableColumn fx:id="tcIdInvestment" prefWidth="92.0" text="ID Inversión" />
+                            <TableColumn fx:id="tcProductName" prefWidth="123.0" text="Producto" />
+                              <TableColumn fx:id="tcProductAmount" prefWidth="76.0" text="Cantidad" />
+                              <TableColumn fx:id="tcProductDate" prefWidth="75.0" text="Fecha" />
+                          </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
          </children>
       </AnchorPane>
    </children>
