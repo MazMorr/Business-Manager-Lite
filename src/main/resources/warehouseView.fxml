@@ -173,7 +173,7 @@
                   <Font size="14.0" />
                </font>
             </Button>
-            <Label fx:id="txtClientName" contentDisplay="TOP" prefHeight="69.0" prefWidth="172.0" styleClass="clientName" stylesheets="@Styles.css" text="Marco A. Romeros" textFill="#eeeeee" wrapText="true" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
+            <Label fx:id="txtClientName" contentDisplay="TOP" prefHeight="69.0" prefWidth="172.0" styleClass="clientName" stylesheets="@Styles.css" text="Marco A. Romeros" textFill="#eeeeee" wrapText="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="5.0">
                <font>
                   <Font name="SansSerif Regular" size="14.0" />
                </font>
@@ -187,7 +187,7 @@
             </Label>
             <HBox layoutX="137.0" layoutY="133.0" prefHeight="355.0" prefWidth="583.0" spacing="20.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="170.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="100.0">
                <children>
-                  <VBox prefHeight="1000.0" prefWidth="1000.0" spacing="1.0" style="-fx-background-radius: 20;" styleClass="rightIndex">
+                  <VBox prefHeight="1000.0" prefWidth="1000.0" style="-fx-background-radius: 20;" styleClass="rightIndex">
                      <children>
                         <HBox prefHeight="35.0" prefWidth="460.0">
                            <children>
@@ -243,7 +243,7 @@
                         </TreeTableView>
                      </children>
                   </VBox>
-                  <VBox prefHeight="1000.0" prefWidth="1000.0" spacing="1.0" style="-fx-background-radius: 20;" styleClass="rightIndex">
+                  <VBox prefHeight="1000.0" prefWidth="1000.0" style="-fx-background-radius: 20;" styleClass="rightIndex">
                      <children>
                         <HBox prefHeight="40.0" prefWidth="460.0">
                            <children>

@@ -180,18 +180,14 @@ Negro:               #0f172a
      -fx-border-width: 2;
 }
 
-.table-view{
+.table-view, .tree-table-view{
     -fx-background-color: linear-gradient(to bottom,#f3f4f6 ,#e0e7ef );
-    -fx-padding: 2px 4px 2px 4px;
+    -fx-padding: 5px 3px 5px 3px;
 }
 
-.tree-table-view{
-    -fx-background-color: linear-gradient(to bottom, #f3f4f6 ,#e0e7ef );
-    -fx-padding: 2px 4px 2px 4px;
-}
 
 /* Encabezados de las columnas */
-.table-view .column-header .label, .table-view .filler {
+.table-view .column-header .label, .table-view .filler, .tree-table-view .column-header .label, tree-table-view .filler {
     -fx-background-color: linear-gradient(to bottom, #60a5fa, #2563eb); /* Azul claro a azul principal */
     -fx-border-color: transparent transparent #60a5fa transparent;
     -fx-font-size: 14;
@@ -201,7 +197,7 @@ Negro:               #0f172a
 }
 
 /* Fondo de las filas */
-.table-view .table-row-cell {
+.table-view .table-row-cell, .tree-table-view .tree-table-row-cell {
     -fx-border-color: #cbd5e1;
     -fx-border-width: 0 0 1px 0;
     -fx-background-color: #fff;
@@ -211,56 +207,19 @@ Negro:               #0f172a
 }
 
 /* Fondo al pasar el cursor sobre una fila */
-.table-view .table-row-cell:hover {
+.table-view .table-row-cell:hover, .tree-table-view .tree-table-row-cell {
     -fx-background-color: #e0e7ef;
 }
 
 /* Fondo de la fila seleccionada */
-.table-view .table-row-cell:selected {
+.table-view .table-row-cell:selected, .tree-table-view .tree-table-row-cell:selected {
     -fx-background-color: #2563eb;
     -fx-text-fill: #fff;
     -fx-font-weight: 700;
 }
 
 /* Fondo de las celdas vacías */
-.table-view .table-row-cell:empty {
-    -fx-background-color: #f3f4f6;
-}
-
-/* Encabezados de las columnas */
-.tree-table-view .column-header .label, .table-view .filler {
-    -fx-background-color: linear-gradient(to bottom, #60a5fa, #2563eb); /* Azul claro a azul principal */
-    -fx-border-color: transparent transparent #60a5fa transparent;
-    -fx-font-size: 14;
-    -fx-font-family: 'Segoe UI', sans-serif;
-    -fx-text-fill: #fff;
-    -fx-border-width: 0 1px 0 1px;
-}
-
-/* Fondo de las filas */
-.tree-table-view .table-row-cell {
-    -fx-border-color: #cbd5e1;
-    -fx-border-width: 0 0 1px 0;
-    -fx-background-color: #fff;
-    -fx-font-weight: 500;
-    -fx-text-fill: #1e293b;
-    -fx-font-size: 14;
-}
-
-/* Fondo al pasar el cursor sobre una fila */
-.tree-table-view .table-row-cell:hover {
-    -fx-background-color: #e0e7ef;
-}
-
-/* Fondo de la fila seleccionada */
-.tree-table-view .table-row-cell:selected {
-    -fx-background-color: #2563eb;
-    -fx-text-fill: #fff;
-    -fx-font-weight: 700;
-}
-
-/* Fondo de las celdas vacías */
-.tree-table-view .table-row-cell:empty {
+.table-view .table-row-cell:empty, .tree-table-view .tree-table-row-cell:empty {
     -fx-background-color: #f3f4f6;
 }
 
@@ -329,6 +288,17 @@ Negro:               #0f172a
     -fx-border-radius: 10;
     -fx-background-radius: 10;
     -fx-padding: 10;
+    -fx-font-family: 'Segoe UI', sans-serif;
+    -fx-font-weight: 800;
+}
+
+.alerts {
+    -fx-background-color: #f3f4f6;
+    -fx-font-size: 13;
+    -fx-border-color: #2563eb;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
     -fx-font-family: 'Segoe UI', sans-serif;
     -fx-font-weight: 800;
 }
