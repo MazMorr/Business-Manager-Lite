@@ -12,11 +12,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Warehouse {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="id_warehouse")
-    private Long id;
 
+    @Id
     @Column(name="warehouse_name")
     private String warehouseName;
 

@@ -28,8 +28,10 @@ public class ClientViewController {
 
     @Autowired
     private SpringFXMLLoader springFXMLLoader;
-
-    private final WindowShowing windowShowing;
+    @Autowired
+    ClientServiceImpl clientServiceImpl;
+    @Autowired
+    UserLogged userLogged;
 
     @FXML
     private TextField txtFieldName;
@@ -38,10 +40,7 @@ public class ClientViewController {
     @FXML
     private Label txtDebugForm;
 
-    @Autowired
-    ClientServiceImpl clientServiceImpl;
-    @Autowired
-    UserLogged userLogged;
+    private final WindowShowing windowShowing;
 
     @Autowired
     public ClientViewController(WindowShowing windowShowing) {

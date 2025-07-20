@@ -61,7 +61,7 @@ public class InvestmentViewController {
 
     // TextFields - Add new Investment
     @FXML
-    private TextField txtAddProductName, txtAddProductAmount, txtId, txtAddInvestmentPrice, txtAddInvestmentCurrency;
+    private TextField txtAddProductName, txtAddProductAmount, txtId, txtAddInvestmentPrice, txtAddInvestmentCurrency, txtAddInvestmentType;
 
     @FXML
     private TextField txtFilterId, txtFilterName, txtMinFilterPrice, txtMaxFilterPrice, txtMaxFilterAmount, txtMinFilterAmount;
@@ -85,19 +85,22 @@ public class InvestmentViewController {
     private TableColumn<InvestmentObservableList, Double> priceColumn;
     @FXML
     private MenuButton mbCurrency;
-
+    @FXML
+    private MenuButton mbInvestmentType;
+    @FXML
+    private Pagination paginator;
 
     // ============================
     // INICIALIZACIÓN
     // ============================
     @FXML
     public void initialize() {
+        txtClientName.setText(userLogged.getName());
         Platform.runLater(() -> {
             initializeTableValues();
             setupTextFieldListeners();
             setupTableSelectionListener();
             updateCurrencyMenu();
-            txtClientName.setText(userLogged.getName());
             initCurrencyDefaultValues();
         });
     }
@@ -215,6 +218,7 @@ public class InvestmentViewController {
                 currencyService.getCurrencyByName(currency),
                 amount,
                 receivedDate,
+                txtAddInvestmentType.getText(),
                 clientService.getClientByName(userLogged.getName()),
                 false
         );
@@ -384,7 +388,7 @@ public class InvestmentViewController {
 
     @FXML
     public void switchToInventory(ActionEvent actionEvent) {
-        switchView(actionEvent, "/inventoryView.fxml");
+        switchView(actionEvent, "/sellView.fxml");
     }
 
     private void switchView(ActionEvent actionEvent, String fxmlPath) {

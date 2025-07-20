@@ -37,6 +37,9 @@ public class Investment {
     @Column(name = "received_date", nullable = false)
     private LocalDate receivedDate;
 
+    @Column(name="investment_type")
+    private String investmentType;
+
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;

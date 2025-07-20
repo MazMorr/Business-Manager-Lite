@@ -59,9 +59,10 @@ repository: Interfaces de repositorio de Spring Data JPA.
 service: Clases de servicio que contienen la lógica de negocio.
 src/main/resources: Contiene los archivos de recursos como archivos FXML y propiedades.
 src/test/java/com/marcosoft/storageSoftware: Contiene las pruebas unitarias.
-Contribución
+
+## Contribución
 ¡Las contribuciones son bienvenidas! Si deseas contribuir, sigue estos pasos:
 
-@Contacto
+## Contacto
 Para cualquier pregunta o sugerencia, por favor contacta a marconchelo12@gmail.com.
 
