@@ -7,7 +7,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.TreeItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -147,7 +146,7 @@ public class WarehouseViewController {
 
     @FXML
     public void switchToInventory(ActionEvent actionEvent) {
-        switchView(actionEvent, "/inventoryView.fxml");
+        switchView(actionEvent, "/sellView.fxml");
     }
 
     @FXML

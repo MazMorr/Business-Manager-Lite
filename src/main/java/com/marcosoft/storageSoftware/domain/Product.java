@@ -22,12 +22,11 @@ import java.util.Objects;
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_product", nullable = false)
-    private Long id;
-
     @Column(name = "product_name", nullable = false, length = 20)
     private String productName;
+
+    @Column(name = "sell_price")
+    private Double sellPrice;
 
     @ManyToOne
     private Client client;

@@ -6,6 +6,7 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.Pagination?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
@@ -62,7 +63,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToInventory" styleClass="btnIndex" stylesheets="@Styles.css" text="Inventario">
+                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToSell" styleClass="btnIndex" stylesheets="@Styles.css" text="Ventas">
                      <font>
                         <Font name="System Bold" size="17.0" />
                      </font>
@@ -168,7 +169,7 @@
                   </Button>
                </children>
             </VBox>
-            <TableView fx:id="tblInvestment" editable="true" layoutX="159.0" layoutY="115.0" onMouseClicked="#selectInventory" prefHeight="445.0" prefWidth="550.0" styleClass="table" stylesheets="@Styles.css" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="310.0" AnchorPane.topAnchor="220.0">
+            <TableView fx:id="tblInvestment" editable="true" layoutX="159.0" layoutY="115.0" onMouseClicked="#selectInventory" prefHeight="445.0" prefWidth="550.0" styleClass="table" stylesheets="@Styles.css" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="310.0" AnchorPane.topAnchor="230.0">
                <columns>
                   <TableColumn fx:id="idColumn" prefWidth="41.0" text="ID" />
                   <TableColumn fx:id="nameColumn" prefWidth="129.0" sortable="false" text="Nombre" />
@@ -212,7 +213,7 @@
                   </Button>
                </children>
             </VBox>
-            <AnchorPane layoutX="160.0" layoutY="85.0" prefHeight="130.0" prefWidth="630.0" styleClass="crudOperations" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="310.0" AnchorPane.topAnchor="85.0">
+            <AnchorPane layoutX="160.0" layoutY="85.0" prefHeight="130.0" prefWidth="630.0" styleClass="crudOperations" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="310.0" AnchorPane.topAnchor="90.0">
                <children>
                   <VBox layoutY="29.0" prefHeight="200.0" prefWidth="290.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
@@ -242,7 +243,7 @@
                         <HBox alignment="CENTER_RIGHT" prefWidth="200.0">
                            <children>
                               <Label text="Nombre" />
-                              <TextField fx:id="txtFilterName" prefHeight="25.0" prefWidth="170.0" styleClass="inputForm" stylesheets="@Styles.css">
+                              <TextField fx:id="txtFilterName" prefHeight="25.0" prefWidth="172.0" styleClass="inputForm" stylesheets="@Styles.css">
                                  <HBox.margin>
                                     <Insets left="30.0" />
                                  </HBox.margin>
@@ -260,16 +261,22 @@
                                     <Insets left="20.0" />
                                  </HBox.margin>
                               </Label>
-                              <TextField fx:id="txtMinFilterPrice" prefWidth="70.0" text="0.00" />
+                              <TextField fx:id="txtMinFilterPrice" prefWidth="70.0" text="0.00">
+                                 <HBox.margin>
+                                    <Insets left="2.0" />
+                                 </HBox.margin></TextField>
                               <Label style="-fx-font-weight: 500;" text="max">
                                  <HBox.margin>
                                     <Insets left="6.0" />
                                  </HBox.margin>
                               </Label>
-                              <TextField fx:id="txtMaxFilterPrice" prefWidth="70.0" text="0.00" />
+                              <TextField fx:id="txtMaxFilterPrice" prefWidth="70.0" text="0.00">
+                                 <HBox.margin>
+                                    <Insets left="2.0" />
+                                 </HBox.margin></TextField>
                            </children>
                            <VBox.margin>
-                              <Insets top="2.0" />
+                              <Insets top="4.0" />
                            </VBox.margin>
                         </HBox>
                      </children>
@@ -284,9 +291,9 @@
                         <HBox alignment="CENTER_LEFT" prefWidth="200.0">
                            <children>
                               <Label text="ID" />
-                              <TextField fx:id="txtFilterId" prefWidth="170.0">
+                              <TextField fx:id="txtFilterId" prefWidth="172.0">
                                  <HBox.margin>
-                                    <Insets left="83.0" />
+                                    <Insets left="85.0" />
                                  </HBox.margin>
                               </TextField>
                            </children>
@@ -299,23 +306,29 @@
                                     <Insets left="20.0" />
                                  </HBox.margin>
                               </Label>
-                              <TextField fx:id="txtMinFilterAmount" prefWidth="70.0" text="0" />
+                              <TextField fx:id="txtMinFilterAmount" prefWidth="70.0" text="0">
+                                 <HBox.margin>
+                                    <Insets left="2.0" />
+                                 </HBox.margin></TextField>
                               <Label style="-fx-font-weight: 500;" text="max">
                                  <HBox.margin>
                                     <Insets left="6.0" />
                                  </HBox.margin>
                               </Label>
-                              <TextField fx:id="txtMaxFilterAmount" prefWidth="70.0" text="0" />
+                              <TextField fx:id="txtMaxFilterAmount" prefWidth="70.0" text="0">
+                                 <HBox.margin>
+                                    <Insets left="2.0" />
+                                 </HBox.margin></TextField>
                            </children>
                            <VBox.margin>
-                              <Insets top="2.0" />
+                              <Insets top="4.0" />
                            </VBox.margin>
                         </HBox>
                      </children>
                   </VBox>
                </children>
             </AnchorPane>
-            <Label fx:id="txtClientName" contentDisplay="TOP" layoutX="70.0" layoutY="178.0" prefHeight="69.0" prefWidth="172.0" styleClass="clientName" stylesheets="@Styles.css" text="Marco A. Romeros" textFill="#eeeeee" wrapText="true" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
+            <Label fx:id="txtClientName" contentDisplay="TOP" layoutX="70.0" layoutY="178.0" prefHeight="69.0" prefWidth="172.0" styleClass="clientName" stylesheets="@Styles.css" text="Marco A. Romeros" textFill="#eeeeee" wrapText="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="5.0">
                <font>
                   <Font name="SansSerif Regular" size="14.0" />
                </font>
@@ -329,9 +342,9 @@
             </Label>
             <AnchorPane layoutX="690.0" layoutY="338.0" prefHeight="200.0" prefWidth="300.0" styleClass="rightIndex" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="80.0">
                <children>
-                  <TabPane layoutX="-83.0" layoutY="-192.0" maxHeight="570.0" prefHeight="570.0" prefWidth="300.0" styleClass="crudOperations" stylesheets="@Styles.css" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                  <TabPane layoutX="-83.0" layoutY="-192.0" maxHeight="570.0" prefHeight="570.0" prefWidth="300.0" styleClass="crudOperations" stylesheets="@Styles.css" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="10.0">
                     <tabs>
-                      <Tab text="Agregar">
+                      <Tab text="Agregar o Actualizar">
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="406.0" prefWidth="233.0">
                                  <children>
@@ -352,13 +365,13 @@
                                           <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="50.0">
                                              <children>
                                                 <Label text="Cantidad" />
-                                                <TextField fx:id="txtAddProductAmount" prefHeight="25.0" prefWidth="150.0" styleClass="inputForm" stylesheets="@Styles.css" />
+                                                <TextField fx:id="txtAddProductAmount" prefHeight="25.0" prefWidth="150.0" styleClass="inputForm" stylesheets="@Styles.css" text="0" />
                                              </children>
                                           </HBox>
                                           <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="13.0">
                                              <children>
                                                 <Label text="Precio Compra" />
-                                                <TextField fx:id="txtAddInvestmentPrice" prefHeight="34.0" prefWidth="150.0" styleClass="inputForm" stylesheets="@Styles.css">
+                                                <TextField fx:id="txtAddInvestmentPrice" prefHeight="34.0" prefWidth="150.0" styleClass="inputForm" stylesheets="@Styles.css" text="0.00">
                                                    <tooltip>
                                                       <Tooltip text="Precio al que deseas vender cada unidad del producto  (en la zona de ventas este precio puede ser cambiado)" wrapText="true">
                                                          <font>
@@ -396,10 +409,34 @@
                                           <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="72.0">
                                              <children>
                                                 <Label text="Fecha" />
-                                                <DatePicker fx:id="txtAddInvestmentDate" prefWidth="150.0" />
+                                                <DatePicker fx:id="txtAddInvestmentDate" editable="false" prefWidth="150.0" />
                                              </children>
                                           </HBox>
-                                        <Button mnemonicParsing="false" onAction="#addOrUpgradeProduct" prefHeight="33.0" prefWidth="331.0" styleClass="btnStock" stylesheets="@Styles.css" text="Actualizar o Agregar">
+                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="15.0">
+                                             <children>
+                                                <Label text="Tipo Inversión" />
+                                                <MenuButton fx:id="mbInvestmentType" mnemonicParsing="false" prefWidth="150.0" styleClass="progressBar" stylesheets="@Styles.css" textFill="WHITE">
+                                                   <graphic>
+                                                      <TextField fx:id="txtAddInvestmentType" alignment="CENTER" disable="true" opacity="0.99" prefHeight="34.0" prefWidth="10.0" promptText="Seleccionar" styleClass="inputForm" stylesheets="@Styles.css">
+                                                         <tooltip>
+                                                            <Tooltip text="Precio al que deseas vender cada unidad del producto  (en la zona de ventas este precio puede ser cambiado)" wrapText="true">
+                                                               <font>
+                                                                  <Font size="14.0" />
+                                                               </font>
+                                                            </Tooltip>
+                                                         </tooltip>
+                                                      </TextField>
+                                                   </graphic>
+                                                   <padding>
+                                                      <Insets bottom="-6.0" left="-9.0" right="2.0" top="-5.0" />
+                                                   </padding>
+                                                   <cursor>
+                                                      <Cursor fx:constant="DEFAULT" />
+                                                   </cursor>
+                                                </MenuButton>
+                                             </children>
+                                          </HBox>
+                                        <Button mnemonicParsing="false" onAction="#addOrUpgradeProduct" prefHeight="33.0" prefWidth="331.0" styleClass="btnStock" stylesheets="@Styles.css" text="Agregar o Actualizar">
                                              <tooltip>
                                                 <Tooltip consumeAutoHidingEvents="false" text="Si el nombre y la categoria coinciden con algún producto ya registrado, este se actualizará y en caso diferente se agregará al registro" wrapText="true">
                                                    <font>
@@ -438,7 +475,7 @@
                                           </Label>
                                        </children>
                                     </VBox>
-                                    <Button layoutX="62.0" layoutY="457.0" mnemonicParsing="false" onAction="#cleanForm" prefHeight="30.0" prefWidth="275.0" styleClass="btnStock" stylesheets="@Styles.css" text="Limpiar Campos" AnchorPane.bottomAnchor="48.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                                    <Button layoutX="62.0" layoutY="457.0" mnemonicParsing="false" onAction="#cleanForm" prefHeight="30.0" prefWidth="275.0" styleClass="btnStock" stylesheets="@Styles.css" text="Vaciar Campos" AnchorPane.bottomAnchor="48.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
                                        <graphic>
                                           <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
@@ -483,13 +520,6 @@
                                  </children>
                               </AnchorPane>
                         </content>
-                           <graphic>
-                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@images/growth-chart-invest.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
                            <tooltip>
                               <Tooltip text="MIra papo esto es para comprar" />
                            </tooltip>
@@ -498,6 +528,7 @@
                   </TabPane>
                </children>
             </AnchorPane>
+            <Pagination fx:id="paginator" layoutX="159.0" layoutY="580.0" maxPageIndicatorCount="40" pageCount="24400404" prefHeight="56.0" prefWidth="630.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="310.0" />
          </children>
       </AnchorPane>
    </children>

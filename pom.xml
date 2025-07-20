@@ -12,7 +12,7 @@
 	<artifactId>storageSoftware</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>storageSoftware</name>
-	<description>Software for storage in little companies like hardware shops or coffee shops</description>
+	<description>Software for managing little companies like hardware shops or coffee shops</description>
 	<url/>
 	<licenses>
 		<license/>

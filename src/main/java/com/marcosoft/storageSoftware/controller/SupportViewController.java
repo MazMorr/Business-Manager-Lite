@@ -66,7 +66,7 @@ public class SupportViewController {
     }
 
     @FXML
-    private void switchToStock(ActionEvent event) {
+    private void switchToInvestment(ActionEvent event) {
         switchView(event, "/investmentView.fxml");
     }
 
@@ -76,13 +76,22 @@ public class SupportViewController {
     }
 
     @FXML
-    public void switchToWallet(ActionEvent event) {
+    public void switchToWarehouse(ActionEvent event) {
         switchView(event, "/warehouseView.fxml");
+    }
+
+    @FXML
+    public void switchToBalance(ActionEvent event) {
+        switchView(event, "/balanceView.fxml");
+    }
+
+    @FXML
+    public void switchToInventory(ActionEvent event) {
+        switchView(event, "/sellView.fxml");
     }
 
     private void switchView(ActionEvent event, String fxml) {
         sceneSwitcher.setRootWithEvent(event, fxml);
-        windowShowing.closeAllWindows();
     }
 
     @FXML

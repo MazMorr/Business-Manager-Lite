@@ -66,26 +66,17 @@ public class ConfigurationViewController implements Initializable {
     }
 
     @FXML
-    public void switchToStock(ActionEvent event) {
+    public void switchToSell(ActionEvent event) {
         sceneSwitcher.setRootWithEvent(event, "/investmentView.fxml");
-        windowShowing.closeAllWindows();
-    }
-
-    @FXML
-    public void switchToWallet(ActionEvent event) {
-        sceneSwitcher.setRootWithEvent(event, "/warehouseView.fxml");
-        windowShowing.closeAllWindows();
     }
 
     @FXML
     public void switchToSupport(ActionEvent event) {
         sceneSwitcher.setRootWithEvent(event, "/supportView.fxml");
-        windowShowing.closeAllWindows();
     }
 
     @FXML
     public void switchToRegistry(ActionEvent event) {
         sceneSwitcher.setRootWithEvent(event, "/registryView.fxml");
-        windowShowing.closeAllWindows();
     }
 }
