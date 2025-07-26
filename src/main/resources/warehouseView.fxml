@@ -17,7 +17,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="650.0" prefWidth="1100.0" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.controller.WarehouseViewController">
+<StackPane prefHeight="650.0" prefWidth="1100.0" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.WarehouseViewController">
    <children>
       <AnchorPane>
          <children>
@@ -189,16 +189,20 @@
                <children>
                   <VBox prefHeight="1000.0" prefWidth="1000.0" spacing="5.0" style="-fx-background-radius: 20;" styleClass="rightIndex">
                      <children>
-                        <TreeTableView fx:id="ttvWarehouse" prefHeight="450.0" prefWidth="460.0" style="-fx-border-color: #2563eb; -fx-background-radius: 10px; -fx-border-radius: 10px; -fx-padding: 5px 3px 5px 3px;" VBox.vgrow="ALWAYS">
-                          <columns>
-                            <TreeTableColumn fx:id="ttcWarehouseName" prefWidth="115.0" text="Almacen" />
-                              <TreeTableColumn fx:id="ttcProductName" prefWidth="151.0" text="Producto" />
-                              <TreeTableColumn fx:id="ttcProductAmount" prefWidth="84.0" text="Cantidad" />
-                          </columns>
-                           <columnResizePolicy>
-                              <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                           </columnResizePolicy>
-                        </TreeTableView>
+                        <AnchorPane prefHeight="450.0" prefWidth="450.0">
+                           <children>
+                              <TreeTableView fx:id="ttvWarehouse" layoutX="-11.0" layoutY="-121.0" prefHeight="450.0" prefWidth="460.0" style="-fx-border-color: #2563eb; -fx-background-radius: 10px; -fx-border-radius: 10px; -fx-padding: 5px 3px 5px 3px;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <columns>
+                                  <TreeTableColumn fx:id="ttcWarehouseName" prefWidth="115.0" text="Almacen" />
+                                    <TreeTableColumn fx:id="ttcProductName" prefWidth="151.0" text="Producto" />
+                                    <TreeTableColumn fx:id="ttcProductAmount" prefWidth="84.0" text="Cantidad" />
+                                </columns>
+                                 <columnResizePolicy>
+                                    <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
+                              </TreeTableView>
+                           </children>
+                        </AnchorPane>
                         <HBox prefHeight="35.0" prefWidth="460.0" spacing="5.0">
                            <children>
                               <Button mnemonicParsing="false" onAction="#addWarehouse" prefHeight="35.0" prefWidth="450.0" styleClass="btnStock" text="Agregar Almacén">
@@ -295,7 +299,7 @@
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                            </columnResizePolicy>
                         </TableView>
-                        <Button mnemonicParsing="false" prefWidth="1000.0" styleClass="btnStock" text="Cambiar Nombre Producto">
+                        <Button mnemonicParsing="false" onAction="#changeProductName" prefWidth="1000.0" styleClass="btnStock" text="Cambiar Nombre Producto">
                            <graphic>
                               <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
                                  <image>
