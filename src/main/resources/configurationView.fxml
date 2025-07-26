@@ -17,29 +17,19 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="650.0" prefWidth="1024.0" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.controller.ConfigurationViewController">
+<StackPane prefHeight="650.0" prefWidth="1024.0" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.ConfigurationViewController">
    <children>
       <AnchorPane prefWidth="330.0">
          <children>
-            <VBox alignment="TOP_CENTER" layoutX="342.0" layoutY="227.0" prefHeight="293.0" prefWidth="201.0" spacing="20.0">
+            <VBox alignment="TOP_CENTER" layoutX="342.0" layoutY="227.0" prefHeight="293.0" prefWidth="309.0" spacing="20.0">
                <children>
-                  <MenuButton fx:id="mbLanguage" alignment="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" styleClass="btnStock" stylesheets="@Styles.css" text="Idioma" textAlignment="CENTER" textFill="#eeeeee" wrapText="true">
-                    <items>
-                        <RadioMenuItem mnemonicParsing="false" onAction="#switchLanguageToSpanish" selected="true" text="Español">
-                           <toggleGroup>
-                              <ToggleGroup fx:id="rdmiLanguage" />
-                           </toggleGroup>
-                        </RadioMenuItem>
-                        <RadioMenuItem mnemonicParsing="false" onAction="#switchLanguageToEnglish" text="English" toggleGroup="$rdmiLanguage" />
-                    </items>
-                  </MenuButton>
-                  <MenuButton alignment="CENTER" contentDisplay="BOTTOM" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" styleClass="btnStock" stylesheets="@Styles.css" text="Importar" textFill="#eeeeee">
+                  <MenuButton alignment="CENTER" contentDisplay="BOTTOM" mnemonicParsing="false" prefHeight="40.0" styleClass="btnStock" stylesheets="@Styles.css" text="Importar Base de Datos" textFill="#eeeeee">
                     <items>
                       <MenuItem mnemonicParsing="false" text="Action 1" />
                       <MenuItem mnemonicParsing="false" text="Action 2" />
                     </items>
                   </MenuButton>
-                  <MenuButton alignment="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" styleClass="btnStock" stylesheets="@Styles.css" text="Exportar" textAlignment="CENTER" textFill="#eeeeee">
+                  <MenuButton alignment="CENTER" mnemonicParsing="false" prefHeight="40.0" styleClass="btnStock" stylesheets="@Styles.css" text="Exportar Base de Datos" textAlignment="CENTER" textFill="#eeeeee">
                     <items>
                       <MenuItem mnemonicParsing="false" text="Exportar Base de Datos" />
                       <MenuItem mnemonicParsing="false" text="Action 2" />
@@ -55,17 +45,6 @@
                         <RadioMenuItem fx:id="rdmiDarkTheme" mnemonicParsing="false" text="Modo Oscuro" toggleGroup="$rdmiTheme" />
                     </items>
                   </MenuButton>
-                  <MenuButton fx:id="mbResolution" alignment="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" styleClass="btnStock" stylesheets="@Styles.css" text="Resolución" textAlignment="CENTER" textFill="#eeeeee" wrapText="true">
-                    <items>
-                        <RadioMenuItem mnemonicParsing="false" selected="true" text="800x600">
-                           <toggleGroup>
-                              <ToggleGroup fx:id="rdmiResolution" />
-                           </toggleGroup>
-                        </RadioMenuItem>
-                        <RadioMenuItem mnemonicParsing="false" text="1280x720" toggleGroup="$rdmiResolution" />
-                        <RadioMenuItem mnemonicParsing="false" text="1920x1980" toggleGroup="$rdmiResolution" />
-                    </items>
-                  </MenuButton>
                </children>
             </VBox>
             <Label fx:id="txtClientCompany" layoutX="231.0" layoutY="96.0" prefHeight="46.0" prefWidth="140.0" text="Compañía: ">
@@ -79,106 +58,30 @@
                <font>
                   <Font name="System Bold" size="14.0" />
                </font></Label>
-            <VBox alignment="TOP_CENTER" layoutY="195.0" prefHeight="500.0" prefWidth="150.0" styleClass="index" stylesheets="@Styles.css" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="80.0">
+            <VBox layoutY="650.0" prefHeight="55.0" prefWidth="150.0" styleClass="index" stylesheets="@Styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" />
+            <Button layoutX="838.0" layoutY="118.0" mnemonicParsing="false" onAction="#closeSession" prefHeight="40.0" prefWidth="140.0" styleClass="btnStock" stylesheets="@Styles.css" text="Cerrar Sesión" textFill="#eeeeee" />
+            <HBox alignment="CENTER" prefHeight="80.0" prefWidth="800.0" spacing="120.0" styleClass="slogan" stylesheets="@Styles.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <VBox styleClass="index" stylesheets="@Styles.css">
-                     <children>
-                        <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" styleClass="btnIndex" stylesheets="@Styles.css" text="Existencias">
-                           <font>
-                              <Font name="System Bold" size="17.0" />
-                           </font>
-                           <graphic>
-                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
-                                 <image>
-                                    <Image url="@images/icons8-inventory-24.png" />
-                                 </image>
-                                 <effect>
-                                    <InnerShadow choke="1.0">
-                                       <color>
-                                          <Color red="1.0" green="1.0" blue="1.0" />
-                                       </color>
-                                    </InnerShadow>
-                                 </effect>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToRegistry" styleClass="btnIndex" stylesheets="@Styles.css" text="Registros">
-                           <font>
-                              <Font name="System Bold" size="17.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                           <graphic>
-                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
-                                 <image>
-                                    <Image url="@images/career-growth.png" />
-                                 </image>
-                                 <effect>
-                                    <InnerShadow choke="1.0">
-                                       <color>
-                                          <Color red="1.0" green="1.0" blue="1.0" />
-                                       </color>
-                                    </InnerShadow>
-                                 </effect>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToWallet" styleClass="btnIndex" stylesheets="@Styles.css" text="Billetera">
-                           <font>
-                              <Font name="System Bold" size="17.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                           <graphic>
-                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
-                                 <image>
-                                    <Image url="@images/memo-circle-check.png" />
-                                 </image>
-                                 <effect>
-                                    <InnerShadow choke="1.0">
-                                       <color>
-                                          <Color red="1.0" green="1.0" blue="1.0" />
-                                       </color>
-                                    </InnerShadow>
-                                 </effect>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToSupport" style="-fx-background-radius: 0;" styleClass="btnIndex" stylesheets="@Styles.css" text="Soporte">
-                           <font>
-                              <Font name="System Bold" size="17.0" />
-                           </font>
-                           <graphic>
-                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
-                                 <image>
-                                    <Image url="@images/whatsapp.png" />
-                                 </image>
-                                 <effect>
-                                    <InnerShadow choke="1.0" height="255.0" radius="127.0" width="255.0">
-                                       <color>
-                                          <Color red="1.0" green="1.0" blue="1.0" />
-                                       </color>
-                                    </InnerShadow>
-                                 </effect>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                     </children>
-                  </VBox>
-               </children>
-            </VBox>
-            <VBox layoutY="650.0" prefHeight="55.0" prefWidth="150.0" styleClass="index" stylesheets="@Styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
-               <children>
-                  <Button alignment="CENTER_LEFT" disable="true" mnemonicParsing="false" prefHeight="60.0" styleClass="btnIndex" stylesheets="@Styles.css" text="Ajustes">
-                     <VBox.margin>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="68.0" prefWidth="421.0" styleClass="title" stylesheets="@Styles.css" text="Almacenes" textFill="#eeeeee">
+                     <font>
+                        <Font name="Constantia Bold" size="60.0" />
+                     </font>
+                     <HBox.margin>
                         <Insets />
-                     </VBox.margin>
+                     </HBox.margin>
+                  </Label>
+               </children>
+            </HBox>
+            <VBox styleClass="index" stylesheets="@Styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="80.0">
+               <children>
+                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToInvestment" styleClass="btnIndex" stylesheets="@Styles.css" text="Inversiones">
+                     <font>
+                        <Font name="System Bold" size="17.0" />
+                     </font>
                      <graphic>
-                        <ImageView fitHeight="32.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
                            <image>
-                              <Image url="@images/bluetooth-settings.png" />
+                              <Image url="@images/goods.png" />
                            </image>
                            <effect>
                               <InnerShadow choke="1.0">
@@ -189,60 +92,138 @@
                            </effect>
                         </ImageView>
                      </graphic>
+                  </Button>
+                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToSell" styleClass="btnIndex" stylesheets="@Styles.css" text="Ventas">
                      <font>
-                        <Font size="14.0" />
+                        <Font name="System Bold" size="17.0" />
                      </font>
+                     <graphic>
+                        <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
+                           <image>
+                              <Image url="@images/agreement.png" />
+                           </image>
+                           <effect>
+                              <InnerShadow choke="1.0">
+                                 <color>
+                                    <Color red="1.0" green="1.0" blue="1.0" />
+                                 </color>
+                              </InnerShadow>
+                           </effect>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToWarehouse" styleClass="btnIndex" stylesheets="@Styles.css" text="Almacenes">
+                     <font>
+                        <Font name="System Bold" size="17.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
+                           <image>
+                              <Image url="@images/warehouse.png" />
+                           </image>
+                           <effect>
+                              <InnerShadow choke="1.0">
+                                 <color>
+                                    <Color red="1.0" green="1.0" blue="1.0" />
+                                 </color>
+                              </InnerShadow>
+                           </effect>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToRegistry" styleClass="btnIndex" stylesheets="@Styles.css" text="Registros">
+                     <font>
+                        <Font name="System Bold" size="17.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <graphic>
+                        <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
+                           <image>
+                              <Image url="@images/monitoring.png" />
+                           </image>
+                           <effect>
+                              <InnerShadow choke="1.0" radius="68.5" width="255.0">
+                                 <color>
+                                    <Color red="1.0" green="1.0" blue="1.0" />
+                                 </color>
+                              </InnerShadow>
+                           </effect>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToBalance" styleClass="btnIndex" stylesheets="@Styles.css" text="Balance">
+                     <font>
+                        <Font name="System Bold" size="17.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
+                           <image>
+                              <Image url="@images/interest-rate.png" />
+                           </image>
+                           <effect>
+                              <InnerShadow choke="1.0">
+                                 <color>
+                                    <Color red="1.0" green="1.0" blue="1.0" />
+                                 </color>
+                              </InnerShadow>
+                           </effect>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToSupport" styleClass="btnIndex" stylesheets="@Styles.css" text="Soporte">
+                     <font>
+                        <Font name="System Bold" size="17.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
+                           <image>
+                              <Image url="@images/support.png" />
+                           </image>
+                           <effect>
+                              <InnerShadow choke="1.0" height="255.0" radius="127.0" width="255.0">
+                                 <color>
+                                    <Color red="1.0" green="1.0" blue="1.0" />
+                                 </color>
+                              </InnerShadow>
+                           </effect>
+                        </ImageView>
+                     </graphic>
                   </Button>
                </children>
             </VBox>
-            <Button layoutX="838.0" layoutY="118.0" mnemonicParsing="false" onAction="#closeSession" prefHeight="40.0" prefWidth="140.0" styleClass="btnStock" stylesheets="@Styles.css" text="Cerrar Sesión" textFill="#eeeeee" />
-            <HBox alignment="CENTER" layoutX="499.0" layoutY="100.0" prefHeight="80.0" prefWidth="800.0" spacing="120.0" styleClass="slogan" stylesheets="@Styles.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <children>
-                  <Label fx:id="txtClientName1" contentDisplay="TOP" prefHeight="69.0" prefWidth="172.0" styleClass="clientName" stylesheets="@Styles.css" text="Marco A. Romeros" textFill="#eeeeee" wrapText="true">
-                     <font>
-                        <Font name="SansSerif Regular" size="14.0" />
-                     </font>
-                     <graphic>
-                        <ImageView fitHeight="47.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@images/Avatar.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                     <HBox.margin>
-                        <Insets left="5.0" />
-                     </HBox.margin>
-                  </Label>
-                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="68.0" prefWidth="421.0" styleClass="title" stylesheets="@Styles.css" text="Ajustes" textFill="#eeeeee">
-                     <font>
-                        <Font name="Constantia Bold" size="60.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
-                  </Label>
-                  <VBox alignment="CENTER" prefHeight="47.0" prefWidth="143.0">
-                     <children>
-                        <Label text="Balance Total USD" textFill="#eeeeee">
-                           <font>
-                              <Font name="SansSerif Bold" size="16.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </Label>
-                        <Label text="17000000" textFill="#38ff01">
-                           <font>
-                              <Font name="System Bold" size="14.0" />
-                           </font>
-                        </Label>
-                     </children>
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
-                  </VBox>
-               </children>
-            </HBox>
+            <Button alignment="CENTER_LEFT" disable="true" mnemonicParsing="false" prefHeight="60.0" styleClass="btnIndex" stylesheets="@Styles.css" text="Ajustes" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+               <graphic>
+                  <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@images/settings.png" />
+                     </image>
+                     <effect>
+                        <InnerShadow choke="1.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </InnerShadow>
+                     </effect>
+                  </ImageView>
+               </graphic>
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
+            <Label fx:id="txtClientName" contentDisplay="TOP" prefHeight="69.0" prefWidth="172.0" styleClass="clientName" stylesheets="@Styles.css" text="Marco A. Romeros" textFill="#eeeeee" wrapText="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="5.0">
+               <font>
+                  <Font name="SansSerif Regular" size="14.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="47.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@images/Avatar.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Label>
          </children>
       </AnchorPane>
    </children>

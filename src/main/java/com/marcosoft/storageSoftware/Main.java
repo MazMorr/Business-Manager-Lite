@@ -1,20 +1,34 @@
 package com.marcosoft.storageSoftware;
 
-import com.marcosoft.storageSoftware.util.SpringFXMLLoader;
+import com.marcosoft.storageSoftware.infrastructure.util.SpringFXMLLoader;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import lombok.Getter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.io.IOException;
 
-@SpringBootApplication(scanBasePackages = "com.marcosoft.storageSoftware")
+@SpringBootApplication( exclude = {CacheAutoConfiguration.class, SecurityAutoConfiguration.class})
+@ComponentScan(basePackages = {
+        "com.marcosoft.storageSoftware.infrastructure.util",
+        "com.marcosoft.storageSoftware.infrastructure.service.impl",
+        "com.marcosoft.storageSoftware.application.controller",
+        "com.marcosoft.storageSoftware.application.dto"
+})
+@EntityScan(basePackages = "com.marcosoft.storageSoftware.domain.model")
+@EnableJpaRepositories(basePackages = "com.marcosoft.storageSoftware.domain.repository")
 public class Main extends Application {
-
+    @Getter
     private static ConfigurableApplicationContext context;
     private static SpringFXMLLoader springFXMLLoader;
     private static Stage primaryStage;
@@ -29,7 +43,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Main.primaryStage = primaryStage;
-        Parent root = (Parent) springFXMLLoader.load("/clientView.fxml");
+        Parent root = springFXMLLoader.load("/clientView.fxml");
         scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.getIcons().add(new Image(getClass().getResource("/images/RTS_logo.png").toString()));
@@ -41,16 +55,20 @@ public class Main extends Application {
 
     @Override
     public void stop() throws Exception {
-        context.close();
+        if (context != null && context.isActive()) {
+            context.close();
+        }
     }
 
     public static void setRoot(String fxml) {
         try {
-            Parent root = (Parent) springFXMLLoader.load("/" + fxml + ".fxml");
+            Parent root = springFXMLLoader.load("/" + fxml + ".fxml");
             scene.setRoot(root);
+            primaryStage.sizeToScene();
+            primaryStage.centerOnScreen();
         } catch (IOException e) {
+            System.err.println("Error al cargar la vista: " + fxml);
             e.printStackTrace();
-            // Puedes agregar un manejo de errores más sofisticado aquí si es necesario
         }
     }
 

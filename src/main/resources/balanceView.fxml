@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.effect.InnerShadow?>
@@ -13,13 +17,26 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="650.0" prefWidth="1100.0" styleClass="background" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.SupportViewController">
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1100.0" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <AnchorPane>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0">
          <children>
+            <HBox alignment="CENTER" prefHeight="80.0" prefWidth="800.0" spacing="120.0" styleClass="slogan" stylesheets="@Styles.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="68.0" prefWidth="421.0" styleClass="title" stylesheets="@Styles.css" text="Balance" textFill="#eeeeee">
+                     <font>
+                        <Font name="Constantia Bold" size="60.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Label>
+               </children>
+            </HBox>
             <VBox styleClass="index" stylesheets="@Styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="80.0">
                <children>
-                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToInvestment" styleClass="btnIndex" stylesheets="@Styles.css" text="Inversiones">
+                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToinvestment" styleClass="btnIndex" stylesheets="@Styles.css" text="Inversiones">
                      <font>
                         <Font name="System Bold" size="17.0" />
                      </font>
@@ -38,7 +55,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToInventory" styleClass="btnIndex" stylesheets="@Styles.css" text="Ventas">
+                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToSell" styleClass="btnIndex" stylesheets="@Styles.css" text="Ventas">
                      <font>
                         <Font name="System Bold" size="17.0" />
                      </font>
@@ -98,7 +115,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToBalance" styleClass="btnIndex" stylesheets="@Styles.css" text="Balance">
+                  <Button alignment="CENTER_LEFT" disable="true" graphicTextGap="5.0" mnemonicParsing="false" styleClass="btnIndex" stylesheets="@Styles.css" text="Balance">
                      <font>
                         <Font name="System Bold" size="17.0" />
                      </font>
@@ -117,7 +134,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button alignment="CENTER_LEFT" disable="true" graphicTextGap="5.0" mnemonicParsing="false" styleClass="btnIndex" stylesheets="@Styles.css" text="Soporte">
+                  <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToSupport" styleClass="btnIndex" stylesheets="@Styles.css" text="Soporte">
                      <font>
                         <Font name="System Bold" size="17.0" />
                      </font>
@@ -136,102 +153,6 @@
                         </ImageView>
                      </graphic>
                   </Button>
-               </children>
-            </VBox>
-            <HBox alignment="CENTER" prefHeight="80.0" prefWidth="800.0" spacing="120.0" styleClass="slogan" stylesheets="@Styles.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <children>
-                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="68.0" prefWidth="421.0" styleClass="title" stylesheets="@Styles.css" text="Soporte" textFill="#eeeeee">
-                     <font>
-                        <Font name="Constantia Bold" size="60.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
-                  </Label>
-               </children>
-            </HBox>
-            <Label fx:id="txtWelcome" alignment="TOP_CENTER" layoutX="156.0" layoutY="191.0" prefHeight="396.0" prefWidth="574.0" stylesheets="@Styles.css" text="text test 1234 JGH" textAlignment="CENTER" wrapText="true" AnchorPane.bottomAnchor="125.0" AnchorPane.leftAnchor="170.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="179.0">
-               <font>
-                  <Font name="Constantia" size="20.0" />
-               </font>
-            </Label>
-            <Label fx:id="txtWelcomeTitle" alignment="CENTER" layoutX="221.0" layoutY="130.0" prefHeight="37.0" prefWidth="513.0" text="Bienvenido" wrapText="true" AnchorPane.leftAnchor="220.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="130.0">
-               <font>
-                  <Font name="Constantia Bold" size="30.0" />
-               </font>
-            </Label>
-            <VBox layoutX="546.0" layoutY="273.0" prefHeight="130.0" prefWidth="245.0" spacing="5.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="300.0">
-               <children>
-                  <Label text="Soporte" underline="true">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets left="95.0" />
-                     </VBox.margin>
-                  </Label>
-                  <Label text="+53 5550 5961">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                     <graphic>
-                        <ImageView fitHeight="28.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@images/whatsapp.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Label>
-                  <Label accessibleRole="HYPERLINK" text="Marco Antonio Romero Albanez">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                     <graphic>
-                        <ImageView fitHeight="28.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@images/Linkedin.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Label>
-                  <Label text="Marcus12 (Romero´s Tech Solutions)">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                     <graphic>
-                        <ImageView fitHeight="32.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@images/facebook.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Label>
-               </children>
-            </VBox>
-            <ImageView fitHeight="166.0" fitWidth="245.0" layoutX="754.0" layoutY="94.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="130.0">
-               <image>
-                  <Image url="@images/RTS_logo.png" />
-               </image>
-            </ImageView>
-            <Label fx:id="versionLabel" layoutX="678.0" layoutY="559.0" text="Version: 5.0.0.0" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="30.0">
-               <font>
-                  <Font name="System Bold" size="13.0" />
-               </font></Label>
-            <VBox alignment="CENTER" layoutX="727.0" layoutY="153.0" onMouseClicked="#licenseInformation" prefHeight="47.0" prefWidth="143.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0">
-               <children>
-                  <Label text="Licencia Válida:" textFill="#eeeeee">
-                     <font>
-                        <Font name="SansSerif Bold" size="16.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                  </Label>
-                  <Label text="17000000 Días" textFill="#38ff01">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                  </Label>
                </children>
             </VBox>
             <Button alignment="CENTER_LEFT" mnemonicParsing="false" onAction="#switchToConfiguration" prefHeight="60.0" styleClass="btnIndex" stylesheets="@Styles.css" text="Ajustes" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
@@ -265,6 +186,19 @@
                   </ImageView>
                </graphic>
             </Label>
+            <HBox layoutX="458.0" layoutY="214.0" prefHeight="379.0" prefWidth="930.0" spacing="20.0" styleClass="crudOperations" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="10.0">
+               <children>
+                  <LineChart prefHeight="334.0" prefWidth="1000.0">
+                    <xAxis>
+                      <CategoryAxis side="BOTTOM" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis side="LEFT" />
+                    </yAxis>
+                  </LineChart>
+                  <PieChart prefHeight="318.0" prefWidth="1000.0" title="X" />
+               </children>
+            </HBox>
          </children>
       </AnchorPane>
    </children>
