@@ -10,6 +10,10 @@ import org.springframework.stereotype.Component;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Component
 public class UserLogged {
     private String name;
+
+    @Getter
+    private static final UserLogged instance = new UserLogged();
 }
