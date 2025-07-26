@@ -23,7 +23,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="650.0" prefWidth="1100.0" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.controller.SellViewController">
+<StackPane prefHeight="650.0" prefWidth="1100.0" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.SellViewController">
    <children>
       <AnchorPane prefHeight="400.0" prefWidth="600.0">
          <children>
@@ -57,7 +57,7 @@
                         <HBox alignment="CENTER_RIGHT" prefWidth="200.0">
                            <children>
                               <Label text="Almacen" />
-                              <TextField fx:id="txtFilterName" prefHeight="25.0" prefWidth="172.0" styleClass="inputForm" stylesheets="@Styles.css">
+                              <TextField fx:id="txtFilterWarehouseName" prefHeight="25.0" prefWidth="172.0" styleClass="inputForm" stylesheets="@Styles.css">
                                  <HBox.margin>
                                     <Insets left="30.0" />
                                  </HBox.margin>
@@ -105,7 +105,7 @@
                         <HBox alignment="CENTER_LEFT" prefWidth="200.0">
                            <children>
                               <Label text="Producto" />
-                              <TextField fx:id="txtFilterId" prefWidth="172.0">
+                              <TextField fx:id="txtFilterProductName" prefWidth="172.0">
                                  <HBox.margin>
                                     <Insets left="42.0" />
                                  </HBox.margin>
@@ -306,12 +306,12 @@
                   </ImageView>
                </graphic>
             </Label>
-            <TreeTableView layoutX="230.0" layoutY="187.0" prefHeight="304.0" prefWidth="410.0" styleClass="table" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="310.0" AnchorPane.topAnchor="230.0">
+            <TreeTableView fx:id="ttvInventory" layoutX="230.0" layoutY="187.0" prefHeight="304.0" prefWidth="410.0" styleClass="table" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="310.0" AnchorPane.topAnchor="230.0">
               <columns>
-                <TreeTableColumn prefWidth="75.0" text="Producto" />
-                  <TreeTableColumn prefWidth="75.0" text="Precio Venta" />
-                <TreeTableColumn prefWidth="75.0" text="Almacen" />
-                  <TreeTableColumn prefWidth="75.0" text="Cantidad" />
+                <TreeTableColumn fx:id="ttcProductName" prefWidth="75.0" text="Producto" />
+                  <TreeTableColumn fx:id="ttcSellPrice" prefWidth="75.0" text="Precio Venta" />
+                <TreeTableColumn fx:id="ttcWarehouse" prefWidth="75.0" text="Almacen" />
+                  <TreeTableColumn fx:id="ttcProductAmount" prefWidth="75.0" text="Cantidad" />
               </columns>
                <columnResizePolicy>
                   <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -371,7 +371,7 @@
                                                 </MenuButton>
                                              </children>
                                           </HBox>
-                                          <Button mnemonicParsing="false" onAction="#AssignProductPrice" prefHeight="33.0" prefWidth="331.0" styleClass="btnStock" stylesheets="@Styles.css" text="Asignar Precio Venta">
+                                          <Button mnemonicParsing="false" onAction="#assignProductPrice" prefHeight="33.0" prefWidth="331.0" styleClass="btnStock" stylesheets="@Styles.css" text="Asignar Precio Venta">
                                              <tooltip>
                                                 <Tooltip consumeAutoHidingEvents="false" text="Si el nombre y la categoria coinciden con algún producto ya registrado, este se actualizará y en caso diferente se agregará al registro" wrapText="true">
                                                    <font>
@@ -397,7 +397,7 @@
                                                 <Insets top="5.0" />
                                              </VBox.margin>
                                           </Button>
-                                          <Label fx:id="txtAddDebugForm" alignment="TOP_LEFT" prefHeight="118.0" prefWidth="260.0" text="Si pincha un elemento en la tabla este se insertará en los campos del formulario" textAlignment="CENTER" wrapText="true">
+                                          <Label fx:id="txtAssignPriceDebug" alignment="TOP_LEFT" prefHeight="118.0" prefWidth="260.0" text="Si pincha un elemento en la tabla este se insertará en los campos del formulario" textAlignment="CENTER" wrapText="true">
                                              <padding>
                                                 <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                              </padding>
@@ -511,7 +511,7 @@
                                                 <DatePicker fx:id="txtSellProductDate" editable="false" prefWidth="150.0" />
                                              </children>
                                           </HBox>
-                                          <Button mnemonicParsing="false" onAction="#addOrUpgradeProduct" prefHeight="33.0" prefWidth="331.0" styleClass="btnStock" stylesheets="@Styles.css" text="Agregar o Actualizar">
+                                          <Button mnemonicParsing="false" onAction="#sellProduct" prefHeight="33.0" prefWidth="331.0" styleClass="btnStock" stylesheets="@Styles.css" text="Vender Producto">
                                              <tooltip>
                                                 <Tooltip consumeAutoHidingEvents="false" text="Si el nombre y la categoria coinciden con algún producto ya registrado, este se actualizará y en caso diferente se agregará al registro" wrapText="true">
                                                    <font>
@@ -522,7 +522,7 @@
                                              <graphic>
                                                 <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
-                                                      <Image url="@images/add.png" />
+                                                      <Image url="@images/purchase.png" />
                                                    </image>
                                                    <effect>
                                                       <InnerShadow choke="1.0">
@@ -537,7 +537,7 @@
                                                 <Insets top="5.0" />
                                              </VBox.margin>
                                           </Button>
-                                          <Label fx:id="txtAddDebugForm1" alignment="TOP_LEFT" prefHeight="118.0" prefWidth="260.0" text="Puede actualizar las transacciones existentes si el ID coincide, para ello debe pinchar el elemento en la tabla" textAlignment="CENTER" wrapText="true">
+                                          <Label fx:id="txtSellDebug" alignment="TOP_LEFT" prefHeight="118.0" prefWidth="260.0" text="Puede actualizar las transacciones existentes si el ID coincide, para ello debe pinchar el elemento en la tabla" textAlignment="CENTER" wrapText="true">
                                              <padding>
                                                 <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                              </padding>

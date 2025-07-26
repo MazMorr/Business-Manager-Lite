@@ -359,3 +359,7 @@ Negro:               #0f172a
     -fx-focus-color: transparent !important;
     -fx-faint-focus-color: transparent !important;
 }
+
+.pagination {
+    -fx-page-information-visible: false; /* Oculta el texto de página */
+}
