@@ -2,10 +2,12 @@ package com.marcosoft.storageSoftware.infrastructure.util;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
 
+@Lazy
 @Component
 public class SoundPlayer {
 

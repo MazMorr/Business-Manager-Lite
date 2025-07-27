@@ -213,7 +213,7 @@
                   </Button>
                </children>
             </VBox>
-            <AnchorPane layoutX="160.0" layoutY="85.0" prefHeight="130.0" prefWidth="630.0" styleClass="crudOperations" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="310.0" AnchorPane.topAnchor="90.0">
+            <AnchorPane layoutX="160.0" layoutY="85.0" prefHeight="130.0" prefWidth="630.0" styleClass="filter-background" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="310.0" AnchorPane.topAnchor="90.0">
                <children>
                   <VBox layoutY="29.0" prefHeight="200.0" prefWidth="290.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>

@@ -2,6 +2,7 @@ package com.marcosoft.storageSoftware.infrastructure.service.impl;
 
 import com.marcosoft.storageSoftware.domain.model.Client;
 import com.marcosoft.storageSoftware.domain.model.Inventory;
+import com.marcosoft.storageSoftware.domain.model.Product;
 import com.marcosoft.storageSoftware.domain.model.Warehouse;
 import com.marcosoft.storageSoftware.domain.repository.InventoryRepository;
 import com.marcosoft.storageSoftware.domain.service.InventoryService;
@@ -44,6 +45,16 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     public List<Inventory> getAllInventoriesByWarehouseAndClient(Warehouse warehouse, Client client) {
         return (List<Inventory>) inventoryRepository.findAllInventoriesByWarehouseAndClient(warehouse, client);
+    }
+
+    @Override
+    public Inventory getByProductAndWarehouseAndClient(Product product, Warehouse warehouse, Client client) {
+        return inventoryRepository.findByProductAndWarehouseAndClient(product, warehouse, client);
+    }
+
+    @Override
+    public boolean existsByProductAndWarehouseAndClient(Product product, Warehouse warehouse, Client client) {
+        return inventoryRepository.existsByProductAndWarehouseAndClient(product, warehouse, client);
     }
 
     @Override

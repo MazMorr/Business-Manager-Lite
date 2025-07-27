@@ -1,7 +1,9 @@
 package com.marcosoft.storageSoftware.infrastructure.util;
 
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
+@Lazy
 @Component
 public class ParseDataTypes {
     public Long parseLong(String value) {

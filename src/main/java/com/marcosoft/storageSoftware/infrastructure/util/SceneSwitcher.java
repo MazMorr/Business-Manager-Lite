@@ -5,7 +5,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -14,10 +13,11 @@ import java.io.IOException;
 public class SceneSwitcher {
 
     private final SpringFXMLLoader springFXMLLoader;
+    private final DisplayAlerts displayAlerts;
 
-    @Autowired
-    public SceneSwitcher(SpringFXMLLoader springFXMLLoader) {
+    public SceneSwitcher(DisplayAlerts displayAlerts, SpringFXMLLoader springFXMLLoader) {
         this.springFXMLLoader = springFXMLLoader;
+        this.displayAlerts = displayAlerts;
     }
 
     /**
@@ -25,13 +25,6 @@ public class SceneSwitcher {
      */
     public void setRootWithEvent(ActionEvent event, String fxmlFile) {
         setRoot((Node) event.getSource(), fxmlFile, null);
-    }
-
-    /**
-     * Cambia la raíz de la escena usando cualquier Node.
-     */
-    public void setRoot(Node node, String fxmlFile) {
-        setRoot(node, fxmlFile, null);
     }
 
     /**
@@ -48,16 +41,16 @@ public class SceneSwitcher {
                 stage.setTitle(windowTitle);
             }
         } catch (IOException e) {
-            showError("No se pudo cargar la vista: " + fxmlFile);
+            displayAlerts.showAlert("No se pudo cargar la vista: " + fxmlFile);
             e.printStackTrace();
         }
     }
 
-    /**
-     * Muestra un mensaje de error simple.
-     */
-    private void showError(String message) {
-        System.err.println(message);
-        // Aquí puedes agregar un Alert si quieres mostrarlo en la interfaz gráfica.
+    public void switchView(ActionEvent actionEvent, String fxmlPath) {
+        try {
+            setRootWithEvent(actionEvent, fxmlPath);
+        } catch (Exception e) {
+            displayAlerts.showAlert("Error al cambiar de vista: " + e.getMessage());
+        }
     }
 }

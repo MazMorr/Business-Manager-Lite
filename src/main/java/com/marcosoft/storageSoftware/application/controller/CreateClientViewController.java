@@ -4,7 +4,11 @@ import com.marcosoft.storageSoftware.Main;
 import com.marcosoft.storageSoftware.domain.model.Client;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceImpl;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.TextField;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
@@ -33,6 +37,13 @@ public class CreateClientViewController {
     private Label txtDebugForm;
 
     private boolean userNameIsSet = false, passwordIsSet = false, confirmedPasswordIsSet = false, companyIsSet = false;
+
+
+    @FXML
+    public void initialize() {
+        percentageBar.setProgress(0);
+        txtDebugForm.setText("");
+    }
 
     @FXML
     private void createAccount() throws IOException {
@@ -143,9 +154,4 @@ public class CreateClientViewController {
         Main.setRoot("clientView");
     }
 
-    @FXML
-    public void initialize() {
-        percentageBar.setProgress(0);
-        txtDebugForm.setText("");
-    }
 }

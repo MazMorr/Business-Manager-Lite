@@ -1,5 +1,6 @@
 package com.marcosoft.storageSoftware.infrastructure.service.impl;
 
+import com.marcosoft.storageSoftware.domain.model.Client;
 import com.marcosoft.storageSoftware.domain.model.Currency;
 import com.marcosoft.storageSoftware.domain.repository.CurrencyRepository;
 import com.marcosoft.storageSoftware.domain.service.CurrencyService;
@@ -42,6 +43,11 @@ public class CurrencyServiceImpl implements CurrencyService {
     @Override
     public Currency getCurrencyByName(String name) {
         return currencyRepository.findByCurrencyName(name);
+    }
+
+    @Override
+    public List<Currency> getAllCurrenciesByCurrencyNameAndClient(String currencyName, Client client) {
+        return (List<Currency>) currencyRepository.findAllCurrenciesByCurrencyNameAndClient(currencyName, client);
     }
 
     @Override

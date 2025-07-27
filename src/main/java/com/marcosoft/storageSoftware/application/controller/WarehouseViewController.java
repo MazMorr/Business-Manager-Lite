@@ -1,15 +1,16 @@
 package com.marcosoft.storageSoftware.application.controller;
 
 import com.marcosoft.storageSoftware.Main;
-import com.marcosoft.storageSoftware.domain.model.Client;
-import com.marcosoft.storageSoftware.domain.model.Inventory;
-import com.marcosoft.storageSoftware.domain.model.Warehouse;
 import com.marcosoft.storageSoftware.application.dto.InvestmentWarehouseDataTable;
 import com.marcosoft.storageSoftware.application.dto.UserLogged;
 import com.marcosoft.storageSoftware.application.dto.WarehouseDataTable;
+import com.marcosoft.storageSoftware.domain.model.Client;
+import com.marcosoft.storageSoftware.domain.model.Inventory;
+import com.marcosoft.storageSoftware.domain.model.Warehouse;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.InventoryServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.WarehouseServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
 import com.marcosoft.storageSoftware.infrastructure.util.ParseDataTypes;
 import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
 import com.marcosoft.storageSoftware.infrastructure.util.SpringFXMLLoader;
@@ -18,7 +19,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableColumn;
+import javafx.scene.control.TreeTableView;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -32,7 +38,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Lazy
@@ -44,15 +49,17 @@ public class WarehouseViewController {
     private final UserLogged userLogged;
     private final SceneSwitcher sceneSwitcher;
     private final ParseDataTypes parseDataTypes;
+    private final DisplayAlerts displayAlerts;
     private final InventoryServiceImpl inventoryService;
     private final ClientServiceImpl clientService;
 
     @Lazy
-    public WarehouseViewController(WarehouseServiceImpl warehouseService, UserLogged userLogged, SceneSwitcher sceneSwitcher, ParseDataTypes parseDataTypes, InventoryServiceImpl inventoryService, ClientServiceImpl clientService) {
+    public WarehouseViewController(DisplayAlerts displayAlerts, WarehouseServiceImpl warehouseService, UserLogged userLogged, SceneSwitcher sceneSwitcher, ParseDataTypes parseDataTypes, InventoryServiceImpl inventoryService, ClientServiceImpl clientService) {
         this.clientService = clientService;
         this.inventoryService = inventoryService;
         this.parseDataTypes = parseDataTypes;
         this.sceneSwitcher = sceneSwitcher;
+        this.displayAlerts = displayAlerts;
         this.userLogged = userLogged;
         this.warehouseService = warehouseService;
     }
@@ -191,7 +198,7 @@ public class WarehouseViewController {
     public void deleteWarehouse(ActionEvent actionEvent) {
         WarehouseDataTable w = ttvWarehouse.getSelectionModel().getSelectedItem().getValue();
         Client c = clientService.getClientByName(userLogged.getName());
-        if (showConfirmationAlert("Está seguro de querer eliminar el almacén seleccionado:\n" +
+        if (displayAlerts.showConfirmationAlert("Está seguro de querer eliminar el almacén seleccionado:\n" +
                 w.getWarehouseName() + " junto a todos los productos almacenados en él?")) {
             warehouseService.deleteWarehouseById(warehouseService.getWarehouseByWarehouseNameAndClient(w.getWarehouseName(), c).getId());
             ttvWarehouse.getSelectionModel().clearSelection();
@@ -215,7 +222,7 @@ public class WarehouseViewController {
 
     @FXML
     public void checkInvestment(ActionEvent actionEvent) {
-        showAlert("Próximamente");
+        displayAlerts.showAlert("Próximamente");
     }
 
     @FXML
@@ -249,61 +256,32 @@ public class WarehouseViewController {
     // ============================
     @FXML
     public void switchToConfiguration(ActionEvent actionEvent) {
-        switchView(actionEvent, "/configurationView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/configurationView.fxml");
     }
 
     @FXML
     public void switchToSupport(ActionEvent actionEvent) {
-        switchView(actionEvent, "/supportView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/supportView.fxml");
     }
 
     @FXML
     public void switchToRegistry(ActionEvent actionEvent) {
-        switchView(actionEvent, "/registryView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/registryView.fxml");
     }
 
     @FXML
     public void switchToBalance(ActionEvent actionEvent) {
-        switchView(actionEvent, "/balanceView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/balanceView.fxml");
     }
 
     @FXML
     public void switchToInvestment(ActionEvent actionEvent) {
-        switchView(actionEvent, "/investmentView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/investmentView.fxml");
     }
 
     @FXML
     public void switchToSell(ActionEvent actionEvent) {
-        switchView(actionEvent, "/sellView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/sellView.fxml");
     }
-
-    private void switchView(ActionEvent actionEvent, String fxmlPath) {
-        try {
-            sceneSwitcher.setRootWithEvent(actionEvent, fxmlPath);
-        } catch (Exception e) {
-            logger.error("Error al cambiar de vista", e);
-            showAlert("Error al cambiar de vista: " + e.getMessage());
-        }
-    }
-
-    // ============================
-    // UTILITIES
-    // ============================
-    private void showAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
-    private boolean showConfirmationAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirmación");
-        alert.setHeaderText("¿Está seguro?");
-        alert.setContentText(message);
-
-        Optional<ButtonType> result = alert.showAndWait();
-        return result.isPresent() && result.get() == ButtonType.OK;
-    }
-
 
 }

@@ -11,14 +11,29 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.autoconfigure.jdbc.JdbcClientAutoConfiguration;
+import org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration;
+import org.springframework.boot.autoconfigure.mail.MailSenderAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.task.TaskExecutionAutoConfiguration;
+import org.springframework.boot.autoconfigure.task.TaskSchedulingAutoConfiguration;
+import org.springframework.boot.autoconfigure.validation.ValidationAutoConfiguration;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.io.IOException;
 
-@SpringBootApplication( exclude = {CacheAutoConfiguration.class, SecurityAutoConfiguration.class})
+@SpringBootApplication(exclude = {
+        CacheAutoConfiguration.class,
+        SecurityAutoConfiguration.class,
+        ValidationAutoConfiguration.class,
+        TaskExecutionAutoConfiguration.class,
+        TaskSchedulingAutoConfiguration.class,
+        MailSenderAutoConfiguration.class,
+        JmxAutoConfiguration.class,
+        JdbcClientAutoConfiguration.class
+})
 @ComponentScan(basePackages = {
         "com.marcosoft.storageSoftware.infrastructure.util",
         "com.marcosoft.storageSoftware.infrastructure.service.impl",
@@ -28,6 +43,7 @@ import java.io.IOException;
 @EntityScan(basePackages = "com.marcosoft.storageSoftware.domain.model")
 @EnableJpaRepositories(basePackages = "com.marcosoft.storageSoftware.domain.repository")
 public class Main extends Application {
+
     @Getter
     private static ConfigurableApplicationContext context;
     private static SpringFXMLLoader springFXMLLoader;

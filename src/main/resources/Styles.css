@@ -174,10 +174,10 @@ Negro:               #0f172a
 /* TABLAS                    */
 /* ========================= */
 .table {
-     -fx-border-color: #2563eb;
-     -fx-background-radius: 10;
-     -fx-border-radius: 10;
-     -fx-border-width: 2;
+    -fx-border-color: #2563eb;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
 }
 
 .table-view, .tree-table-view{
@@ -284,6 +284,16 @@ Negro:               #0f172a
     -fx-background-color: #f3f4f6;
     -fx-font-size: 13;
     -fx-border-color: #2563eb;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 10;
+    -fx-font-family: 'Segoe UI', sans-serif;
+    -fx-font-weight: 800;
+}
+
+.filter-background {
+    -fx-font-size: 13;
     -fx-border-width: 2;
     -fx-border-radius: 10;
     -fx-background-radius: 10;

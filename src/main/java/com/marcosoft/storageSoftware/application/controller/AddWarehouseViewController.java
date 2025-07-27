@@ -1,12 +1,12 @@
 package com.marcosoft.storageSoftware.application.controller;
 
-import com.marcosoft.storageSoftware.domain.model.Warehouse;
 import com.marcosoft.storageSoftware.application.dto.UserLogged;
+import com.marcosoft.storageSoftware.domain.model.Warehouse;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.WarehouseServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.springframework.context.annotation.Lazy;
@@ -17,13 +17,15 @@ import org.springframework.stereotype.Controller;
 public class AddWarehouseViewController {
 
     private final UserLogged userLogged;
+    private final DisplayAlerts displayAlerts;
     private final ClientServiceImpl clientService;
     private final WarehouseServiceImpl warehouseService;
 
     @Lazy
-    public AddWarehouseViewController(WarehouseServiceImpl warehouseService, UserLogged userLogged,ClientServiceImpl clientService){
+    public AddWarehouseViewController(DisplayAlerts displayAlerts, WarehouseServiceImpl warehouseService, UserLogged userLogged,ClientServiceImpl clientService){
         this.warehouseService= warehouseService;
         this.clientService = clientService;
+        this.displayAlerts = displayAlerts;
         this.userLogged = userLogged;
     }
 
@@ -32,9 +34,9 @@ public class AddWarehouseViewController {
     @FXML
     public void addWarehouse(ActionEvent actionEvent) {
         if (tfWarehouseName.getText().isEmpty()) {
-            showAlert("Debe asignar un nombre para el nuevo almacén");
+            displayAlerts.showAlert("Debe asignar un nombre para el nuevo almacén");
         } else if (tfWarehouseName.getText().length() > 18) {
-            showAlert("El nuevo nombre no puede exceder los 18 carácteres incluyendo espacios");
+            displayAlerts.showAlert("El nuevo nombre no puede exceder los 18 carácteres incluyendo espacios");
         } else {
             try {
                 Warehouse warehouse = new Warehouse(
@@ -44,9 +46,9 @@ public class AddWarehouseViewController {
                 );
                 warehouseService.save(warehouse);
 
-                showAlert("El nuevo almacén ha sido añadido correctamente");
+                displayAlerts.showAlert("El nuevo almacén ha sido añadido correctamente");
             } catch (Exception e) {
-                showAlert("Ha ocurrido un error: " + e.getMessage());
+                displayAlerts.showAlert("Ha ocurrido un error: " + e.getMessage());
             }
         }
     }
@@ -57,12 +59,4 @@ public class AddWarehouseViewController {
         stage.close();
     }
 
-    // ============================
-    // UTILITIES
-    // ============================
-    private void showAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
 }

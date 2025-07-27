@@ -1,12 +1,21 @@
 package com.marcosoft.storageSoftware.application.controller;
 
 import com.marcosoft.storageSoftware.application.dto.UserLogged;
-import com.marcosoft.storageSoftware.domain.model.*;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.*;
+import com.marcosoft.storageSoftware.domain.model.Client;
+import com.marcosoft.storageSoftware.domain.model.Inventory;
+import com.marcosoft.storageSoftware.domain.model.Investment;
+import com.marcosoft.storageSoftware.domain.model.Product;
+import com.marcosoft.storageSoftware.domain.model.Warehouse;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.InventoryServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.InvestmentServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.ProductServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.WarehouseServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
+import com.marcosoft.storageSoftware.infrastructure.util.ParseDataTypes;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
@@ -26,15 +35,19 @@ public class AssignInvestmentViewController {
     private final WarehouseServiceImpl warehouseService;
     private final InvestmentServiceImpl investmentService;
     private final ProductServiceImpl productService;
+    private final DisplayAlerts displayAlerts;
+    private final ParseDataTypes parseDataTypes;
 
     @Lazy
-    public AssignInvestmentViewController(InventoryServiceImpl inventoryService, UserLogged userLogged, WarehouseServiceImpl warehouseService, ClientServiceImpl clientService, InvestmentServiceImpl investmentService, ProductServiceImpl productService) {
+    public AssignInvestmentViewController(ParseDataTypes parseDataTypes, DisplayAlerts displayAlerts, InventoryServiceImpl inventoryService, UserLogged userLogged, WarehouseServiceImpl warehouseService, ClientServiceImpl clientService, InvestmentServiceImpl investmentService, ProductServiceImpl productService) {
         this.productService = productService;
+        this.displayAlerts = displayAlerts;
         this.inventoryService = inventoryService;
         this.userLogged = userLogged;
         this.warehouseService = warehouseService;
         this.investmentService = investmentService;
         this.clientService = clientService;
+        this.parseDataTypes = parseDataTypes;
     }
 
     @FXML
@@ -53,11 +66,11 @@ public class AssignInvestmentViewController {
     @FXML
     public void assignAllProductAmount(ActionEvent actionEvent) {
         if (tfInvestment.getText().isEmpty()) {
-            showAlert("Debe asignar una inversión primero");
+            displayAlerts.showAlert("Debe asignar una inversión primero");
         } else if (!investmentService.existsByInvestmentId(Long.parseLong(tfInvestment.getText()))) {
-            showAlert("No se encontró el identificador de la inversión en la base de datos");
-        } else if (investmentService.getInvestmentById(Long.parseLong(tfInvestment.getText())).getAmount() == 0) {
-            showAlert("Esta inversión ha sido completamente asignada, debe seleccionar otra o reasignar los productos de esta");
+            displayAlerts.showAlert("No se encontró el identificador de la inversión en la base de datos");
+        } else if (investmentService.getInvestmentById(parseDataTypes.parseLong(tfInvestment.getText())).getAmount() == 0) {
+            displayAlerts.showAlert("Esta inversión ha sido completamente asignada, debe seleccionar otra o reasignar los productos de esta");
         } else {
             tfAmount.setText(String.valueOf(investmentService.getInvestmentById(
                     Long.parseLong(tfInvestment.getText())).getAmount())
@@ -75,7 +88,7 @@ public class AssignInvestmentViewController {
     public void assignProduct(ActionEvent actionEvent) {
         try {
             if (tfInvestment.getText().isEmpty() || tfWarehouse.getText().isEmpty() || tfAmount.getText().isEmpty()) {
-                showAlert("Todos los campos son obligatorios");
+                displayAlerts.showAlert("Todos los campos son obligatorios");
                 return;
             }
 
@@ -85,13 +98,13 @@ public class AssignInvestmentViewController {
             Investment investment = investmentService.getInvestmentById(investmentId);
 
             if (investment == null) {
-                showAlert("No se encontró la inversión en la base de datos");
+                displayAlerts.showAlert("No se encontró la inversión en la base de datos");
             } else if (investment.getAmount() == 0) {
-                showAlert("Esta inversión ha sido completamente asignada");
+                displayAlerts.showAlert("Esta inversión ha sido completamente asignada");
             } else if (amountToAssign > investment.getAmount()) {
-                showAlert("La cantidad excede el monto de la inversión");
+                displayAlerts.showAlert("La cantidad excede el monto de la inversión");
             } else if (!warehouseExistsForClient()) {
-                showAlert("No se encuentra el Almacén especificado");
+                displayAlerts.showAlert("No se encuentra el Almacén especificado");
             } else {
 
                 Client client = clientService.getClientByName(userLogged.getName());
@@ -115,24 +128,18 @@ public class AssignInvestmentViewController {
                 inventoryService.save(inventory);
                 int actualInvestmentAmount = investmentService.getInvestmentById(investmentId).getAmount() - amountToAssign;
                 investmentService.getInvestmentById(investmentId).setAmount(actualInvestmentAmount);
-                showAlert("Producto asignado exitosamente");
+                displayAlerts.showAlert("Producto asignado exitosamente");
             }
         } catch (NumberFormatException e) {
-            showAlert("Los campos numéricos deben contener valores válidos");
+            displayAlerts.showAlert("Los campos numéricos deben contener valores válidos");
         } catch (Exception e) {
-            showAlert("Ocurrió un error inesperado: " + e.getMessage());
+            displayAlerts.showAlert("Ocurrió un error inesperado: " + e.getMessage());
         }
     }
 
     // ============================
     // UTILITIES
     // ============================
-    private void showAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
     private boolean warehouseExistsForClient() {
         Client client = clientService.getClientByName(userLogged.getName());
         return warehouseService.existsByWarehouseNameAndClient(
