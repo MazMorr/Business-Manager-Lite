@@ -3,7 +3,6 @@ package com.marcosoft.storageSoftware.application.controller;
 import com.marcosoft.storageSoftware.application.dto.UserLogged;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
-import com.marcosoft.storageSoftware.infrastructure.util.SpringFXMLLoader;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,7 +22,7 @@ public class SupportViewController {
     private final ClientServiceImpl clientService;
 
     @Lazy
-    public SupportViewController( UserLogged userLogged, SceneSwitcher sceneSwitcher, ClientServiceImpl clientService) {
+    public SupportViewController(UserLogged userLogged, SceneSwitcher sceneSwitcher, ClientServiceImpl clientService) {
         this.userLogged = userLogged;
         this.sceneSwitcher = sceneSwitcher;
         this.clientService = clientService;
@@ -31,11 +30,6 @@ public class SupportViewController {
 
     @FXML
     private Label txtWelcome, versionLabel, txtClientName, txtWelcomeTitle;
-
-    public void setAccountController(ClientViewController clientViewController) {
-        this.accountController = clientViewController;
-        System.out.println("Controlador de cuenta configurado: " + clientViewController);
-    }
 
     @FXML
     private void initialize() {
@@ -51,6 +45,12 @@ public class SupportViewController {
         });
     }
 
+    public void setAccountController(ClientViewController clientViewController) {
+        this.accountController = clientViewController;
+        System.out.println("Controlador de cuenta configurado: " + clientViewController);
+    }
+
+
     private void initWelcomeLabels() {
         versionLabel.setText("0.9.3");
         txtWelcomeTitle.setText("Bienvenido, " + userLogged.getName());
@@ -64,36 +64,32 @@ public class SupportViewController {
 
     @FXML
     private void switchToRegistry(ActionEvent event) {
-        switchView(event, "/registryView.fxml");
+        sceneSwitcher.switchView(event, "/registryView.fxml");
     }
 
     @FXML
     private void switchToInvestment(ActionEvent event) {
-        switchView(event, "/investmentView.fxml");
+        sceneSwitcher.switchView(event, "/investmentView.fxml");
     }
 
     @FXML
     private void switchToConfiguration(ActionEvent event) {
-        switchView(event, "/configurationView.fxml");
+        sceneSwitcher.switchView(event, "/configurationView.fxml");
     }
 
     @FXML
     public void switchToWarehouse(ActionEvent event) {
-        switchView(event, "/warehouseView.fxml");
+        sceneSwitcher.switchView(event, "/warehouseView.fxml");
     }
 
     @FXML
     public void switchToBalance(ActionEvent event) {
-        switchView(event, "/balanceView.fxml");
+        sceneSwitcher.switchView(event, "/balanceView.fxml");
     }
 
     @FXML
     public void switchToInventory(ActionEvent event) {
-        switchView(event, "/sellView.fxml");
-    }
-
-    private void switchView(ActionEvent event, String fxml) {
-        sceneSwitcher.setRootWithEvent(event, fxml);
+        sceneSwitcher.switchView(event, "/sellView.fxml");
     }
 
     @FXML

@@ -14,14 +14,13 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="200.0" prefWidth="300.0" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.ChangeProductNameViewController">
    <children>
       <VBox alignment="CENTER" layoutX="78.0" layoutY="77.0" prefHeight="200.0" prefWidth="338.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
          <children>
-            <HBox alignment="CENTER_LEFT" spacing="29.0">
+            <HBox alignment="CENTER_LEFT" spacing="23.0">
                <children>
-                  <Label text="Nombre Actual">
+                  <Label text="Producto Actual">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>

@@ -1,10 +1,15 @@
 package com.marcosoft.storageSoftware.application.controller;
 
-import com.marcosoft.storageSoftware.domain.model.Currency;
-import com.marcosoft.storageSoftware.domain.model.Investment;
 import com.marcosoft.storageSoftware.application.dto.InvestmentDataTable;
 import com.marcosoft.storageSoftware.application.dto.UserLogged;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.*;
+import com.marcosoft.storageSoftware.domain.model.Client;
+import com.marcosoft.storageSoftware.domain.model.Currency;
+import com.marcosoft.storageSoftware.domain.model.Investment;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.CurrencyServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.InvestmentRegistryServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.InvestmentServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
 import com.marcosoft.storageSoftware.infrastructure.util.ParseDataTypes;
 import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
 import javafx.application.Platform;
@@ -13,12 +18,19 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.Pagination;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -27,77 +39,70 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+/**
+ * Controller for the Investment view.
+ * Handles CRUD operations, filtering, and navigation for investments.
+ */
 @Lazy
 @Controller
 public class InvestmentViewController {
-    private static final Logger logger = LoggerFactory.getLogger(InvestmentViewController.class);
+    // Observable list for table data
     private ObservableList<InvestmentDataTable> investmentList;
+    private Client client;
 
     // ============================
     // DEPENDENCY INJECTION
     // ============================
     private final ParseDataTypes parseDataTypes;
     private final UserLogged userLogged;
-    private final WarehouseServiceImpl warehouseService;
     private final ClientServiceImpl clientService;
     private final InvestmentServiceImpl investmentService;
     private final InvestmentRegistryServiceImpl investmentRegistryService;
     private final SceneSwitcher sceneSwitcher;
     private final CurrencyServiceImpl currencyService;
+    private final DisplayAlerts displayAlerts;
 
+    /**
+     * Constructor for dependency injection.
+     * All required services and utilities are injected here.
+     */
     @Lazy
-    public InvestmentViewController(ParseDataTypes parseDataTypes, UserLogged userLogged, WarehouseServiceImpl warehouseService, ClientServiceImpl clientService, InvestmentServiceImpl investmentService, CurrencyServiceImpl currencyService, InvestmentRegistryServiceImpl investmentRegistryService, SceneSwitcher sceneSwitcher) {
+    public InvestmentViewController(DisplayAlerts displayAlerts, ParseDataTypes parseDataTypes, UserLogged userLogged, ClientServiceImpl clientService, InvestmentServiceImpl investmentService, CurrencyServiceImpl currencyService, InvestmentRegistryServiceImpl investmentRegistryService, SceneSwitcher sceneSwitcher) {
         this.currencyService = currencyService;
+        this.displayAlerts = displayAlerts;
         this.sceneSwitcher = sceneSwitcher;
         this.investmentService = investmentService;
         this.investmentRegistryService = investmentRegistryService;
         this.clientService = clientService;
-        this.warehouseService = warehouseService;
         this.userLogged = userLogged;
         this.parseDataTypes = parseDataTypes;
     }
 
-    // Labels
-    @FXML
-    private Label txtAddDebugForm, txtClientName;
-
-    // TextFields - Add new Investment
-    @FXML
-    private TextField txtAddProductName, txtAddProductAmount, txtId, txtAddInvestmentPrice, txtAddInvestmentCurrency, txtAddInvestmentType;
-
-    @FXML
-    private TextField txtFilterId, txtFilterName, txtMinFilterPrice, txtMaxFilterPrice, txtMaxFilterAmount, txtMinFilterAmount;
-
-    // Date Pickers
-    @FXML
-    private DatePicker txtAddInvestmentDate;
-
-    // Table Components
-    @FXML
-    private TableView<InvestmentDataTable> tblInvestment;
-    @FXML
-    private TableColumn<InvestmentDataTable, Integer> amountColumn;
-    @FXML
-    private TableColumn<InvestmentDataTable, String> nameColumn, currencyColumn;
-    @FXML
-    private TableColumn<InvestmentDataTable, LocalDate> dateColumn;
-    @FXML
-    private TableColumn<InvestmentDataTable, Long> idColumn;
-    @FXML
-    private TableColumn<InvestmentDataTable, Double> priceColumn;
-    @FXML
-    private MenuButton mbCurrency;
-    @FXML
-    private MenuButton mbInvestmentType;
-    @FXML
-    private Pagination paginator;
+    // UI components
+    @FXML private Label txtAddDebugForm, txtClientName;
+    @FXML private TextField txtAddProductName, txtAddProductAmount, txtId, txtAddInvestmentPrice, txtAddInvestmentCurrency, txtAddInvestmentType;
+    @FXML private TextField txtFilterId, txtFilterName, txtMinFilterPrice, txtMaxFilterPrice, txtMaxFilterAmount, txtMinFilterAmount;
+    @FXML private DatePicker txtAddInvestmentDate;
+    @FXML private TableView<InvestmentDataTable> tblInvestment;
+    @FXML private TableColumn<InvestmentDataTable, Integer> amountColumn;
+    @FXML private TableColumn<InvestmentDataTable, String> nameColumn, currencyColumn;
+    @FXML private TableColumn<InvestmentDataTable, LocalDate> dateColumn;
+    @FXML private TableColumn<InvestmentDataTable, Long> idColumn;
+    @FXML private TableColumn<InvestmentDataTable, Double> priceColumn;
+    @FXML private MenuButton mbCurrency, mbInvestmentType;
+    @FXML private Pagination paginator;
 
     // ============================
-    // INICIALIZACIÓN
+    // INITIALIZATION
     // ============================
+    /**
+     * Initializes the controller after its root element has been completely processed.
+     * Sets up table values, listeners, and default currencies.
+     */
     @FXML
     public void initialize() {
         txtClientName.setText(userLogged.getName());
+        client = clientService.getClientByName(userLogged.getName());
         Platform.runLater(() -> {
             initializeTableValues();
             setupTextFieldListeners();
@@ -107,22 +112,28 @@ public class InvestmentViewController {
         });
     }
 
+    /**
+     * Initializes default currencies if they do not exist in the database.
+     */
     private void initCurrencyDefaultValues() {
         List<String> defaultCurrenciesName = List.of("MLC", "CUP", "USD", "EUR", "CAD");
         for (String currencyName : defaultCurrenciesName) {
             if (!currencyService.existsByCurrencyName(currencyName)) {
-                Currency currency = new Currency(null, currencyName);
+                Currency currency = new Currency(null, currencyName, client);
                 currencyService.save(currency);
             }
         }
     }
 
+    /**
+     * Sets up listeners for filter and input text fields.
+     * Triggers table filtering and formatting.
+     */
     private void setupTextFieldListeners() {
         txtFilterId.textProperty().addListener((obs, oldVal, newVal) -> filterInvestmentTable());
         txtFilterName.textProperty().addListener((obs, oldVal, newVal) -> filterInvestmentTable());
         txtMinFilterAmount.textProperty().addListener((obs, oldVal, newVal) -> filterInvestmentTable());
         txtMaxFilterAmount.textProperty().addListener((obs, oldVal, newVal) -> filterInvestmentTable());
-        txtMaxFilterPrice.textProperty().addListener((obs, oldVal, newVal) -> filterInvestmentTable());
         txtMinFilterPrice.textProperty().addListener((obs, oldVal, newVal) -> filterInvestmentTable());
         txtAddInvestmentCurrency.textProperty().addListener((obs, oldVal, newVal) -> uppercaseCurrencyText());
     }
@@ -184,7 +195,7 @@ public class InvestmentViewController {
                 txtAddProductAmount.getText().isEmpty() ||
                 txtAddInvestmentPrice.getText().isEmpty() ||
                 txtAddInvestmentDate.getValue() == null) {
-            showAlert("Todos los campos son obligatorios.");
+            displayAlerts.showAlert("Todos los campos son obligatorios.");
             return;
         }
 
@@ -197,18 +208,18 @@ public class InvestmentViewController {
 
         // Validaciones adicionales
         if (price == null || price <= 0) {
-            showAlert("El precio debe ser un número positivo.");
+            displayAlerts.showAlert("El precio debe ser un número positivo.");
             return;
         }
         if (amount == null || amount <= 0) {
-            showAlert("La cantidad debe ser un número positivo.");
+            displayAlerts.showAlert("La cantidad debe ser un número positivo.");
             return;
         }
         if (currency.isEmpty()) {
-            showAlert("Debe seleccionar una moneda");
+            displayAlerts.showAlert("Debe seleccionar una moneda");
             return;
         } else if (!currencyService.existsByCurrencyName(currency)) {
-            Currency newCurrency = new Currency(null, currency);
+            Currency newCurrency = new Currency(null, currency, client);
             currencyService.save(newCurrency);
         }
 
@@ -233,7 +244,7 @@ public class InvestmentViewController {
     public void removeProduct(ActionEvent actionEvent) {
         Long investmentId = parseDataTypes.parseLong(txtId.getText());
         if (investmentId == null) {
-            showAlert("Debes seleccionar un registro para eliminar.");
+            displayAlerts.showAlert("Debes seleccionar un registro para eliminar.");
             return;
         }
 
@@ -247,7 +258,7 @@ public class InvestmentViewController {
                 initializeTableValues();
                 cleanForm(null);
             } else {
-                showAlert("No hay ningún registro con ese ID");
+                displayAlerts.showAlert("No hay ningún registro con ese ID");
             }
         }
     }
@@ -343,11 +354,6 @@ public class InvestmentViewController {
     // ============================
     // UTILIDADES
     // ============================
-    private void showAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
 
     @FXML
     public void selectInventory(Event event) {
@@ -365,40 +371,33 @@ public class InvestmentViewController {
     // ============================
     @FXML
     public void switchToConfiguration(ActionEvent actionEvent) {
-        switchView(actionEvent, "/configurationView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/configurationView.fxml");
     }
 
     @FXML
     public void switchToSupport(ActionEvent actionEvent) {
-        switchView(actionEvent, "/supportView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/supportView.fxml");
     }
 
     @FXML
     public void switchToRegistry(ActionEvent actionEvent) {
-        switchView(actionEvent, "/registryView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/registryView.fxml");
     }
 
     @FXML
     public void switchToWarehouse(ActionEvent actionEvent) {
-        switchView(actionEvent, "/warehouseView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/warehouseView.fxml");
     }
 
     @FXML
     public void switchToBalance(ActionEvent actionEvent) {
-        switchView(actionEvent, "/balanceView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/balanceView.fxml");
     }
 
     @FXML
     public void switchToSell(ActionEvent actionEvent) {
-        switchView(actionEvent, "/sellView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/sellView.fxml");
     }
 
-    private void switchView(ActionEvent actionEvent, String fxmlPath) {
-        try {
-            sceneSwitcher.setRootWithEvent(actionEvent, fxmlPath);
-        } catch (Exception e) {
-            logger.error("Error al cambiar de vista", e);
-            showAlert("Error al cambiar de vista: " + e.getMessage());
-        }
-    }
+
 }

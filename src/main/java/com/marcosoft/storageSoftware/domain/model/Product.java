@@ -29,4 +29,7 @@ public class Product {
 
     @ManyToOne
     private Client client;
+
+    @ManyToOne
+    private Currency currency;
 }

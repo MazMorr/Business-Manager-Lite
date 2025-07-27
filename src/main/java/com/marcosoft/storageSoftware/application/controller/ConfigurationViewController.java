@@ -6,7 +6,10 @@ import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceIm
 import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.RadioMenuItem;
+import javafx.scene.control.ToggleGroup;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
@@ -59,48 +62,32 @@ public class ConfigurationViewController {
 
     @FXML
     public void switchToSupport(ActionEvent actionEvent) {
-        switchView(actionEvent, "/supportView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/supportView.fxml");
     }
 
     @FXML
     public void switchToWarehouse(ActionEvent actionEvent) {
-        switchView(actionEvent, "/warehouseView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/warehouseView.fxml");
     }
 
     @FXML
     public void switchToRegistry(ActionEvent actionEvent) {
-        switchView(actionEvent, "/registryView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/registryView.fxml");
     }
 
     @FXML
     public void switchToBalance(ActionEvent actionEvent) {
-        switchView(actionEvent, "/balanceView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/balanceView.fxml");
     }
 
     @FXML
     public void switchToInvestment(ActionEvent actionEvent) {
-        switchView(actionEvent, "/investmentView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/investmentView.fxml");
     }
 
     @FXML
     public void switchToSell(ActionEvent actionEvent) {
-        switchView(actionEvent, "/sellView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/sellView.fxml");
     }
 
-    private void switchView(ActionEvent actionEvent, String fxmlPath) {
-        try {
-            sceneSwitcher.setRootWithEvent(actionEvent, fxmlPath);
-        } catch (Exception e) {
-            showAlert("Error al cambiar de vista: " + e.getMessage());
-        }
-    }
-
-    // ============================
-    // UTILIDADES
-    // ============================
-    private void showAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
 }
