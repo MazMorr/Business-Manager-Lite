@@ -186,13 +186,13 @@ public class SellViewController {
 
         // Check if currency field is empty
         if (currencyName == null || currencyName.isEmpty()) {
-            displayAlerts.showAlert("Currency field cannot be empty");
+            displayAlerts.showAlert("Debe seleccionar una moneda");
             return false;
         }
 
         // Check if currency name contains only letters
         if (!currencyName.matches("[a-zA-Z]+")) {
-            displayAlerts.showAlert("Currency must contain only letters");
+            displayAlerts.showAlert("La moneda solo puede contener letras");
             return false;
         }
 
@@ -204,14 +204,14 @@ public class SellViewController {
 
         // Check if product field is empty
         if (productName == null || productName.isEmpty()) {
-            displayAlerts.showAlert("Product field cannot be empty");
+            displayAlerts.showAlert("Debe asignar un producto");
             return false;
         }
 
         // Check if product exists for this client
         Product product = productService.getByProductNameAndClient(productName, client);
         if (product == null) {
-            displayAlerts.showAlert("Product does not exist in inventory");
+            displayAlerts.showAlert("El producto no existe en la base de datos");
             return false;
         }
 
@@ -223,7 +223,7 @@ public class SellViewController {
 
         // Check if price field is empty
         if (priceText == null || priceText.isEmpty()) {
-            displayAlerts.showAlert("Price field cannot be empty");
+            displayAlerts.showAlert("El precio no debe estar vacío");
             return false;
         }
 
@@ -232,19 +232,19 @@ public class SellViewController {
 
             // Check if price is positive
             if (price <= 0) {
-                displayAlerts.showAlert("Price must be greater than zero");
+                displayAlerts.showAlert("El precio debe ser mayor que 0");
                 return false;
             }
 
             // Check if price has valid decimal format
             if (priceText.split("\\.")[1].length() > 2) {
-                displayAlerts.showAlert("Price can have maximum 2 decimal places");
+                displayAlerts.showAlert("El precio solo puede tener 2 lugar decimales");
                 return false;
             }
 
             return true;
         } catch (NumberFormatException e) {
-            displayAlerts.showAlert("Price must be a valid number");
+            displayAlerts.showAlert("El precio debe ser un número válido");
             return false;
         }
     }
@@ -263,13 +263,13 @@ public class SellViewController {
 
         // Check if currency field is empty
         if (currencyName == null || currencyName.isEmpty()) {
-            displayAlerts.showAlert("Currency field cannot be empty");
+            displayAlerts.showAlert("Debe seleccionar una moneda");
             return false;
         }
 
         // Check if currency exists in system
         if (!currencyService.existsByCurrencyName(currencyName)) {
-            displayAlerts.showAlert("Selected currency is not available");
+            displayAlerts.showAlert("La moneda seleccionada no existe en la base de datos");
             return false;
         }
 
@@ -281,7 +281,7 @@ public class SellViewController {
 
         // Check if price field is empty
         if (priceText == null || priceText.isEmpty()) {
-            displayAlerts.showAlert("Price field cannot be empty");
+            displayAlerts.showAlert("El precio no puede estar vacío");
             return false;
         }
 
@@ -290,13 +290,13 @@ public class SellViewController {
 
             // Check if price is positive
             if (price <= 0) {
-                displayAlerts.showAlert("Price must be greater than zero");
+                displayAlerts.showAlert("El precio debe ser mayor que cero");
                 return false;
             }
 
             return true;
         } catch (NumberFormatException e) {
-            displayAlerts.showAlert("Price must be a valid number");
+            displayAlerts.showAlert("El precio debe ser un número válido");
             return false;
         }
     }
@@ -306,13 +306,13 @@ public class SellViewController {
 
         // Check if date is selected
         if (selectedDate == null) {
-            displayAlerts.showAlert("Please select a valid date");
+            displayAlerts.showAlert("Por favor selecciona una fecha válida");
             return false;
         }
 
         // Check if date is not in the future
         if (selectedDate.isAfter(LocalDate.now())) {
-            displayAlerts.showAlert("Sale date cannot be in the future");
+            displayAlerts.showAlert("La fecha de venta no puede ser en el futuro");
             return false;
         }
 
@@ -324,7 +324,7 @@ public class SellViewController {
 
         // Check if amount field is empty
         if (amountText == null || amountText.isEmpty()) {
-            displayAlerts.showAlert("Amount field cannot be empty");
+            displayAlerts.showAlert("La cantidad no pueda estar vacía");
             return false;
         }
 
@@ -333,7 +333,7 @@ public class SellViewController {
 
             // Check if amount is positive
             if (amount <= 0) {
-                displayAlerts.showAlert("Amount must be greater than zero");
+                displayAlerts.showAlert("La cantidad debe ser mayor que cero");
                 return false;
             }
 
@@ -345,14 +345,14 @@ public class SellViewController {
 
                 // Check if there's enough stock
                 if (inventory.getAmount() < amount) {
-                    displayAlerts.showAlert("Not enough stock available");
+                    displayAlerts.showAlert("No hay suficiente existencias disponibles");
                     return false;
                 }
             }
 
             return true;
         } catch (NumberFormatException e) {
-            displayAlerts.showAlert("Amount must be a valid integer");
+            displayAlerts.showAlert("La cantidad debe ser un número válido");
             return false;
         }
     }
@@ -363,33 +363,33 @@ public class SellViewController {
 
         // Check if product field is empty
         if (productName == null || productName.isEmpty()) {
-            displayAlerts.showAlert("Product field cannot be empty");
+            displayAlerts.showAlert("Debe seleccionar un producto");
             return false;
         }
 
         // Check if warehouse field is empty
         if (warehouseName == null || warehouseName.isEmpty()) {
-            displayAlerts.showAlert("Warehouse field cannot be empty");
+            displayAlerts.showAlert("Debe seleccionar un almacén");
             return false;
         }
 
         // Check if product exists for this client
         Product product = productService.getByProductNameAndClient(productName, client);
         if (product == null) {
-            displayAlerts.showAlert("Product does not exist in inventory");
+            displayAlerts.showAlert("El producto no existe");
             return false;
         }
 
         // Check if warehouse exists for this client
         Warehouse warehouse = warehouseService.getWarehouseByWarehouseNameAndClient(warehouseName, client);
         if (warehouse == null) {
-            displayAlerts.showAlert("Warehouse does not exist");
+            displayAlerts.showAlert("El almacén no existe");
             return false;
         }
 
         // Check if product exists in the selected warehouse
         if (!inventoryService.existsByProductAndWarehouseAndClient(product, warehouse, client)) {
-            displayAlerts.showAlert("Product is not available in selected warehouse");
+            displayAlerts.showAlert("El producto no está disponible en el almacén seleccionado");
             return false;
         }
 
