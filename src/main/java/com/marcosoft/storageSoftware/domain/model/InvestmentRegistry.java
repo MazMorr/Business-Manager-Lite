@@ -29,7 +29,5 @@ public class InvestmentRegistry {
     private String registryType;
 
     @Column(name="date")
-    private LocalDateTime localDateTime;
-
-
+    private LocalDateTime registryDateTime;
 }

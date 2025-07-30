@@ -4,10 +4,7 @@ import com.marcosoft.storageSoftware.application.dto.SellDataTable;
 import com.marcosoft.storageSoftware.application.dto.UserLogged;
 import com.marcosoft.storageSoftware.domain.model.*;
 import com.marcosoft.storageSoftware.domain.service.WarehouseService;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceImpl;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.CurrencyServiceImpl;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.InventoryServiceImpl;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.ProductServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.*;
 import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
 import com.marcosoft.storageSoftware.infrastructure.util.ParseDataTypes;
 import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
@@ -22,15 +19,21 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
+/**
+ * Controller for the sell view.
+ * Handles logic for selling products, assigning prices, filtering inventory, and navigation.
+ */
 @Lazy
 @Controller
 public class SellViewController {
     private Client client;
 
+    // Service and utility dependencies
     private final UserLogged userLogged;
     private final ParseDataTypes parseDataTypes;
     private final SceneSwitcher sceneSwitcher;
@@ -40,14 +43,22 @@ public class SellViewController {
     private final DisplayAlerts displayAlerts;
     private final ClientServiceImpl clientService;
     private final CurrencyServiceImpl currencyService;
+    private final SellRegistryServiceImpl sellRegistryService;
+    private final GeneralRegistryServiceImpl generalRegistryService;
 
+    /**
+     * Constructor for dependency injection.
+     */
     @Lazy
     public SellViewController(
             CurrencyServiceImpl currencyService, ClientServiceImpl clientService, DisplayAlerts displayAlerts,
             UserLogged userLogged, ParseDataTypes parseDataTypes, SceneSwitcher sceneSwitcher,
-            InventoryServiceImpl inventoryService, ProductServiceImpl productService, WarehouseService warehouseService
+            InventoryServiceImpl inventoryService, ProductServiceImpl productService, WarehouseService warehouseService,
+            SellRegistryServiceImpl sellRegistryService, GeneralRegistryServiceImpl generalRegistryService
     ) {
         this.inventoryService = inventoryService;
+        this.generalRegistryService = generalRegistryService;
+        this.sellRegistryService = sellRegistryService;
         this.displayAlerts = displayAlerts;
         this.clientService = clientService;
         this.sceneSwitcher = sceneSwitcher;
@@ -58,6 +69,7 @@ public class SellViewController {
         this.userLogged = userLogged;
     }
 
+    // FXML UI components
     @FXML
     private TextField tfSellProductCurrency, tfMinFilterAmount, tfMaxFilterAmount,
             tfAssignPriceProductPrice, tfSellProductAmount, tfFilterProductName, tfSellProductPrice,
@@ -82,6 +94,10 @@ public class SellViewController {
 
     private final ObservableList<SellDataTable> inventoryList = FXCollections.observableArrayList();
 
+    /**
+     * Initializes the controller after its root element has been completely processed.
+     * Sets up table columns, loads inventory, listeners, date picker, warehouse and currency menus.
+     */
     @FXML
     public void initialize() {
         txtClientName.setText(userLogged.getName());
@@ -96,6 +112,9 @@ public class SellViewController {
         });
     }
 
+    /**
+     * Clears all filter fields for the inventory table.
+     */
     @FXML
     public void cleanFilters(ActionEvent actionEvent) {
         tfFilterProductName.setText("");
@@ -106,6 +125,9 @@ public class SellViewController {
         tfMaxFilterPrice.setText(String.valueOf(0.00));
     }
 
+    /**
+     * Clears all input fields in the sell and assign price forms.
+     */
     @FXML
     public void cleanForm(ActionEvent actionEvent) {
         tfAssignPriceCurrency.clear();
@@ -118,6 +140,10 @@ public class SellViewController {
         dpSellProductDate.setValue(LocalDate.now());
     }
 
+    /**
+     * Handles the selling of a product.
+     * Validates input fields and updates inventory.
+     */
     @FXML
     public void sellProduct(ActionEvent actionEvent) {
         if (!validateAllSellFields()) {
@@ -138,12 +164,26 @@ public class SellViewController {
             inventory.setAmount(inventory.getAmount() - productAmount);
             inventoryService.save(inventory);
 
-            //TODO: IMPLEMENTAR la lógica de guardado en base de datos el registro de la venta
+            // TODO: Implement database logic for saving the sale record
+            SellRegistry sellRegistry = new SellRegistry(
+                    null, client, "Venta", LocalDateTime.now(), productName,
+                    currencyName, productSellPrice, date, warehouseName, productAmount
+            );
+            sellRegistryService.save(sellRegistry);
+
+            GeneralRegistry generalRegistry = new GeneralRegistry(
+                    null, client, "Ventas", "Venta", LocalDateTime.now()
+            );
+            generalRegistryService.save(generalRegistry);
         } catch (Exception e) {
             displayAlerts.showAlert("Ha ocurrido un error: " + e.getMessage());
         }
     }
 
+    /**
+     * Handles the assignment of a price to a product.
+     * Validates input fields and updates product price.
+     */
     @FXML
     public void assignProductPrice(ActionEvent actionEvent) {
         if (!validateAllAssignPriceFields()) {
@@ -166,6 +206,12 @@ public class SellViewController {
             product.setSellPrice(productPrice);
             product.setCurrency(currency);
             productService.save(product);
+
+            GeneralRegistry generalRegistry = new GeneralRegistry(
+                    null, client, "Ventas", "Asignación Precio", LocalDateTime.now()
+            );
+            generalRegistryService.save(generalRegistry);
+
             displayAlerts.showAlert("El precio del producto ha sido guardado satisfactoriamente");
             cleanForm(null);
         } catch (Exception e) {
@@ -173,6 +219,9 @@ public class SellViewController {
         }
     }
 
+    /**
+     * Validates all fields in the assign price form.
+     */
     private boolean validateAllAssignPriceFields() {
         return validateTfAssignProduct() && validateTfPriceAssign() && validateTfAssignCurrency();
     }
@@ -181,16 +230,17 @@ public class SellViewController {
     // VALIDATION METHODS FOR ASSIGN PRICE FORM
     // ============================
 
+    /**
+     * Validates the currency field in the assign price form.
+     */
     private boolean validateTfAssignCurrency() {
         String currencyName = tfAssignPriceCurrency.getText();
 
-        // Check if currency field is empty
         if (currencyName == null || currencyName.isEmpty()) {
             displayAlerts.showAlert("Debe seleccionar una moneda");
             return false;
         }
 
-        // Check if currency name contains only letters
         if (!currencyName.matches("[a-zA-Z]+")) {
             displayAlerts.showAlert("La moneda solo puede contener letras");
             return false;
@@ -199,16 +249,18 @@ public class SellViewController {
         return true;
     }
 
+    /**
+     * Validates the product field in the assign price form.
+     * Shows alerts in Spanish if validation fails.
+     */
     private boolean validateTfAssignProduct() {
         String productName = tfAssignPriceProductName.getText();
 
-        // Check if product field is empty
         if (productName == null || productName.isEmpty()) {
             displayAlerts.showAlert("Debe asignar un producto");
             return false;
         }
 
-        // Check if product exists for this client
         Product product = productService.getByProductNameAndClient(productName, client);
         if (product == null) {
             displayAlerts.showAlert("El producto no existe en la base de datos");
@@ -218,10 +270,13 @@ public class SellViewController {
         return true;
     }
 
+    /**
+     * Validates the price field in the assign price form.
+     * Shows alerts in Spanish if validation fails.
+     */
     private boolean validateTfPriceAssign() {
         String priceText = tfAssignPriceProductPrice.getText();
 
-        // Check if price field is empty
         if (priceText == null || priceText.isEmpty()) {
             displayAlerts.showAlert("El precio no debe estar vacío");
             return false;
@@ -230,13 +285,11 @@ public class SellViewController {
         try {
             double price = Double.parseDouble(priceText);
 
-            // Check if price is positive
             if (price <= 0) {
                 displayAlerts.showAlert("El precio debe ser mayor que 0");
                 return false;
             }
 
-            // Check if price has valid decimal format
             if (priceText.split("\\.")[1].length() > 2) {
                 displayAlerts.showAlert("El precio solo puede tener 2 lugar decimales");
                 return false;
@@ -249,7 +302,10 @@ public class SellViewController {
         }
     }
 
-
+    /**
+     * Validates all fields in the sell form.
+     * Shows alerts in Spanish if validation fails.
+     */
     private boolean validateAllSellFields() {
         return validateTfSellProduct() && validateTfSellAmount() && validateSellPrice() && validateSellCurrency() && validateDatePicker();
     }
@@ -258,16 +314,18 @@ public class SellViewController {
     // VALIDATION METHODS FOR SELL FORM
     // ============================
 
+    /**
+     * Validates the currency field in the sell form.
+     * Shows alerts in Spanish if validation fails.
+     */
     private boolean validateSellCurrency() {
         String currencyName = tfSellProductCurrency.getText();
 
-        // Check if currency field is empty
         if (currencyName == null || currencyName.isEmpty()) {
             displayAlerts.showAlert("Debe seleccionar una moneda");
             return false;
         }
 
-        // Check if currency exists in system
         if (!currencyService.existsByCurrencyName(currencyName)) {
             displayAlerts.showAlert("La moneda seleccionada no existe en la base de datos");
             return false;
@@ -276,10 +334,13 @@ public class SellViewController {
         return true;
     }
 
+    /**
+     * Validates the price field in the sell form.
+     * Shows alerts in Spanish if validation fails.
+     */
     private boolean validateSellPrice() {
         String priceText = tfSellProductPrice.getText();
 
-        // Check if price field is empty
         if (priceText == null || priceText.isEmpty()) {
             displayAlerts.showAlert("El precio no puede estar vacío");
             return false;
@@ -288,7 +349,6 @@ public class SellViewController {
         try {
             double price = Double.parseDouble(priceText);
 
-            // Check if price is positive
             if (price <= 0) {
                 displayAlerts.showAlert("El precio debe ser mayor que cero");
                 return false;
@@ -301,16 +361,18 @@ public class SellViewController {
         }
     }
 
+    /**
+     * Validates the date picker field in the sell form.
+     * Shows alerts in Spanish if validation fails.
+     */
     private boolean validateDatePicker() {
         LocalDate selectedDate = dpSellProductDate.getValue();
 
-        // Check if date is selected
         if (selectedDate == null) {
             displayAlerts.showAlert("Por favor selecciona una fecha válida");
             return false;
         }
 
-        // Check if date is not in the future
         if (selectedDate.isAfter(LocalDate.now())) {
             displayAlerts.showAlert("La fecha de venta no puede ser en el futuro");
             return false;
@@ -319,10 +381,13 @@ public class SellViewController {
         return true;
     }
 
+    /**
+     * Validates the amount field in the sell form.
+     * Shows alerts in Spanish if validation fails.
+     */
     private boolean validateTfSellAmount() {
         String amountText = tfSellProductAmount.getText();
 
-        // Check if amount field is empty
         if (amountText == null || amountText.isEmpty()) {
             displayAlerts.showAlert("La cantidad no pueda estar vacía");
             return false;
@@ -331,19 +396,16 @@ public class SellViewController {
         try {
             int amount = Integer.parseInt(amountText);
 
-            // Check if amount is positive
             if (amount <= 0) {
                 displayAlerts.showAlert("La cantidad debe ser mayor que cero");
                 return false;
             }
 
-            // Check if product and warehouse are valid before checking stock
             if (validateTfSellProduct() && !tfSellWarehouse.getText().isEmpty()) {
                 Product product = productService.getByProductNameAndClient(tfSellProductName.getText(), client);
                 Warehouse warehouse = warehouseService.getWarehouseByWarehouseNameAndClient(tfSellWarehouse.getText(), client);
                 Inventory inventory = inventoryService.getByProductAndWarehouseAndClient(product, warehouse, client);
 
-                // Check if there's enough stock
                 if (inventory.getAmount() < amount) {
                     displayAlerts.showAlert("No hay suficiente existencias disponibles");
                     return false;
@@ -357,37 +419,36 @@ public class SellViewController {
         }
     }
 
+    /**
+     * Validates the product and warehouse fields in the sell form.
+     * Shows alerts in Spanish if validation fails.
+     */
     private boolean validateTfSellProduct() {
         String productName = tfSellProductName.getText();
         String warehouseName = tfSellWarehouse.getText();
 
-        // Check if product field is empty
         if (productName == null || productName.isEmpty()) {
             displayAlerts.showAlert("Debe seleccionar un producto");
             return false;
         }
 
-        // Check if warehouse field is empty
         if (warehouseName == null || warehouseName.isEmpty()) {
             displayAlerts.showAlert("Debe seleccionar un almacén");
             return false;
         }
 
-        // Check if product exists for this client
         Product product = productService.getByProductNameAndClient(productName, client);
         if (product == null) {
             displayAlerts.showAlert("El producto no existe");
             return false;
         }
 
-        // Check if warehouse exists for this client
         Warehouse warehouse = warehouseService.getWarehouseByWarehouseNameAndClient(warehouseName, client);
         if (warehouse == null) {
             displayAlerts.showAlert("El almacén no existe");
             return false;
         }
 
-        // Check if product exists in the selected warehouse
         if (!inventoryService.existsByProductAndWarehouseAndClient(product, warehouse, client)) {
             displayAlerts.showAlert("El producto no está disponible en el almacén seleccionado");
             return false;
@@ -399,40 +460,62 @@ public class SellViewController {
     // ============================
     // NAVIGATION METHODS
     // ============================
+
+    /**
+     * Navigates to the configuration view.
+     */
     @FXML
     public void switchToConfiguration(ActionEvent actionEvent) {
         sceneSwitcher.switchView(actionEvent, "/configurationView.fxml");
     }
 
+    /**
+     * Navigates to the support view.
+     */
     @FXML
     public void switchToSupport(ActionEvent actionEvent) {
         sceneSwitcher.switchView(actionEvent, "/supportView.fxml");
     }
 
+    /**
+     * Navigates to the registry view.
+     */
     @FXML
     public void switchToRegistry(ActionEvent actionEvent) {
         sceneSwitcher.switchView(actionEvent, "/registryView.fxml");
     }
 
+    /**
+     * Navigates to the warehouse view.
+     */
     @FXML
     public void switchToWarehouse(ActionEvent actionEvent) {
         sceneSwitcher.switchView(actionEvent, "/warehouseView.fxml");
     }
 
+    /**
+     * Navigates to the investment view.
+     */
     @FXML
     public void switchToInvestment(ActionEvent actionEvent) {
         sceneSwitcher.switchView(actionEvent, "/investmentView.fxml");
     }
 
+    /**
+     * Navigates to the balance view.
+     */
     @FXML
     public void switchToBalance(ActionEvent actionEvent) {
         sceneSwitcher.switchView(actionEvent, "/balanceView.fxml");
     }
 
-
     // ============================
     // UTILITIES
     // ============================
+
+    /**
+     * Sets up the columns for the inventory table.
+     */
     private void setupTableColumns() {
         ttcWarehouse.setCellValueFactory(new TreeItemPropertyValueFactory<>("warehouseName"));
         ttcProductName.setCellValueFactory(new TreeItemPropertyValueFactory<>("productName"));
@@ -440,6 +523,9 @@ public class SellViewController {
         ttcProductAmount.setCellValueFactory(new TreeItemPropertyValueFactory<>("productAmount"));
     }
 
+    /**
+     * Loads inventory data and populates the product table.
+     */
     private void loadProductTable() {
         inventoryList.clear();
         List<Inventory> inventories = inventoryService.getAllInventories();
@@ -461,6 +547,9 @@ public class SellViewController {
         filterProductTable();
     }
 
+    /**
+     * Sets up listeners for filter fields to trigger table filtering.
+     */
     private void setupFilterListeners() {
         tfFilterProductName.textProperty().addListener((obs, oldVal, newVal) -> filterProductTable());
         tfFilterWarehouseName.textProperty().addListener((obs, oldVal, newVal) -> filterProductTable());
@@ -470,6 +559,9 @@ public class SellViewController {
         tfMaxFilterPrice.textProperty().addListener((obs, oldVal, newVal) -> filterProductTable());
     }
 
+    /**
+     * Filters the product table based on filter field values.
+     */
     private void filterProductTable() {
         String productName = tfFilterProductName.getText().trim().toLowerCase();
         String warehouseName = tfFilterWarehouseName.getText().trim().toLowerCase();
@@ -507,10 +599,16 @@ public class SellViewController {
         ttvInventory.setShowRoot(false);
     }
 
+    /**
+     * Initializes the date picker with the current date.
+     */
     private void initDatePicker() {
         dpSellProductDate.setValue(LocalDate.now());
     }
 
+    /**
+     * Initializes the warehouse menu with all warehouses for the current client.
+     */
     private void initMbWarehouse() {
         mbSellWarehouse.getItems().clear();
         List<Warehouse> warehouses = warehouseService.getWarehousesByClient(clientService.getClientByName(userLogged.getName()));
@@ -525,6 +623,9 @@ public class SellViewController {
         }
     }
 
+    /**
+     * Initializes the product menu for the selected warehouse.
+     */
     private void initMbSellProduct(Warehouse w) {
         if (w == null || w.getWarehouseName() == null) return;
 
@@ -547,11 +648,17 @@ public class SellViewController {
         }
     }
 
+    /**
+     * Initializes both currency menus for selling and assigning price.
+     */
     private void initAllMbCurrency() {
         initMbCurrency(mbSellCurrency, tfSellProductCurrency);
         initMbCurrency(mbAssignPriceCurrency, tfAssignPriceCurrency);
     }
 
+    /**
+     * Initializes a currency menu with all available currencies.
+     */
     private void initMbCurrency(MenuButton mb, TextField tf) {
         mb.getItems().clear();
         List<Currency> currencies = currencyService.getAllCurrencies();

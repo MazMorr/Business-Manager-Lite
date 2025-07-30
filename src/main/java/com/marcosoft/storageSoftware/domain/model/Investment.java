@@ -20,8 +20,8 @@ public class Investment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long investmentId;
 
-    @Column(name = "product_name", nullable = false)
-    private String productName;
+    @Column(name = "investment_name", nullable = false)
+    private String investmentName;
 
     @Column(name = "transaction_price", nullable = false)
     private Double investmentPrice;
@@ -43,7 +43,5 @@ public class Investment {
 
     @ManyToOne
     private Client client;
-
-
 
 }

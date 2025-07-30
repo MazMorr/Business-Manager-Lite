@@ -1,14 +1,8 @@
 package com.marcosoft.storageSoftware.application.controller;
 
 import com.marcosoft.storageSoftware.application.dto.UserLogged;
-import com.marcosoft.storageSoftware.domain.model.Client;
-import com.marcosoft.storageSoftware.domain.model.Inventory;
-import com.marcosoft.storageSoftware.domain.model.Product;
-import com.marcosoft.storageSoftware.domain.model.Warehouse;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceImpl;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.InventoryServiceImpl;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.ProductServiceImpl;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.WarehouseServiceImpl;
+import com.marcosoft.storageSoftware.domain.model.*;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.*;
 import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
 import com.marcosoft.storageSoftware.infrastructure.util.ParseDataTypes;
 import javafx.application.Platform;
@@ -21,14 +15,20 @@ import javafx.stage.Stage;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Controller for the product reassignment view.
+ * Handles logic for transferring products between warehouses.
+ */
 @Lazy
 @Controller
 public class ReassignProductViewController {
 
     private Client client;
 
+    // Service and utility dependencies
     private final InventoryServiceImpl inventoryService;
     private final ClientServiceImpl clientService;
     private final UserLogged userLogged;
@@ -36,10 +36,22 @@ public class ReassignProductViewController {
     private final DisplayAlerts displayAlerts;
     private final ProductServiceImpl productService;
     private final ParseDataTypes parseDataTypes;
+    private final GeneralRegistryServiceImpl generalRegistryService;
+    private final WarehouseRegistryServiceImpl warehouseRegistryService;
 
+    /**
+     * Constructor for dependency injection.
+     */
     @Lazy
-    public ReassignProductViewController(ParseDataTypes parseDataTypes, ProductServiceImpl productService, DisplayAlerts displayAlerts, WarehouseServiceImpl warehouseService, ClientServiceImpl clientService, UserLogged userLogged, InventoryServiceImpl inventoryService) {
+    public ReassignProductViewController(
+            GeneralRegistryServiceImpl generalRegistryService, WarehouseRegistryServiceImpl warehouseRegistryService,
+            ParseDataTypes parseDataTypes, ProductServiceImpl productService, DisplayAlerts displayAlerts,
+            WarehouseServiceImpl warehouseService, ClientServiceImpl clientService, UserLogged userLogged,
+            InventoryServiceImpl inventoryService
+    ) {
         this.inventoryService = inventoryService;
+        this.warehouseRegistryService = warehouseRegistryService;
+        this.generalRegistryService = generalRegistryService;
         this.parseDataTypes = parseDataTypes;
         this.productService = productService;
         this.displayAlerts = displayAlerts;
@@ -48,11 +60,16 @@ public class ReassignProductViewController {
         this.warehouseService = warehouseService;
     }
 
+    // FXML UI components
     @FXML
     private MenuButton mbWarehouse, mbWarehouseReceipt, mbProduct;
     @FXML
     private TextField tfAmount, tfProduct, tfWarehouseReceipt, tfWarehouseGives;
 
+    /**
+     * Initializes the controller after its root element has been completely processed.
+     * Loads client and initializes warehouse menus.
+     */
     @FXML
     public void initialize() {
         initClient();
@@ -62,16 +79,26 @@ public class ReassignProductViewController {
         });
     }
 
+    /**
+     * Loads the client based on the logged user.
+     */
     private void initClient() {
         client = clientService.getClientByName(userLogged.getName());
     }
 
+    /**
+     * Closes the current window.
+     */
     @FXML
     public void goOut(ActionEvent actionEvent) {
         Stage stage = (Stage) tfAmount.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * Handles the product reassignment between warehouses.
+     * Validates fields, updates inventories, and shows alerts in Spanish.
+     */
     @FXML
     public void reassignProduct(ActionEvent actionEvent) {
         if (!validateAllFields()) {
@@ -104,6 +131,19 @@ public class ReassignProductViewController {
                 Inventory newInv = new Inventory(null, product, client, warehouseReceives, amount);
                 inventoryService.save(newInv);
             }
+
+            LocalDateTime registryMoment = LocalDateTime.now();
+            String registryType = "Reasignación de Producto";
+            GeneralRegistry generalRegistry = new GeneralRegistry(
+                    null, client, "Almacenes", registryType, registryMoment
+            );
+            generalRegistryService.save(generalRegistry);
+
+            WarehouseRegistry warehouseRegistry = new WarehouseRegistry(
+                    null, registryType, registryMoment, warehouseGives, product, client, amount
+            );
+            warehouseRegistryService.save(warehouseRegistry);
+
             displayAlerts.showAlert("Se ha reasignado el producto satisfactoriamente");
             cleanFields();
         } catch (Exception e) {
@@ -111,6 +151,10 @@ public class ReassignProductViewController {
         }
     }
 
+    /**
+     * Assigns all available product amount from the origin warehouse to the destination.
+     * Shows alerts in Spanish if validation fails.
+     */
     @FXML
     public void assignAllProductAmount(ActionEvent actionEvent) {
         String productName = tfProduct.getText();
@@ -133,6 +177,9 @@ public class ReassignProductViewController {
     // UTILITIES
     // ============================
 
+    /**
+     * Clears all input fields in the form.
+     */
     private void cleanFields() {
         tfProduct.clear();
         tfWarehouseReceipt.clear();
@@ -140,10 +187,17 @@ public class ReassignProductViewController {
         tfAmount.clear();
     }
 
+    /**
+     * Validates all required fields before reassignment.
+     * Shows alerts in Spanish if validation fails.
+     */
     private boolean validateAllFields() {
         return validateTfWarehouseGives() && validateTfProduct() && validateTfAmount() && validateTfWarehouseReceipt();
     }
 
+    /**
+     * Validates the origin warehouse field.
+     */
     private boolean validateTfWarehouseGives() {
         String warehouseGivesName = tfWarehouseGives.getText();
         if (warehouseGivesName == null || warehouseGivesName.isEmpty()) {
@@ -160,6 +214,9 @@ public class ReassignProductViewController {
         return true;
     }
 
+    /**
+     * Validates the destination warehouse field.
+     */
     private boolean validateTfWarehouseReceipt() {
         String warehouseReceiptName = tfWarehouseReceipt.getText();
         if (warehouseReceiptName == null || warehouseReceiptName.isEmpty()) {
@@ -167,7 +224,7 @@ public class ReassignProductViewController {
             return false;
         }
 
-        // Validar que no sea el mismo almacén
+        // Validate that origin and destination warehouses are not the same
         if (warehouseReceiptName.equals(tfWarehouseGives.getText())) {
             displayAlerts.showAlert("El almacén de destino no puede ser el mismo que el de origen");
             return false;
@@ -182,6 +239,9 @@ public class ReassignProductViewController {
         return true;
     }
 
+    /**
+     * Validates the product field.
+     */
     private boolean validateTfProduct() {
         String productName = tfProduct.getText();
         if (productName == null || productName.isEmpty()) {
@@ -195,7 +255,7 @@ public class ReassignProductViewController {
             return false;
         }
 
-        // Validar que el producto exista en el almacén de origen
+        // Validate that the product exists in the origin warehouse
         Warehouse warehouseGives = warehouseService.getWarehouseByWarehouseNameAndClient(tfWarehouseGives.getText(), client);
         if (!inventoryService.existsByProductAndWarehouseAndClient(product, warehouseGives, client)) {
             displayAlerts.showAlert("El producto no existe en el almacén de origen");
@@ -205,6 +265,9 @@ public class ReassignProductViewController {
         return true;
     }
 
+    /**
+     * Validates the amount field.
+     */
     private boolean validateTfAmount() {
         String amountText = tfAmount.getText();
         if (amountText == null || amountText.isEmpty()) {
@@ -219,7 +282,7 @@ public class ReassignProductViewController {
                 return false;
             }
 
-            // Validar que haya suficiente stock en el almacén de origen
+            // Validate that there is enough stock in the origin warehouse
             if (validateTfProduct() && validateTfWarehouseGives()) {
                 Product product = productService.getByProductNameAndClient(tfProduct.getText(), client);
                 Warehouse warehouse = warehouseService.getWarehouseByWarehouseNameAndClient(tfWarehouseGives.getText(), client);
@@ -238,6 +301,10 @@ public class ReassignProductViewController {
         }
     }
 
+    /**
+     * Initializes the product menu for the selected warehouse.
+     * Populates the menu with available products.
+     */
     private void initMbProduct(Warehouse warehouse) {
         if (warehouse == null || warehouse.getWarehouseName() == null) return;
 
@@ -260,6 +327,10 @@ public class ReassignProductViewController {
         }
     }
 
+    /**
+     * Initializes the destination warehouse menu.
+     * Populates the menu with available warehouses except the origin.
+     */
     private void initMbWarehouseReceipt() {
         mbWarehouseReceipt.getItems().clear();
         mbWarehouse.getItems().clear();
@@ -277,6 +348,10 @@ public class ReassignProductViewController {
         }
     }
 
+    /**
+     * Initializes the origin warehouse menu.
+     * Populates the menu with available warehouses except the destination.
+     */
     private void initMbWarehouse() {
         mbWarehouse.getItems().clear();
         Client client = clientService.getClientByName(userLogged.getName());

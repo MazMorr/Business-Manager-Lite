@@ -5,16 +5,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class WarehouseRegistryDataTable {
+public class SellRegistryDataTable {
     private String registryType;
-    private LocalDateTime registryDateTime;
-    private String warehouseName;
+    private LocalDateTime registryDate;
     private String productName;
+    private String sellPriceAndCurrency;
+    private LocalDate sellDate;
+    private String warehouseName;
     private Integer amount;
 }

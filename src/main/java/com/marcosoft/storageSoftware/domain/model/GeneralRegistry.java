@@ -8,26 +8,27 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "Inventory_Registry")
-public class InventoryRegistry {
+@Entity
+public class GeneralRegistry {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @ManyToOne
-    private Inventory inventory;
-
-    @Column(name = "transaction_type")
-    private String transactionType;
-
-    @Column(name="date")
-    private LocalDateTime date;
-
-    @ManyToOne
     private Client client;
+
+    @Column(name = "zone")
+    private String affectedZone;
+
+    @Column(name = "registry_type")
+    private String registryType;
+
+    @Column(name = "registrydate_time")
+    private LocalDateTime registryDateTime;
+
 }

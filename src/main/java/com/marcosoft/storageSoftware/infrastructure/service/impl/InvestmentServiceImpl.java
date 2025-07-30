@@ -45,8 +45,13 @@ public class InvestmentServiceImpl implements InvestmentService {
     }
 
     @Override
+    public List<Investment> getAllInvestmentsByClientAndAmountGreaterThanZeroAndInvestmentType(Client client, String investmentType) {
+        return investmentRepository.findAllInvestmentsByClientAndAmountGreaterThanAndInvestmentType(client, 0, investmentType);
+    }
+
+    @Override
     public List<Investment> getAllInvestmentsByLeftAmountGreaterThanAndClient(Integer leftAmount, Client client) {
-        return (List<Investment>) investmentRepository.findByLeftAmountGreaterThanAndClient(leftAmount, client);
+        return investmentRepository.findByLeftAmountGreaterThanAndClient(leftAmount, client);
     }
 
     public List<Investment> getNonZeroInvestmentsByClient(Client client) {
