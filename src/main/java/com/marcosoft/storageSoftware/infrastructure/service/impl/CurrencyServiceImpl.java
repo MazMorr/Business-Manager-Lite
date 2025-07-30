@@ -15,7 +15,6 @@ public class CurrencyServiceImpl implements CurrencyService {
 
     CurrencyRepository currencyRepository;
 
-    @Lazy
     public CurrencyServiceImpl(CurrencyRepository currencyRepository){
         this.currencyRepository = currencyRepository;
     }

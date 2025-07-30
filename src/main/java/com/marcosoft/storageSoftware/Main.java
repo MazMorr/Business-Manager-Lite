@@ -23,6 +23,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.io.IOException;
+import java.util.Objects;
 
 @SpringBootApplication(exclude = {
         CacheAutoConfiguration.class,
@@ -51,7 +52,7 @@ public class Main extends Application {
     private static Scene scene;
 
     @Override
-    public void init() throws Exception {
+    public void init() {
         context = SpringApplication.run(Main.class);
         springFXMLLoader = context.getBean(SpringFXMLLoader.class);
     }
@@ -62,7 +63,7 @@ public class Main extends Application {
         Parent root = springFXMLLoader.load("/clientView.fxml");
         scene = new Scene(root);
         primaryStage.setScene(scene);
-        primaryStage.getIcons().add(new Image(getClass().getResource("/images/RTS_logo.png").toString()));
+        primaryStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResource("/images/RTS_logo.png")).toString()));
         primaryStage.setResizable(false);
         primaryStage.setTitle("Sistema de cuentas");
         primaryStage.centerOnScreen();
@@ -70,7 +71,7 @@ public class Main extends Application {
     }
 
     @Override
-    public void stop() throws Exception {
+    public void stop() {
         if (context != null && context.isActive()) {
             context.close();
         }
@@ -83,8 +84,7 @@ public class Main extends Application {
             primaryStage.sizeToScene();
             primaryStage.centerOnScreen();
         } catch (IOException e) {
-            System.err.println("Error al cargar la vista: " + fxml);
-            e.printStackTrace();
+            System.err.println("Error al cargar la vista: " + fxml +" Error: "+ e.getMessage());
         }
     }
 

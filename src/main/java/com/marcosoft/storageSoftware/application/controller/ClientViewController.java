@@ -21,23 +21,33 @@ import javafx.stage.Stage;
 import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Optional;
 
 import static javafx.scene.paint.Color.RED;
 
+/**
+ * Controller for the client login view.
+ * Handles authentication, navigation, and session management for clients.
+ */
 @Controller
 public class ClientViewController {
 
+    // Dependencies injected via constructor
     private final SpringFXMLLoader springFXMLLoader;
     private final ClientServiceImpl clientServiceImpl;
     private final UserLogged userLogged;
 
+    /**
+     * Constructor for dependency injection.
+     */
     public ClientViewController(UserLogged userLogged, ClientServiceImpl clientService, SpringFXMLLoader springFXMLLoader) {
         this.userLogged = userLogged;
         this.clientServiceImpl = clientService;
         this.springFXMLLoader = springFXMLLoader;
     }
 
+    // FXML UI components
     @FXML
     private TextField txtFieldName;
     @FXML
@@ -45,42 +55,47 @@ public class ClientViewController {
     @FXML
     private Label txtDebugForm;
 
+    /**
+     * Handles the login process when the user clicks the login button.
+     * Validates input, authenticates the user, and navigates to the support view if successful.
+     */
     @FXML
     private void enterApplication(ActionEvent event) {
         String username = txtFieldName.getText();
         String password = txtFieldPassword.getText();
 
+        // Validate input fields
         if (username == null || username.isBlank() || password == null || password.isBlank()) {
             showError("Por favor, ingrese usuario y contraseña.");
             return;
         }
 
+        // Authenticate user credentials
         if (clientServiceImpl.existsByClientNameAndClientPassword(username, password)) {
             try {
+                // Mark client as active in the database
                 clientServiceImpl.updateIsClientActiveByClientName(true, username);
                 userLogged.setName(username);
 
-                // Usar SpringFXMLLoader para cargar el archivo FXML
-                Parent root = (Parent) springFXMLLoader.load("/supportView.fxml");
+                // Load the support view using SpringFXMLLoader
+                Parent root = springFXMLLoader.load("/supportView.fxml");
 
-                // Obtener el controlador del archivo FXML cargado
+                // Get the controller for the support view and pass this controller as reference
                 SupportViewController primaryController = springFXMLLoader.getController(SupportViewController.class);
                 primaryController.setAccountController(this);
 
-                // Obtener la ventana actual
+                // Get the current window and prepare the new stage for support view
                 Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
-                // Crear una nueva ventana para la vista de soporte
                 Stage stage = new Stage();
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
-                stage.getIcons().add(new Image(getClass().getResource("/images/RTS_logo.png").toString()));
+                stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResource("/images/RTS_logo.png")).toString()));
                 stage.setTitle("Almacenamiento");
                 stage.centerOnScreen();
                 stage.setMinWidth(1100);
                 stage.setMinHeight(650);
 
-                // Manejar el cierre de la ventana
+                // Handle window close event to update client active status
                 stage.setOnCloseRequest(e -> {
                     if (showExitAlert()) {
                         clientServiceImpl.updateIsClientActiveByClientName(false, username);
@@ -90,24 +105,30 @@ public class ClientViewController {
                     }
                 });
 
-                // Mostrar la nueva ventana y cerrar la actual
+                // Show the new window and close the login window
                 stage.show();
                 currentStage.close();
 
             } catch (IOException e) {
-                showError("Ha ocurrido un error al cargar la aplicación.");
-                e.printStackTrace();
+                showError("Ha ocurrido un error al cargar la aplicación: "+ e.getMessage());
             }
         } else {
             showError("Usuario o contraseña incorrecta.");
         }
     }
 
+    /**
+     * Displays an error message in the debug label.
+     */
     private void showError(String message) {
         txtDebugForm.setText(message);
         txtDebugForm.setTextFill(RED);
     }
 
+    /**
+     * Shows a confirmation dialog when the user attempts to exit the application.
+     * @return true if the user confirms exit, false otherwise.
+     */
     private boolean showExitAlert() {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Confirmación");
@@ -118,22 +139,33 @@ public class ClientViewController {
         return result.isPresent() && result.get() == ButtonType.OK;
     }
 
+    /**
+     * Navigates to the create client view.
+     * Clears input fields before switching view.
+     */
     @FXML
     private void switchToCreateClient() {
         clearFields();
         Main.setRoot("createClientView");
     }
 
+    /**
+     * Clears all input fields and debug messages.
+     */
     private void clearFields() {
         txtFieldName.clear();
         txtFieldPassword.clear();
         txtDebugForm.setText("");
     }
 
+    /**
+     * Initializes the controller after its root element has been completely processed.
+     * Closes any previous active session and clears fields.
+     */
     @FXML
     public void initialize() {
         Platform.runLater(() -> {
-            // Cierra cualquier sesión activa previa
+            // Close any previous active client session
             if (clientServiceImpl.existsByIsClientActive(true)) {
                 clientServiceImpl.updateIsClientActiveByClientName(false,
                         clientServiceImpl.getByIsClientActive(true).getClientName());

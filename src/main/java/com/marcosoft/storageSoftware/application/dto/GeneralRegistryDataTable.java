@@ -11,10 +11,8 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class WarehouseRegistryDataTable {
+public class GeneralRegistryDataTable {
+    private String affectedZone;
     private String registryType;
     private LocalDateTime registryDateTime;
-    private String warehouseName;
-    private String productName;
-    private Integer amount;
 }

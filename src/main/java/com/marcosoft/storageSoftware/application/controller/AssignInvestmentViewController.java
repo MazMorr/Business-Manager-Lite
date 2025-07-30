@@ -1,16 +1,8 @@
 package com.marcosoft.storageSoftware.application.controller;
 
 import com.marcosoft.storageSoftware.application.dto.UserLogged;
-import com.marcosoft.storageSoftware.domain.model.Client;
-import com.marcosoft.storageSoftware.domain.model.Inventory;
-import com.marcosoft.storageSoftware.domain.model.Investment;
-import com.marcosoft.storageSoftware.domain.model.Product;
-import com.marcosoft.storageSoftware.domain.model.Warehouse;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceImpl;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.InventoryServiceImpl;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.InvestmentServiceImpl;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.ProductServiceImpl;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.WarehouseServiceImpl;
+import com.marcosoft.storageSoftware.domain.model.*;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.*;
 import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
 import com.marcosoft.storageSoftware.infrastructure.util.ParseDataTypes;
 import javafx.application.Platform;
@@ -23,12 +15,19 @@ import javafx.stage.Stage;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Controller for the assign investment view.
+ * Handles logic for assigning investments to warehouses and products.
+ */
 @Lazy
 @Controller
 public class AssignInvestmentViewController {
+    private Client client;
 
+    // Service and utility dependencies
     private final InventoryServiceImpl inventoryService;
     private final UserLogged userLogged;
     private final ClientServiceImpl clientService;
@@ -37,10 +36,22 @@ public class AssignInvestmentViewController {
     private final ProductServiceImpl productService;
     private final DisplayAlerts displayAlerts;
     private final ParseDataTypes parseDataTypes;
+    private final GeneralRegistryServiceImpl generalRegistryService;
+    private final WarehouseRegistryServiceImpl warehouseRegistryService;
 
+    /**
+     * Constructor for dependency injection.
+     */
     @Lazy
-    public AssignInvestmentViewController(ParseDataTypes parseDataTypes, DisplayAlerts displayAlerts, InventoryServiceImpl inventoryService, UserLogged userLogged, WarehouseServiceImpl warehouseService, ClientServiceImpl clientService, InvestmentServiceImpl investmentService, ProductServiceImpl productService) {
+    public AssignInvestmentViewController(
+            GeneralRegistryServiceImpl generalRegistryService, ParseDataTypes parseDataTypes, DisplayAlerts displayAlerts,
+            InventoryServiceImpl inventoryService, UserLogged userLogged, WarehouseServiceImpl warehouseService,
+            ClientServiceImpl clientService, InvestmentServiceImpl investmentService, ProductServiceImpl productService,
+            WarehouseRegistryServiceImpl warehouseRegistryService
+    ) {
         this.productService = productService;
+        this.warehouseRegistryService = warehouseRegistryService;
+        this.generalRegistryService = generalRegistryService;
         this.displayAlerts = displayAlerts;
         this.inventoryService = inventoryService;
         this.userLogged = userLogged;
@@ -50,19 +61,29 @@ public class AssignInvestmentViewController {
         this.parseDataTypes = parseDataTypes;
     }
 
+    // FXML UI components
     @FXML
     private MenuButton mbWarehouse, mbInvestment;
     @FXML
     private TextField tfWarehouse, tfProduct, tfInvestment, tfAmount;
 
+    /**
+     * Initializes the controller after its root element has been completely processed.
+     * Loads warehouse and investment menus.
+     */
     @FXML
     public void initialize() {
+        client = clientService.getClientByName(userLogged.getName());
         Platform.runLater(() -> {
             initMbWarehouse();
             initMbInvestment();
         });
     }
 
+    /**
+     * Assigns all available product amount from the selected investment.
+     * Shows alerts in Spanish if validation fails.
+     */
     @FXML
     public void assignAllProductAmount(ActionEvent actionEvent) {
         if (tfInvestment.getText().isEmpty()) {
@@ -78,12 +99,19 @@ public class AssignInvestmentViewController {
         }
     }
 
+    /**
+     * Closes the assign investment window.
+     */
     @FXML
     public void goOut(ActionEvent actionEvent) {
         Stage stage = (Stage) tfAmount.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * Handles the assignment of a product from an investment to a warehouse.
+     * Validates fields, updates inventory and investment, and shows alerts in Spanish.
+     */
     @FXML
     public void assignProduct(ActionEvent actionEvent) {
         try {
@@ -107,7 +135,6 @@ public class AssignInvestmentViewController {
                 displayAlerts.showAlert("No se encuentra el Almacén especificado");
             } else {
 
-                Client client = clientService.getClientByName(userLogged.getName());
                 Product product = productService.getByProductNameAndClient(
                         tfProduct.getText(),
                         client
@@ -124,10 +151,24 @@ public class AssignInvestmentViewController {
                         warehouse,
                         amountToAssign
                 );
-
                 inventoryService.save(inventory);
-                int actualInvestmentAmount = investmentService.getInvestmentById(investmentId).getAmount() - amountToAssign;
-                investmentService.getInvestmentById(investmentId).setAmount(actualInvestmentAmount);
+
+                int actualInvestmentAmount = investment.getAmount() - amountToAssign;
+                investment.setAmount(actualInvestmentAmount);
+                investmentService.save(investment);
+
+
+                LocalDateTime registryMoment = LocalDateTime.now();
+                GeneralRegistry generalRegistry = new GeneralRegistry(
+                        null, client, "Almacenes", "Asignación de Productos", registryMoment
+                );
+                generalRegistryService.save(generalRegistry);
+
+                WarehouseRegistry warehouseRegistry = new WarehouseRegistry(
+                        null, "Asignación", registryMoment, warehouse, product, client, amountToAssign
+                );
+                warehouseRegistryService.save(warehouseRegistry);
+
                 displayAlerts.showAlert("Producto asignado exitosamente");
             }
         } catch (NumberFormatException e) {
@@ -140,6 +181,10 @@ public class AssignInvestmentViewController {
     // ============================
     // UTILITIES
     // ============================
+
+    /**
+     * Checks if the warehouse exists for the current client.
+     */
     private boolean warehouseExistsForClient() {
         Client client = clientService.getClientByName(userLogged.getName());
         return warehouseService.existsByWarehouseNameAndClient(
@@ -148,6 +193,9 @@ public class AssignInvestmentViewController {
         );
     }
 
+    /**
+     * Initializes the investment menu with investments that have remaining amount.
+     */
     private void initMbInvestment() {
         mbInvestment.getItems().clear();
         List<Investment> investments = investmentService.getNonZeroInvestmentsByClient(clientService.getClientByName(userLogged.getName()));
@@ -156,12 +204,15 @@ public class AssignInvestmentViewController {
             MenuItem item = new MenuItem(String.valueOf(i.getInvestmentId()));
             item.setOnAction(e -> {
                 tfInvestment.setText(item.getText());
-                tfProduct.setText(i.getProductName());
+                tfProduct.setText(i.getInvestmentName());
             });
             mbInvestment.getItems().add(item);
         }
     }
 
+    /**
+     * Initializes the warehouse menu with all warehouses for the current client.
+     */
     private void initMbWarehouse() {
         mbWarehouse.getItems().clear();
         List<Warehouse> warehouses = warehouseService.getWarehousesByClient(clientService.getClientByName(userLogged.getName()));

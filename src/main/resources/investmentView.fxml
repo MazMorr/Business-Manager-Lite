@@ -6,6 +6,7 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Pagination?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -172,10 +173,10 @@
             <TableView fx:id="tblInvestment" editable="true" layoutX="159.0" layoutY="115.0" onMouseClicked="#selectInventory" prefHeight="445.0" prefWidth="550.0" styleClass="table" stylesheets="@Styles.css" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="310.0" AnchorPane.topAnchor="230.0">
                <columns>
                   <TableColumn fx:id="idColumn" prefWidth="41.0" text="ID" />
-                  <TableColumn fx:id="nameColumn" prefWidth="129.0" sortable="false" text="Nombre" />
+                  <TableColumn fx:id="nameColumn" prefWidth="129.0" sortable="false" text="Nombre Inversión" />
                   <TableColumn fx:id="amountColumn" prefWidth="75.0" sortable="false" text="Cantidad" />
-                  <TableColumn fx:id="priceColumn" prefWidth="76.0" sortable="false" text="Precio" />
-                  <TableColumn fx:id="currencyColumn" prefWidth="45.0" text="\$" />
+                  <TableColumn fx:id="priceColumn" prefWidth="89.0" sortable="false" text="Precio" />
+                  <TableColumn fx:id="currencyColumn" prefWidth="81.0" text="Moneda" />
                   <TableColumn fx:id="dateColumn" prefWidth="75.0" text="Fecha" />
                </columns>
                <columnResizePolicy>
@@ -242,10 +243,10 @@
                         </HBox>
                         <HBox alignment="CENTER_RIGHT" prefWidth="200.0">
                            <children>
-                              <Label text="Nombre" />
-                              <TextField fx:id="txtFilterName" prefHeight="25.0" prefWidth="172.0" styleClass="inputForm" stylesheets="@Styles.css">
+                              <Label text="Inversión" />
+                              <TextField fx:id="tfFilterName" prefHeight="25.0" prefWidth="172.0" styleClass="inputForm" stylesheets="@Styles.css">
                                  <HBox.margin>
-                                    <Insets left="30.0" />
+                                    <Insets left="25.0" />
                                  </HBox.margin>
                               </TextField>
                            </children>
@@ -261,7 +262,7 @@
                                     <Insets left="20.0" />
                                  </HBox.margin>
                               </Label>
-                              <TextField fx:id="txtMinFilterPrice" prefWidth="70.0" text="0.00">
+                              <TextField fx:id="tfMinFilterPrice" prefWidth="70.0" text="0.00">
                                  <HBox.margin>
                                     <Insets left="2.0" />
                                  </HBox.margin></TextField>
@@ -270,7 +271,7 @@
                                     <Insets left="6.0" />
                                  </HBox.margin>
                               </Label>
-                              <TextField fx:id="txtMaxFilterPrice" prefWidth="70.0" text="0.00">
+                              <TextField fx:id="tfMaxFilterPrice" prefWidth="70.0" text="0.00">
                                  <HBox.margin>
                                     <Insets left="2.0" />
                                  </HBox.margin></TextField>
@@ -291,7 +292,7 @@
                         <HBox alignment="CENTER_LEFT" prefWidth="200.0">
                            <children>
                               <Label text="ID" />
-                              <TextField fx:id="txtFilterId" prefWidth="172.0">
+                              <TextField fx:id="tfFilterId" prefWidth="172.0">
                                  <HBox.margin>
                                     <Insets left="85.0" />
                                  </HBox.margin>
@@ -306,7 +307,7 @@
                                     <Insets left="20.0" />
                                  </HBox.margin>
                               </Label>
-                              <TextField fx:id="txtMinFilterAmount" prefWidth="70.0" text="0">
+                              <TextField fx:id="tfMinFilterAmount" prefWidth="70.0" text="0">
                                  <HBox.margin>
                                     <Insets left="2.0" />
                                  </HBox.margin></TextField>
@@ -315,7 +316,7 @@
                                     <Insets left="6.0" />
                                  </HBox.margin>
                               </Label>
-                              <TextField fx:id="txtMaxFilterAmount" prefWidth="70.0" text="0">
+                              <TextField fx:id="tfMaxFilterAmount" prefWidth="70.0" text="0">
                                  <HBox.margin>
                                     <Insets left="2.0" />
                                  </HBox.margin></TextField>
@@ -328,7 +329,7 @@
                   </VBox>
                </children>
             </AnchorPane>
-            <Label fx:id="txtClientName" contentDisplay="TOP" layoutX="70.0" layoutY="178.0" prefHeight="69.0" prefWidth="172.0" styleClass="clientName" stylesheets="@Styles.css" text="Marco A. Romeros" textFill="#eeeeee" wrapText="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="5.0">
+            <Label fx:id="lblClientName" contentDisplay="TOP" layoutX="70.0" layoutY="178.0" prefHeight="69.0" prefWidth="172.0" styleClass="clientName" stylesheets="@Styles.css" text="Marco A. Romeros" textFill="#eeeeee" wrapText="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="5.0">
                <font>
                   <Font name="SansSerif Regular" size="14.0" />
                </font>
@@ -353,25 +354,25 @@
                                           <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="95.0">
                                              <children>
                                                 <Label text="ID" />
-                                                <TextField fx:id="txtId" alignment="CENTER" disable="true" opacity="0.7" prefHeight="25.0" prefWidth="150.0" promptText="Autogenerado" styleClass="inputForm" stylesheets="@Styles.css" />
+                                                <TextField fx:id="tfId" alignment="CENTER" disable="true" opacity="0.7" prefHeight="25.0" prefWidth="150.0" promptText="Autogenerado" styleClass="inputForm" stylesheets="@Styles.css" />
                                              </children>
                                           </HBox>
-                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="55.0">
+                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="49.0">
                                              <children>
-                                                <Label text="Nombre" />
-                                                <TextField fx:id="txtAddProductName" prefHeight="25.0" prefWidth="150.0" styleClass="inputForm" stylesheets="@Styles.css" />
+                                                <Label text="Inversión" />
+                                                <TextField fx:id="tfAddProductName" prefHeight="25.0" prefWidth="150.0" styleClass="inputForm" stylesheets="@Styles.css" />
                                              </children>
                                           </HBox>
                                           <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="50.0">
                                              <children>
                                                 <Label text="Cantidad" />
-                                                <TextField fx:id="txtAddProductAmount" prefHeight="25.0" prefWidth="150.0" styleClass="inputForm" stylesheets="@Styles.css" text="0" />
+                                                <TextField fx:id="tfAddProductAmount" prefHeight="25.0" prefWidth="150.0" styleClass="inputForm" stylesheets="@Styles.css" text="0" />
                                              </children>
                                           </HBox>
                                           <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="13.0">
                                              <children>
                                                 <Label text="Precio Compra" />
-                                                <TextField fx:id="txtAddInvestmentPrice" prefHeight="34.0" prefWidth="150.0" styleClass="inputForm" stylesheets="@Styles.css" text="0.00">
+                                                <TextField fx:id="tfAddInvestmentPrice" prefHeight="34.0" prefWidth="150.0" styleClass="inputForm" stylesheets="@Styles.css" text="0.00">
                                                    <tooltip>
                                                       <Tooltip text="Precio al que deseas vender cada unidad del producto  (en la zona de ventas este precio puede ser cambiado)" wrapText="true">
                                                          <font>
@@ -387,7 +388,7 @@
                                                 <Label text="Moneda" />
                                                 <MenuButton fx:id="mbCurrency" mnemonicParsing="false" prefWidth="150.0" styleClass="progressBar" stylesheets="@Styles.css" textFill="WHITE">
                                                    <graphic>
-                                                      <TextField fx:id="txtAddInvestmentCurrency" prefHeight="34.0" prefWidth="10.0" styleClass="inputForm" stylesheets="@Styles.css">
+                                                      <TextField fx:id="tfAddInvestmentCurrency" prefHeight="34.0" prefWidth="10.0" styleClass="inputForm" stylesheets="@Styles.css">
                                                          <tooltip>
                                                             <Tooltip text="Precio al que deseas vender cada unidad del producto  (en la zona de ventas este precio puede ser cambiado)" wrapText="true">
                                                                <font>
@@ -409,7 +410,7 @@
                                           <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="72.0">
                                              <children>
                                                 <Label text="Fecha" />
-                                                <DatePicker fx:id="txtAddInvestmentDate" editable="false" prefWidth="150.0" />
+                                                <DatePicker fx:id="dpAddInvestmentDate" editable="false" prefWidth="150.0" />
                                              </children>
                                           </HBox>
                                           <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="15.0">
@@ -417,7 +418,7 @@
                                                 <Label text="Tipo Inversión" />
                                                 <MenuButton fx:id="mbInvestmentType" mnemonicParsing="false" prefWidth="150.0" styleClass="progressBar" stylesheets="@Styles.css" textFill="WHITE">
                                                    <graphic>
-                                                      <TextField fx:id="txtAddInvestmentType" alignment="CENTER" disable="true" opacity="0.99" prefHeight="34.0" prefWidth="10.0" promptText="Seleccionar" styleClass="inputForm" stylesheets="@Styles.css">
+                                                      <TextField fx:id="tfAddInvestmentType" alignment="CENTER" disable="true" opacity="0.99" prefHeight="34.0" prefWidth="10.0" promptText="Seleccionar" styleClass="inputForm" stylesheets="@Styles.css">
                                                          <tooltip>
                                                             <Tooltip text="Precio al que deseas vender cada unidad del producto  (en la zona de ventas este precio puede ser cambiado)" wrapText="true">
                                                                <font>
@@ -433,6 +434,11 @@
                                                    <cursor>
                                                       <Cursor fx:constant="DEFAULT" />
                                                    </cursor>
+                                                   <items>
+                                                      <MenuItem mnemonicParsing="false" onAction="#setInvestmentBill" text="Factura" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#setInvestmentTypeToProduct" text="Producto" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#setInvestmentTypeToService" text="Servicio" />
+                                                   </items>
                                                 </MenuButton>
                                              </children>
                                           </HBox>
@@ -462,7 +468,7 @@
                                                 <Insets top="5.0" />
                                              </VBox.margin>
                                           </Button>
-                                          <Label fx:id="txtAddDebugForm" alignment="TOP_LEFT" prefHeight="118.0" prefWidth="260.0" text="Puede actualizar las transacciones existentes si el ID coincide, para ello debe pinchar el elemento en la tabla" textAlignment="CENTER" wrapText="true">
+                                          <Label fx:id="lblAddDebugForm" alignment="TOP_LEFT" prefHeight="118.0" prefWidth="260.0" text="Puede actualizar las inversiones existentes si el ID coincide, para ello debe pinchar el elemento en la tabla y cambiar los valores que desee" textAlignment="CENTER" wrapText="true">
                                              <padding>
                                                 <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                              </padding>
@@ -491,7 +497,7 @@
                                           </ImageView>
                                        </graphic>
                                     </Button>
-                                    <Button layoutX="42.0" layoutY="483.0" mnemonicParsing="false" onAction="#removeProduct" prefHeight="30.0" prefWidth="281.0" style="-fx-background-color: linear-gradient(to bottom, #eb5050, #ec3030);" styleClass="btnDelete" stylesheets="@Styles.css" text="Eliminar Registro" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                                    <Button layoutX="42.0" layoutY="483.0" mnemonicParsing="false" onAction="#removeInvestment" prefHeight="30.0" prefWidth="281.0" style="-fx-background-color: linear-gradient(to bottom, #eb5050, #ec3030);" styleClass="btnDelete" stylesheets="@Styles.css" text="Eliminar Inversión" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
                                        <graphic>
                                           <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                              <image>

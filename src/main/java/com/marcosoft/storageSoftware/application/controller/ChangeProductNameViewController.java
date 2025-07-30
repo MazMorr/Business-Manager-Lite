@@ -2,8 +2,10 @@ package com.marcosoft.storageSoftware.application.controller;
 
 import com.marcosoft.storageSoftware.application.dto.UserLogged;
 import com.marcosoft.storageSoftware.domain.model.Client;
+import com.marcosoft.storageSoftware.domain.model.GeneralRegistry;
 import com.marcosoft.storageSoftware.domain.model.Product;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.GeneralRegistryServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.ProductServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
 import javafx.application.Platform;
@@ -16,37 +18,57 @@ import javafx.stage.Stage;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Controller for the change product name view.
+ * Handles logic for updating the name of a product for the current client.
+ */
 @Lazy
 @Controller
 public class ChangeProductNameViewController {
     private Client client;
 
+    // Service and utility dependencies
     private final UserLogged userLogged;
     private final ClientServiceImpl clientService;
     private final ProductServiceImpl productService;
     private final DisplayAlerts displayAlerts;
+    private final GeneralRegistryServiceImpl generalRegistryService;
 
+    /**
+     * Constructor for dependency injection.
+     */
     @Lazy
-    public ChangeProductNameViewController(DisplayAlerts displayAlerts, UserLogged userLogged, ClientServiceImpl clientService, ProductServiceImpl productService) {
+    public ChangeProductNameViewController(GeneralRegistryServiceImpl generalRegistryService, DisplayAlerts displayAlerts, UserLogged userLogged, ClientServiceImpl clientService, ProductServiceImpl productService) {
         this.productService = productService;
+        this.generalRegistryService = generalRegistryService;
         this.displayAlerts = displayAlerts;
         this.clientService = clientService;
         this.userLogged = userLogged;
     }
 
+    // FXML UI components
     @FXML
     private TextField tfActualName, tfNewName;
     @FXML
     private MenuButton mbActualName;
 
+    /**
+     * Initializes the controller after its root element has been completely processed.
+     * Loads client and initializes product menu.
+     */
     @FXML
     private void initialize() {
         client = clientService.getClientByName(userLogged.getName());
         Platform.runLater(this::initMbActualName);
     }
 
+    /**
+     * Handles the update of a product name when the user clicks the update button.
+     * Validates input and shows alerts in Spanish if validation fails.
+     */
     @FXML
     public void updateProductName(ActionEvent actionEvent) {
         if (!validateAllFields()) {
@@ -59,12 +81,27 @@ public class ChangeProductNameViewController {
             Product product = productService.getByProductNameAndClient(productName, client);
             product.setProductName(newName);
             productService.save(product);
+
+            GeneralRegistry generalRegistry = new GeneralRegistry(
+                    null, client,"Almacenes", "Cambio Nombre Producto", LocalDateTime.now()
+            );
+            generalRegistryService.save(generalRegistry);
+
+            displayAlerts.showAlert("El nuevo nombre ha sido correctamente asignado");
+            clearFields();
         } catch (Exception e) {
             displayAlerts.showAlert("Ha ocurrido un error: " + e.getMessage());
         }
-
     }
 
+    private void clearFields() {
+        tfNewName.clear();
+        tfActualName.clear();
+    }
+
+    /**
+     * Closes the change product name window.
+     */
     @FXML
     public void goOut(ActionEvent actionEvent) {
         Stage stage = (Stage) tfActualName.getScene().getWindow();
@@ -74,10 +111,18 @@ public class ChangeProductNameViewController {
     // ============================
     // UTILITIES
     // ============================
+
+    /**
+     * Validates all required fields before updating the product name.
+     * Shows alerts in Spanish if validation fails.
+     */
     private boolean validateAllFields() {
         return validateTfActualName() && validateTfNewName();
     }
 
+    /**
+     * Validates the new product name field.
+     */
     private boolean validateTfNewName() {
         String newProductName = tfNewName.getText();
         if (newProductName == null || newProductName.isEmpty()) {
@@ -93,6 +138,9 @@ public class ChangeProductNameViewController {
         return true;
     }
 
+    /**
+     * Validates the actual product name field.
+     */
     private boolean validateTfActualName() {
         String actualProductName = tfActualName.getText();
         if (actualProductName == null || actualProductName.isEmpty()) {
@@ -109,14 +157,15 @@ public class ChangeProductNameViewController {
         return true;
     }
 
+    /**
+     * Initializes the product menu with all products for the current client.
+     */
     private void initMbActualName() {
         mbActualName.getItems().clear();
         List<Product> products = productService.getAllProductsByClient(client);
         for (Product p : products) {
             MenuItem item = new MenuItem(p.getProductName());
-            item.setOnAction(e -> {
-                tfActualName.getText();
-            });
+            item.setOnAction(e -> tfActualName.setText(item.getText()));
             mbActualName.getItems().add(item);
         }
     }

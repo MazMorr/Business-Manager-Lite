@@ -16,5 +16,7 @@ public interface InvestmentService {
 
     boolean existsByInvestmentId(Long investmentId);
 
+    List<Investment> getAllInvestmentsByClientAndAmountGreaterThanZeroAndInvestmentType(Client client, String investmentType);
+
     List<Investment> getAllInvestmentsByLeftAmountGreaterThanAndClient(Integer leftAmount, Client client);
 }

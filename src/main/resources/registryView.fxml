@@ -5,6 +5,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.effect.InnerShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -20,37 +22,81 @@
       <AnchorPane>
          <children>
             <HBox layoutX="125.0" layoutY="510.0" prefHeight="40.0" prefWidth="171.0" AnchorPane.leftAnchor="125.0" />
-            <TabPane layoutX="302.0" layoutY="80.0" prefHeight="496.0" prefWidth="652.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="90.0">
+            <TabPane fx:id="tbpRegistry" layoutX="302.0" layoutY="80.0" prefHeight="496.0" prefWidth="652.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="90.0">
               <tabs>
-                <Tab text="General">
+                <Tab fx:id="tabGeneral" text="General">
                   <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <TableView fx:id="tvGeneralRegistry" layoutX="12.0" layoutY="16.0" prefHeight="476.0" prefWidth="817.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                                <columns>
+                                  <TableColumn fx:id="tcGeneralRegistryZone" prefWidth="75.0" text="Zona Afectada" />
+                                  <TableColumn fx:id="tcGeneralRegistryType" prefWidth="75.0" text="Tipo Registro" />
+                                    <TableColumn fx:id="tcGeneralRegistryDateTime" prefWidth="75.0" text="Fecha Registro" />
+                                </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
+                              </TableView>
+                           </children></AnchorPane>
                   </content>
                 </Tab>
-                <Tab text="Inversiones">
+                <Tab fx:id="tabInvestment" text="Inversiones">
                   <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <TableView fx:id="tvInvestment" layoutX="237.0" layoutY="95.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                                <columns>
+                                  <TableColumn fx:id="tcInvestmentRegistryType" prefWidth="108.0" text="Tipo Registro" />
+                                    <TableColumn fx:id="tcInvestmentRegistryDateTime" prefWidth="122.0" text="Fecha Registro" />
+                                    <TableColumn fx:id="tcIdInvestment" prefWidth="102.0" text="Id Inversión" />
+                                  <TableColumn fx:id="tcInvestmentName" prefWidth="148.0" text="Nombre Inversión" />
+                                    <TableColumn fx:id="tcInvestmentPriceCurrency" prefWidth="129.0" text="Precio Compra" />
+                                </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
+                              </TableView>
+                           </children></AnchorPane>
                   </content>
                 </Tab>
-                  <Tab text="Ventas">
-                    <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                    </content>
-                  </Tab>
-                  <Tab text="Almacenes">
-                    <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                    </content>
-                  </Tab>
-                  <Tab text="Servicios">
+                  <Tab fx:id="tabSell" text="Ventas">
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <Label layoutX="281.0" layoutY="161.0" text="Próximamente" AnchorPane.bottomAnchor="235.0" AnchorPane.leftAnchor="330.0" AnchorPane.rightAnchor="330.0" AnchorPane.topAnchor="235.0">
-                                 <font>
-                                    <Font name="System Bold" size="24.0" />
-                                 </font>
-                              </Label>
+                              <TableView fx:id="tvSell" layoutX="284.0" layoutY="120.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                                <columns>
+                                  <TableColumn fx:id="tcSellRegistryType" prefWidth="105.0" text="Tipo Registro" />
+                                    <TableColumn fx:id="tcSellRegistryDateTime" prefWidth="115.0" text="Fecha Registro" />
+                                  <TableColumn fx:id="tcSellProductName" prefWidth="144.0" text="Nombre Producto" />
+                                    <TableColumn fx:id="tcSellPriceCurrency" prefWidth="113.0" text="Precio Venta" />
+                                    <TableColumn fx:id="tcSellDate" prefWidth="93.0" text="Fecha Venta" />
+                                    <TableColumn fx:id="tcSellWarehouse" prefWidth="75.0" text="Almacén" />
+                                    <TableColumn fx:id="tcSellAmount" prefWidth="88.0" text="Cantidad" />
+                                </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
+                              </TableView>
+                           </children></AnchorPane>
+                    </content>
+                  </Tab>
+                  <Tab fx:id="tabWarehouse" text="Almacenes">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <TableView fx:id="tvWarehouse" layoutX="217.0" layoutY="89.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                                <columns>
+                                  <TableColumn fx:id="tcWarehouseRegistryType" prefWidth="75.0" text="Tipo Registro" />
+                                    <TableColumn fx:id="tcWarehouseDateTime" prefWidth="75.0" text="Fecha Registro" />
+                                  <TableColumn fx:id="tcWarehouseName" prefWidth="75.0" text="Almacén" />
+                                    <TableColumn fx:id="tcWarehouseProduct" prefWidth="75.0" text="Producto" />
+                                    <TableColumn fx:id="tcWarehouseAmount" prefWidth="75.0" text="Cantidad" />
+                                </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
+                              </TableView>
                            </children></AnchorPane>
                     </content>
                   </Tab>

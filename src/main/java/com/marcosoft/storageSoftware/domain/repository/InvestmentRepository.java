@@ -11,4 +11,6 @@ public interface InvestmentRepository extends CrudRepository<Investment, Long> {
     boolean existsByInvestmentId(Long investmentId);
 
     List<Investment> findByLeftAmountGreaterThanAndClient(Integer leftAmount, Client client);
+
+    List<Investment> findAllInvestmentsByClientAndAmountGreaterThanAndInvestmentType(Client client, Integer amount, String investmentType);
 }

@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.chart.CategoryAxis?>
-<?import javafx.scene.chart.LineChart?>
-<?import javafx.scene.chart.NumberAxis?>
-<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.effect.InnerShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -185,19 +183,13 @@
                   </ImageView>
                </graphic>
             </Label>
-            <HBox layoutX="458.0" layoutY="214.0" prefHeight="379.0" prefWidth="930.0" spacing="20.0" styleClass="crudOperations" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="10.0">
-               <children>
-                  <LineChart prefHeight="334.0" prefWidth="1000.0">
-                    <xAxis>
-                      <CategoryAxis side="BOTTOM" />
-                    </xAxis>
-                    <yAxis>
-                      <NumberAxis side="LEFT" />
-                    </yAxis>
-                  </LineChart>
-                  <PieChart prefHeight="318.0" prefWidth="1000.0" title="X" />
-               </children>
-            </HBox>
+            <VBox layoutX="274.0" layoutY="154.0" prefHeight="200.0" prefWidth="100.0" />
+            <MenuButton layoutX="987.0" layoutY="100.0" mnemonicParsing="false" text="MenuButton">
+              <items>
+                <MenuItem mnemonicParsing="false" text="Action 1" />
+                <MenuItem mnemonicParsing="false" text="Action 2" />
+              </items>
+            </MenuButton>
          </children>
       </AnchorPane>
    </children>

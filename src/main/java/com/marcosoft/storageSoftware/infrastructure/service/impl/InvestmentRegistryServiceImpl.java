@@ -1,5 +1,6 @@
 package com.marcosoft.storageSoftware.infrastructure.service.impl;
 
+import com.marcosoft.storageSoftware.domain.model.Client;
 import com.marcosoft.storageSoftware.domain.model.InvestmentRegistry;
 import com.marcosoft.storageSoftware.domain.repository.InvestmentRegistryRepository;
 import com.marcosoft.storageSoftware.domain.service.InvestmentRegistryService;
@@ -37,5 +38,10 @@ public class InvestmentRegistryServiceImpl implements InvestmentRegistryService 
     @Override
     public void deleteInventoryRegistryById(Long id) {
         investmentRegistryRepository.deleteById(id);
+    }
+
+    @Override
+    public List<InvestmentRegistry> getAllInvestmentRegistryByClient(Client client) {
+        return investmentRegistryRepository.findAllInvestmentRegistryByClient(client);
     }
 }

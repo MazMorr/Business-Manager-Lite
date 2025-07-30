@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.util.Objects;
 
 @Lazy
 @Component
@@ -60,7 +61,7 @@ public class SoundPlayer {
             if (new File(soundPath).exists()) {
                 media = new Media(new File(soundPath).toURI().toString());
             } else {
-                media = new Media(getClass().getResource(soundPath).toExternalForm());
+                media = new Media(Objects.requireNonNull(getClass().getResource(soundPath)).toExternalForm());
             }
             mediaPlayerSound = new MediaPlayer(media);
             mediaPlayerSound.setOnEndOfMedia(() -> {

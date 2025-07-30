@@ -1,5 +1,6 @@
 package com.marcosoft.storageSoftware.infrastructure.service.impl;
 
+import com.marcosoft.storageSoftware.domain.model.Client;
 import com.marcosoft.storageSoftware.domain.model.WarehouseRegistry;
 import com.marcosoft.storageSoftware.domain.repository.WarehouseRegistryRepository;
 import com.marcosoft.storageSoftware.domain.service.WarehouseRegistryService;
@@ -32,6 +33,11 @@ public class WarehouseRegistryServiceImpl implements WarehouseRegistryService {
     @Override
     public List<WarehouseRegistry> getAllWarehouseRegistries() {
         return (List<WarehouseRegistry>) warehouseRegistryRepository.findAll();
+    }
+
+    @Override
+    public List<WarehouseRegistry> getAllWarehouseRegistriesByClient(Client client) {
+        return (List<WarehouseRegistry>) warehouseRegistryRepository.findAllWarehouseRegistriesByClient(client);
     }
 
     @Override

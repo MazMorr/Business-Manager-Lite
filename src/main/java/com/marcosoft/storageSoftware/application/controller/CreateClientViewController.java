@@ -16,17 +16,25 @@ import java.io.IOException;
 
 import static javafx.scene.paint.Color.*;
 
+/**
+ * Controller for the create client view.
+ * Handles logic for creating a new client account and validating input fields.
+ */
 @Lazy
 @Controller
 public class CreateClientViewController {
 
     private final ClientServiceImpl clientService;
 
+    /**
+     * Constructor for dependency injection.
+     */
     @Lazy
     public CreateClientViewController(ClientServiceImpl clientService){
         this.clientService = clientService;
     }
 
+    // FXML UI components
     @FXML
     private PasswordField passFieldPasswordConfirmed;
     @FXML
@@ -36,15 +44,23 @@ public class CreateClientViewController {
     @FXML
     private Label txtDebugForm;
 
+    // State variables for validation
     private boolean userNameIsSet = false, passwordIsSet = false, confirmedPasswordIsSet = false, companyIsSet = false;
 
-
+    /**
+     * Initializes the controller after its root element has been completely processed.
+     * Sets initial progress and clears debug label.
+     */
     @FXML
     public void initialize() {
         percentageBar.setProgress(0);
         txtDebugForm.setText("");
     }
 
+    /**
+     * Handles the creation of a new client account when the user clicks the create button.
+     * Validates input and shows alerts in Spanish if validation fails.
+     */
     @FXML
     private void createAccount() throws IOException {
         if (!userNameIsSet || !passwordIsSet || !confirmedPasswordIsSet) {
@@ -72,6 +88,10 @@ public class CreateClientViewController {
         goBack();
     }
 
+    /**
+     * Creates and returns an alert with account creation information.
+     * The alert message is shown in Spanish.
+     */
     private static Alert getAlert(TextField txtFieldCompany, TextField txtFieldUserName) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Cuenta creada");
@@ -87,6 +107,10 @@ public class CreateClientViewController {
         return alert;
     }
 
+    /**
+     * Validates the username field as the user types.
+     * Updates the debug label and progress bar. Messages are shown in Spanish.
+     */
     @FXML
     public void txtFieldTypingUserName() {
         String userName = txtFieldUserName.getText();
@@ -102,12 +126,19 @@ public class CreateClientViewController {
         updateProgress();
     }
 
+    /**
+     * Sets the state and message for username validation.
+     */
     private void setUserNameState(boolean isValid, String message, javafx.scene.paint.Color color) {
         userNameIsSet = isValid;
         txtDebugForm.setTextFill(color);
         txtDebugForm.setText(message);
     }
 
+    /**
+     * Validates the password and confirmation fields as the user types.
+     * Updates the debug label and progress bar. Messages are shown in Spanish.
+     */
     @FXML
     public void txtFieldTypingPassword() {
         String password = txtFieldPassword.getText();
@@ -127,6 +158,9 @@ public class CreateClientViewController {
         updateProgress();
     }
 
+    /**
+     * Sets the state and message for password validation.
+     */
     private void setPasswordState(boolean passValid, boolean confirmValid, String message, javafx.scene.paint.Color color) {
         passwordIsSet = passValid;
         confirmedPasswordIsSet = confirmValid;
@@ -134,13 +168,20 @@ public class CreateClientViewController {
         txtDebugForm.setText(message);
     }
 
+    /**
+     * Validates the company field as the user types.
+     * Updates the progress bar.
+     */
     @FXML
     public void txtFieldTypingCompany() {
-        // Puedes agregar validación de empresa aquí si lo deseas
+        // You can add company validation here if needed
         companyIsSet = txtFieldCompany.getText() != null && !txtFieldCompany.getText().isEmpty();
         updateProgress();
     }
 
+    /**
+     * Updates the progress bar based on the validation state of all fields.
+     */
     private void updateProgress() {
         double progress = 0;
         if (userNameIsSet) progress += 0.33;
@@ -149,6 +190,9 @@ public class CreateClientViewController {
         percentageBar.setProgress(progress);
     }
 
+    /**
+     * Navigates back to the client view.
+     */
     @FXML
     private void goBack() throws IOException {
         Main.setRoot("clientView");
