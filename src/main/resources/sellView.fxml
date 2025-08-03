@@ -76,7 +76,7 @@
                                     <Insets left="20.0" />
                                  </HBox.margin>
                               </Label>
-                              <TextField fx:id="tfMinFilterPrice" prefWidth="70.0" text="0.00">
+                              <TextField fx:id="tfMinFilterPrice" prefWidth="70.0" promptText="0.00">
                                  <HBox.margin>
                                     <Insets left="2.0" />
                                  </HBox.margin></TextField>
@@ -85,7 +85,7 @@
                                     <Insets left="6.0" />
                                  </HBox.margin>
                               </Label>
-                              <TextField fx:id="tfMaxFilterPrice" prefWidth="70.0" text="0.00">
+                              <TextField fx:id="tfMaxFilterPrice" prefWidth="70.0" promptText="0.00">
                                  <HBox.margin>
                                     <Insets left="2.0" />
                                  </HBox.margin></TextField>
@@ -121,7 +121,7 @@
                                     <Insets left="20.0" />
                                  </HBox.margin>
                               </Label>
-                              <TextField fx:id="tfMinFilterAmount" prefWidth="70.0" text="0">
+                              <TextField fx:id="tfMinFilterAmount" prefWidth="70.0" promptText="0.">
                                  <HBox.margin>
                                     <Insets left="2.0" />
                                  </HBox.margin></TextField>
@@ -130,7 +130,7 @@
                                     <Insets left="6.0" />
                                  </HBox.margin>
                               </Label>
-                              <TextField fx:id="tfMaxFilterAmount" prefWidth="70.0" text="0">
+                              <TextField fx:id="tfMaxFilterAmount" prefWidth="70.0" promptText="0">
                                  <HBox.margin>
                                     <Insets left="2.0" />
                                  </HBox.margin></TextField>
@@ -337,7 +337,7 @@
                                           <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="26.0">
                                              <children>
                                                 <Label text="Precio Venta" />
-                                                <TextField fx:id="tfAssignPriceProductPrice" prefHeight="34.0" prefWidth="150.0" styleClass="inputForm" stylesheets="@Styles.css" text="0.00">
+                                                <TextField fx:id="tfAssignPriceProductPrice" prefHeight="34.0" prefWidth="150.0" promptText="0.00" styleClass="inputForm" stylesheets="@Styles.css">
                                                    <tooltip>
                                                       <Tooltip text="Precio al que deseas vender cada unidad del producto  (en la zona de ventas este precio puede ser cambiado)" wrapText="true">
                                                          <font>
@@ -353,7 +353,7 @@
                                                 <Label text="Moneda" />
                                                 <MenuButton fx:id="mbAssignPriceCurrency" mnemonicParsing="false" prefWidth="150.0" styleClass="progressBar" stylesheets="@Styles.css" textFill="WHITE">
                                                    <graphic>
-                                                      <TextField fx:id="tfAssignPriceCurrency" prefHeight="34.0" prefWidth="10.0" styleClass="inputForm" stylesheets="@Styles.css">
+                                                      <TextField fx:id="tfAssignPriceCurrency" editable="false" prefHeight="34.0" prefWidth="10.0" promptText="Seleccionar" styleClass="inputForm" stylesheets="@Styles.css">
                                                          <tooltip>
                                                             <Tooltip text="Precio al que deseas vender cada unidad del producto  (en la zona de ventas este precio puede ser cambiado)" wrapText="true">
                                                                <font>
@@ -596,7 +596,7 @@
                      <children>
                         <Button layoutX="65.0" layoutY="63.0" mnemonicParsing="false" styleClass="btnStock" text="Alertas de Productos" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
                            <graphic>
-                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@images/alert%20(2).png" />
                                  </image>

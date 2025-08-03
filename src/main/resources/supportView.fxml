@@ -150,12 +150,12 @@
                   </Label>
                </children>
             </HBox>
-            <Label fx:id="txtWelcome" alignment="TOP_CENTER" layoutX="156.0" layoutY="191.0" prefHeight="396.0" prefWidth="574.0" stylesheets="@Styles.css" text="text test 1234 JGH" textAlignment="CENTER" wrapText="true" AnchorPane.bottomAnchor="125.0" AnchorPane.leftAnchor="170.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="179.0">
+            <Label fx:id="txtWelcome" alignment="TOP_CENTER" layoutX="156.0" layoutY="191.0" prefHeight="396.0" prefWidth="574.0" stylesheets="@Styles.css" text="text test 1234 JGH" textAlignment="CENTER" wrapText="true" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="170.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="150.0">
                <font>
                   <Font name="Constantia" size="20.0" />
                </font>
             </Label>
-            <Label fx:id="txtWelcomeTitle" alignment="CENTER" layoutX="221.0" layoutY="130.0" prefHeight="37.0" prefWidth="513.0" text="Bienvenido" wrapText="true" AnchorPane.leftAnchor="220.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="130.0">
+            <Label fx:id="txtWelcomeTitle" alignment="CENTER" layoutX="221.0" layoutY="130.0" prefHeight="37.0" prefWidth="513.0" text="Bienvenido" wrapText="true" AnchorPane.leftAnchor="220.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="110.0">
                <font>
                   <Font name="Constantia Bold" size="30.0" />
                </font>

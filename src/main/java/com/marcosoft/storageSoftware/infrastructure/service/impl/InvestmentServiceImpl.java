@@ -1,12 +1,14 @@
 package com.marcosoft.storageSoftware.infrastructure.service.impl;
 
 import com.marcosoft.storageSoftware.domain.model.Client;
+import com.marcosoft.storageSoftware.domain.model.Currency;
 import com.marcosoft.storageSoftware.domain.model.Investment;
 import com.marcosoft.storageSoftware.domain.repository.InvestmentRepository;
 import com.marcosoft.storageSoftware.domain.service.InvestmentService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Lazy
@@ -42,6 +44,11 @@ public class InvestmentServiceImpl implements InvestmentService {
     @Override
     public boolean existsByInvestmentId(Long investmentId) {
         return investmentRepository.existsByInvestmentId(investmentId);
+    }
+
+    @Override
+    public Investment getByClientAndInvestmentNameAndInvestmentPriceAndCurrencyAndAmountAndReceivedDateAndInvestmentType(Client client, String investmentName, Double investmentPrice, Currency currency, Integer amount, LocalDate receivedDate, String investmentType) {
+        return investmentRepository.findByClientAndInvestmentNameAndInvestmentPriceAndCurrencyAndAmountAndReceivedDateAndInvestmentType(client, investmentName, investmentPrice, currency, amount, receivedDate, investmentType);
     }
 
     @Override

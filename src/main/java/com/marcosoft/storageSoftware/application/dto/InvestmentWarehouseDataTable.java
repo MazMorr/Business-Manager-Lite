@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class InvestmentWarehouseDataTable {
     private Long investmentId;
-    private String productName;
+    private String investmentName;
     private Integer productAmount;
     private LocalDate investmentDate;
 }

@@ -27,6 +27,7 @@ import java.time.LocalDateTime;
 @Controller
 public class AddWarehouseViewController {
     private Client client;
+    private WarehouseViewController warehouseViewController;
 
     // Dependencies injected via constructor
     private final UserLogged userLogged;
@@ -40,8 +41,9 @@ public class AddWarehouseViewController {
      * Constructor for dependency injection.
      */
     @Lazy
-    public AddWarehouseViewController(WarehouseRegistryServiceImpl warehouseRegistryService, GeneralRegistryServiceImpl generalRegistryService, DisplayAlerts displayAlerts, WarehouseServiceImpl warehouseService, UserLogged userLogged, ClientServiceImpl clientService) {
+    public AddWarehouseViewController(WarehouseViewController warehouseViewController, WarehouseRegistryServiceImpl warehouseRegistryService, GeneralRegistryServiceImpl generalRegistryService, DisplayAlerts displayAlerts, WarehouseServiceImpl warehouseService, UserLogged userLogged, ClientServiceImpl clientService) {
         this.warehouseService = warehouseService;
+        this.warehouseViewController = warehouseViewController;
         this.generalRegistryService = generalRegistryService;
         this.warehouseRegistryService = warehouseRegistryService;
         this.clientService = clientService;
@@ -85,11 +87,12 @@ public class AddWarehouseViewController {
                 generalRegistryService.save(generalRegistry);
 
                 WarehouseRegistry warehouseRegistry = new WarehouseRegistry(
-                        null, "Adición", registryMoment, warehouse, null, client, null
+                        null, client, "Adición", registryMoment, warehouse.getWarehouseName(), null, null
                 );
                 warehouseRegistryService.save(warehouseRegistry);
 
                 displayAlerts.showAlert("El nuevo almacén ha sido añadido correctamente");
+                warehouseViewController.initTreeTable();
             } catch (Exception e) {
                 displayAlerts.showAlert("Ha ocurrido un error: " + e.getMessage());
             }

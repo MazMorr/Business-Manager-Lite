@@ -58,7 +58,6 @@ public class WarehouseViewController {
     /**
      * Constructor for dependency injection.
      */
-    @Lazy
     public WarehouseViewController(
             InvestmentServiceImpl investmentService, DisplayAlerts displayAlerts, WarehouseServiceImpl warehouseService,
             UserLogged userLogged, SceneSwitcher sceneSwitcher, ParseDataTypes parseDataTypes,
@@ -78,13 +77,13 @@ public class WarehouseViewController {
     @FXML
     private TableView<InvestmentWarehouseDataTable> tvInvestments;
     @FXML
-    private Label txtClientName;
-    @FXML
     private TreeTableView<WarehouseDataTable> ttvWarehouse;
     @FXML
     private TreeTableColumn<WarehouseDataTable, String> ttcWarehouseName, ttcProductName;
     @FXML
     private TreeTableColumn<WarehouseDataTable, Integer> ttcProductAmount;
+
+
     @FXML
     private TableColumn<InvestmentWarehouseDataTable, Long> tcIdInvestment;
     @FXML
@@ -93,6 +92,9 @@ public class WarehouseViewController {
     private TableColumn<InvestmentWarehouseDataTable, Integer> tcProductAmount;
     @FXML
     private TableColumn<InvestmentWarehouseDataTable, LocalDate> tcProductDate;
+
+    @FXML
+    private Label txtClientName;
 
     /**
      * Initializes the controller after its root element has been completely processed.
@@ -113,14 +115,13 @@ public class WarehouseViewController {
      * Loads investment data into the investments table.
      * Populates the tvInvestments TableView with unassigned investments for the current client.
      */
-    private void initTableValues() {
+    public void initTableValues() {
         // Clear previous data
         tvInvestments.getItems().clear();
 
         // Get all investments for the client with amount > 0 (not fully assigned)
         List<Investment> investments =
             investmentService.getAllInvestmentsByClientAndAmountGreaterThanZeroAndInvestmentType(client, "Producto").stream()
-                .filter(inv -> inv.getAmount() != null && inv.getAmount() > 0)
                 .toList();
 
         // Map investments to InvestmentWarehouseDataTable
@@ -135,9 +136,9 @@ public class WarehouseViewController {
 
         // Set up columns if not already set (optional, for safety)
         tcIdInvestment.setCellValueFactory(new javafx.scene.control.cell.PropertyValueFactory<>("investmentId"));
-        tcProductName.setCellValueFactory(new javafx.scene.control.cell.PropertyValueFactory<>("investmenttName"));
-        tcProductAmount.setCellValueFactory(new javafx.scene.control.cell.PropertyValueFactory<>("amount"));
-        tcProductDate.setCellValueFactory(new javafx.scene.control.cell.PropertyValueFactory<>("receivedDate"));
+        tcProductName.setCellValueFactory(new javafx.scene.control.cell.PropertyValueFactory<>("investmentName"));
+        tcProductAmount.setCellValueFactory(new javafx.scene.control.cell.PropertyValueFactory<>("productAmount"));
+        tcProductDate.setCellValueFactory(new javafx.scene.control.cell.PropertyValueFactory<>("investmentDate"));
 
         // Add data to the table
         tvInvestments.getItems().addAll(investmentData);
@@ -175,7 +176,7 @@ public class WarehouseViewController {
      * Loads warehouse and inventory data into the tree table.
      * Groups inventories by warehouse and displays products as children.
      */
-    private void initTreeTable() {
+    public void initTreeTable() {
         // Column configuration
         ttcWarehouseName.setCellValueFactory(new TreeItemPropertyValueFactory<>("warehouseName"));
         ttcProductName.setCellValueFactory(new TreeItemPropertyValueFactory<>("productName"));

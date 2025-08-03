@@ -19,8 +19,17 @@ public class InvestmentRegistry {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne
-    private Investment investment;
+    @Column(name = "investment_id", nullable = false)
+    private Long investmentId;
+
+    @Column(name = "investment_name", nullable = false)
+    private String investmentName;
+
+    @Column(name = "transaction_price", nullable = false)
+    private Double investmentPrice;
+
+    @Column(name = "currency_name")
+    private String currency;
 
     @ManyToOne
     private Client client;

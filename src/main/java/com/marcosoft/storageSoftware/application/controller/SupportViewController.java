@@ -75,13 +75,17 @@ public class SupportViewController {
         versionLabel.setText("0.9.5");
         txtWelcomeTitle.setText("Bienvenido, " + userLogged.getName());
         txtWelcome.setText(
-            "Este sistema ha sido diseñado para brindarle un control eficiente y seguro sobre los recursos de su negocio. " +
-            "Aquí podrá gestionar inventarios, inversiones, ventas y mucho más de manera sencilla y centralizada.\n\n" +
-            "Recuerde que el uso de este software está protegido por una licencia. La distribución o comercialización fuera de los canales oficiales " +
-            "puede resultar en sanciones legales, multas o la cancelación permanente de la licencia.\n\n" +
-            "Para cualquier duda, sugerencia o reporte de errores, utilice la sección 'Soporte' ubicada a la derecha de este mensaje. " +
-            "Nuestro equipo estará siempre disponible para ayudarle y mejorar su experiencia.\n\n" +
-            "¡Gracias por confiar en nosotros!"
+                """
+                        Este sistema ha sido diseñado para brindarle un control eficiente y seguro sobre los recursos de su negocio. \
+                        Aquí podrá gestionar inventarios, inversiones, ventas y mucho más de manera sencilla y centralizada.
+                        
+                        Recuerde que el uso de este software está protegido por una licencia. La distribución o comercialización fuera de los canales oficiales \
+                        puede resultar en sanciones legales, multas o la cancelación permanente de la licencia.
+                        
+                        Para cualquier duda, sugerencia o reporte de errores, utilice la sección 'Soporte' ubicada a la derecha de este mensaje. \
+                        Nuestro equipo estará siempre disponible para ayudarle y mejorar su experiencia.
+                        
+                        ¡Gracias por confiar en nosotros!"""
         );
     }
 

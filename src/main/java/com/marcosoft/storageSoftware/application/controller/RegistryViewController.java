@@ -1,21 +1,8 @@
 package com.marcosoft.storageSoftware.application.controller;
 
-import com.marcosoft.storageSoftware.application.dto.GeneralRegistryDataTable;
-import com.marcosoft.storageSoftware.application.dto.InvestmentRegistryDataTable;
-import com.marcosoft.storageSoftware.application.dto.SellRegistryDataTable;
-import com.marcosoft.storageSoftware.application.dto.UserLogged;
-import com.marcosoft.storageSoftware.application.dto.WarehouseRegistryDataTable;
-import com.marcosoft.storageSoftware.domain.model.Client;
-import com.marcosoft.storageSoftware.domain.model.GeneralRegistry;
-import com.marcosoft.storageSoftware.domain.model.Investment;
-import com.marcosoft.storageSoftware.domain.model.InvestmentRegistry;
-import com.marcosoft.storageSoftware.domain.model.SellRegistry;
-import com.marcosoft.storageSoftware.domain.model.WarehouseRegistry;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceImpl;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.GeneralRegistryServiceImpl;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.InvestmentRegistryServiceImpl;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.SellRegistryServiceImpl;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.WarehouseRegistryServiceImpl;
+import com.marcosoft.storageSoftware.application.dto.*;
+import com.marcosoft.storageSoftware.domain.model.*;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.*;
 import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
 import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
 import javafx.application.Platform;
@@ -23,11 +10,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
@@ -185,8 +168,8 @@ public class RegistryViewController {
             warehouseRegistryDataTables.add(new WarehouseRegistryDataTable(
                     w.getRegistryType(),
                     w.getRegistryDateTime(),
-                    w.getWarehouse().getWarehouseName(),
-                    w.getProduct().getProductName(),
+                    w.getWarehouseName(),
+                    w.getProductName(),
                     w.getAmount()
             ));
         }
@@ -236,24 +219,23 @@ public class RegistryViewController {
             investmentRegistryDataTables.clear();
 
             for (InvestmentRegistry investmentRegistry : investmentRegistries) {
-                Investment investment = investmentRegistry.getInvestment();
+
 
                 // Verificar si la inversión existe
-                if (investment != null) {
+
                     // Formatear el precio y moneda
                     String priceCurrency = String.format("%.2f %s",
-                            investment.getInvestmentPrice(),
-                            investment.getCurrency());
+                            investmentRegistry.getInvestmentPrice(),
+                            investmentRegistry.getCurrency());
 
                     // Agregar a la lista observable
                     investmentRegistryDataTables.add(new InvestmentRegistryDataTable(
                             investmentRegistry.getRegistryType(),
                             investmentRegistry.getRegistryDateTime(),
-                            investment.getInvestmentId(),
-                            investment.getInvestmentName(),
+                            investmentRegistry.getInvestmentId(),
+                            investmentRegistry.getInvestmentName(),
                             priceCurrency
                     ));
-                }
             }
 
             tcInvestmentRegistryType.setCellValueFactory(new PropertyValueFactory<>("registryType"));

@@ -165,7 +165,7 @@ public class AssignInvestmentViewController {
                 generalRegistryService.save(generalRegistry);
 
                 WarehouseRegistry warehouseRegistry = new WarehouseRegistry(
-                        null, "Asignación", registryMoment, warehouse, product, client, amountToAssign
+                        null, client, "Asignación", registryMoment, warehouse.getWarehouseName(), product.getProductName(), amountToAssign
                 );
                 warehouseRegistryService.save(warehouseRegistry);
 

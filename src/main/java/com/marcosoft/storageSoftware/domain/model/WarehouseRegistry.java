@@ -20,20 +20,22 @@ public class WarehouseRegistry {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @ManyToOne
+    private Client client;
+
     @Column(name = "registry_type")
     private String registryType;
 
     @Column(name = "date")
     private LocalDateTime registryDateTime;
 
-    @ManyToOne
-    private Warehouse warehouse;
+    @Column(name = "warehouse_name")
+    private String warehouseName;
 
-    @ManyToOne
-    private Product product;
+    @Column(name = "product_name")
+    private String productName;
 
-    @ManyToOne
-    private Client client;
+
 
     @Column(name = "amount")
     private Integer amount;

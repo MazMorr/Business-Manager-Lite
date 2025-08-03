@@ -140,7 +140,7 @@ public class ReassignProductViewController {
             generalRegistryService.save(generalRegistry);
 
             WarehouseRegistry warehouseRegistry = new WarehouseRegistry(
-                    null, registryType, registryMoment, warehouseGives, product, client, amount
+                    null, client, registryType, registryMoment, warehouseGives.getWarehouseName(), product.getProductName() , amount
             );
             warehouseRegistryService.save(warehouseRegistry);
 

@@ -13,7 +13,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class InvestmentDataTable {
     private Long id;
-    private String productName;
+    private String investmentName;
+    private String investmentType;
     private Double price;
     private String currency;
     private Integer amount;
