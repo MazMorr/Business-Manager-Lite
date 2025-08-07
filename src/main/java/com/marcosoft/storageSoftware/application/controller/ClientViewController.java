@@ -1,21 +1,17 @@
 package com.marcosoft.storageSoftware.application.controller;
 
+import com.marcosoft.storageSoftware.Main;
 import com.marcosoft.storageSoftware.application.dto.UserLogged;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.util.SpringFXMLLoader;
-import com.marcosoft.storageSoftware.Main;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.springframework.stereotype.Controller;
@@ -155,7 +151,6 @@ public class ClientViewController {
     private void clearFields() {
         txtFieldName.clear();
         txtFieldPassword.clear();
-        txtDebugForm.setText("");
     }
 
     /**

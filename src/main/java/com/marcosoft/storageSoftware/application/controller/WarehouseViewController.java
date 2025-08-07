@@ -8,6 +8,7 @@ import com.marcosoft.storageSoftware.domain.model.Client;
 import com.marcosoft.storageSoftware.domain.model.Inventory;
 import com.marcosoft.storageSoftware.domain.model.Investment;
 import com.marcosoft.storageSoftware.domain.model.Warehouse;
+import com.marcosoft.storageSoftware.domain.repository.InventoryRepository;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.InventoryServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.InvestmentServiceImpl;
@@ -62,8 +63,8 @@ public class WarehouseViewController {
     public WarehouseViewController(
             InvestmentServiceImpl investmentService, DisplayAlerts displayAlerts, WarehouseServiceImpl warehouseService,
             UserLogged userLogged, SceneSwitcher sceneSwitcher, ParseDataTypes parseDataTypes,
-            InventoryServiceImpl inventoryService, ClientServiceImpl clientService
-    ) {
+            InventoryServiceImpl inventoryService, ClientServiceImpl clientService,
+            InventoryRepository inventoryRepository) {
         this.clientService = clientService;
         this.investmentService = investmentService;
         this.inventoryService = inventoryService;
@@ -72,6 +73,7 @@ public class WarehouseViewController {
         this.displayAlerts = displayAlerts;
         this.userLogged = userLogged;
         this.warehouseService = warehouseService;
+        this.inventoryRepository = inventoryRepository;
     }
 
     // FXML UI components
@@ -96,6 +98,7 @@ public class WarehouseViewController {
 
     @FXML
     private Label txtClientName;
+    private final InventoryRepository inventoryRepository;
 
     /**
      * Initializes the controller after its root element has been completely processed.
@@ -196,22 +199,27 @@ public class WarehouseViewController {
                     .mapToInt(inv -> inv.getAmount() != null ? inv.getAmount() : 0)
                     .sum();
 
+            int invCount = inventories.size() - 1;
+
             WarehouseDataTable warehouseNode = new WarehouseDataTable(
                     warehouse.getWarehouseName(),
-                    "Productos: " + inventories.size(),
+                    "Productos: " + invCount,
                     total
             );
 
             TreeItem<WarehouseDataTable> warehouseItem = new TreeItem<>(warehouseNode);
 
             // Children (products)
+
             inventories.forEach(inv -> {
-                WarehouseDataTable productNode = new WarehouseDataTable(
-                        "",
-                        inv.getProduct() != null ? inv.getProduct().getProductName() : "",
-                        inv.getAmount() != null ? inv.getAmount() : 0
-                );
-                warehouseItem.getChildren().add(new TreeItem<>(productNode));
+                if (!(inv.getProduct() == null || inv.getAmount() == null)) {
+                    WarehouseDataTable productNode = new WarehouseDataTable(
+                            "",
+                            inv.getProduct().getProductName(),
+                            inv.getAmount()
+                    );
+                    warehouseItem.getChildren().add(new TreeItem<>(productNode));
+                }
             });
 
             root.getChildren().add(warehouseItem);
@@ -273,11 +281,16 @@ public class WarehouseViewController {
     @FXML
     public void deleteWarehouse(ActionEvent actionEvent) {
         WarehouseDataTable w = ttvWarehouse.getSelectionModel().getSelectedItem().getValue();
-        Client c = clientService.getClientByName(userLogged.getName());
+        Warehouse warehouse = warehouseService.getWarehouseByWarehouseNameAndClient(w.getWarehouseName(), client);
         if (displayAlerts.showConfirmationAlert("Está seguro de querer eliminar el almacén seleccionado:\n" +
                 w.getWarehouseName() + " junto a todos los productos almacenados en él?")) {
-            warehouseService.deleteWarehouseById(warehouseService.getWarehouseByWarehouseNameAndClient(w.getWarehouseName(), c).getId());
+            List<Inventory> inv = inventoryService.getAllInventoriesByWarehouseAndClient(warehouse, client);
+            for (Inventory i : inv) {
+                inventoryService.deleteInventoryById(i.getId());
+            }
+            warehouseService.deleteWarehouseById(warehouse.getId());
             ttvWarehouse.getSelectionModel().clearSelection();
+            initTreeTable();
         } else {
             ttvWarehouse.getSelectionModel().clearSelection();
         }

@@ -109,6 +109,7 @@ public class SellViewController {
             initDatePicker();
             initMbWarehouse();
             initAllMbCurrency();
+            setupTableSelectionListener();
         });
     }
 
@@ -310,9 +311,28 @@ public class SellViewController {
         return validateTfSellProduct() && validateTfSellAmount() && validateSellPrice() && validateSellCurrency() && validateDatePicker();
     }
 
-    // ============================
-    // VALIDATION METHODS FOR SELL FORM
-    // ============================
+    /**
+     * Sets up listener for table row selection.
+     * Populates form fields with selected investment data.
+     */
+    private void setupTableSelectionListener() {
+        ttvInventory.getSelectionModel().selectedItemProperty().addListener((obs, oldSel, newSel) -> {
+            if (newSel != null) {
+                String productName = newSel.getValue().getProductName();
+                Product product = productService.getByProductNameAndClient(productName, client);
+                String price = product.getSellPrice() != null ? String.valueOf(product.getSellPrice()) : "";
+                String currency = product.getCurrency() != null ? product.getCurrency().getCurrencyName() : "";
+
+                tfAssignPriceProductName.setText(productName);
+                tfAssignPriceCurrency.setText(currency);
+                tfAssignPriceProductPrice.setText(price);
+                tfSellWarehouse.setText(newSel.getValue().getWarehouseName());
+                tfSellProductName.setText(newSel.getValue().getProductName());
+                tfSellProductPrice.setText(price);
+                tfSellProductCurrency.setText(currency);
+            }
+        });
+    }
 
     /**
      * Validates the currency field in the sell form.

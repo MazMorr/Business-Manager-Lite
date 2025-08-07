@@ -327,13 +327,19 @@ public class ReassignProductViewController {
         for (Warehouse w : warehouses) {
             MenuItem item = new MenuItem(w.getWarehouseName());
             item.setOnAction(e -> {
-                tfWarehouseGives.setText(w.getWarehouseName());
+                tfWarehouseGives.setText(item.getText());
                 initMbProduct(w);  // Actualiza productos
                 updateReceivingWarehouses(w.getWarehouseName()); // Actualiza receptores
-                cleanFields();
+                cleanFieldsExceptWarehouseGives();
             });
             mbWarehouse.getItems().add(item);
         }
+    }
+
+    private void cleanFieldsExceptWarehouseGives() {
+        tfProduct.clear();
+        tfWarehouseReceipt.clear();
+        tfAmount.clear();
     }
 
     private void updateReceivingWarehouses(String excludedWarehouseName) {

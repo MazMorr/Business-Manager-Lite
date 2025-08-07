@@ -196,7 +196,6 @@ public class InvestmentViewController {
             ));
         }
 
-
         tcId.setCellValueFactory(new PropertyValueFactory<>("id"));
         tcInvestmentName.setCellValueFactory(new PropertyValueFactory<>("investmentName"));
         tcTypeInvestment.setCellValueFactory(new PropertyValueFactory<>("investmentType"));
@@ -248,7 +247,8 @@ public class InvestmentViewController {
         investmentService.save(investment);
         initializeTableValues();
 
-        Investment inv = investmentService.getByClientAndInvestmentNameAndInvestmentPriceAndCurrencyAndAmountAndReceivedDateAndInvestmentType(
+        Investment inv = investmentService
+                .getByClientAndInvestmentNameAndInvestmentPriceAndCurrencyAndAmountAndReceivedDateAndInvestmentType(
                 client, investmentName, price, currencyService.getCurrencyByName(currency), amount, receivedDate, investmentType
         );
 
