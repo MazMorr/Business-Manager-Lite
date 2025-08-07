@@ -171,7 +171,7 @@
                   <Font size="14.0" />
                </font>
             </Button>
-            <Label fx:id="txtClientName" contentDisplay="TOP" prefHeight="69.0" prefWidth="172.0" styleClass="clientName" stylesheets="@Styles.css" text="Marco A. Romeros" textFill="#eeeeee" wrapText="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="5.0">
+            <Label fx:id="lblClientName" contentDisplay="TOP" prefHeight="69.0" prefWidth="172.0" styleClass="clientName" stylesheets="@Styles.css" text="Marco A. Romeros" textFill="#eeeeee" wrapText="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="5.0">
                <font>
                   <Font name="SansSerif Regular" size="14.0" />
                </font>
@@ -197,7 +197,7 @@
                   </Label>
                </graphic>
             </MenuButton>
-            <VBox layoutX="456.0" layoutY="254.0" prefHeight="200.0" prefWidth="100.0" spacing="20.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="170.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="100.0">
+            <VBox layoutX="456.0" layoutY="254.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="170.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="100.0">
                <children>
                   <HBox alignment="CENTER" prefHeight="800.0" prefWidth="200.0" spacing="40.0" styleClass="filter-background">
                      <children>
@@ -228,7 +228,7 @@
                                     </VBox>
                                     <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="1000.0">
                                        <children>
-                                          <Label text="Label">
+                                          <Label fx:id="lblProductProfit" text="0.00 CUP">
                                              <font>
                                                 <Font name="System Bold" size="18.0" />
                                              </font>
@@ -236,6 +236,9 @@
                                        </children>
                                     </VBox>
                                  </children>
+                                 <padding>
+                                    <Insets left="2.0" right="2.0" />
+                                 </padding>
                               </HBox>
                               <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-border-color: gray; -fx-border-radius: 0px 0px 10px 10px; -fx-border-width: 1px 2px 2px 2px;">
                                  <children>
@@ -250,7 +253,7 @@
                                     </VBox>
                                     <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="1000.0">
                                        <children>
-                                          <Label text="123,253,240.00 CUP">
+                                          <Label fx:id="lblTotalProfit" text="0.00 CUP">
                                              <font>
                                                 <Font name="System Bold" size="18.0" />
                                              </font>
@@ -258,6 +261,9 @@
                                        </children>
                                     </VBox>
                                  </children>
+                                 <padding>
+                                    <Insets left="2.0" right="2.0" />
+                                 </padding>
                               </HBox>
                               <HBox prefHeight="100.0" prefWidth="200.0" />
                               <HBox prefHeight="100.0" prefWidth="200.0" />
@@ -281,7 +287,7 @@
                               </HBox>
                               <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-border-color: gray; -fx-border-width: 1px 2px 1px 2px;">
                                  <children>
-                                    <Label text="Renta">
+                                    <Label prefWidth="950.0" text="Renta">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
@@ -289,19 +295,23 @@
                                           <Insets left="2.0" />
                                        </HBox.margin>
                                     </Label>
-                                    <Label text="123253240.00 CUP">
-                                       <font>
-                                          <Font name="System Bold" size="18.0" />
-                                       </font>
-                                       <HBox.margin>
-                                          <Insets left="95.0" />
-                                       </HBox.margin>
-                                    </Label>
+                                    <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="1000.0">
+                                       <children>
+                                          <Label fx:id="lblRentExpense" text="0.00 CUP">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </VBox>
                                  </children>
+                                 <padding>
+                                    <Insets left="2.0" right="2.0" />
+                                 </padding>
                               </HBox>
                               <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-border-color: gray; -fx-border-width: 1px 2px 1px 2px;">
                                  <children>
-                                    <Label text="Salarios">
+                                    <Label prefWidth="950.0" text="Salarios">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
@@ -309,19 +319,23 @@
                                           <Insets left="2.0" />
                                        </HBox.margin>
                                     </Label>
-                                    <Label text="123253240.00 CUP">
-                                       <font>
-                                          <Font name="System Bold" size="18.0" />
-                                       </font>
-                                       <HBox.margin>
-                                          <Insets left="80.0" />
-                                       </HBox.margin>
-                                    </Label>
+                                    <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="1000.0">
+                                       <children>
+                                          <Label fx:id="lblSalaryExpense" text="0.00 CUP">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </VBox>
                                  </children>
+                                 <padding>
+                                    <Insets left="2.0" right="2.0" />
+                                 </padding>
                               </HBox>
                               <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-border-color: gray; -fx-border-width: 1px 2px 1px 2px;">
                                  <children>
-                                    <Label text="Publicidad">
+                                    <Label prefWidth="950.0" text="Publicidad">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
@@ -329,19 +343,23 @@
                                           <Insets left="2.0" />
                                        </HBox.margin>
                                     </Label>
-                                    <Label text="123253240.00 CUP">
-                                       <font>
-                                          <Font name="System Bold" size="18.0" />
-                                       </font>
-                                       <HBox.margin>
-                                          <Insets left="55.0" />
-                                       </HBox.margin>
-                                    </Label>
+                                    <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="1000.0">
+                                       <children>
+                                          <Label fx:id="lblPublicityExpense" text="0.00 CUP">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </VBox>
                                  </children>
+                                 <padding>
+                                    <Insets left="2.0" right="2.0" />
+                                 </padding>
                               </HBox>
                               <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-border-color: gray; -fx-border-width: 1px 2px 1px 2px;">
                                  <children>
-                                    <Label text="Servicios">
+                                    <Label prefWidth="950.0" text="Servicios">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
@@ -349,19 +367,23 @@
                                           <Insets left="2.0" />
                                        </HBox.margin>
                                     </Label>
-                                    <Label text="123253240.00 CUP">
-                                       <font>
-                                          <Font name="System Bold" size="18.0" />
-                                       </font>
-                                       <HBox.margin>
-                                          <Insets left="65.0" />
-                                       </HBox.margin>
-                                    </Label>
+                                    <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="1000.0">
+                                       <children>
+                                          <Label fx:id="lblServiceExpense" text="0.00 CUP">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </VBox>
                                  </children>
+                                 <padding>
+                                    <Insets left="2.0" right="2.0" />
+                                 </padding>
                               </HBox>
                               <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-border-color: gray; -fx-border-width: 1px 2px 1px 2px;">
                                  <children>
-                                    <Label text="Productos">
+                                    <Label prefWidth="950.0" text="Productos">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
@@ -369,19 +391,23 @@
                                           <Insets left="2.0" />
                                        </HBox.margin>
                                     </Label>
-                                    <Label text="123253240.00 CUP">
-                                       <font>
-                                          <Font name="System Bold" size="18.0" />
-                                       </font>
-                                       <HBox.margin>
-                                          <Insets left="55.0" />
-                                       </HBox.margin>
-                                    </Label>
+                                    <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="1000.0">
+                                       <children>
+                                          <Label fx:id="lblProductExpense" text="0.00 CUP">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </VBox>
                                  </children>
+                                 <padding>
+                                    <Insets left="2.0" right="2.0" />
+                                 </padding>
                               </HBox>
                               <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-border-color: gray; -fx-border-radius: 0px 0px 10px 10px; -fx-border-width: 1px 2px 2px 2px;">
                                  <children>
-                                    <Label text="Gasto Total">
+                                    <Label prefWidth="950.0" text="Gasto Total">
                                        <font>
                                           <Font name="System Bold" size="22.0" />
                                        </font>
@@ -389,26 +415,33 @@
                                           <Insets left="2.0" />
                                        </HBox.margin>
                                     </Label>
-                                    <Label text="123253240.00 CUP">
-                                       <font>
-                                          <Font name="System Bold" size="18.0" />
-                                       </font>
-                                       <HBox.margin>
-                                          <Insets left="30.0" />
-                                       </HBox.margin>
-                                    </Label>
+                                    <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="1000.0">
+                                       <children>
+                                          <Label fx:id="lblTotalExpense" text="0.00 CUP">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </VBox>
                                  </children>
+                                 <padding>
+                                    <Insets left="2.0" right="2.0" />
+                                 </padding>
                               </HBox>
                            </children>
                         </VBox>
-                        <VBox alignment="TOP_RIGHT" prefHeight="200.0" prefWidth="2810.0">
-                           <children>
-                              <Button mnemonicParsing="false" prefWidth="2870.0" text="Precios" />
-                              <Button mnemonicParsing="false" prefWidth="2870.0" text="Exportar a pdf" />
-                              <Button mnemonicParsing="false" prefWidth="2870.0" text="Exportar a Excel" />
-                           </children>
-                        </VBox>
                      </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#exportToPdf" prefWidth="2870.0" style="-fx-background-radius: 10px 0px 0px 10px;" text="Exportar a pdf" />
+                        <Button mnemonicParsing="false" onAction="#displayPrices" prefWidth="2870.0" style="-fx-background-radius: 0px;" text="Precios" />
+                        <Button mnemonicParsing="false" onAction="#exportToExcel" prefWidth="2870.0" style="-fx-background-radius: 0px 10px 10px 0px;" text="Exportar a Excel" />
+                     </children>
+                     <padding>
+                        <Insets left="10.0" right="10.0" />
+                     </padding>
                   </HBox>
                   <VBox alignment="CENTER" prefHeight="700.0" prefWidth="100.0" styleClass="crudOperations">
                      <children>
@@ -419,9 +452,12 @@
                         </Label>
                         <Label text="0">
                            <font>
-                              <Font size="24.0" />
+                              <Font name="System Bold" size="30.0" />
                            </font></Label>
                      </children>
+                     <VBox.margin>
+                        <Insets left="10.0" right="10.0" top="3.0" />
+                     </VBox.margin>
                   </VBox>
                </children>
             </VBox>

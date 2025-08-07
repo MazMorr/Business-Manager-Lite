@@ -22,6 +22,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -105,8 +106,8 @@ public class WarehouseViewController {
         client = clientService.getClientByName(userLogged.getName());
         txtClientName.setText(userLogged.getName());
         Platform.runLater(() -> {
-            initTreeTable();
             initTableValues();
+            initTreeTable();
             initTableLabels();
         });
     }
@@ -120,25 +121,24 @@ public class WarehouseViewController {
         tvInvestments.getItems().clear();
 
         // Get all investments for the client with amount > 0 (not fully assigned)
-        List<Investment> investments =
-            investmentService.getAllInvestmentsByClientAndAmountGreaterThanZeroAndInvestmentType(client, "Producto").stream()
-                .toList();
+        List<Investment> investments = investmentService.getAllProductInvestmentsGreaterThanZeroByClient(client)
+                .stream().toList();
 
         // Map investments to InvestmentWarehouseDataTable
         List<InvestmentWarehouseDataTable> investmentData = investments.stream()
-            .map(inv -> new InvestmentWarehouseDataTable(
-                    inv.getInvestmentId(),
-                    inv.getInvestmentName(),
-                    inv.getAmount(),
-                    inv.getReceivedDate()
-            ))
-            .toList();
+                .map(inv -> new InvestmentWarehouseDataTable(
+                        inv.getInvestmentId(),
+                        inv.getInvestmentName(),
+                        inv.getLeftAmount(),
+                        inv.getReceivedDate()
+                ))
+                .toList();
 
         // Set up columns if not already set (optional, for safety)
-        tcIdInvestment.setCellValueFactory(new javafx.scene.control.cell.PropertyValueFactory<>("investmentId"));
-        tcProductName.setCellValueFactory(new javafx.scene.control.cell.PropertyValueFactory<>("investmentName"));
-        tcProductAmount.setCellValueFactory(new javafx.scene.control.cell.PropertyValueFactory<>("productAmount"));
-        tcProductDate.setCellValueFactory(new javafx.scene.control.cell.PropertyValueFactory<>("investmentDate"));
+        tcIdInvestment.setCellValueFactory(new PropertyValueFactory<>("investmentId"));
+        tcProductName.setCellValueFactory(new PropertyValueFactory<>("investmentName"));
+        tcProductAmount.setCellValueFactory(new PropertyValueFactory<>("productAmount"));
+        tcProductDate.setCellValueFactory(new PropertyValueFactory<>("investmentDate"));
 
         // Add data to the table
         tvInvestments.getItems().addAll(investmentData);
@@ -182,7 +182,7 @@ public class WarehouseViewController {
         ttcProductName.setCellValueFactory(new TreeItemPropertyValueFactory<>("productName"));
         ttcProductAmount.setCellValueFactory(new TreeItemPropertyValueFactory<>("productAmount"));
 
-        List<Inventory> inventory = inventoryService.getAllInventories();
+        List<Inventory> inventory = inventoryService.getAllInventoriesByClient(client);
 
         // Group inventories by warehouse
         Map<Warehouse, List<Inventory>> inventoriesByWarehouse = inventory.stream()
@@ -191,10 +191,14 @@ public class WarehouseViewController {
         TreeItem<WarehouseDataTable> root = new TreeItem<>();
 
         inventoriesByWarehouse.forEach((warehouse, inventories) -> {
-            int total = inventories.stream().mapToInt(Inventory::getAmount).sum();
+            // Manejo de amount null en el cálculo del total
+            int total = inventories.stream()
+                    .mapToInt(inv -> inv.getAmount() != null ? inv.getAmount() : 0)
+                    .sum();
+
             WarehouseDataTable warehouseNode = new WarehouseDataTable(
-                    warehouse.getWarehouseName() + " (Total: " + total + ")",
-                    "",
+                    warehouse.getWarehouseName(),
+                    "Productos: " + inventories.size(),
                     total
             );
 
@@ -204,8 +208,8 @@ public class WarehouseViewController {
             inventories.forEach(inv -> {
                 WarehouseDataTable productNode = new WarehouseDataTable(
                         "",
-                        inv.getProduct().getProductName(),
-                        inv.getAmount()
+                        inv.getProduct() != null ? inv.getProduct().getProductName() : "",
+                        inv.getAmount() != null ? inv.getAmount() : 0
                 );
                 warehouseItem.getChildren().add(new TreeItem<>(productNode));
             });
@@ -287,7 +291,7 @@ public class WarehouseViewController {
         ConfigurableApplicationContext context = Main.getContext();
         Stage stage = createStage(
                 context.getBean(SpringFXMLLoader.class).load("/assignInvestmentView.fxml"),
-                "Asignar Inversión a un Almacén",
+                "Asignar Inversión",
                 "/images/RTS_logo.png"
         );
         stage.setOnCloseRequest(event -> {
@@ -338,6 +342,7 @@ public class WarehouseViewController {
     // ============================
     // MÉTODOS DE NAVEGACIÓN
     // ============================
+
     /**
      * Navigates to the configuration view.
      */

@@ -1,14 +1,8 @@
 package com.marcosoft.storageSoftware.application.controller;
 
 import com.marcosoft.storageSoftware.application.dto.UserLogged;
-import com.marcosoft.storageSoftware.domain.model.Client;
-import com.marcosoft.storageSoftware.domain.model.GeneralRegistry;
-import com.marcosoft.storageSoftware.domain.model.Warehouse;
-import com.marcosoft.storageSoftware.domain.model.WarehouseRegistry;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceImpl;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.GeneralRegistryServiceImpl;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.WarehouseRegistryServiceImpl;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.WarehouseServiceImpl;
+import com.marcosoft.storageSoftware.domain.model.*;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.*;
 import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -36,12 +30,18 @@ public class AddWarehouseViewController {
     private final WarehouseServiceImpl warehouseService;
     private final WarehouseRegistryServiceImpl warehouseRegistryService;
     private final GeneralRegistryServiceImpl generalRegistryService;
+    private final InventoryServiceImpl inventoryService;
 
     /**
      * Constructor for dependency injection.
      */
     @Lazy
-    public AddWarehouseViewController(WarehouseViewController warehouseViewController, WarehouseRegistryServiceImpl warehouseRegistryService, GeneralRegistryServiceImpl generalRegistryService, DisplayAlerts displayAlerts, WarehouseServiceImpl warehouseService, UserLogged userLogged, ClientServiceImpl clientService) {
+    public AddWarehouseViewController(
+            InventoryServiceImpl inventoryService, WarehouseViewController warehouseViewController,
+            WarehouseRegistryServiceImpl warehouseRegistryService, GeneralRegistryServiceImpl generalRegistryService,
+            DisplayAlerts displayAlerts, WarehouseServiceImpl warehouseService, UserLogged userLogged, ClientServiceImpl clientService
+    ) {
+        this.inventoryService = inventoryService;
         this.warehouseService = warehouseService;
         this.warehouseViewController = warehouseViewController;
         this.generalRegistryService = generalRegistryService;
@@ -77,17 +77,36 @@ public class AddWarehouseViewController {
                 Warehouse warehouse = new Warehouse(
                         null,
                         tfWarehouseName.getText(),
-                        clientService.getClientByName(userLogged.getName())
+                        client
                 );
                 warehouseService.save(warehouse);
 
+                Inventory inventory = new Inventory(
+                        null,
+                        null,
+                        client,
+                        warehouse,
+                        null
+                );
+                inventoryService.save(inventory);
+
                 GeneralRegistry generalRegistry = new GeneralRegistry(
-                        null, client, "Almacenes", "Adición Almacén", registryMoment
+                        null,
+                        client,
+                        "Almacenes",
+                        "Adición Almacén",
+                        registryMoment
                 );
                 generalRegistryService.save(generalRegistry);
 
                 WarehouseRegistry warehouseRegistry = new WarehouseRegistry(
-                        null, client, "Adición", registryMoment, warehouse.getWarehouseName(), null, null
+                        null,
+                        client,
+                        "Adición",
+                        registryMoment,
+                        warehouse.getWarehouseName(),
+                        null,
+                        null
                 );
                 warehouseRegistryService.save(warehouseRegistry);
 

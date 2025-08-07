@@ -17,4 +17,7 @@ public interface InvestmentRepository extends CrudRepository<Investment, Long> {
     List<Investment> findAllInvestmentsByClientAndAmountGreaterThanAndInvestmentType(Client client, Integer amount, String investmentType);
 
     Investment findByClientAndInvestmentNameAndInvestmentPriceAndCurrencyAndAmountAndReceivedDateAndInvestmentType(Client client, String investmentName, Double investmentPrice, Currency currency, Integer amount, LocalDate receivedDate, String investmentType);
+
+    List<Investment> findByClientAndLeftAmountGreaterThanAndInvestmentType(Client client, Integer leftAmount, String investmentType);
+
 }

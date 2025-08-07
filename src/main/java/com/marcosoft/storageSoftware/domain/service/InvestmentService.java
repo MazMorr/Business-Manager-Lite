@@ -19,7 +19,10 @@ public interface InvestmentService {
     boolean existsByInvestmentId(Long investmentId);
 
     Investment getByClientAndInvestmentNameAndInvestmentPriceAndCurrencyAndAmountAndReceivedDateAndInvestmentType(Client client, String investmentName, Double investmentPrice, Currency currency, Integer amount, LocalDate receivedDate, String investmentType);
+
     List<Investment> getAllInvestmentsByClientAndAmountGreaterThanZeroAndInvestmentType(Client client, String investmentType);
+
+    List<Investment> getAllProductInvestmentsGreaterThanZeroByClient(Client client);
 
     List<Investment> getAllInvestmentsByLeftAmountGreaterThanAndClient(Integer leftAmount, Client client);
 }

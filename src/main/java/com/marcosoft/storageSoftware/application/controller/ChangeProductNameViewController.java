@@ -6,6 +6,7 @@ import com.marcosoft.storageSoftware.domain.model.GeneralRegistry;
 import com.marcosoft.storageSoftware.domain.model.Product;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.GeneralRegistryServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.InvestmentServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.ProductServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
 import javafx.application.Platform;
@@ -35,14 +36,22 @@ public class ChangeProductNameViewController {
     private final ClientServiceImpl clientService;
     private final ProductServiceImpl productService;
     private final DisplayAlerts displayAlerts;
+    private final InvestmentServiceImpl investmentService;
     private final GeneralRegistryServiceImpl generalRegistryService;
+    private final WarehouseViewController warehouseViewController;
 
     /**
      * Constructor for dependency injection.
      */
     @Lazy
-    public ChangeProductNameViewController(GeneralRegistryServiceImpl generalRegistryService, DisplayAlerts displayAlerts, UserLogged userLogged, ClientServiceImpl clientService, ProductServiceImpl productService) {
+    public ChangeProductNameViewController(
+            WarehouseViewController warehouseViewController, InvestmentServiceImpl investmentService,
+            GeneralRegistryServiceImpl generalRegistryService, DisplayAlerts displayAlerts, UserLogged userLogged,
+            ClientServiceImpl clientService, ProductServiceImpl productService
+    ) {
         this.productService = productService;
+        this.warehouseViewController = warehouseViewController;
+        this.investmentService = investmentService;
         this.generalRegistryService = generalRegistryService;
         this.displayAlerts = displayAlerts;
         this.clientService = clientService;
@@ -89,6 +98,8 @@ public class ChangeProductNameViewController {
 
             displayAlerts.showAlert("El nuevo nombre ha sido correctamente asignado");
             clearFields();
+            warehouseViewController.initTableValues();
+            warehouseViewController.initTreeTable();
         } catch (Exception e) {
             displayAlerts.showAlert("Ha ocurrido un error: " + e.getMessage());
         }

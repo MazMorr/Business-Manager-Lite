@@ -38,16 +38,16 @@ public class AssignInvestmentViewController {
     private final ParseDataTypes parseDataTypes;
     private final GeneralRegistryServiceImpl generalRegistryService;
     private final WarehouseRegistryServiceImpl warehouseRegistryService;
+    private final WarehouseViewController warehouseViewController;
 
     /**
      * Constructor for dependency injection.
      */
-    @Lazy
     public AssignInvestmentViewController(
             GeneralRegistryServiceImpl generalRegistryService, ParseDataTypes parseDataTypes, DisplayAlerts displayAlerts,
             InventoryServiceImpl inventoryService, UserLogged userLogged, WarehouseServiceImpl warehouseService,
             ClientServiceImpl clientService, InvestmentServiceImpl investmentService, ProductServiceImpl productService,
-            WarehouseRegistryServiceImpl warehouseRegistryService
+            WarehouseRegistryServiceImpl warehouseRegistryService, WarehouseViewController warehouseViewController
     ) {
         this.productService = productService;
         this.warehouseRegistryService = warehouseRegistryService;
@@ -59,6 +59,7 @@ public class AssignInvestmentViewController {
         this.investmentService = investmentService;
         this.clientService = clientService;
         this.parseDataTypes = parseDataTypes;
+        this.warehouseViewController = warehouseViewController;
     }
 
     // FXML UI components
@@ -94,7 +95,7 @@ public class AssignInvestmentViewController {
             displayAlerts.showAlert("Esta inversión ha sido completamente asignada, debe seleccionar otra o reasignar los productos de esta");
         } else {
             tfAmount.setText(String.valueOf(investmentService.getInvestmentById(
-                    Long.parseLong(tfInvestment.getText())).getAmount())
+                    Long.parseLong(tfInvestment.getText())).getLeftAmount())
             );
         }
     }
@@ -144,17 +145,24 @@ public class AssignInvestmentViewController {
                         client
                 );
 
-                Inventory inventory = new Inventory(
-                        investmentId,
-                        product,
-                        client,
-                        warehouse,
-                        amountToAssign
-                );
+                Inventory inventory;
+                if(inventoryService.existsByProductAndWarehouseAndClient(product,warehouse,client)){
+                    inventory = inventoryService.getByProductAndWarehouseAndClient(product, warehouse, client);
+                    inventory.setAmount(inventory.getAmount() + amountToAssign);
+                }else{
+                    inventory = new Inventory(
+                            null,
+                            product,
+                            client,
+                            warehouse,
+                            amountToAssign
+                    );
+                }
+
                 inventoryService.save(inventory);
 
                 int actualInvestmentAmount = investment.getAmount() - amountToAssign;
-                investment.setAmount(actualInvestmentAmount);
+                investment.setLeftAmount(actualInvestmentAmount);
                 investmentService.save(investment);
 
 
@@ -169,6 +177,8 @@ public class AssignInvestmentViewController {
                 );
                 warehouseRegistryService.save(warehouseRegistry);
 
+                warehouseViewController.initTreeTable();
+                warehouseViewController.initTableValues();
                 displayAlerts.showAlert("Producto asignado exitosamente");
             }
         } catch (NumberFormatException e) {
@@ -198,7 +208,7 @@ public class AssignInvestmentViewController {
      */
     private void initMbInvestment() {
         mbInvestment.getItems().clear();
-        List<Investment> investments = investmentService.getNonZeroInvestmentsByClient(clientService.getClientByName(userLogged.getName()));
+        List<Investment> investments = investmentService.getAllProductInvestmentsGreaterThanZeroByClient(client);
 
         for (Investment i : investments) {
             MenuItem item = new MenuItem(String.valueOf(i.getInvestmentId()));
@@ -215,7 +225,7 @@ public class AssignInvestmentViewController {
      */
     private void initMbWarehouse() {
         mbWarehouse.getItems().clear();
-        List<Warehouse> warehouses = warehouseService.getWarehousesByClient(clientService.getClientByName(userLogged.getName()));
+        List<Warehouse> warehouses = warehouseService.getWarehousesByClient(client);
 
         for (Warehouse w : warehouses) {
             MenuItem item = new MenuItem(w.getWarehouseName());

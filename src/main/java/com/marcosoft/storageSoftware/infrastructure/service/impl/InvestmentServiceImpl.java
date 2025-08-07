@@ -5,28 +5,28 @@ import com.marcosoft.storageSoftware.domain.model.Currency;
 import com.marcosoft.storageSoftware.domain.model.Investment;
 import com.marcosoft.storageSoftware.domain.repository.InvestmentRepository;
 import com.marcosoft.storageSoftware.domain.service.InvestmentService;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
 
-@Lazy
 @Service
 public class InvestmentServiceImpl implements InvestmentService {
     InvestmentRepository investmentRepository;
 
-    @Lazy
     public InvestmentServiceImpl(InvestmentRepository investmentRepository) {
         this.investmentRepository = investmentRepository;
     }
 
     @Override
+    @Transactional
     public Investment save(Investment investment) {
         return investmentRepository.save(investment);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Investment getInvestmentById(Long id) {
         return investmentRepository.findById(id).orElse(null);
     }
@@ -37,6 +37,7 @@ public class InvestmentServiceImpl implements InvestmentService {
     }
 
     @Override
+    @Transactional
     public void deleteInvestmentById(Long id) {
         investmentRepository.deleteById(id);
     }
@@ -54,6 +55,11 @@ public class InvestmentServiceImpl implements InvestmentService {
     @Override
     public List<Investment> getAllInvestmentsByClientAndAmountGreaterThanZeroAndInvestmentType(Client client, String investmentType) {
         return investmentRepository.findAllInvestmentsByClientAndAmountGreaterThanAndInvestmentType(client, 0, investmentType);
+    }
+
+    @Override
+    public List<Investment> getAllProductInvestmentsGreaterThanZeroByClient(Client client) {
+        return investmentRepository.findByClientAndLeftAmountGreaterThanAndInvestmentType(client, 0, "Producto");
     }
 
     @Override

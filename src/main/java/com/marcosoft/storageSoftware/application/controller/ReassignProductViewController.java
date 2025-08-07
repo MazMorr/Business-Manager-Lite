@@ -38,6 +38,7 @@ public class ReassignProductViewController {
     private final ParseDataTypes parseDataTypes;
     private final GeneralRegistryServiceImpl generalRegistryService;
     private final WarehouseRegistryServiceImpl warehouseRegistryService;
+    private final WarehouseViewController warehouseViewController;
 
     /**
      * Constructor for dependency injection.
@@ -47,10 +48,11 @@ public class ReassignProductViewController {
             GeneralRegistryServiceImpl generalRegistryService, WarehouseRegistryServiceImpl warehouseRegistryService,
             ParseDataTypes parseDataTypes, ProductServiceImpl productService, DisplayAlerts displayAlerts,
             WarehouseServiceImpl warehouseService, ClientServiceImpl clientService, UserLogged userLogged,
-            InventoryServiceImpl inventoryService
+            InventoryServiceImpl inventoryService, WarehouseViewController warehouseViewController
     ) {
         this.inventoryService = inventoryService;
         this.warehouseRegistryService = warehouseRegistryService;
+        this.warehouseViewController = warehouseViewController;
         this.generalRegistryService = generalRegistryService;
         this.parseDataTypes = parseDataTypes;
         this.productService = productService;
@@ -75,7 +77,6 @@ public class ReassignProductViewController {
         initClient();
         Platform.runLater(() -> {
             initMbWarehouse();
-            initMbWarehouseReceipt();
         });
     }
 
@@ -101,9 +102,7 @@ public class ReassignProductViewController {
      */
     @FXML
     public void reassignProduct(ActionEvent actionEvent) {
-        if (!validateAllFields()) {
-            return;
-        }
+        if (!validateAllFields()) return;
 
         try {
             String warehouseGivesName = tfWarehouseGives.getText();
@@ -140,14 +139,16 @@ public class ReassignProductViewController {
             generalRegistryService.save(generalRegistry);
 
             WarehouseRegistry warehouseRegistry = new WarehouseRegistry(
-                    null, client, registryType, registryMoment, warehouseGives.getWarehouseName(), product.getProductName() , amount
+                    null, client, registryType, registryMoment, warehouseGives.getWarehouseName(), product.getProductName(), amount
             );
             warehouseRegistryService.save(warehouseRegistry);
 
             displayAlerts.showAlert("Se ha reasignado el producto satisfactoriamente");
             cleanFields();
+
+            warehouseViewController.initTreeTable();
         } catch (Exception e) {
-            displayAlerts.showAlert("Ha ocurrid un error" + e.getMessage());
+            displayAlerts.showAlert("Ha ocurrido un error" + e.getMessage());
         }
     }
 
@@ -172,10 +173,6 @@ public class ReassignProductViewController {
             tfAmount.setText(String.valueOf(inventoryService.getByProductAndWarehouseAndClient(product, warehouse, client).getAmount()));
         }
     }
-
-    // ============================
-    // UTILITIES
-    // ============================
 
     /**
      * Clears all input fields in the form.
@@ -301,14 +298,10 @@ public class ReassignProductViewController {
         }
     }
 
-    /**
-     * Initializes the product menu for the selected warehouse.
-     * Populates the menu with available products.
-     */
     private void initMbProduct(Warehouse warehouse) {
-        if (warehouse == null || warehouse.getWarehouseName() == null) return;
-
         mbProduct.getItems().clear();
+        if (warehouse == null) return;
+
         List<Inventory> inventory = inventoryService.getAllInventoriesByWarehouseAndClient(warehouse, client);
 
         if (inventory.isEmpty()) {
@@ -318,53 +311,40 @@ public class ReassignProductViewController {
             return;
         }
 
-        for (Inventory i : inventory) {
-            if (i.getProduct() != null && i.getProduct().getProductName() != null) {
-                MenuItem item = new MenuItem(i.getProduct().getProductName());
-                item.setOnAction(e -> tfProduct.setText(item.getText()));
-                mbProduct.getItems().add(item);
-            }
-        }
-    }
-
-    /**
-     * Initializes the destination warehouse menu.
-     * Populates the menu with available warehouses except the origin.
-     */
-    private void initMbWarehouseReceipt() {
-        mbWarehouseReceipt.getItems().clear();
-        mbWarehouse.getItems().clear();
-        Client client = clientService.getClientByName(userLogged.getName());
-        List<Warehouse> warehouses = warehouseService.getAllWarehousesByClient(client);
-        for (Warehouse w : warehouses) {
-            if (!w.getWarehouseName().equals(tfWarehouseGives.getText())) {
-                MenuItem item = new MenuItem(w.getWarehouseName());
-                item.setOnAction(e -> {
-                    tfWarehouseGives.setText(item.getText());
-                    initMbWarehouse();
+        inventory.stream()
+                .filter(i -> i.getProduct() != null)
+                .forEach(i -> {
+                    MenuItem item = new MenuItem(i.getProduct().getProductName());
+                    item.setOnAction(e -> tfProduct.setText(i.getProduct().getProductName()));
+                    mbProduct.getItems().add(item);
                 });
-                mbWarehouse.getItems().add(item);
-            }
-        }
     }
 
-    /**
-     * Initializes the origin warehouse menu.
-     * Populates the menu with available warehouses except the destination.
-     */
     private void initMbWarehouse() {
         mbWarehouse.getItems().clear();
-        Client client = clientService.getClientByName(userLogged.getName());
         List<Warehouse> warehouses = warehouseService.getAllWarehousesByClient(client);
+
         for (Warehouse w : warehouses) {
-            if (!w.getWarehouseName().equals(tfWarehouseReceipt.getText())) {
+            MenuItem item = new MenuItem(w.getWarehouseName());
+            item.setOnAction(e -> {
+                tfWarehouseGives.setText(w.getWarehouseName());
+                initMbProduct(w);  // Actualiza productos
+                updateReceivingWarehouses(w.getWarehouseName()); // Actualiza receptores
+                cleanFields();
+            });
+            mbWarehouse.getItems().add(item);
+        }
+    }
+
+    private void updateReceivingWarehouses(String excludedWarehouseName) {
+        mbWarehouseReceipt.getItems().clear();
+        List<Warehouse> warehouses = warehouseService.getAllWarehousesByClient(client);
+
+        for (Warehouse w : warehouses) {
+            if (!w.getWarehouseName().equals(excludedWarehouseName)) {
                 MenuItem item = new MenuItem(w.getWarehouseName());
-                item.setOnAction(e -> {
-                    tfWarehouseGives.setText(item.getText());
-                    initMbProduct(w);
-                    initMbWarehouseReceipt();
-                });
-                mbWarehouse.getItems().add(item);
+                item.setOnAction(e -> tfWarehouseReceipt.setText(w.getWarehouseName()));
+                mbWarehouseReceipt.getItems().add(item);
             }
         }
     }

@@ -48,14 +48,16 @@ public class InvestmentViewController {
     private final CurrencyServiceImpl currencyService;
     private final DisplayAlerts displayAlerts;
     private final GeneralRegistryServiceImpl generalRegistryService;
+    private final ProductServiceImpl productService;
 
     /**
      * Constructor for dependency injection.
      * All required services and utilities are injected here.
      */
     @Lazy
-    public InvestmentViewController(GeneralRegistryServiceImpl generalRegistryService, DisplayAlerts displayAlerts, ParseDataTypes parseDataTypes, UserLogged userLogged, ClientServiceImpl clientService, InvestmentServiceImpl investmentService, CurrencyServiceImpl currencyService, InvestmentRegistryServiceImpl investmentRegistryService, SceneSwitcher sceneSwitcher) {
+    public InvestmentViewController(ProductServiceImpl productService, GeneralRegistryServiceImpl generalRegistryService, DisplayAlerts displayAlerts, ParseDataTypes parseDataTypes, UserLogged userLogged, ClientServiceImpl clientService, InvestmentServiceImpl investmentService, CurrencyServiceImpl currencyService, InvestmentRegistryServiceImpl investmentRegistryService, SceneSwitcher sceneSwitcher) {
         this.currencyService = currencyService;
+        this.productService = productService;
         this.generalRegistryService = generalRegistryService;
         this.displayAlerts = displayAlerts;
         this.sceneSwitcher = sceneSwitcher;
@@ -249,6 +251,17 @@ public class InvestmentViewController {
         Investment inv = investmentService.getByClientAndInvestmentNameAndInvestmentPriceAndCurrencyAndAmountAndReceivedDateAndInvestmentType(
                 client, investmentName, price, currencyService.getCurrencyByName(currency), amount, receivedDate, investmentType
         );
+
+        if (investmentType.equals("Producto") && !productService.existsByProductNameAndClient(investmentName, client)) {
+            Product product = new Product(
+                    null,
+                    investmentName,
+                    null,
+                    client,
+                    null
+            );
+            productService.save(product);
+        }
 
         //Add the investment registry to DB
         InvestmentRegistry investmentRegistry = new InvestmentRegistry(
