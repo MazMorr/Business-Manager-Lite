@@ -45,7 +45,7 @@
                   <TextField fx:id="tfNewName" prefWidth="150.0" />
                </children>
             </HBox>
-            <Button mnemonicParsing="false" onAction="#updateWarehouseName" prefHeight="40.0" prefWidth="296.0" text="Actualizar Nombre Almacén">
+            <Button defaultButton="true" mnemonicParsing="false" onAction="#updateWarehouseName" prefHeight="40.0" prefWidth="296.0" text="Actualizar Nombre Almacén">
                <graphic>
                   <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
                      <image>

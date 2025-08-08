@@ -48,14 +48,16 @@ public class InvestmentViewController {
     private final CurrencyServiceImpl currencyService;
     private final DisplayAlerts displayAlerts;
     private final GeneralRegistryServiceImpl generalRegistryService;
+    private final ProductServiceImpl productService;
 
     /**
      * Constructor for dependency injection.
      * All required services and utilities are injected here.
      */
     @Lazy
-    public InvestmentViewController(GeneralRegistryServiceImpl generalRegistryService, DisplayAlerts displayAlerts, ParseDataTypes parseDataTypes, UserLogged userLogged, ClientServiceImpl clientService, InvestmentServiceImpl investmentService, CurrencyServiceImpl currencyService, InvestmentRegistryServiceImpl investmentRegistryService, SceneSwitcher sceneSwitcher) {
+    public InvestmentViewController(ProductServiceImpl productService, GeneralRegistryServiceImpl generalRegistryService, DisplayAlerts displayAlerts, ParseDataTypes parseDataTypes, UserLogged userLogged, ClientServiceImpl clientService, InvestmentServiceImpl investmentService, CurrencyServiceImpl currencyService, InvestmentRegistryServiceImpl investmentRegistryService, SceneSwitcher sceneSwitcher) {
         this.currencyService = currencyService;
+        this.productService = productService;
         this.generalRegistryService = generalRegistryService;
         this.displayAlerts = displayAlerts;
         this.sceneSwitcher = sceneSwitcher;
@@ -76,21 +78,22 @@ public class InvestmentViewController {
     @FXML
     private DatePicker dpAddInvestmentDate;
     @FXML
-    private TableView<InvestmentDataTable> tblInvestment;
-    @FXML
-    private TableColumn<InvestmentDataTable, Integer> amountColumn;
-    @FXML
-    private TableColumn<InvestmentDataTable, String> nameColumn, currencyColumn;
-    @FXML
-    private TableColumn<InvestmentDataTable, LocalDate> dateColumn;
-    @FXML
-    private TableColumn<InvestmentDataTable, Long> idColumn;
-    @FXML
-    private TableColumn<InvestmentDataTable, Double> priceColumn;
-    @FXML
     private MenuButton mbCurrency, mbInvestmentType;
     @FXML
     private Pagination paginator;
+
+    @FXML
+    private TableView<InvestmentDataTable> tvInvestment;
+    @FXML
+    private TableColumn<InvestmentDataTable, String> tcInvestmentName, tcTypeInvestment, tcCurrency;
+    @FXML
+    private TableColumn<InvestmentDataTable, Double> tcPrice;
+    @FXML
+    private TableColumn<InvestmentDataTable, Integer> tcAmount;
+    @FXML
+    private TableColumn<InvestmentDataTable, Long> tcId;
+    @FXML
+    private TableColumn<InvestmentDataTable, LocalDate> tcDate;
 
     /**
      * Initializes the controller after its root element has been completely processed.
@@ -98,7 +101,7 @@ public class InvestmentViewController {
      */
     @FXML
     public void initialize() {
-        registryZone= "Inversiones";
+        registryZone = "Inversiones";
         lblClientName.setText(userLogged.getName());
         client = clientService.getClientByName(userLogged.getName());
         Platform.runLater(() -> {
@@ -106,23 +109,12 @@ public class InvestmentViewController {
             setupTextFieldListeners();
             setupTableSelectionListener();
             updateCurrencyMenu();
-            initCurrencyDefaultValues();
             initDpDefaultValue();
+            initMbInvestmentTypeItemsOnAction();
         });
     }
 
-    /**
-     * Initializes default currencies if they do not exist in the database.
-     */
-    private void initCurrencyDefaultValues() {
-        List<String> defaultCurrenciesName = List.of("MLC", "CUP", "USD", "EUR");
-        for (String currencyName : defaultCurrenciesName) {
-            if (!currencyService.existsByCurrencyName(currencyName)) {
-                Currency currency = new Currency(null, currencyName, client);
-                currencyService.save(currency);
-            }
-        }
-    }
+
 
     /**
      * Sets up listeners for filter and input text fields.
@@ -149,16 +141,26 @@ public class InvestmentViewController {
      * Populates form fields with selected investment data.
      */
     private void setupTableSelectionListener() {
-        tblInvestment.getSelectionModel().selectedItemProperty().addListener((obs, oldSel, newSel) -> {
+        tvInvestment.getSelectionModel().selectedItemProperty().addListener((obs, oldSel, newSel) -> {
             if (newSel != null) {
                 tfId.setText(newSel.getId() != null ? String.valueOf(newSel.getId()) : "");
-                tfAddProductName.setText(newSel.getProductName());
+                tfAddProductName.setText(newSel.getInvestmentName());
                 tfAddProductAmount.setText(newSel.getAmount() != null ? String.valueOf(newSel.getAmount()) : "");
                 tfAddInvestmentPrice.setText(newSel.getPrice() != null ? String.valueOf(newSel.getPrice()) : "");
                 tfAddInvestmentCurrency.setText(newSel.getCurrency());
                 dpAddInvestmentDate.setValue(newSel.getReceivedDate());
             }
         });
+    }
+
+    private void initMbInvestmentTypeItemsOnAction() {
+        List<MenuItem> items = mbInvestmentType.getItems().stream().toList();
+        mbInvestmentType.getItems().clear();
+
+        for (MenuItem mi : items) {
+            mi.setOnAction(e -> tfAddInvestmentType.setText(mi.getText()));
+            mbInvestmentType.getItems().add(mi);
+        }
     }
 
     /**
@@ -174,6 +176,7 @@ public class InvestmentViewController {
             investmentList.add(new InvestmentDataTable(
                     investment.getInvestmentId(),
                     investment.getInvestmentName(),
+                    investment.getInvestmentType(),
                     investment.getInvestmentPrice(),
                     investment.getCurrency().getCurrencyName(),
                     investment.getAmount(),
@@ -181,15 +184,15 @@ public class InvestmentViewController {
             ));
         }
 
+        tcId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        tcInvestmentName.setCellValueFactory(new PropertyValueFactory<>("investmentName"));
+        tcTypeInvestment.setCellValueFactory(new PropertyValueFactory<>("investmentType"));
+        tcPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
+        tcCurrency.setCellValueFactory(new PropertyValueFactory<>("currency"));
+        tcAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
+        tcDate.setCellValueFactory(new PropertyValueFactory<>("receivedDate"));
 
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("productName"));
-        priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
-        currencyColumn.setCellValueFactory(new PropertyValueFactory<>("currency"));
-        amountColumn.setCellValueFactory(new PropertyValueFactory<>("amount"));
-        dateColumn.setCellValueFactory(new PropertyValueFactory<>("receivedDate"));
-
-        tblInvestment.setItems(investmentList);
+        tvInvestment.setItems(investmentList);
         filterInvestmentTable();
     }
 
@@ -204,23 +207,23 @@ public class InvestmentViewController {
         }
 
         Long investmentId = parseDataTypes.parseLong(tfId.getText());
-        String productName = tfAddProductName.getText();
+        String investmentName = tfAddProductName.getText();
         Double price = parseDataTypes.parseDouble(tfAddInvestmentPrice.getText());
         Integer amount = parseDataTypes.parseInt(tfAddProductAmount.getText());
         LocalDate receivedDate = dpAddInvestmentDate.getValue();
         String currency = tfAddInvestmentCurrency.getText();
         String investmentType = tfAddInvestmentType.getText();
         String registryType;
-        if(investmentService.getInvestmentById(investmentId) == null){
+        if (!investmentService.existsByInvestmentId(investmentId)) {
             registryType = "Adición";
-        }else{
-            registryType= "Actualización";
+        } else {
+            registryType = "Actualización";
         }
 
         //Add the investment to DB
         Investment investment = new Investment(
                 investmentId,
-                productName,
+                investmentName,
                 price,
                 currencyService.getCurrencyByName(currency),
                 amount,
@@ -232,10 +235,29 @@ public class InvestmentViewController {
         investmentService.save(investment);
         initializeTableValues();
 
+        Investment inv = investmentService
+                .getByClientAndInvestmentNameAndInvestmentPriceAndCurrencyAndAmountAndReceivedDateAndInvestmentType(
+                        client, investmentName, price, currencyService.getCurrencyByName(currency), amount, receivedDate, investmentType
+                );
+
+        if (investmentType.equals("Producto") && !productService.existsByProductNameAndClient(investmentName, client)) {
+            Product product = new Product(
+                    null,
+                    investmentName,
+                    null,
+                    client,
+                    null
+            );
+            productService.save(product);
+        }
+
         //Add the investment registry to DB
         InvestmentRegistry investmentRegistry = new InvestmentRegistry(
                 null,
-                investment,
+                inv.getInvestmentId(),
+                investmentName,
+                price,
+                currency,
                 client,
                 registryType,
                 LocalDateTime.now()
@@ -253,6 +275,7 @@ public class InvestmentViewController {
         generalRegistryService.save(generalRegistry);
 
         cleanForm(null);
+        updateCurrencyMenu();
     }
 
     /**
@@ -285,9 +308,6 @@ public class InvestmentViewController {
         if (currency.isEmpty()) {
             displayAlerts.showAlert("Debe seleccionar una moneda");
             return false;
-        } else if (!currencyService.existsByCurrencyName(currency)) {
-            Currency newCurrency = new Currency(null, currency, client);
-            currencyService.save(newCurrency);
         }
         return true;
     }
@@ -313,7 +333,10 @@ public class InvestmentViewController {
 
                 InvestmentRegistry investmentRegistry = new InvestmentRegistry(
                         null,
-                        investmentDB,
+                        investmentDB.getInvestmentId(),
+                        investmentDB.getInvestmentName(),
+                        investmentDB.getInvestmentPrice(),
+                        investmentDB.getCurrency().getCurrencyName(),
                         client,
                         registryType,
                         LocalDateTime.now()
@@ -342,9 +365,10 @@ public class InvestmentViewController {
     @FXML
     public void cleanForm(ActionEvent actionEvent) {
         tfId.clear();
+        tfAddInvestmentType.clear();
         tfAddProductName.clear();
-        tfAddProductAmount.setText("0");
-        tfAddInvestmentPrice.setText("0.00");
+        tfAddProductAmount.clear();
+        tfAddInvestmentPrice.clear();
         dpAddInvestmentDate.setValue(LocalDate.now());
         tfAddInvestmentCurrency.clear();
     }
@@ -359,8 +383,8 @@ public class InvestmentViewController {
         tfMinFilterAmount.clear();
         tfMaxFilterAmount.clear();
         tfAddInvestmentCurrency.clear();
-        tfMinFilterPrice.setText(String.valueOf(0.00));
-        tfMaxFilterPrice.setText(String.valueOf(0.00));
+        tfMinFilterPrice.clear();
+        tfMaxFilterPrice.clear();
     }
 
     /**
@@ -381,8 +405,8 @@ public class InvestmentViewController {
                 matches &= investment.getId() != null && investment.getId().toString().contains(id);
 
             if (!name.isEmpty())
-                matches &= investment.getProductName() != null &&
-                        investment.getProductName().toLowerCase().contains(name);
+                matches &= investment.getInvestmentName() != null &&
+                        investment.getInvestmentName().toLowerCase().contains(name);
 
             if (minAmount != null && minAmount > 0)
                 matches &= investment.getAmount() != null && investment.getAmount() >= minAmount;
@@ -403,7 +427,7 @@ public class InvestmentViewController {
                 .filter(filter)
                 .collect(Collectors.toCollection(FXCollections::observableArrayList));
 
-        tblInvestment.setItems(filteredList);
+        tvInvestment.setItems(filteredList);
     }
 
     /**
@@ -432,10 +456,11 @@ public class InvestmentViewController {
      */
     @FXML
     public void selectInventory(Event event) {
-        InvestmentDataTable selectedInvestment = tblInvestment.getSelectionModel().getSelectedItem();
+        InvestmentDataTable selectedInvestment = tvInvestment.getSelectionModel().getSelectedItem();
         tfId.setText(String.valueOf(selectedInvestment.getId()));
         dpAddInvestmentDate.setValue(selectedInvestment.getReceivedDate());
-        tfAddProductName.setText(selectedInvestment.getProductName());
+        tfAddProductName.setText(selectedInvestment.getInvestmentName());
+        tfAddInvestmentType.setText(selectedInvestment.getInvestmentType());
         tfAddProductAmount.setText(String.valueOf(selectedInvestment.getAmount()));
         tfAddInvestmentCurrency.setText(selectedInvestment.getCurrency());
         tfAddInvestmentPrice.setText(String.valueOf(selectedInvestment.getPrice()));
@@ -489,21 +514,6 @@ public class InvestmentViewController {
         sceneSwitcher.switchView(actionEvent, "/sellView.fxml");
     }
 
-    /**
-     * Sets the investment type to "Producto" when the corresponding button is clicked.
-     */
-    @FXML
-    public void setInvestmentTypeToProduct(ActionEvent actionEvent) {
-        tfAddInvestmentType.setText("Producto");
-    }
-
-    /**
-     * Sets the investment type to "Servicio" when the corresponding button is clicked.
-     */
-    @FXML
-    public void setInvestmentTypeToService(ActionEvent actionEvent) {
-        tfAddInvestmentType.setText("Servicio");
-    }
 
     /**
      * Initializes the date picker with the current date.
@@ -512,8 +522,4 @@ public class InvestmentViewController {
         dpAddInvestmentDate.setValue(LocalDate.now());
     }
 
-    @FXML
-    public void setInvestmentBill(ActionEvent actionEvent) {
-        tfAddInvestmentType.setText("Factura");
-    }
 }

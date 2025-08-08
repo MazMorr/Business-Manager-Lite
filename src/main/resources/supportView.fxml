@@ -150,67 +150,67 @@
                   </Label>
                </children>
             </HBox>
-            <Label fx:id="txtWelcome" alignment="TOP_CENTER" layoutX="156.0" layoutY="191.0" prefHeight="396.0" prefWidth="574.0" stylesheets="@Styles.css" text="text test 1234 JGH" textAlignment="CENTER" wrapText="true" AnchorPane.bottomAnchor="125.0" AnchorPane.leftAnchor="170.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="179.0">
+            <Label fx:id="txtWelcome" alignment="TOP_CENTER" layoutX="156.0" layoutY="191.0" prefHeight="396.0" prefWidth="600.0" stylesheets="@Styles.css" text="text test 1234 JGH" textAlignment="CENTER" wrapText="true" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="180.0" AnchorPane.topAnchor="150.0">
                <font>
                   <Font name="Constantia" size="20.0" />
                </font>
             </Label>
-            <Label fx:id="txtWelcomeTitle" alignment="CENTER" layoutX="221.0" layoutY="130.0" prefHeight="37.0" prefWidth="513.0" text="Bienvenido" wrapText="true" AnchorPane.leftAnchor="220.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="130.0">
+            <Label fx:id="txtWelcomeTitle" alignment="CENTER" layoutX="221.0" layoutY="130.0" prefHeight="37.0" prefWidth="513.0" text="Bienvenido" wrapText="true" AnchorPane.leftAnchor="220.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="110.0">
                <font>
                   <Font name="Constantia Bold" size="30.0" />
                </font>
             </Label>
-            <VBox layoutX="546.0" layoutY="273.0" prefHeight="130.0" prefWidth="245.0" spacing="5.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="300.0">
+            <VBox layoutX="546.0" layoutY="273.0" prefHeight="130.0" prefWidth="260.0" spacing="5.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="310.0">
                <children>
-                  <Label text="Soporte" underline="true">
+                  <Label text="Soporte">
                      <font>
-                        <Font name="System Bold" size="18.0" />
+                        <Font name="System Bold" size="20.0" />
                      </font>
                      <VBox.margin>
                         <Insets left="95.0" />
                      </VBox.margin>
                   </Label>
-                  <Label text="+53 5550 5961">
+                  <Label text="MazMorr">
                      <font>
-                        <Font name="System Bold" size="14.0" />
+                        <Font name="System Bold" size="16.0" />
                      </font>
                      <graphic>
-                        <ImageView fitHeight="28.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@images/whatsapp.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Label>
-                  <Label accessibleRole="HYPERLINK" text="Marco Antonio Romero Albanez">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                     <graphic>
-                        <ImageView fitHeight="28.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@images/Linkedin.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Label>
-                  <Label text="Marcus12 (Romero´s Tech Solutions)">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                     <graphic>
-                        <ImageView fitHeight="32.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="32.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@images/facebook.png" />
                            </image>
                         </ImageView>
                      </graphic>
                   </Label>
+                  <Label text="+53 5550 5961">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="28.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/whatsapp.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Label>
+                  <Label accessibleRole="HYPERLINK" text="marconchelo12@gmail.com">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="28.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/Linkedin.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Label>
                </children>
             </VBox>
-            <ImageView fitHeight="166.0" fitWidth="245.0" layoutX="754.0" layoutY="94.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="130.0">
+            <ImageView fitHeight="238.0" fitWidth="245.0" layoutX="821.0" layoutY="99.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="120.0">
                <image>
-                  <Image url="@images/RTS_logo.png" />
+                  <Image url="@images/lazy_compile_logo.png" />
                </image>
             </ImageView>
             <Label fx:id="versionLabel" layoutX="678.0" layoutY="559.0" text="Version: 5.0.0.0" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="30.0">

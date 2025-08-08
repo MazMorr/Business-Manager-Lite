@@ -1,7 +1,9 @@
 package com.marcosoft.storageSoftware.application.controller;
 
 import com.marcosoft.storageSoftware.application.dto.UserLogged;
+import com.marcosoft.storageSoftware.domain.model.Currency;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.CurrencyServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -11,6 +13,8 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
+
+import java.util.List;
 
 /**
  * Controller for the support view.
@@ -26,13 +30,18 @@ public class SupportViewController {
     private final UserLogged userLogged;
     private final SceneSwitcher sceneSwitcher;
     private final ClientServiceImpl clientService;
+    private final CurrencyServiceImpl currencyService;
 
     /**
      * Constructor for dependency injection.
      */
     @Lazy
-    public SupportViewController(UserLogged userLogged, SceneSwitcher sceneSwitcher, ClientServiceImpl clientService) {
+    public SupportViewController(
+            CurrencyServiceImpl currencyService, SceneSwitcher sceneSwitcher, ClientServiceImpl clientService,
+            UserLogged userLogged
+    ) {
         this.userLogged = userLogged;
+        this.currencyService = currencyService;
         this.sceneSwitcher = sceneSwitcher;
         this.clientService = clientService;
     }
@@ -49,6 +58,7 @@ public class SupportViewController {
     private void initialize() {
         Platform.runLater(() -> {
             initWelcomeLabels();
+            initCurrencyDefaultValues();
 
             try {
                 String clientName = clientService.getByIsClientActive(true).getClientName();
@@ -68,20 +78,44 @@ public class SupportViewController {
     }
 
     /**
+     * Initializes default currencies if they do not exist in the database.
+     */
+    private void initCurrencyDefaultValues() {
+        List<String> defaultCurrenciesName = List.of("MLC", "CUP", "USD", "EUR");
+        for (String currencyName : defaultCurrenciesName) {
+            if (!currencyService.existsByCurrencyName(currencyName)) {
+                Currency currency = new Currency(null, currencyName, 0.0);
+                switch (currencyName) {
+                    case "MLC" -> currency = new Currency(null, currencyName, 215.00);
+                    case "CUP" -> currency = new Currency(null, currencyName, 1.00);
+                    case "USD" -> currency = new Currency(null, currencyName, 395.00);
+                    case "EUR" -> currency = new Currency(null, currencyName, 445.00);
+                }
+
+                currencyService.save(currency);
+            }
+        }
+    }
+
+    /**
      * Initializes welcome labels with version and welcome message.
      * The welcome message is shown in Spanish.
      */
     private void initWelcomeLabels() {
-        versionLabel.setText("0.9.5");
+        versionLabel.setText("0.9.7");
         txtWelcomeTitle.setText("Bienvenido, " + userLogged.getName());
         txtWelcome.setText(
-            "Este sistema ha sido diseñado para brindarle un control eficiente y seguro sobre los recursos de su negocio. " +
-            "Aquí podrá gestionar inventarios, inversiones, ventas y mucho más de manera sencilla y centralizada.\n\n" +
-            "Recuerde que el uso de este software está protegido por una licencia. La distribución o comercialización fuera de los canales oficiales " +
-            "puede resultar en sanciones legales, multas o la cancelación permanente de la licencia.\n\n" +
-            "Para cualquier duda, sugerencia o reporte de errores, utilice la sección 'Soporte' ubicada a la derecha de este mensaje. " +
-            "Nuestro equipo estará siempre disponible para ayudarle y mejorar su experiencia.\n\n" +
-            "¡Gracias por confiar en nosotros!"
+                """
+                        Este sistema ha sido diseñado para brindarle un control eficiente y seguro sobre los recursos de su negocio. \
+                        Aquí podrá gestionar inventarios, inversiones, ventas y mucho más de manera sencilla y centralizada.
+                        
+                        Recuerde que el uso de este software está protegido por una licencia. La distribución o comercialización fuera de los canales oficiales \
+                        puede resultar en sanciones legales, multas o la cancelación permanente de la licencia.
+                        
+                        Para cualquier duda, sugerencia o reporte de errores, utilice la sección 'Soporte' ubicada a la derecha de este mensaje. \
+                        Nuestro equipo estará siempre disponible para ayudarle y mejorar su experiencia.
+                        
+                        ¡Gracias por confiar en nosotros!"""
         );
     }
 

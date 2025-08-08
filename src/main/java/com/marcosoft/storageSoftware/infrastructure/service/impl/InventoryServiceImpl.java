@@ -6,28 +6,28 @@ import com.marcosoft.storageSoftware.domain.model.Product;
 import com.marcosoft.storageSoftware.domain.model.Warehouse;
 import com.marcosoft.storageSoftware.domain.repository.InventoryRepository;
 import com.marcosoft.storageSoftware.domain.service.InventoryService;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Lazy
 @Service
 public class InventoryServiceImpl implements InventoryService {
 
     InventoryRepository inventoryRepository;
 
-    @Lazy
     public InventoryServiceImpl(InventoryRepository inventoryRepository) {
         this.inventoryRepository = inventoryRepository;
     }
 
     @Override
+    @Transactional
     public Inventory save(Inventory inventory) {
         return inventoryRepository.save(inventory);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Inventory getInventoryById(Long id) {
         return inventoryRepository.findById(id).orElse(null);
     }
@@ -38,6 +38,7 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Override
+    @Transactional
     public void deleteInventoryById(Long id) {
         inventoryRepository.deleteById(id);
     }

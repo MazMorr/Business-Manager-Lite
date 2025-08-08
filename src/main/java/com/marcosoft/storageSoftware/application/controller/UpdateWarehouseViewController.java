@@ -36,6 +36,7 @@ public class UpdateWarehouseViewController {
     private final UserLogged userLogged;
     private final DisplayAlerts displayAlerts;
     private final GeneralRegistryServiceImpl generalRegistryService;
+    private final WarehouseViewController warehouseViewController;
 
     /**
      * Constructor for dependency injection.
@@ -43,9 +44,11 @@ public class UpdateWarehouseViewController {
     @Lazy
     public UpdateWarehouseViewController(
             UserLogged userLogged, DisplayAlerts displayAlerts, ClientServiceImpl clientService,
-            WarehouseServiceImpl warehouseService, GeneralRegistryServiceImpl generalRegistryService
+            WarehouseServiceImpl warehouseService, GeneralRegistryServiceImpl generalRegistryService,
+            WarehouseViewController warehouseViewController
     ) {
         this.warehouseService = warehouseService;
+        this.warehouseViewController = warehouseViewController;
         this.generalRegistryService = generalRegistryService;
         this.displayAlerts = displayAlerts;
         this.clientService = clientService;
@@ -97,7 +100,6 @@ public class UpdateWarehouseViewController {
                 String newName = tfNewName.getText().trim(); // Elimina espacios en blanco
                 String actualName = tfActualName.getText().trim();
 
-                Client client = clientService.getClientByName(userLogged.getName());
                 if (client == null) {
                     displayAlerts.showAlert("Cliente no encontrado");
                     return;
@@ -119,6 +121,7 @@ public class UpdateWarehouseViewController {
 
                 displayAlerts.showAlert("Nombre actualizado satisfactoriamente");
                 cleanFields();
+                warehouseViewController.initTreeTable();
             }
         } catch (Exception e) {
             displayAlerts.showAlert("Error al actualizar el nombre: " + e.getMessage());
