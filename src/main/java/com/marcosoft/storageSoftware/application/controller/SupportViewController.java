@@ -102,7 +102,7 @@ public class SupportViewController {
      * The welcome message is shown in Spanish.
      */
     private void initWelcomeLabels() {
-        versionLabel.setText("0.9.5");
+        versionLabel.setText("0.9.7");
         txtWelcomeTitle.setText("Bienvenido, " + userLogged.getName());
         txtWelcome.setText(
                 """
