@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Lazy
@@ -29,6 +30,7 @@ public class RegistryViewController {
     ObservableList<WarehouseRegistryDataTable> warehouseRegistryDataTables;
 
     private Client client;
+    private DateTimeFormatter formatter;
 
     private final UserLogged userLogged;
     private final ClientServiceImpl clientService;
@@ -109,6 +111,7 @@ public class RegistryViewController {
     @FXML
     public void initialize() {
         client = clientService.getClientByName(userLogged.getName());
+        formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         txtClientName.setText(userLogged.getName());
         Platform.runLater(() -> {
             // Load initial data for tables
@@ -154,6 +157,19 @@ public class RegistryViewController {
         tcGeneralRegistryType.setCellValueFactory(new PropertyValueFactory<>("registryType"));
         tcGeneralRegistryDateTime.setCellValueFactory(new PropertyValueFactory<>("registryDateTime"));
 
+        // Formatear LocalDateTime
+        tcGeneralRegistryDateTime.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(LocalDateTime item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.format(formatter));
+                }
+            }
+        });
+
         tvGeneralRegistry.setItems(generalRegistryDataTables);
 
     }
@@ -179,6 +195,19 @@ public class RegistryViewController {
         tcWarehouseName.setCellValueFactory(new PropertyValueFactory<>("warehouseName"));
         tcWarehouseProduct.setCellValueFactory(new PropertyValueFactory<>("productName"));
         tcWarehouseAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
+
+        // Formatear LocalDateTime
+        tcWarehouseDateTime.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(LocalDateTime item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.format(formatter));
+                }
+            }
+        });
 
         tvWarehouse.setItems(warehouseRegistryDataTables);
     }
@@ -207,7 +236,20 @@ public class RegistryViewController {
         tcSellPriceCurrency.setCellValueFactory(new PropertyValueFactory<>("sellPriceAndCurrency"));
         tcSellDate.setCellValueFactory(new PropertyValueFactory<>("sellDate"));
         tcSellWarehouse.setCellValueFactory(new PropertyValueFactory<>("warehouseName"));
-        tcSellAmount.setCellValueFactory(new PropertyValueFactory<>("productAmount"));
+        tcSellAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
+
+        // Formatear LocalDateTime
+        tcSellRegistryDateTime.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(LocalDateTime item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.format(formatter));
+                }
+            }
+        });
 
         tvSell.setItems(sellRegistryDataTables);
     }
@@ -220,22 +262,19 @@ public class RegistryViewController {
 
             for (InvestmentRegistry investmentRegistry : investmentRegistries) {
 
+                // Formatear el precio y moneda
+                String priceCurrency = String.format("%.2f %s",
+                        investmentRegistry.getInvestmentPrice(),
+                        investmentRegistry.getCurrency());
 
-                // Verificar si la inversión existe
-
-                    // Formatear el precio y moneda
-                    String priceCurrency = String.format("%.2f %s",
-                            investmentRegistry.getInvestmentPrice(),
-                            investmentRegistry.getCurrency());
-
-                    // Agregar a la lista observable
-                    investmentRegistryDataTables.add(new InvestmentRegistryDataTable(
-                            investmentRegistry.getRegistryType(),
-                            investmentRegistry.getRegistryDateTime(),
-                            investmentRegistry.getInvestmentId(),
-                            investmentRegistry.getInvestmentName(),
-                            priceCurrency
-                    ));
+                // Agregar a la lista observable
+                investmentRegistryDataTables.add(new InvestmentRegistryDataTable(
+                        investmentRegistry.getRegistryType(),
+                        investmentRegistry.getRegistryDateTime(),
+                        investmentRegistry.getInvestmentId(),
+                        investmentRegistry.getInvestmentName(),
+                        priceCurrency
+                ));
             }
 
             tcInvestmentRegistryType.setCellValueFactory(new PropertyValueFactory<>("registryType"));
@@ -243,6 +282,19 @@ public class RegistryViewController {
             tcIdInvestment.setCellValueFactory(new PropertyValueFactory<>("investmentId"));
             tcInvestmentName.setCellValueFactory(new PropertyValueFactory<>("investmentName"));
             tcInvestmentPriceCurrency.setCellValueFactory(new PropertyValueFactory<>("buyPriceAndCurrency"));
+
+            // Formatear LocalDateTime
+            tcInvestmentRegistryDateTime.setCellFactory(column -> new TableCell<>() {
+                @Override
+                protected void updateItem(LocalDateTime item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                    } else {
+                        setText(item.format(formatter));
+                    }
+                }
+            });
 
             tvInvestment.setItems(investmentRegistryDataTables);
 

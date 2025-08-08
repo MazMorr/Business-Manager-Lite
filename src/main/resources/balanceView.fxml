@@ -436,7 +436,7 @@
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
                         <Button mnemonicParsing="false" onAction="#exportToPdf" prefWidth="2870.0" style="-fx-background-radius: 10px 0px 0px 10px;" text="Exportar a pdf" />
-                        <Button mnemonicParsing="false" onAction="#displayPrices" prefWidth="2870.0" style="-fx-background-radius: 0px;" text="Precios" />
+                        <Button mnemonicParsing="false" onAction="#displayCurrencyValues" prefWidth="2870.0" style="-fx-background-radius: 0px;" text="Valores Moneda" />
                         <Button mnemonicParsing="false" onAction="#exportToExcel" prefWidth="2870.0" style="-fx-background-radius: 0px 10px 10px 0px;" text="Exportar a Excel" />
                      </children>
                      <padding>

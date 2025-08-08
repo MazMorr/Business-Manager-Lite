@@ -1,6 +1,5 @@
 package com.marcosoft.storageSoftware.application.controller;
 
-import com.marcosoft.storageSoftware.Main;
 import com.marcosoft.storageSoftware.application.dto.InvestmentWarehouseDataTable;
 import com.marcosoft.storageSoftware.application.dto.UserLogged;
 import com.marcosoft.storageSoftware.application.dto.WarehouseDataTable;
@@ -16,18 +15,12 @@ import com.marcosoft.storageSoftware.infrastructure.service.impl.WarehouseServic
 import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
 import com.marcosoft.storageSoftware.infrastructure.util.ParseDataTypes;
 import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
-import com.marcosoft.storageSoftware.infrastructure.util.SpringFXMLLoader;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.stage.Stage;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
@@ -35,7 +28,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -233,46 +225,18 @@ public class WarehouseViewController {
      * Opens the reassign product view in a new window.
      */
     @FXML
-    public void reassignProduct(ActionEvent actionEvent) throws IOException {
-        ConfigurableApplicationContext context = Main.getContext();
-        Stage stage = createStage(
-                context.getBean(SpringFXMLLoader.class).load("/reassignProductView.fxml"),
-                "Sistema de cuentas",
-                "/images/RTS_logo.png"
-        );
-        stage.setOnCloseRequest(event -> {
-        });
-        stage.show();
+    public void reassignProduct(ActionEvent actionEvent) {
+        sceneSwitcher.displayWindow("Sistema de cuentas", "/images/RTS_logo.png", "/reassignProductView.fxml");
     }
 
     /**
      * Opens the add warehouse view in a new window.
      */
     @FXML
-    public void addWarehouse(ActionEvent actionEvent) throws IOException {
-        ConfigurableApplicationContext context = Main.getContext();
-        Stage stage = createStage(
-                context.getBean(SpringFXMLLoader.class).load("/addWarehouseView.fxml"),
-                "Añadir Almacén",
-                "/images/RTS_logo.png"
-        );
-        stage.setOnCloseRequest(event -> {
-        });
-        stage.showAndWait();
+    public void addWarehouse(ActionEvent actionEvent) {
+        sceneSwitcher.displayWindow("Añadir Almacén", "/images/RTS_logo.png", "/addWarehouseView.fxml");
     }
 
-    /**
-     * Utility method to create and configure a new stage.
-     */
-    private Stage createStage(Parent root, String title, String iconPath) {
-        Stage stage = new Stage();
-        stage.setScene(new Scene(root));
-        stage.setTitle(title);
-        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResource(iconPath)).toString()));
-        stage.setResizable(false);
-        stage.centerOnScreen();
-        return stage;
-    }
 
     /**
      * Deletes the selected warehouse and all its products after confirmation.
@@ -300,16 +264,8 @@ public class WarehouseViewController {
      * Opens the assign investment view in a new window.
      */
     @FXML
-    public void assignInvestment(ActionEvent actionEvent) throws IOException {
-        ConfigurableApplicationContext context = Main.getContext();
-        Stage stage = createStage(
-                context.getBean(SpringFXMLLoader.class).load("/assignInvestmentView.fxml"),
-                "Asignar Inversión",
-                "/images/RTS_logo.png"
-        );
-        stage.setOnCloseRequest(event -> {
-        });
-        stage.showAndWait();
+    public void assignInvestment(ActionEvent actionEvent) {
+        sceneSwitcher.displayWindow("Asignar Inversión", "/images/RTS_logo.png", "/assignInvestmentView.fxml");
     }
 
     /**
@@ -325,15 +281,7 @@ public class WarehouseViewController {
      */
     @FXML
     public void updateWarehouse(ActionEvent actionEvent) throws IOException {
-        ConfigurableApplicationContext context = Main.getContext();
-        Stage stage = createStage(
-                context.getBean(SpringFXMLLoader.class).load("/updateWarehouseView.fxml"),
-                "Asignar Inversión a un Almacén",
-                "/images/RTS_logo.png"
-        );
-        stage.setOnCloseRequest(event -> {
-        });
-        stage.showAndWait();
+        sceneSwitcher.displayWindow("Actualizar Almacén", "/images/RTS_logo.png", "/updateWarehouseView.fxml");
     }
 
     /**
@@ -341,15 +289,7 @@ public class WarehouseViewController {
      */
     @FXML
     public void changeProductName(ActionEvent actionEvent) throws IOException {
-        ConfigurableApplicationContext context = Main.getContext();
-        Stage stage = createStage(
-                context.getBean(SpringFXMLLoader.class).load("/changeProductNameView.fxml"),
-                "Asignar Inversión a un Almacén",
-                "/images/RTS_logo.png"
-        );
-        stage.setOnCloseRequest(event -> {
-        });
-        stage.showAndWait();
+        sceneSwitcher.displayWindow("Asignar Inversión a un Almacén", "/images/RTS_logo.png", "/changeProductNameView.fxml");
     }
 
     // ============================

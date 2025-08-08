@@ -86,6 +86,7 @@ public class BalanceViewController {
     }
 
     @FXML
-    public void displayPrices(ActionEvent actionEvent) {
+    public void displayCurrencyValues(ActionEvent actionEvent) {
+        sceneSwitcher.displayWindow("Valor de Monedas", "/images/RTS_logo","/currencyValuesView.fxml");
     }
 }

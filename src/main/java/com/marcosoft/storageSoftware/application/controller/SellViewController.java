@@ -2,9 +2,20 @@ package com.marcosoft.storageSoftware.application.controller;
 
 import com.marcosoft.storageSoftware.application.dto.SellDataTable;
 import com.marcosoft.storageSoftware.application.dto.UserLogged;
-import com.marcosoft.storageSoftware.domain.model.*;
+import com.marcosoft.storageSoftware.domain.model.Client;
+import com.marcosoft.storageSoftware.domain.model.Currency;
+import com.marcosoft.storageSoftware.domain.model.GeneralRegistry;
+import com.marcosoft.storageSoftware.domain.model.Inventory;
+import com.marcosoft.storageSoftware.domain.model.Product;
+import com.marcosoft.storageSoftware.domain.model.SellRegistry;
+import com.marcosoft.storageSoftware.domain.model.Warehouse;
 import com.marcosoft.storageSoftware.domain.service.WarehouseService;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.*;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.CurrencyServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.GeneralRegistryServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.InventoryServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.ProductServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.SellRegistryServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
 import com.marcosoft.storageSoftware.infrastructure.util.ParseDataTypes;
 import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
@@ -13,16 +24,24 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableColumn;
+import javafx.scene.control.TreeTableView;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Controller for the sell view.
@@ -49,7 +68,6 @@ public class SellViewController {
     /**
      * Constructor for dependency injection.
      */
-    @Lazy
     public SellViewController(
             CurrencyServiceImpl currencyService, ClientServiceImpl clientService, DisplayAlerts displayAlerts,
             UserLogged userLogged, ParseDataTypes parseDataTypes, SceneSwitcher sceneSwitcher,
@@ -71,18 +89,15 @@ public class SellViewController {
 
     // FXML UI components
     @FXML
-    private TextField tfSellProductCurrency, tfMinFilterAmount, tfMaxFilterAmount,
-            tfAssignPriceProductPrice, tfSellProductAmount, tfFilterProductName, tfSellProductPrice,
-            tfMinFilterPrice, tfSellProductName, tfMaxFilterPrice, tfFilterWarehouseName,
-            tfAssignPriceCurrency, tfAssignPriceProductName, tfSellWarehouse;
+    private TextField tfSellProductCurrency, tfMinFilterAmount, tfMaxFilterAmount, tfAssignPriceProductPrice,
+            tfSellProductAmount, tfFilterProductName, tfSellProductPrice, tfMinFilterPrice, tfSellProductName,
+            tfMaxFilterPrice, tfFilterWarehouseName, tfAssignPriceCurrency, tfAssignPriceProductName, tfSellWarehouse;
     @FXML
     private MenuButton mbAssignPriceCurrency, mbSellCurrency, mbSellWarehouse, mbSellProduct;
     @FXML
     private Label txtClientName, txtAssignPriceDebug, txtSellDebug;
     @FXML
     private DatePicker dpSellProductDate;
-    @FXML
-    private Pagination paginator;
     @FXML
     private TreeTableView<SellDataTable> ttvInventory;
     @FXML
@@ -165,7 +180,6 @@ public class SellViewController {
             inventory.setAmount(inventory.getAmount() - productAmount);
             inventoryService.save(inventory);
 
-            // TODO: Implement database logic for saving the sale record
             SellRegistry sellRegistry = new SellRegistry(
                     null, client, "Venta", LocalDateTime.now(), productName,
                     currencyName, productSellPrice, date, warehouseName, productAmount
@@ -176,6 +190,8 @@ public class SellViewController {
                     null, client, "Ventas", "Venta", LocalDateTime.now()
             );
             generalRegistryService.save(generalRegistry);
+            loadProductTable();
+            displayAlerts.showAlert("Venta exitosa");
         } catch (Exception e) {
             displayAlerts.showAlert("Ha ocurrido un error: " + e.getMessage());
         }
@@ -215,6 +231,7 @@ public class SellViewController {
 
             displayAlerts.showAlert("El precio del producto ha sido guardado satisfactoriamente");
             cleanForm(null);
+            loadProductTable();
         } catch (Exception e) {
             displayAlerts.showAlert("Ha ocurrido un error: " + e.getMessage());
         }
@@ -284,6 +301,8 @@ public class SellViewController {
         }
 
         try {
+            // Handle locale-specific decimal separators
+            priceText = priceText.replace(",", ".");
             double price = Double.parseDouble(priceText);
 
             if (price <= 0) {
@@ -291,8 +310,10 @@ public class SellViewController {
                 return false;
             }
 
-            if (priceText.split("\\.")[1].length() > 2) {
-                displayAlerts.showAlert("El precio solo puede tener 2 lugar decimales");
+            // Check decimal places safely
+            String[] parts = priceText.split("\\.");
+            if (parts.length > 1 && parts[1].length() > 2) {
+                displayAlerts.showAlert("El precio solo puede tener 2 decimales");
                 return false;
             }
 
@@ -544,27 +565,70 @@ public class SellViewController {
     }
 
     /**
-     * Loads inventory data and populates the product table.
+     * Loads inventory data in a hierarchical structure where products are parent nodes
+     * and their warehouse locations are child nodes.
      */
     private void loadProductTable() {
-        inventoryList.clear();
-        List<Inventory> inventories = inventoryService.getAllInventories();
-        List<SellDataTable> inventoriesObs = new ArrayList<>();
-        for (Inventory i : inventories) {
-            SellDataTable sell = new SellDataTable(i.getProduct().getProductName(),
-                    i.getProduct().getSellPrice(), i.getWarehouse().getWarehouseName(),
-                    i.getAmount());
-            inventoriesObs.add(sell);
-        }
-        inventoryList.addAll(inventoriesObs);
+        try {
+            // Clear existing data
+            inventoryList.clear();
 
-        TreeItem<SellDataTable> root = new TreeItem<>();
-        for (SellDataTable item : inventoryList) {
-            root.getChildren().add(new TreeItem<>(item));
+            // Get all inventories for the current client
+            List<Inventory> inventories = inventoryService.getAllInventoriesByClient(client);
+
+            // Group inventories by product
+            Map<Product, List<Inventory>> inventoriesByProduct = inventories.stream()
+                    .filter(inv -> inv.getProduct() != null && inv.getWarehouse() != null)
+                    .collect(Collectors.groupingBy(Inventory::getProduct));
+
+            // Create root item
+            TreeItem<SellDataTable> root = new TreeItem<>();
+
+            // Create product nodes with warehouse children
+            inventoriesByProduct.forEach((product, productInventories) -> {
+                // Calculate total amount across all warehouses
+                int totalAmount = productInventories.stream()
+                        .mapToInt(Inventory::getAmount)
+                        .sum();
+
+                // Create product parent node (shows product info)
+                SellDataTable productNode = new SellDataTable(
+                        product.getProductName(),
+                        product.getSellPrice(),
+                        "Almacenes: " + productInventories.size(), // Indicates this is a parent node
+                        totalAmount
+                );
+
+                TreeItem<SellDataTable> productItem = new TreeItem<>(productNode);
+
+                // Add warehouse children
+                productInventories.forEach(inv -> {
+                    SellDataTable warehouseNode = new SellDataTable(
+                            product.getProductName(), // Same product name
+                            product.getSellPrice(),   // Same price
+                            inv.getWarehouse().getWarehouseName(), // Specific warehouse
+                            inv.getAmount()          // Warehouse-specific amount
+                    );
+                    productItem.getChildren().add(new TreeItem<>(warehouseNode));
+                });
+
+                root.getChildren().add(productItem);
+                inventoryList.addAll(productItem.getChildren().stream()
+                        .map(TreeItem::getValue)
+                        .toList());
+            });
+
+            // Configure table view
+            ttvInventory.setRoot(root);
+            ttvInventory.setShowRoot(false);
+
+            // Expand all parent nodes by default
+            root.getChildren().forEach(item -> item.setExpanded(false));
+
+        } catch (Exception e) {
+            displayAlerts.showAlert("Error al cargar inventario: " + e.getMessage());
+            System.err.println("Failed to load product table: " + e.getMessage());
         }
-        ttvInventory.setRoot(root);
-        ttvInventory.setShowRoot(false);
-        filterProductTable();
     }
 
     /**
@@ -607,15 +671,25 @@ public class SellViewController {
             return matches;
         };
 
-        List<SellDataTable> filtered = inventoryList.stream()
-                .filter(filter)
-                .toList();
+        TreeItem<SellDataTable> originalRoot = ttvInventory.getRoot();
+        TreeItem<SellDataTable> filteredRoot = new TreeItem<>();
 
-        TreeItem<SellDataTable> root = new TreeItem<>();
-        for (SellDataTable item : filtered) {
-            root.getChildren().add(new TreeItem<>(item));
-        }
-        ttvInventory.setRoot(root);
+        originalRoot.getChildren().forEach(productItem -> {
+            // Filter the warehouse children
+            List<TreeItem<SellDataTable>> filteredWarehouses = productItem.getChildren()
+                    .stream()
+                    .filter(warehouseItem -> filter.test(warehouseItem.getValue()))
+                    .collect(Collectors.toList());
+
+            // If any warehouse matches OR the product itself matches, include it
+            if (!filteredWarehouses.isEmpty() || filter.test(productItem.getValue())) {
+                TreeItem<SellDataTable> filteredProduct = new TreeItem<>(productItem.getValue());
+                filteredProduct.getChildren().addAll(filteredWarehouses);
+                filteredRoot.getChildren().add(filteredProduct);
+            }
+        });
+
+        ttvInventory.setRoot(filteredRoot);
         ttvInventory.setShowRoot(false);
     }
 

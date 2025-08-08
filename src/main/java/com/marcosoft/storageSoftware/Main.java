@@ -8,7 +8,6 @@ import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -59,7 +58,6 @@ public class Main extends Application {
     private static SpringFXMLLoader springFXMLLoader;
     private static Stage primaryStage;
     private static Scene scene;
-    private static ProgressIndicator progressIndicator;
 
     @Override
     public void start(Stage primaryStage) {
@@ -73,13 +71,11 @@ public class Main extends Application {
     }
 
     private void showLoadingScreen(Stage stage) {
-        progressIndicator = new ProgressIndicator();
-        progressIndicator.setPrefSize(50, 50);
 
         ImageView logo = new ImageView();
         try {
             // Cambio clave: Usar getResource() en lugar de getResourceAsStream()
-            String imagePath = Objects.requireNonNull(getClass().getResource("/images/RTS_logo.png")).toString();
+            String imagePath = Objects.requireNonNull(getClass().getResource("/images/lazy_compile_logo.png")).toString();
             logo.setImage(new Image(imagePath));
             System.out.println("Ruta de la imagen: " + imagePath); // Para depuración
         } catch (Exception e) {
@@ -89,13 +85,15 @@ public class Main extends Application {
         logo.setFitWidth(200);
         logo.setPreserveRatio(true);
 
-        VBox loadingLayout = new VBox(20, logo, progressIndicator);
+        VBox loadingLayout = new VBox(20, logo);
         loadingLayout.setAlignment(Pos.CENTER);
-        loadingLayout.setStyle("-fx-background-color: #ffffff; -fx-padding: 20;");
+        //loadingLayout.setStyle("-fx-background-color: #ffffff; -fx-padding: 20;");
 
-        Scene loadingScene = new Scene(loadingLayout, 400, 400);
+        Scene loadingScene = new Scene(loadingLayout, 400, 300);
         loadingScene.setCursor(Cursor.WAIT);
         stage.setScene(loadingScene);
+        stage.setResizable(false);
+        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResource("/images/RTS_logo.png")).toString()));
         stage.show();
     }
 
