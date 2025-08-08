@@ -21,18 +21,16 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 
 @Lazy
 @Controller
 public class BalanceViewController {
     private Client client;
-    @Getter
-    @Setter
     private LocalDate startDate;
-    @Getter
-    @Setter
     private LocalDate endDate;
+    @Setter
     private Currency currency;
     private double totalExpense;
     private double totalProfit;
@@ -78,37 +76,41 @@ public class BalanceViewController {
 
     private void initMbDateRange() {
         mbDateRange.getItems().clear();
-        List<MenuItem> items = List.of(
-                new MenuItem("Hoy"),
-                new MenuItem("Última Semana"),
-                new MenuItem("Último Mes"),
-                new MenuItem("Último Trimestre"),
-                new MenuItem("Último Semestre"),
-                new MenuItem("Último Año")
+
+        List<DateRangeOption> dateOptions = List.of(
+                new DateRangeOption("Hoy", Period.ZERO),
+                new DateRangeOption("Última Semana", Period.ofWeeks(1)),
+                new DateRangeOption("Último Mes", Period.ofMonths(1)),
+                new DateRangeOption("Último Trimestre", Period.ofMonths(3)),
+                new DateRangeOption("Último Semestre", Period.ofMonths(6)),
+                new DateRangeOption("Último Año", Period.ofYears(1))
         );
-        for (MenuItem item : items) {
-            switch (item.getText()) {
-                case "Hoy" -> item.setOnAction(e -> initMbDateRangeSwitchHelper(item, LocalDate.now()));
-                case "Última Semana" -> item.setOnAction(e ->
-                        initMbDateRangeSwitchHelper(item, LocalDate.now().minusWeeks(1)));
-                case "Último Mes" -> item.setOnAction(e ->
-                        initMbDateRangeSwitchHelper(item, LocalDate.now().minusMonths(1)));
-                case "Último Trimestre" -> item.setOnAction(e ->
-                        initMbDateRangeSwitchHelper(item, LocalDate.now().minusMonths(3)));
-                case "Último Semestre" -> item.setOnAction(e ->
-                        initMbDateRangeSwitchHelper(item, LocalDate.now().minusMonths(6)));
-                case "Último Año" -> item.setOnAction(e ->
-                        initMbDateRangeSwitchHelper(item, LocalDate.now().minusYears(1)));
-            }
+
+        dateOptions.forEach(option -> {
+            MenuItem item = new MenuItem(option.getLabel());
+            item.setOnAction(e -> setDateRange(option));
             mbDateRange.getItems().add(item);
-        }
+        });
     }
 
-    private void initMbDateRangeSwitchHelper(MenuItem item, LocalDate startDate) {
-        lblTimeLapse.setText(item.getText());
+    private void setDateRange(DateRangeOption option) {
+        lblTimeLapse.setText(option.getLabel());
         endDate = LocalDate.now();
-        this.startDate = startDate;
+        this.startDate = endDate.minus(option.getPeriod());
         refreshBalance();
+    }
+
+    // Clase de apoyo para encapsular la lógica de rangos de fecha
+    @Getter
+    private static class DateRangeOption {
+        private final String label;
+        private final Period period;
+
+        public DateRangeOption(String label, Period period) {
+            this.label = label;
+            this.period = period;
+        }
+
     }
 
     private void initDefaultValues() {
@@ -119,7 +121,7 @@ public class BalanceViewController {
         client = clientService.getClientByName(userLogged.getName());
     }
 
-    private void refreshBalance() {
+    public void refreshBalance() {
         initProfitLabels();
         initExpenseLabels();
         initNetProfit();
@@ -197,7 +199,9 @@ public class BalanceViewController {
     }
 
     @FXML
-    public void switchToRegistry(ActionEvent actionEvent) {sceneSwitcher.switchView(actionEvent, "/registryView.fxml");}
+    public void switchToRegistry(ActionEvent actionEvent) {
+        sceneSwitcher.switchView(actionEvent, "/registryView.fxml");
+    }
 
     @FXML
     public void exportToExcel(ActionEvent actionEvent) {

@@ -10,16 +10,34 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class InvestmentServiceImpl implements InvestmentService {
-    InvestmentRepository investmentRepository;
-    CurrencyRepository currencyRepository;
+
+    private static final String CUP = "CUP";
+    private static final String MLC = "MLC";
+    private static final String USD = "USD";
+    private static final String EUR = "EUR";
+
+    private final InvestmentRepository investmentRepository;
+    private final CurrencyRepository currencyRepository;
+    private Map<String, Double> currencyRatesCache = new ConcurrentHashMap<>();
 
     public InvestmentServiceImpl(CurrencyRepository currencyRepository, InvestmentRepository investmentRepository) {
         this.investmentRepository = investmentRepository;
         this.currencyRepository = currencyRepository;
+        initializeCurrencyCache();
+    }
+
+    private void initializeCurrencyCache() {
+        currencyRatesCache.put(MLC, currencyRepository.findByCurrencyName(MLC).getCurrencyPriceInCUP());
+        currencyRatesCache.put(USD, currencyRepository.findByCurrencyName(USD).getCurrencyPriceInCUP());
+        currencyRatesCache.put(EUR, currencyRepository.findByCurrencyName(EUR).getCurrencyPriceInCUP());
+        currencyRatesCache.put(CUP, 1.0); // Tasa fija para CUP
     }
 
     @Override
@@ -75,59 +93,62 @@ public class InvestmentServiceImpl implements InvestmentService {
     }
 
     public Double getTotalRentExpense(Client client, LocalDate initDate, LocalDate endDate, Currency currency) {
-        return getExpense(client, initDate, endDate, currency, "Renta");
+        return calculateExpense(client, initDate, endDate, currency, "Renta");
     }
 
     public Double getTotalSalaryExpense(Client client, LocalDate initDate, LocalDate endDate, Currency currency) {
-        return getExpense(client, initDate, endDate, currency, "Salario");
+        return calculateExpense(client, initDate, endDate, currency, "Salario");
     }
 
     public Double getTotalPublicityExpense(Client client, LocalDate initDate, LocalDate endDate, Currency currency) {
-        return getExpense(client, initDate, endDate, currency, "Publicidad");
+        return calculateExpense(client, initDate, endDate, currency, "Publicidad");
     }
 
     public Double getTotalProductExpense(Client client, LocalDate initDate, LocalDate endDate, Currency currency) {
-        return getExpense(client, initDate, endDate, currency, "Producto");
+        return calculateExpense(client, initDate, endDate, currency, "Producto");
     }
 
     public Double getTotalServiceExpense(Client client, LocalDate initDate, LocalDate endDate, Currency currency) {
-        return getExpense(client, initDate, endDate, currency, "Servicio");
+        return calculateExpense(client, initDate, endDate, currency, "Servicio");
     }
 
-    public Double getExpense(Client client, LocalDate initDate, LocalDate endDate, Currency currency, String investmentType) {
-        double cup = 0.0, mlc = 0.0, usd = 0.0, eur = 0.0;
+    private Double calculateExpense(
+            Client client, LocalDate initDate, LocalDate endDate, Currency currency, String investmentType
+    ) {
+        Map<String, Double> amounts = new HashMap<>();
+        amounts.put(CUP, 0.0);
+        amounts.put(MLC, 0.0);
+        amounts.put(USD, 0.0);
+        amounts.put(EUR, 0.0);
 
-        List<Investment> investmentList = investmentRepository.findAllInvestmentsByClientAndInvestmentType(client, investmentType);
-        for (Investment inv : investmentList) {
-            LocalDate date = inv.getReceivedDate();
-            if ((date.isEqual(initDate) || date.isAfter(initDate)) &&
-                    (date.isEqual(endDate) || date.isBefore(endDate))) {
+        investmentRepository.findAllInvestmentsByClientAndInvestmentType(client, investmentType)
+                .stream()
+                .filter(inv -> isWithinDateRange(inv.getReceivedDate(), initDate, endDate))
+                .forEach(inv -> {
+                    String curr = inv.getCurrency().getCurrencyName();
+                    amounts.merge(curr, inv.getInvestmentPrice(), Double::sum);
+                });
 
-                double price = inv.getInvestmentPrice();
-                String curr = inv.getCurrency().getCurrencyName();
+        return convertToTargetCurrency(amounts, currency);
+    }
 
-                switch (curr) {
-                    case "CUP" -> cup += price;
-                    case "MLC" -> mlc += price;
-                    case "USD" -> usd += price;
-                    case "EUR" -> eur += price;
-                }
-            }
+    private boolean isWithinDateRange(LocalDate date, LocalDate start, LocalDate end) {
+        return !date.isBefore(start) && !date.isAfter(end);
+    }
+
+    private Double convertToTargetCurrency(Map<String, Double> amounts, Currency targetCurrency) {
+        double totalInCUP = amounts.get(CUP)
+                + amounts.get(MLC) * currencyRatesCache.get(MLC)
+                + amounts.get(USD) * currencyRatesCache.get(USD)
+                + amounts.get(EUR) * currencyRatesCache.get(EUR);
+
+        String targetCurrencyName = targetCurrency.getCurrencyName();
+
+        if (CUP.equals(targetCurrencyName)) {
+            return totalInCUP;
         }
 
-        double mlcRate = currencyRepository.findByCurrencyName("MLC").getCurrencyPriceInCUP();
-        double usdRate = currencyRepository.findByCurrencyName("USD").getCurrencyPriceInCUP();
-        double eurRate = currencyRepository.findByCurrencyName("EUR").getCurrencyPriceInCUP();
-
-        double totalInCUP = cup + mlc * mlcRate + usd * usdRate + eur * eurRate;
-
-        return switch (currency.getCurrencyName()) {
-            case "CUP" -> totalInCUP;
-            case "MLC" -> totalInCUP / mlcRate;
-            case "USD" -> totalInCUP / usdRate;
-            case "EUR" -> totalInCUP / eurRate;
-            default -> totalInCUP;
-        };
+        Double rate = currencyRatesCache.get(targetCurrencyName);
+        return rate != null ? totalInCUP / rate : totalInCUP;
     }
-
 }

@@ -81,7 +81,7 @@
                   </MenuButton>
                </children>
             </HBox>
-            <Button mnemonicParsing="false" prefWidth="450.0" text="Actualizar Balance">
+            <Button mnemonicParsing="false" onAction="#updateBalance" prefWidth="450.0" text="Actualizar Balance">
                <graphic>
                   <ImageView fitHeight="150.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                      <image>
