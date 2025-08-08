@@ -1,11 +1,6 @@
 package com.marcosoft.storageSoftware.domain.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,6 +20,6 @@ public class Currency {
     @Column(name = "name")
     private String currencyName;
 
-    @ManyToOne
-    private Client client;
+    @Column(name= "currency_price_in_CUP")
+    private Double currencyPriceInCUP;
 }

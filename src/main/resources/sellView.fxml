@@ -6,7 +6,6 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
@@ -371,10 +370,6 @@
                                              <children>
                                                 <Label text="Producto" />
                                                 <MenuButton fx:id="mbSellProduct" mnemonicParsing="false" prefWidth="150.0">
-                                                  <items>
-                                                    <MenuItem mnemonicParsing="false" text="Action 1" />
-                                                    <MenuItem mnemonicParsing="false" text="Action 2" />
-                                                  </items>
                                                    <padding>
                                                       <Insets bottom="-6.0" left="-9.0" right="2.0" top="-5.0" />
                                                    </padding>
@@ -409,7 +404,7 @@
                                                 <Label text="Moneda" />
                                                 <MenuButton fx:id="mbSellCurrency" mnemonicParsing="false" prefWidth="150.0" styleClass="progressBar" stylesheets="@Styles.css" textFill="WHITE">
                                                    <graphic>
-                                                      <TextField fx:id="tfSellProductCurrency" prefHeight="34.0" prefWidth="10.0" styleClass="inputForm" stylesheets="@Styles.css">
+                                                      <TextField fx:id="tfSellProductCurrency" alignment="CENTER" disable="true" opacity="0.99" prefHeight="34.0" prefWidth="10.0" promptText="Seleccionar" styleClass="inputForm" stylesheets="@Styles.css">
                                                          <tooltip>
                                                             <Tooltip text="Precio al que deseas vender cada unidad del producto  (en la zona de ventas este precio puede ser cambiado)" wrapText="true">
                                                                <font>

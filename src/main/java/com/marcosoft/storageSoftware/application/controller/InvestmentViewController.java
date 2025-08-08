@@ -108,25 +108,13 @@ public class InvestmentViewController {
             initializeTableValues();
             setupTextFieldListeners();
             setupTableSelectionListener();
-            initCurrencyDefaultValues();
             updateCurrencyMenu();
             initDpDefaultValue();
             initMbInvestmentTypeItemsOnAction();
         });
     }
 
-    /**
-     * Initializes default currencies if they do not exist in the database.
-     */
-    private void initCurrencyDefaultValues() {
-        List<String> defaultCurrenciesName = List.of("MLC", "CUP", "USD", "EUR");
-        for (String currencyName : defaultCurrenciesName) {
-            if (!currencyService.existsByCurrencyName(currencyName)) {
-                Currency currency = new Currency(null, currencyName, client);
-                currencyService.save(currency);
-            }
-        }
-    }
+
 
     /**
      * Sets up listeners for filter and input text fields.
@@ -249,8 +237,8 @@ public class InvestmentViewController {
 
         Investment inv = investmentService
                 .getByClientAndInvestmentNameAndInvestmentPriceAndCurrencyAndAmountAndReceivedDateAndInvestmentType(
-                client, investmentName, price, currencyService.getCurrencyByName(currency), amount, receivedDate, investmentType
-        );
+                        client, investmentName, price, currencyService.getCurrencyByName(currency), amount, receivedDate, investmentType
+                );
 
         if (investmentType.equals("Producto") && !productService.existsByProductNameAndClient(investmentName, client)) {
             Product product = new Product(
@@ -320,9 +308,6 @@ public class InvestmentViewController {
         if (currency.isEmpty()) {
             displayAlerts.showAlert("Debe seleccionar una moneda");
             return false;
-        } else if (!currencyService.existsByCurrencyName(currency)) {
-            Currency newCurrency = new Currency(null, currency, client);
-            currencyService.save(newCurrency);
         }
         return true;
     }

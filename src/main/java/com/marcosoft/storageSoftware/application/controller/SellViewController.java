@@ -212,13 +212,7 @@ public class SellViewController {
         String productCurrency = tfAssignPriceCurrency.getText();
 
         try {
-            Currency currency;
-            if (!currencyService.existsByCurrencyName(productCurrency)) {
-                currency = new Currency(null, productCurrency, client);
-            } else {
-                currency = currencyService.getCurrencyByName(productCurrency);
-            }
-
+            Currency currency = currencyService.getCurrencyByName(productCurrency);
             Product product = productService.getByProductNameAndClient(productName, client);
             product.setSellPrice(productPrice);
             product.setCurrency(currency);

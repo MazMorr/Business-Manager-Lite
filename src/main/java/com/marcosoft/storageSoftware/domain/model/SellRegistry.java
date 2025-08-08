@@ -23,25 +23,25 @@ public class SellRegistry {
     @ManyToOne
     private Client client;
 
-    @Column()
+    @Column(name = "registry_type")
     private String registryType;
 
     @Column(name = "registry_date")
     private LocalDateTime registryDate;
 
-    @Column(name= "product_name")
+    @Column(name = "product_name")
     private String productName;
 
     @Column(name = "sell_currency")
     private String sellCurrency;
 
-    @Column(name= "sell_price")
+    @Column(name = "sell_price")
     private Double sellPrice;
 
-    @Column(name= "sell_date")
+    @Column(name = "sell_date")
     private LocalDate sellDate;
 
-    @Column(name= "warehouse_name")
+    @Column(name = "warehouse_name")
     private String warehouseName;
 
     @Column(name = "product_amount")

@@ -419,7 +419,7 @@
                                                 <Label text="Moneda" />
                                                 <MenuButton fx:id="mbCurrency" mnemonicParsing="false" prefWidth="150.0" styleClass="progressBar" stylesheets="@Styles.css" textFill="WHITE">
                                                    <graphic>
-                                                      <TextField fx:id="tfAddInvestmentCurrency" prefHeight="34.0" prefWidth="10.0" styleClass="inputForm" stylesheets="@Styles.css">
+                                                      <TextField fx:id="tfAddInvestmentCurrency" alignment="CENTER" disable="true" opacity="0.99" prefHeight="34.0" prefWidth="10.0" promptText="Seleccionar" styleClass="inputForm" stylesheets="@Styles.css">
                                                          <tooltip>
                                                             <Tooltip text="Precio al que deseas vender cada unidad del producto  (en la zona de ventas este precio puede ser cambiado)" wrapText="true">
                                                                <font>

@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.effect.InnerShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -184,11 +183,7 @@
                </graphic>
             </Label>
             <VBox layoutX="274.0" layoutY="154.0" prefHeight="200.0" prefWidth="100.0" />
-            <MenuButton layoutX="987.0" layoutY="100.0" mnemonicParsing="false" textFill="#ffffff" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="25.0">
-              <items>
-                <MenuItem mnemonicParsing="false" text="Action 1" />
-                <MenuItem mnemonicParsing="false" text="Action 2" />
-              </items>
+            <MenuButton fx:id="mbDateRange" layoutX="987.0" layoutY="100.0" mnemonicParsing="false" textFill="#ffffff" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="25.0">
                <graphic>
                   <Label fx:id="lblTimeLapse" text="Ultimo mes" textFill="WHITE">
                      <font>
@@ -450,7 +445,7 @@
                               <Font name="System Bold" size="40.0" />
                            </font>
                         </Label>
-                        <Label text="0">
+                        <Label fx:id="lblNetProfit" text="0">
                            <font>
                               <Font name="System Bold" size="30.0" />
                            </font></Label>
