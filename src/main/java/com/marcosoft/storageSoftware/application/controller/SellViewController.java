@@ -125,6 +125,7 @@ public class SellViewController {
             initMbWarehouse();
             initAllMbCurrency();
             setupTableSelectionListener();
+            setupOtherTextFieldListeners();
         });
     }
 
@@ -635,6 +636,20 @@ public class SellViewController {
         tfMaxFilterAmount.textProperty().addListener((obs, oldVal, newVal) -> filterProductTable());
         tfMinFilterPrice.textProperty().addListener((obs, oldVal, newVal) -> filterProductTable());
         tfMaxFilterPrice.textProperty().addListener((obs, oldVal, newVal) -> filterProductTable());
+    }
+
+    private void setupOtherTextFieldListeners() {
+        tfSellProductAmount.textProperty().addListener((obs, oldVal, newVal) -> updatePricePerAmount());
+    }
+
+    private void updatePricePerAmount() {
+        try {
+            double price = productService.getByProductNameAndClient(tfSellProductName.getText(), client).getSellPrice();
+            double pricePerAmount = Double.parseDouble(tfSellProductAmount.getText()) * price;
+            tfSellProductPrice.setText(String.valueOf(pricePerAmount));
+        } catch (NullPointerException e) {
+            System.out.println("No hay precios para este producto en la base de datos");
+        }
     }
 
     /**

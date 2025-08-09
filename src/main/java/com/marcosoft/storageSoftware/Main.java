@@ -47,7 +47,8 @@ import java.util.concurrent.Executors;
         "com.marcosoft.storageSoftware.infrastructure.util",
         "com.marcosoft.storageSoftware.infrastructure.service.impl",
         "com.marcosoft.storageSoftware.application.controller",
-        "com.marcosoft.storageSoftware.application.dto"
+        "com.marcosoft.storageSoftware.application.dto",
+        "com.marcosoft.storageSoftware.infrastructure.security"
 })
 @EntityScan(basePackages = "com.marcosoft.storageSoftware.domain.model")
 @EnableJpaRepositories(basePackages = "com.marcosoft.storageSoftware.domain.repository")
@@ -87,7 +88,6 @@ public class Main extends Application {
 
         VBox loadingLayout = new VBox(20, logo);
         loadingLayout.setAlignment(Pos.CENTER);
-        //loadingLayout.setStyle("-fx-background-color: #ffffff; -fx-padding: 20;");
 
         Scene loadingScene = new Scene(loadingLayout, 400, 300);
         loadingScene.setCursor(Cursor.WAIT);

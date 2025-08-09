@@ -386,7 +386,7 @@
                                                    </cursor>
                                                    <items>
                                                       <MenuItem mnemonicParsing="false" text="Producto" />
-                                                      <MenuItem mnemonicParsing="false" text="Factura" />
+                                                      <MenuItem mnemonicParsing="false" text="Renta" />
                                                       <MenuItem mnemonicParsing="false" text="Salario" />
                                                       <MenuItem mnemonicParsing="false" text="Publicidad" />
                                                       <MenuItem mnemonicParsing="false" text="Servicio" />

@@ -140,27 +140,41 @@
             </VBox>
             <HBox alignment="CENTER" prefHeight="80.0" prefWidth="800.0" spacing="120.0" styleClass="slogan" stylesheets="@Styles.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="68.0" prefWidth="421.0" styleClass="title" stylesheets="@Styles.css" text="Soporte" textFill="#eeeeee">
+                  <Label alignment="CENTER" contentDisplay="RIGHT" prefHeight="68.0" prefWidth="421.0" styleClass="title" stylesheets="@Styles.css" text="Soporte" textFill="#eeeeee">
                      <font>
                         <Font name="Constantia Bold" size="60.0" />
                      </font>
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
+                     <graphic>
+                        <ImageView fitHeight="150.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/support.png" />
+                           </image>
+                           <effect>
+                              <InnerShadow choke="1.0" radius="68.5" width="255.0">
+                                 <color>
+                                    <Color red="1.0" green="1.0" blue="1.0" />
+                                 </color>
+                              </InnerShadow>
+                           </effect>
+                        </ImageView>
+                     </graphic>
                   </Label>
                </children>
             </HBox>
-            <Label fx:id="txtWelcome" alignment="TOP_CENTER" layoutX="156.0" layoutY="191.0" prefHeight="396.0" prefWidth="600.0" stylesheets="@Styles.css" text="text test 1234 JGH" textAlignment="CENTER" wrapText="true" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="180.0" AnchorPane.topAnchor="150.0">
+            <Label fx:id="lblWelcome" alignment="TOP_CENTER" layoutX="156.0" layoutY="191.0" prefHeight="396.0" prefWidth="600.0" stylesheets="@Styles.css" text="text test 1234 JGH" textAlignment="CENTER" wrapText="true" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="180.0" AnchorPane.topAnchor="150.0">
                <font>
                   <Font name="Constantia" size="20.0" />
                </font>
             </Label>
-            <Label fx:id="txtWelcomeTitle" alignment="CENTER" layoutX="221.0" layoutY="130.0" prefHeight="37.0" prefWidth="513.0" text="Bienvenido" wrapText="true" AnchorPane.leftAnchor="220.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="110.0">
+            <Label fx:id="lblWelcomeTitle" alignment="CENTER" layoutX="221.0" layoutY="130.0" prefHeight="37.0" prefWidth="513.0" text="Bienvenido" wrapText="true" AnchorPane.leftAnchor="220.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="110.0">
                <font>
                   <Font name="Constantia Bold" size="30.0" />
                </font>
             </Label>
-            <VBox layoutX="546.0" layoutY="273.0" prefHeight="130.0" prefWidth="260.0" spacing="5.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="310.0">
+            <VBox layoutX="546.0" layoutY="273.0" prefHeight="130.0" prefWidth="260.0" spacing="5.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="320.0">
                <children>
                   <Label text="Soporte">
                      <font>
@@ -208,7 +222,7 @@
                   </Label>
                </children>
             </VBox>
-            <ImageView fitHeight="238.0" fitWidth="245.0" layoutX="821.0" layoutY="99.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="120.0">
+            <ImageView fitHeight="238.0" fitWidth="245.0" layoutX="821.0" layoutY="99.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="130.0">
                <image>
                   <Image url="@images/lazy_compile_logo.png" />
                </image>
@@ -227,7 +241,7 @@
                         <Insets />
                      </VBox.margin>
                   </Label>
-                  <Label text="17000000 Días" textFill="#38ff01">
+                  <Label fx:id="lblLicenseDays" text="17000000 Días" textFill="#38ff01">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
@@ -253,7 +267,7 @@
                   <Font size="14.0" />
                </font>
             </Button>
-            <Label fx:id="txtClientName" contentDisplay="TOP" prefHeight="69.0" prefWidth="172.0" styleClass="clientName" stylesheets="@Styles.css" text="Marco A. Romeros" textFill="#eeeeee" wrapText="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="5.0">
+            <Label fx:id="lblClientName" contentDisplay="TOP" prefHeight="69.0" prefWidth="172.0" styleClass="clientName" stylesheets="@Styles.css" text="Marco A. Romeros" textFill="#eeeeee" wrapText="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="5.0">
                <font>
                   <Font name="SansSerif Regular" size="14.0" />
                </font>

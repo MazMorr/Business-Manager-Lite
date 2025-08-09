@@ -2,6 +2,7 @@ package com.marcosoft.storageSoftware.application.controller;
 
 import com.marcosoft.storageSoftware.application.dto.UserLogged;
 import com.marcosoft.storageSoftware.domain.model.Currency;
+import com.marcosoft.storageSoftware.infrastructure.security.LicenseValidator;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.CurrencyServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
@@ -14,6 +15,7 @@ import javafx.scene.input.MouseEvent;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -28,6 +30,7 @@ public class SupportViewController {
 
     // Service and utility dependencies
     private final UserLogged userLogged;
+    private final LicenseValidator licenseValidator;
     private final SceneSwitcher sceneSwitcher;
     private final ClientServiceImpl clientService;
     private final CurrencyServiceImpl currencyService;
@@ -38,9 +41,10 @@ public class SupportViewController {
     @Lazy
     public SupportViewController(
             CurrencyServiceImpl currencyService, SceneSwitcher sceneSwitcher, ClientServiceImpl clientService,
-            UserLogged userLogged
+            UserLogged userLogged, LicenseValidator licenseValidator
     ) {
         this.userLogged = userLogged;
+        this.licenseValidator = licenseValidator;
         this.currencyService = currencyService;
         this.sceneSwitcher = sceneSwitcher;
         this.clientService = clientService;
@@ -48,7 +52,7 @@ public class SupportViewController {
 
     // FXML UI components
     @FXML
-    private Label txtWelcome, versionLabel, txtClientName, txtWelcomeTitle;
+    private Label lblWelcome, versionLabel, lblLicenseDays, lblClientName, lblWelcomeTitle;
 
     /**
      * Initializes the controller after its root element has been completely processed.
@@ -62,9 +66,9 @@ public class SupportViewController {
 
             try {
                 String clientName = clientService.getByIsClientActive(true).getClientName();
-                txtClientName.setText(clientName != null ? clientName : "Usuario");
+                lblClientName.setText(clientName != null ? clientName : "Usuario");
             } catch (Exception e) {
-                txtClientName.setText("Usuario");
+                lblClientName.setText("Usuario");
             }
         });
     }
@@ -102,9 +106,10 @@ public class SupportViewController {
      * The welcome message is shown in Spanish.
      */
     private void initWelcomeLabels() {
+        lblLicenseDays.setText(LocalDate.now().until(licenseValidator.getRemainingTime()).getDays() + " Días");
         versionLabel.setText("0.9.7");
-        txtWelcomeTitle.setText("Bienvenido, " + userLogged.getName());
-        txtWelcome.setText(
+        lblWelcomeTitle.setText("Bienvenido, " + userLogged.getName());
+        lblWelcome.setText(
                 """
                         Este sistema ha sido diseñado para brindarle un control eficiente y seguro sobre los recursos de su negocio. \
                         Aquí podrá gestionar inventarios, inversiones, ventas y mucho más de manera sencilla y centralizada.
