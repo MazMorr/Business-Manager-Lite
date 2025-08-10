@@ -86,6 +86,8 @@ public class AddWarehouseViewController {
                         null,
                         client,
                         warehouse,
+                        null,
+                        null,
                         null
                 );
                 inventoryService.save(inventory);

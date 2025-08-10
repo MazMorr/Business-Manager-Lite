@@ -155,13 +155,15 @@ public class AssignInvestmentViewController {
                             product,
                             client,
                             warehouse,
-                            amountToAssign
+                            amountToAssign,
+                            null,
+                            null
                     );
                 }
 
                 inventoryService.save(inventory);
 
-                int actualInvestmentAmount = investment.getAmount() - amountToAssign;
+                int actualInvestmentAmount = investment.getLeftAmount() - amountToAssign;
                 investment.setLeftAmount(actualInvestmentAmount);
                 investmentService.save(investment);
 

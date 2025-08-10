@@ -214,7 +214,7 @@ public class BalanceViewController {
     }
 
     @FXML
-    public void displayCurrencyValues(ActionEvent actionEvent) {
+    public void displayCurrencyValues(ActionEvent actionEvent) throws SceneSwitcher.WindowLoadException {
         sceneSwitcher.displayWindow("Valor de Monedas", "/images/RTS_logo", "/currencyValuesView.fxml");
     }
 }

@@ -127,7 +127,7 @@ public class ReassignProductViewController {
                 inventoryReceives.setAmount(inventoryReceives.getAmount() + amount);
                 inventoryService.save(inventoryReceives);
             } else {
-                Inventory newInv = new Inventory(null, product, client, warehouseReceives, amount);
+                Inventory newInv = new Inventory(null, product, client, warehouseReceives, amount, null, null);
                 inventoryService.save(newInv);
             }
 

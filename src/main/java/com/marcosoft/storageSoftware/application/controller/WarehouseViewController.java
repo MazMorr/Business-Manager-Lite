@@ -225,7 +225,7 @@ public class WarehouseViewController {
      * Opens the reassign product view in a new window.
      */
     @FXML
-    public void reassignProduct(ActionEvent actionEvent) {
+    public void reassignProduct(ActionEvent actionEvent) throws SceneSwitcher.WindowLoadException {
         sceneSwitcher.displayWindow("Sistema de cuentas", "/images/RTS_logo.png", "/reassignProductView.fxml");
     }
 
@@ -233,7 +233,7 @@ public class WarehouseViewController {
      * Opens the add warehouse view in a new window.
      */
     @FXML
-    public void addWarehouse(ActionEvent actionEvent) {
+    public void addWarehouse(ActionEvent actionEvent) throws SceneSwitcher.WindowLoadException {
         sceneSwitcher.displayWindow("Añadir Almacén", "/images/RTS_logo.png", "/addWarehouseView.fxml");
     }
 
@@ -264,7 +264,7 @@ public class WarehouseViewController {
      * Opens the assign investment view in a new window.
      */
     @FXML
-    public void assignInvestment(ActionEvent actionEvent) {
+    public void assignInvestment(ActionEvent actionEvent) throws SceneSwitcher.WindowLoadException {
         sceneSwitcher.displayWindow("Asignar Inversión", "/images/RTS_logo.png", "/assignInvestmentView.fxml");
     }
 
@@ -280,7 +280,7 @@ public class WarehouseViewController {
      * Opens the update warehouse view in a new window.
      */
     @FXML
-    public void updateWarehouse(ActionEvent actionEvent) throws IOException {
+    public void updateWarehouse(ActionEvent actionEvent) throws IOException, SceneSwitcher.WindowLoadException {
         sceneSwitcher.displayWindow("Actualizar Almacén", "/images/RTS_logo.png", "/updateWarehouseView.fxml");
     }
 
@@ -288,7 +288,7 @@ public class WarehouseViewController {
      * Opens the change product name view in a new window.
      */
     @FXML
-    public void changeProductName(ActionEvent actionEvent) throws IOException {
+    public void changeProductName(ActionEvent actionEvent) throws IOException, SceneSwitcher.WindowLoadException {
         sceneSwitcher.displayWindow("Asignar Inversión a un Almacén", "/images/RTS_logo.png", "/changeProductNameView.fxml");
     }
 
