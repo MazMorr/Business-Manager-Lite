@@ -104,13 +104,27 @@
             </TabPane>
             <HBox alignment="CENTER" prefHeight="80.0" prefWidth="800.0" spacing="120.0" styleClass="slogan" stylesheets="@Styles.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="68.0" prefWidth="421.0" styleClass="title" stylesheets="@Styles.css" text="Registros" textFill="#eeeeee">
+                  <Label alignment="CENTER" graphicTextGap="14.0" prefHeight="68.0" prefWidth="421.0" styleClass="title" stylesheets="@Styles.css" text="Registros" textFill="#eeeeee">
                      <font>
                         <Font name="Constantia Bold" size="60.0" />
                      </font>
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
+                     <graphic>
+                        <ImageView fitHeight="150.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/monitoring.png" />
+                           </image>
+                           <effect>
+                              <InnerShadow choke="1.0" radius="68.5" width="255.0">
+                                 <color>
+                                    <Color red="1.0" green="1.0" blue="1.0" />
+                                 </color>
+                              </InnerShadow>
+                           </effect>
+                        </ImageView>
+                     </graphic>
                   </Label>
                </children>
             </HBox>

@@ -2,6 +2,8 @@ package com.marcosoft.storageSoftware.application.controller;
 
 import com.marcosoft.storageSoftware.Main;
 import com.marcosoft.storageSoftware.application.dto.UserLogged;
+import com.marcosoft.storageSoftware.domain.model.Client;
+import com.marcosoft.storageSoftware.infrastructure.security.LicenseValidator;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.util.SpringFXMLLoader;
 import javafx.application.Platform;
@@ -33,13 +35,15 @@ public class ClientViewController {
     private final SpringFXMLLoader springFXMLLoader;
     private final ClientServiceImpl clientServiceImpl;
     private final UserLogged userLogged;
+    private final LicenseValidator licenseValidator;
 
     /**
      * Constructor for dependency injection.
      */
-    public ClientViewController(UserLogged userLogged, ClientServiceImpl clientService, SpringFXMLLoader springFXMLLoader) {
+    public ClientViewController(UserLogged userLogged, LicenseValidator licenseValidator, ClientServiceImpl clientService, SpringFXMLLoader springFXMLLoader) {
         this.userLogged = userLogged;
         this.clientServiceImpl = clientService;
+        this.licenseValidator = licenseValidator;
         this.springFXMLLoader = springFXMLLoader;
     }
 
@@ -66,50 +70,56 @@ public class ClientViewController {
             return;
         }
 
-        // Authenticate user credentials
-        if (clientServiceImpl.existsByClientNameAndClientPassword(username, password)) {
-            try {
-                // Mark client as active in the database
-                clientServiceImpl.updateIsClientActiveByClientName(true, username);
-                userLogged.setName(username);
+        try {
+            // Authenticate user credentials (ahora verifica directamente)
+            Client client = clientServiceImpl.authenticate(username, password);
 
-                // Load the support view using SpringFXMLLoader
-                Parent root = springFXMLLoader.load("/supportView.fxml");
-
-                // Get the controller for the support view and pass this controller as reference
-                SupportViewController primaryController = springFXMLLoader.getController(SupportViewController.class);
-                primaryController.setAccountController(this);
-
-                // Get the current window and prepare the new stage for support view
-                Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                Stage stage = new Stage();
-                Scene scene = new Scene(root);
-                stage.setScene(scene);
-                stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResource("/images/RTS_logo.png")).toString()));
-                stage.setTitle("Almacenamiento");
-                stage.centerOnScreen();
-                stage.setMinWidth(1100);
-                stage.setMinHeight(650);
-
-                // Handle window close event to update client active status
-                stage.setOnCloseRequest(e -> {
-                    if (showExitAlert()) {
-                        clientServiceImpl.updateIsClientActiveByClientName(false, username);
-                        stage.close();
-                    } else {
-                        e.consume();
-                    }
-                });
-
-                // Show the new window and close the login window
-                stage.show();
-                currentStage.close();
-
-            } catch (IOException e) {
-                showError("Ha ocurrido un error al cargar la aplicación: "+ e.getMessage());
+            if (client == null) {
+                showError("Usuario o contraseña incorrecta.");
+                return;
             }
-        } else {
-            showError("Usuario o contraseña incorrecta.");
+
+            if (!licenseValidator.validateLicense(username)) {
+                showError("Licencia no válida o expirada.");
+                return;
+            }
+
+            // Mark client as active in the database
+            clientServiceImpl.updateIsClientActiveByClientName(true, username);
+            userLogged.setName(username);
+
+            // Load the support view
+            Parent root = springFXMLLoader.load("/supportView.fxml");
+            SupportViewController primaryController = springFXMLLoader.getController(SupportViewController.class);
+            primaryController.setAccountController(this);
+
+            // Prepare new stage
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResource("/images/RTS_logo.png")).toString()));
+            stage.setTitle("Almacenamiento");
+            stage.centerOnScreen();
+            stage.setMinWidth(1100);
+            stage.setMinHeight(650);
+
+            // Handle window close event
+            stage.setOnCloseRequest(e -> {
+                if (showExitAlert()) {
+                    clientServiceImpl.updateIsClientActiveByClientName(false, username);
+                    stage.close();
+                } else {
+                    e.consume();
+                }
+            });
+
+            stage.show();
+            currentStage.close();
+
+        } catch (IOException e) {
+            showError("Error al cargar la interfaz: " + e.getMessage());
+        } catch (Exception e) {
+            showError("Error inesperado: " + e.getMessage());
         }
     }
 
@@ -123,6 +133,7 @@ public class ClientViewController {
 
     /**
      * Shows a confirmation dialog when the user attempts to exit the application.
+     *
      * @return true if the user confirms exit, false otherwise.
      */
     private boolean showExitAlert() {

@@ -16,13 +16,13 @@ public interface ClientService {
 
     Boolean existsByClientName(String name);
 
-    Boolean existsByClientNameAndClientPassword(String name, String password);
+    Client authenticate(String clientName, String clientPassword);
 
     Client getByIsClientActive(Boolean isActive);
 
     void updateIsClientActiveByClientName(Boolean isActive, String name);
 
-    Client getByClientNameAndClientPassword(String clientName, String clientPassword);
+    boolean verifyCredentials(String clientName, String rawPassword);
 
     boolean existsByIsClientActive(Boolean isClientActive);
 }

@@ -3,7 +3,7 @@ package com.marcosoft.storageSoftware.infrastructure.service.impl;
 import com.marcosoft.storageSoftware.domain.model.Client;
 import com.marcosoft.storageSoftware.domain.repository.ClientRepository;
 import com.marcosoft.storageSoftware.domain.service.ClientService;
-import org.springframework.context.annotation.Lazy;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,14 +13,28 @@ public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository clientRepository;
 
-    @Lazy
     public ClientServiceImpl(ClientRepository clientRepository) {
         this.clientRepository = clientRepository;
     }
 
     @Override
     public Client save(Client client) {
+        if (client.getClientPassword() == null || client.getClientPassword().isEmpty()) {
+            throw new IllegalArgumentException("La contraseña no puede estar vacía");
+        }
+
+        String hashedPassword = BCrypt.hashpw(client.getClientPassword(), BCrypt.gensalt());
+        client.setClientPassword(hashedPassword);
         return clientRepository.save(client);
+    }
+
+    @Override
+    public boolean verifyCredentials(String clientName, String rawPassword) {
+        Client client = clientRepository.findById(clientName).orElse(null);
+        if (client == null) {
+            return false;
+        }
+        return BCrypt.checkpw(rawPassword, client.getClientPassword());
     }
 
     @Override
@@ -40,12 +54,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Boolean existsByClientName(String name) {
-        return clientRepository.existsByClientName(name);
-    }
-
-    @Override
-    public Boolean existsByClientNameAndClientPassword(String name, String password) {
-        return clientRepository.existsByClientNameAndClientPassword(name, password);
+        return clientRepository.existsById(name);
     }
 
     @Override
@@ -58,9 +67,15 @@ public class ClientServiceImpl implements ClientService {
         clientRepository.updateIsClientActiveByClientName(isActive, name);
     }
 
+
+
     @Override
-    public Client getByClientNameAndClientPassword(String clientName, String clientPassword) {
-        return clientRepository.findByClientNameAndClientPassword(clientName, clientPassword);
+    public Client authenticate(String clientName, String clientPassword) {
+        Client client = getClientByName(clientName);
+        if (client != null && verifyCredentials(clientName, clientPassword)) {
+            return client;
+        }
+        return null;
     }
 
     @Override

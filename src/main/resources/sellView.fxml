@@ -143,13 +143,27 @@
             </AnchorPane>
             <HBox alignment="CENTER" prefHeight="80.0" prefWidth="800.0" spacing="120.0" styleClass="slogan" stylesheets="@Styles.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="68.0" prefWidth="421.0" styleClass="title" stylesheets="@Styles.css" text="Ventas" textFill="#eeeeee">
+                  <Label alignment="CENTER" graphicTextGap="14.0" prefHeight="68.0" prefWidth="421.0" styleClass="title" stylesheets="@Styles.css" text="Ventas" textFill="#eeeeee">
                      <font>
                         <Font name="Constantia Bold" size="60.0" />
                      </font>
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
+                     <graphic>
+                        <ImageView fitHeight="150.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                           <effect>
+                              <InnerShadow choke="1.0" radius="68.5" width="255.0">
+                                 <color>
+                                    <Color red="1.0" green="1.0" blue="1.0" />
+                                 </color>
+                              </InnerShadow>
+                           </effect>
+                           <image>
+                              <Image url="@images/agreement.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
                   </Label>
                </children>
             </HBox>
@@ -293,7 +307,7 @@
                   <Font size="14.0" />
                </font>
             </Button>
-            <Label fx:id="txtClientName" contentDisplay="TOP" prefHeight="69.0" prefWidth="172.0" styleClass="clientName" stylesheets="@Styles.css" text="Marco A. Romeros" textFill="#eeeeee" wrapText="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="5.0">
+            <Label fx:id="lblClientName" contentDisplay="TOP" prefHeight="69.0" prefWidth="172.0" styleClass="clientName" stylesheets="@Styles.css" text="Marco A. Romeros" textFill="#eeeeee" wrapText="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="5.0">
                <font>
                   <Font name="SansSerif Regular" size="14.0" />
                </font>
@@ -616,7 +630,7 @@
                            <graphic>
                               <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@images/Alert.PNG" />
+                                    <Image url="@images/Alert.png" />
                                  </image>
                               </ImageView>
                            </graphic>

@@ -35,4 +35,10 @@ public class Inventory {
 
     @Column(name = "amount")
     private Integer amount;
+
+    @Column(name="amount_alert")
+    private Integer amountAlert;
+
+    @Column(name="amount_warning")
+    private Integer amountWarning;
 }
