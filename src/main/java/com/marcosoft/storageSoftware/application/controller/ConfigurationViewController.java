@@ -25,6 +25,12 @@ public class ConfigurationViewController {
     private final ClientServiceImpl clientService;
     private final SceneSwitcher sceneSwitcher;
 
+    /**
+     * Instantiates a new Configuration view controller.
+     *
+     * @param clientService the client service
+     * @param sceneSwitcher the scene switcher
+     */
     @Lazy
     public ConfigurationViewController(ClientServiceImpl clientService, SceneSwitcher sceneSwitcher) {
         this.clientService = clientService;
@@ -40,6 +46,9 @@ public class ConfigurationViewController {
     @FXML
     private ToggleGroup rdmiTheme;
 
+    /**
+     * Close session.
+     */
     @FXML
     void closeSession() {
         Client client = clientService.getByIsClientActive(true);
@@ -48,6 +57,9 @@ public class ConfigurationViewController {
         Main.launch();
     }
 
+    /**
+     * Initialize.
+     */
     @FXML
     public void initialize() {
 
@@ -60,34 +72,64 @@ public class ConfigurationViewController {
     // MÉTODOS DE NAVEGACIÓN
     // ============================
 
+    /**
+     * Switch to support.
+     *
+     * @param actionEvent the action event
+     */
     @FXML
     public void switchToSupport(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/supportView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/supportView.fxml");
     }
 
+    /**
+     * Switch to warehouse.
+     *
+     * @param actionEvent the action event
+     */
     @FXML
     public void switchToWarehouse(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/warehouseView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/warehouseView.fxml");
     }
 
+    /**
+     * Switch to registry.
+     *
+     * @param actionEvent the action event
+     */
     @FXML
     public void switchToRegistry(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/registryView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/registryView.fxml");
     }
 
+    /**
+     * Switch to balance.
+     *
+     * @param actionEvent the action event
+     */
     @FXML
     public void switchToBalance(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/balanceView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/balanceView.fxml");
     }
 
+    /**
+     * Switch to investment.
+     *
+     * @param actionEvent the action event
+     */
     @FXML
     public void switchToInvestment(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/investmentView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/investmentView.fxml");
     }
 
+    /**
+     * Switch to sell.
+     *
+     * @param actionEvent the action event
+     */
     @FXML
     public void switchToSell(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/sellView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/sellView.fxml");
     }
 
 }

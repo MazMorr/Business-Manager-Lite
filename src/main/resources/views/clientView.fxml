@@ -20,12 +20,12 @@
    <children>
       <AnchorPane id="AnchorPane" prefHeight="350.0" prefWidth="450.0" styleClass="background">
           <stylesheets>
-              <URL value="@Styles.css" />
+              <URL value="@../Styles.css" />
           </stylesheets>
          <children>
-            <HBox alignment="CENTER" layoutX="125.0" prefHeight="64.0" prefWidth="323.0" styleClass="slogan" stylesheets="@Styles.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <HBox alignment="CENTER" layoutX="125.0" prefHeight="64.0" prefWidth="323.0" styleClass="slogan" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <Label styleClass="title" stylesheets="@Styles.css" text="Inicie Sesión">
+                  <Label styleClass="title" text="Inicie Sesión">
                      <font>
                         <Font name="Constantia Bold Italic" size="40.0" />
                      </font>
@@ -37,12 +37,12 @@
             </HBox>
             <VBox layoutX="109.0" layoutY="79.0" prefHeight="257.0" prefWidth="300.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="75.0" AnchorPane.rightAnchor="75.0" AnchorPane.topAnchor="85.0">
                <children>
-                  <Label styleClass="txtUser" stylesheets="@Styles.css" text="Usuario:">
+                  <Label styleClass="txtUser" stylesheets="@../Styles.css" text="Usuario:">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="txtFieldName" promptText="Introduzca su nombre de usuario" styleClass="inputForm" stylesheets="@Styles.css">
+                  <TextField fx:id="txtFieldName" promptText="Introduzca su nombre de usuario" styleClass="inputForm">
                      <tooltip>
                         <Tooltip consumeAutoHidingEvents="false" text="Recuerde el nombre de usuario de la cuenta que había creado y rellene el campo">
                            <font>
@@ -50,7 +50,7 @@
                            </font>
                         </Tooltip>
                      </tooltip></TextField>
-                  <Label styleClass="txtPassword" stylesheets="@Styles.css" text="Contraseña:">
+                  <Label styleClass="txtPassword" stylesheets="@../Styles.css" text="Contraseña:">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
@@ -58,7 +58,7 @@
                         <Insets top="2.0" />
                      </VBox.margin>
                   </Label>
-                  <PasswordField fx:id="txtFieldPassword" promptText="Introduzca su contraseña" styleClass="inputForm" stylesheets="@Styles.css">
+                  <PasswordField fx:id="txtFieldPassword" promptText="Introduzca su contraseña" styleClass="inputForm">
                      <tooltip>
                         <Tooltip consumeAutoHidingEvents="false" text="Introduzca la contraseña correspondiente a su usuario">
                            <font>
@@ -66,7 +66,7 @@
                            </font>
                         </Tooltip>
                      </tooltip></PasswordField>
-                  <Button defaultButton="true" mnemonicParsing="false" onAction="#enterApplication" prefHeight="30.0" prefWidth="300.0" styleClass="btnStock" stylesheets="@Styles.css" text="Iniciar Sesión">
+                  <Button defaultButton="true" mnemonicParsing="false" onAction="#enterApplication" prefHeight="30.0" prefWidth="300.0" styleClass="btnStock" text="Iniciar Sesión">
                      <font>
                         <Font name="SansSerif Regular" size="14.0" />
                      </font>
@@ -96,7 +96,7 @@
                         <Insets top="5.0" />
                      </VBox.margin>
                   </Label>
-                  <Button mnemonicParsing="false" onAction="#switchToCreateClient" prefHeight="30.0" prefWidth="300.0" styleClass="btnStock" stylesheets="@Styles.css" text="Crear Cuenta">
+                  <Button mnemonicParsing="false" onAction="#switchToCreateClient" prefHeight="30.0" prefWidth="300.0" styleClass="btnStock" text="Crear Cuenta">
                      <font>
                         <Font name="System Bold" size="15.0" />
                      </font>

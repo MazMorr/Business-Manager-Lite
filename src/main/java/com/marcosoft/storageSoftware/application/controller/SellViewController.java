@@ -11,7 +11,6 @@ import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -29,8 +28,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Controller for the sell view.
- * Handles logic for selling products, assigning prices, filtering inventory, and navigation.
+ * The type Sell view controller.
  */
 @Slf4j
 @Controller
@@ -50,8 +48,24 @@ public class SellViewController {
     private final SellRegistryServiceImpl sellRegistryService;
     private final GeneralRegistryServiceImpl generalRegistryService;
 
+    @FXML
+    private Label lblWarning, lblAlerts, txtSellDebug, txtAssignPriceDebug;
+
+
     /**
-     * Constructor for dependency injection.
+     * Instantiates a new Sell view controller.
+     *
+     * @param currencyService the currency service
+     * @param clientService the client service
+     * @param displayAlerts the display alerts
+     * @param userLogged the user logged
+     * @param parseDataTypes the parse data types
+     * @param sceneSwitcher the scene switcher
+     * @param inventoryService the inventory service
+     * @param productService the product service
+     * @param warehouseService the warehouse service
+     * @param sellRegistryService the sell registry service
+     * @param generalRegistryService the general registry service
      */
     public SellViewController(
             CurrencyServiceImpl currencyService, ClientServiceImpl clientService, DisplayAlerts displayAlerts,
@@ -92,20 +106,15 @@ public class SellViewController {
     @FXML
     private TreeTableColumn<SellDataTable, Integer> ttcProductAmount;
 
-    private ObservableList<TreeItem<SellDataTable>> originalItems = FXCollections.observableArrayList();
-    private FilteredList<TreeItem<SellDataTable>> filteredItems;
+    private final ObservableList<TreeItem<SellDataTable>> originalItems = FXCollections.observableArrayList();
 
     /**
-     * Initializes the controller after its root element has been completely processed.
-     * Sets up table columns, loads inventory, listeners, date picker, warehouse and currency menus.
+     * Initialize.
      */
     @FXML
     public void initialize() {
         client = clientService.getClientByName(userLogged.getName());
         lblClientName.setText(client.getClientName());
-
-        // Initialize filteredItems with originalItems as source
-        filteredItems = new FilteredList<>(originalItems, p -> true);
 
         Platform.runLater(() -> {
             setupTableColumns();
@@ -116,43 +125,100 @@ public class SellViewController {
             initAllMbCurrency();
             setupTableSelectionListener();
             setupOtherTextFieldListeners();
+            loadWarningAndAlertLabels();
         });
     }
 
+    /**
+     * Load warning and alert labels.
+     */
+    public void loadWarningAndAlertLabels() {
+        int alertCounter = 0;
+        int warningCounter = 0;
+
+        try {
+            // Get all inventories for the client
+            List<Inventory> inventories = inventoryService.getAllInventoriesByClient(client);
+
+            if (inventories != null) {
+                for (Inventory inventory : inventories) {
+                    // Skip invalid inventory records
+                    if (inventory == null || inventory.getProduct() == null || inventory.getWarehouse() == null) {
+                        continue;
+                    }
+
+                    // Check for alerts (more critical condition)
+                    if (inventory.getAmountAlert() != null && inventory.getAmount() <= inventory.getAmountAlert()) {
+                        alertCounter++;
+                    }
+                    // Check for warnings (less critical condition)
+                    else if (inventory.getAmountWarning() != null && inventory.getAmount() <= inventory.getAmountWarning()) {
+                        warningCounter++;
+                    }
+                }
+            }
+
+            // Update the labels with counters
+            lblAlerts.setText("Alertas (" + alertCounter + ")");
+            lblWarning.setText("Advertencias (" + warningCounter + ")");
+
+            // Optional: Style the labels based on severity
+            if (alertCounter > 0) {
+                lblAlerts.setStyle("-fx-text-fill: #ff0000; -fx-font-weight: bold;"); // Red for alerts
+            } else {
+                lblAlerts.setStyle(""); // Reset style
+            }
+
+            if (warningCounter > 0) {
+                lblWarning.setStyle("-fx-text-fill: #ff9900; -fx-font-weight: bold;"); // Orange for warnings
+            } else {
+                lblWarning.setStyle(""); // Reset style
+            }
+
+        } catch (Exception e) {
+            // Handle any errors gracefully
+            log.error("Error loading warning and alert labels", e);
+            lblAlerts.setText("Alertas (Error)");
+            lblWarning.setText("Advertencias (Error)");
+        }
+    }
+
+    /**
+     * Clean filters.
+     */
     @FXML
     public void cleanFilters() {
-        tfFilterProductName.clear();
-        tfFilterWarehouseName.clear();
-        tfMinFilterAmount.clear();
-        tfMinFilterPrice.clear();
-        tfMaxFilterAmount.clear();
-        tfMaxFilterPrice.clear();
+        List<TextField> textFields = List.of(
+                tfFilterProductName, tfFilterWarehouseName, tfMinFilterAmount, tfMinFilterPrice, tfMaxFilterAmount,
+                tfMaxFilterPrice
+        );
+        cleanTextFields(textFields);
 
         loadProductTable();
     }
 
+
     /**
-     * Clears all input fields in the sell and assign price forms.
+     * Clean form.
      */
     @FXML
     public void cleanForm() {
-        tfAssignPriceCurrency.clear();
-        tfAssignPriceProductName.clear();
-        tfAssignPriceProductPrice.clear();
-        tfSellProductAmount.clear();
-        tfSellProductCurrency.clear();
-        tfSellProductName.clear();
-        tfSellProductPrice.clear();
+        List<TextField> textFields = List.of(
+                tfAssignPriceCurrency, tfAssignPriceProductName, tfAssignPriceProductPrice, tfSellProductAmount,
+                tfSellProductCurrency, tfSellProductName, tfSellProductPrice
+        );
+        cleanTextFields(textFields);
         dpSellProductDate.setValue(LocalDate.now());
     }
 
+    private void cleanTextFields(List<TextField> textFields) {
+        for (TextField tf : textFields) {
+            tf.clear();
+        }
+    }
+
     /**
-     * Handles the selling of a product.
-     * Validates input fields and updates inventory.
-     * Improved version with:
-     * - Better transaction handling
-     * - Stock validation before modification
-     * - Clearer error messages
+     * Sell product.
      */
     @FXML
     public void sellProduct() {
@@ -160,67 +226,94 @@ public class SellViewController {
             return;
         }
 
-        String warehouseName = tfSellWarehouse.getText();
-        String productName = tfSellProductName.getText();
-        Integer productAmount = parseDataTypes.parseInt(tfSellProductAmount.getText());
-        Double productSellPrice = parseDataTypes.parseDouble(tfSellProductPrice.getText());
-        String currencyName = tfSellProductCurrency.getText();
-        LocalDate date = dpSellProductDate.getValue();
-
         try {
-            // 1. Obtener entidades necesarias
-            Product product = productService.getByProductNameAndClient(productName, client);
-            Warehouse warehouse = warehouseService.getWarehouseByWarehouseNameAndClient(warehouseName, client);
-            Inventory inventory = inventoryService.getByProductAndWarehouseAndClient(product, warehouse, client);
+            // 1. Obtener datos básicos
+            String warehouseName = tfSellWarehouse.getText();
+            String productName = tfSellProductName.getText();
+            int productAmount = parseDataTypes.parseInt(tfSellProductAmount.getText());
 
-            // 2. Validación adicional del stock (por si acaso)
-            if (inventory.getAmount() < productAmount) {
-                displayAlerts.showAlert("No hay suficiente stock disponible. Stock actual: " + inventory.getAmount());
-                return;
-            }
+            // 2. Obtener entidades y validar stock
+            Inventory inventory = getAndValidateInventory(warehouseName, productName, productAmount);
 
-            // 3. Actualizar inventario (manejar caso de venta total)
-            int newAmount = inventory.getAmount() - productAmount;
-            if (newAmount == 0) {
-                // Eliminar el registro de inventario si el stock llega a cero
-                inventoryService.deleteInventoryById(inventory.getId());
-            } else {
-                // Actualizar la cantidad normalmente
-                inventory.setAmount(newAmount);
-                inventoryService.save(inventory);
-            }
+            // 3. Procesar venta
+            processSale(inventory, productAmount, productName);
 
-            // 4. Registrar la venta
-            SellRegistry sellRegistry = new SellRegistry(
-                    null, client, "Venta", LocalDateTime.now(), productName,
-                    currencyName, productSellPrice, date, warehouseName, productAmount
-            );
-            sellRegistryService.save(sellRegistry);
-
-            // 5. Registrar en el historial general
-            GeneralRegistry generalRegistry = new GeneralRegistry(
-                    null, client, "Ventas", "Venta de " + productAmount + " unidades de " + productName,
-                    LocalDateTime.now()
-            );
-            generalRegistryService.save(generalRegistry);
-
-            // 6. Actualizar UI y mostrar confirmación
-            loadProductTable();
-            cleanForm();
-            displayAlerts.showAlert("Venta registrada exitosamente. Stock restante: " + (newAmount > 0 ? newAmount : "AGOTADO"));
+            // 4. Actualizar UI
+            updateUIAfterSale(inventory);
 
         } catch (DataIntegrityViolationException e) {
             displayAlerts.showAlert("Error de integridad de datos. Posiblemente el producto ya fue modificado.");
         } catch (EmptyResultDataAccessException e) {
             displayAlerts.showAlert("El producto o almacén ya no existe en la base de datos");
         } catch (Exception e) {
-            displayAlerts.showAlert("Error inesperado: " + e.getMessage());
+            displayAlerts.showAlert(e.getMessage());
         }
     }
 
+// --- Métodos auxiliares simplificados ---
+
+    private Inventory getAndValidateInventory(String warehouseName, String productName, int productAmount) {
+        Product product = productService.getByProductNameAndClient(productName, client);
+        Warehouse warehouse = warehouseService.getWarehouseByWarehouseNameAndClient(warehouseName, client);
+        Inventory inventory = inventoryService.getByProductAndWarehouseAndClient(product, warehouse, client);
+
+        if (inventory.getAmount() < productAmount) {
+            throw new IllegalStateException("No hay suficiente stock. Stock actual: " + inventory.getAmount());
+        }
+
+        return inventory;
+    }
+
+    private void processSale(Inventory inventory, int productAmount, String productName) {
+        // Actualizar inventario
+        int newAmount = inventory.getAmount() - productAmount;
+        if (newAmount == 0) {
+            inventoryService.deleteInventoryById(inventory.getId());
+        } else {
+            inventory.setAmount(newAmount);
+            inventoryService.save(inventory);
+        }
+
+        // Registrar venta
+        registerSaleTransaction(productName, productAmount);
+    }
+
+    private void registerSaleTransaction(String productName, int productAmount) {
+        // Datos adicionales del formulario
+        double price = parseDataTypes.parseDouble(tfSellProductPrice.getText());
+        String currency = tfSellProductCurrency.getText();
+        LocalDate date = dpSellProductDate.getValue();
+
+        SellRegistry sellRegistry = new SellRegistry(
+                null, client, "Venta", LocalDateTime.now(),
+                productName, currency, price, date,
+                tfSellWarehouse.getText(), productAmount
+        );
+        sellRegistryService.save(sellRegistry);
+
+        // Registrar en historial general
+        GeneralRegistry generalRegistry = new GeneralRegistry(
+                null, client, "Ventas",
+                "Venta de " + productAmount + " unidades de " + productName,
+                LocalDateTime.now()
+        );
+        generalRegistryService.save(generalRegistry);
+    }
+
+    private void updateUIAfterSale(Inventory inventory) {
+        loadProductTable();
+        cleanForm();
+
+        int remainingStock = inventory.getAmount();
+        String message = remainingStock > 0
+                ? "Venta registrada. Stock restante: " + remainingStock
+                : "Venta registrada. Producto AGOTADO";
+
+        displayAlerts.showAlert(message);
+    }
+
     /**
-     * Handles the assignment of a price to a product.
-     * Validates input fields and updates product price.
+     * Assign product price.
      */
     @FXML
     public void assignProductPrice() {
@@ -252,16 +345,10 @@ public class SellViewController {
         }
     }
 
-    /**
-     * Validates all fields in the assign price form.
-     */
     private boolean validateAllAssignPriceFields() {
         return validateTfAssignProduct() && validateTfPriceAssign() && validateTfAssignCurrency();
     }
 
-    /**
-     * Validates the currency field in the assign price form.
-     */
     private boolean validateTfAssignCurrency() {
         String currencyName = tfAssignPriceCurrency.getText();
 
@@ -278,10 +365,6 @@ public class SellViewController {
         return true;
     }
 
-    /**
-     * Validates the product field in the assign price form.
-     * Shows alerts in Spanish if validation fails.
-     */
     private boolean validateTfAssignProduct() {
         String productName = tfAssignPriceProductName.getText();
 
@@ -299,10 +382,6 @@ public class SellViewController {
         return true;
     }
 
-    /**
-     * Validates the price field in the assign price form.
-     * Shows alerts in Spanish if validation fails.
-     */
     private boolean validateTfPriceAssign() {
         String priceText = tfAssignPriceProductPrice.getText();
 
@@ -335,10 +414,6 @@ public class SellViewController {
         }
     }
 
-    /**
-     * Validates all fields in the sell form.
-     * Shows alerts in Spanish if validation fails.
-     */
     private boolean validateAllSellFields() {
         return validateTfSellProduct() && validateTfSellAmount() && validateSellPrice() && validateSellCurrency() && validateDatePicker();
     }
@@ -381,10 +456,6 @@ public class SellViewController {
         });
     }
 
-    /**
-     * Validates the currency field in the sell form.
-     * Shows alerts in Spanish if validation fails.
-     */
     private boolean validateSellCurrency() {
         String currencyName = tfSellProductCurrency.getText();
 
@@ -401,10 +472,6 @@ public class SellViewController {
         return true;
     }
 
-    /**
-     * Validates the price field in the sell form.
-     * Shows alerts in Spanish if validation fails.
-     */
     private boolean validateSellPrice() {
         String priceText = tfSellProductPrice.getText();
 
@@ -428,10 +495,6 @@ public class SellViewController {
         }
     }
 
-    /**
-     * Validates the date picker field in the sell form.
-     * Shows alerts in Spanish if validation fails.
-     */
     private boolean validateDatePicker() {
         LocalDate selectedDate = dpSellProductDate.getValue();
 
@@ -448,10 +511,6 @@ public class SellViewController {
         return true;
     }
 
-    /**
-     * Validates the amount field in the sell form.
-     * Shows alerts in Spanish if validation fails.
-     */
     private boolean validateTfSellAmount() {
         String amountText = tfSellProductAmount.getText();
 
@@ -486,10 +545,6 @@ public class SellViewController {
         }
     }
 
-    /**
-     * Validates the product and warehouse fields in the sell form.
-     * Shows alerts in Spanish if validation fails.
-     */
     private boolean validateTfSellProduct() {
         String productName = tfSellProductName.getText();
         String warehouseName = tfSellWarehouse.getText();
@@ -524,178 +579,490 @@ public class SellViewController {
         return true;
     }
 
-    // ============================
-    // NAVIGATION METHODS
-    // ============================
-
     /**
-     * Navigates to the configuration view.
+     * Switch to configuration.
+     *
+     * @param actionEvent the action event
      */
     @FXML
     public void switchToConfiguration(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/configurationView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/configurationView.fxml");
     }
 
     /**
-     * Navigates to the support view.
+     * Switch to support.
+     *
+     * @param actionEvent the action event
      */
     @FXML
     public void switchToSupport(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/supportView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/supportView.fxml");
     }
 
     /**
-     * Navigates to the registry view.
+     * Switch to registry.
+     *
+     * @param actionEvent the action event
      */
     @FXML
     public void switchToRegistry(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/registryView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/registryView.fxml");
     }
 
     /**
-     * Navigates to the warehouse view.
+     * Switch to warehouse.
+     *
+     * @param actionEvent the action event
      */
     @FXML
     public void switchToWarehouse(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/warehouseView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/warehouseView.fxml");
     }
 
     /**
-     * Navigates to the investment view.
+     * Switch to investment.
+     *
+     * @param actionEvent the action event
      */
     @FXML
     public void switchToInvestment(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/investmentView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/investmentView.fxml");
     }
 
     /**
-     * Navigates to the balance view.
+     * Switch to balance.
+     *
+     * @param actionEvent the action event
      */
     @FXML
     public void switchToBalance(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/balanceView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/balanceView.fxml");
+    }
+
+    private void setupTableColumns() {
+        // Configurar cada columna con su tipo específico
+        configureStringColumn(ttcWarehouse, "warehouseName");
+        configureStringColumn(ttcProductName, "productName");
+        configureDoubleColumn(ttcSellPrice, "sellPrice"); // Asumo que el campo se llama "sellPrice" y no "formattedPrice"
+        configureIntegerColumn(ttcProductAmount, "productAmount");
+    }
+
+
+    // Método para columnas de tipo Double
+    private void configureDoubleColumn(TreeTableColumn<SellDataTable, Double> column, String property) {
+        column.setCellValueFactory(new TreeItemPropertyValueFactory<>(property));
+        column.setCellFactory(col -> new TreeTableCell<>() {
+            @Override
+            protected void updateItem(Double item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    setText(String.format("%.2f", item)); // Formatear a 2 decimales
+                }
+                applyRowStyle();
+            }
+
+            private void applyRowStyle() {
+                TreeTableRow<SellDataTable> row = getTableRow();
+                if (row != null && row.getItem() != null) {
+                    setStyle(row.getItem().getStyle());
+                } else {
+                    setStyle("");
+                }
+            }
+        });
+        column.setSortable(false);
+    }
+
+    // Método para columnas de tipo Integer
+    private void configureIntegerColumn(TreeTableColumn<SellDataTable, Integer> column, String property) {
+        column.setCellValueFactory(new TreeItemPropertyValueFactory<>(property));
+        column.setCellFactory(col -> new TreeTableCell<>() {
+            @Override
+            protected void updateItem(Integer item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    setText(item.toString());
+                }
+                applyRowStyle();
+            }
+
+            private void applyRowStyle() {
+                TreeTableRow<SellDataTable> row = getTableRow();
+                if (row != null && row.getItem() != null) {
+                    setStyle(row.getItem().getStyle());
+                } else {
+                    setStyle("");
+                }
+            }
+        });
+        column.setSortable(false);
     }
 
     /**
-     * Sets up the columns for the inventory table.
+     * Load product table.
      */
-    private void setupTableColumns() {
-        ttcWarehouse.setCellValueFactory(new TreeItemPropertyValueFactory<>("warehouseName"));
-        ttcProductName.setCellValueFactory(new TreeItemPropertyValueFactory<>("productName"));
-        ttcSellPrice.setCellValueFactory(new TreeItemPropertyValueFactory<>("sellPrice"));
-        ttcProductAmount.setCellValueFactory(new TreeItemPropertyValueFactory<>("productAmount"));
-    }
-
-    private void loadProductTable() {
+    public void loadProductTable() {
         try {
-            // Obtener valores de filtro
-            String productNameFilter = tfFilterProductName.getText().trim().toLowerCase();
-            String warehouseNameFilter = tfFilterWarehouseName.getText().trim().toLowerCase();
-            Integer minAmount = tfMinFilterAmount.getText().isEmpty() ? null : parseDataTypes.parseInt(tfMinFilterAmount.getText());
-            Integer maxAmount = tfMaxFilterAmount.getText().isEmpty() ? null : parseDataTypes.parseInt(tfMaxFilterAmount.getText());
-            Double minPrice = tfMinFilterPrice.getText().isEmpty() ? null : parseDataTypes.parseDouble(tfMinFilterPrice.getText());
-            Double maxPrice = tfMaxFilterPrice.getText().isEmpty() ? null : parseDataTypes.parseDouble(tfMaxFilterPrice.getText());
+            // 1. Get filters
+            FilterCriteria filters = getFilterCriteria();
 
-            // Limpiar listas
-            originalItems.clear();
+            // 2. Get and process data
+            List<Inventory> inventories = getInventories();
+            TreeItem<SellDataTable> root = processInventories(inventories, filters);
 
-            // Obtener datos de la base de datos
-            List<Inventory> inventories = inventoryService.getAllInventoriesByClient(client);
-            if (inventories == null) {
-                inventories = Collections.emptyList();
+            // 3. Display results
+            displayResults(root);
+
+            // 4. Apply styles with error handling
+            try {
+                applyStockWarningStyles(root);
+            } catch (Exception e) {
+                log.error("Error applying styles to table", e);
+                displayAlerts.showAlert("Error al aplicar estilos a la tabla");
             }
 
-            TreeItem<SellDataTable> root = new TreeItem<>(new SellDataTable());
-
-            // Filtrar y agrupar durante la carga
-            Map<Product, List<Inventory>> inventoriesByProduct = inventories.stream()
-                    .filter(inv -> inv != null && inv.getProduct() != null && inv.getWarehouse() != null)
-                    .filter(inv -> {
-                        Product product = inv.getProduct();
-                        // Aplicar filtros directamente aquí
-                        if (!productNameFilter.isEmpty() &&
-                                !product.getProductName().toLowerCase().contains(productNameFilter)) {
-                            return false;
-                        }
-                        if (minPrice != null &&
-                                (product.getSellPrice() == null || product.getSellPrice() < minPrice)) {
-                            return false;
-                        }
-                        return maxPrice == null ||
-                                (product.getSellPrice() != null && product.getSellPrice() <= maxPrice);
-                    })
-                    .collect(Collectors.groupingBy(Inventory::getProduct));
-
-            // Construir el árbol con los datos filtrados
-            inventoriesByProduct.forEach((product, invList) -> {
-                // Filtrar por almacén y cantidad
-                List<Inventory> filteredInvList = invList.stream()
-                        .filter(inv -> {
-                            if (!warehouseNameFilter.isEmpty() &&
-                                    !inv.getWarehouse().getWarehouseName().toLowerCase().contains(warehouseNameFilter)) {
-                                return false;
-                            }
-                            if (minAmount != null && inv.getAmount() < minAmount) {
-                                return false;
-                            }
-                            return maxAmount == null || inv.getAmount() <= maxAmount;
-                        })
-                        .toList();
-
-                if (!filteredInvList.isEmpty()) {
-                    int totalAmount = filteredInvList.stream().mapToInt(Inventory::getAmount).sum();
-
-                    if (filteredInvList.size() > 1) {
-                        TreeItem<SellDataTable> productItem = new TreeItem<>(
-                                new SellDataTable(
-                                        product.getProductName(),
-                                        product.getSellPrice(),
-                                        "Almacenes: " + filteredInvList.size(),
-                                        totalAmount
-                                )
-                        );
-
-                        filteredInvList.forEach(inv -> {
-                            TreeItem<SellDataTable> warehouseNode = new TreeItem<>(
-                                    new SellDataTable(
-                                            "",
-                                            null,
-                                            inv.getWarehouse().getWarehouseName(),
-                                            inv.getAmount()
-                                    )
-                            );
-                            productItem.getChildren().add(warehouseNode);
-                        });
-
-                        root.getChildren().add(productItem);
-                        originalItems.add(productItem);
-                    } else {
-                        TreeItem<SellDataTable> singleNode = new TreeItem<>(
-                                new SellDataTable(
-                                        product.getProductName(),
-                                        product.getSellPrice(),
-                                        filteredInvList.getFirst().getWarehouse().getWarehouseName(),
-                                        totalAmount
-                                )
-                        );
-                        root.getChildren().add(singleNode);
-                        originalItems.add(singleNode);
-                    }
+        } catch (Exception e) {
+            handleLoadError(e);
+        } finally {
+            Platform.runLater(() -> {
+                try {
+                    ttvInventory.refresh();
+                } catch (Exception e) {
+                    log.error("Error refreshing table", e);
                 }
             });
-
-            ttvInventory.setRoot(root);
-            ttvInventory.setShowRoot(false);
-
-        } catch (Exception e) {
-            displayAlerts.showAlert("Error al cargar inventario");
-            e.printStackTrace();
         }
     }
 
+    private void configureStringColumn(TreeTableColumn<SellDataTable, String> column, String property) {
+        column.setCellValueFactory(new TreeItemPropertyValueFactory<>(property));
+        column.setCellFactory(col -> new TreeTableCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    setText(item);
+                    TreeTableRow<SellDataTable> row = getTableRow();
+                    if (row != null && row.getItem() != null && row.getItem().getStyle() != null) {
+                        String style = row.getItem().getStyle();
+                        if (style != null && !style.isEmpty()) {
+                            setStyle(style);
+                            log.debug("Applied style to cell: {}", style);
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    private void applyStockWarningStyles(TreeItem<SellDataTable> root) {
+        if (root == null || root.getChildren() == null) {
+            log.warn("Root or its children are null");
+            return;
+        }
+
+        final String alertStyle = "-fx-background-color: #ffcccc;";
+        final String warningStyle = "-fx-background-color: #ffff99;";
+
+        for (TreeItem<SellDataTable> productItem : root.getChildren()) {
+            try {
+                if (productItem == null || productItem.getValue() == null) {
+                    continue;
+                }
+
+                // Debug: Log current item
+                log.debug("Processing product: {}", productItem.getValue().getProductName());
+
+                // Reset style
+                productItem.getValue().setStyle("");
+
+                if (!productItem.getChildren().isEmpty()) {
+                    processParentItem(productItem, alertStyle, warningStyle);
+                } else {
+                    processSingleItem(productItem, alertStyle, warningStyle);
+                }
+            } catch (Exception e) {
+                log.error("Error processing product item", e);
+            }
+        }
+    }
+
+    private void processParentItem(TreeItem<SellDataTable> productItem, String alertStyle, String warningStyle) {
+        boolean hasAlert = false;
+        boolean hasWarning = false;
+
+        for (TreeItem<SellDataTable> warehouseItem : productItem.getChildren()) {
+            try {
+                if (warehouseItem == null || warehouseItem.getValue() == null) {
+                    continue;
+                }
+
+                warehouseItem.getValue().setStyle("");
+                Inventory inventory = getInventoryFromTreeItem(warehouseItem);
+
+                if (inventory != null) {
+                    if (shouldShowAlert(inventory)) {
+                        hasAlert = true;
+                        warehouseItem.getValue().setStyle(alertStyle);
+                        log.debug("Applied alert style to warehouse: {}", warehouseItem.getValue().getWarehouseName());
+                    } else if (shouldShowWarning(inventory)) {
+                        hasWarning = true;
+                        warehouseItem.getValue().setStyle(warningStyle);
+                        log.debug("Applied warning style to warehouse: {}", warehouseItem.getValue().getWarehouseName());
+                    }
+                }
+            } catch (Exception e) {
+                log.error("Error processing warehouse item", e);
+            }
+        }
+
+        if (hasAlert) {
+            productItem.getValue().setStyle(alertStyle);
+            log.debug("Applied alert style to product: {}", productItem.getValue().getProductName());
+        } else if (hasWarning) {
+            productItem.getValue().setStyle(warningStyle);
+            log.debug("Applied warning style to product: {}", productItem.getValue().getProductName());
+        }
+    }
+
+    private void processSingleItem(TreeItem<SellDataTable> item, String alertStyle, String warningStyle) {
+        try {
+            Inventory inventory = getInventoryFromTreeItem(item);
+            if (inventory != null) {
+                if (shouldShowAlert(inventory)) {
+                    item.getValue().setStyle(alertStyle);
+                    log.debug("Applied alert style to single item: {}", item.getValue().getProductName());
+                } else if (shouldShowWarning(inventory)) {
+                    item.getValue().setStyle(warningStyle);
+                    log.debug("Applied warning style to single item: {}", item.getValue().getProductName());
+                }
+            }
+        } catch (Exception e) {
+            log.error("Error processing single item", e);
+        }
+    }
+
+    private boolean shouldShowAlert(Inventory inventory) {
+        try {
+            return inventory != null &&
+                    inventory.getAmountAlert() != null &&
+                    inventory.getAmount() <= inventory.getAmountAlert();
+        } catch (Exception e) {
+            log.error("Error checking alert condition", e);
+            return false;
+        }
+    }
+
+    private boolean shouldShowWarning(Inventory inventory) {
+        try {
+            return inventory != null &&
+                    inventory.getAmountWarning() != null &&
+                    inventory.getAmount() <= inventory.getAmountWarning() &&
+                    inventory.getAmount() > (inventory.getAmountAlert() != null ? inventory.getAmountAlert() : Integer.MIN_VALUE);
+        } catch (Exception e) {
+            log.error("Error checking warning condition", e);
+            return false;
+        }
+    }
+
+    private Inventory getInventoryFromTreeItem(TreeItem<SellDataTable> item) {
+        try {
+            if (item == null || item.getValue() == null) return null;
+
+            String productName;
+            String warehouseName = item.getValue().getWarehouseName();
+
+            // 1. Si es nodo hijo (warehouse): obtener productName del padre
+            if (item.getParent() != null && item.getParent() != ttvInventory.getRoot()) {
+                productName = item.getParent().getValue().getProductName();
+            }
+            // 2. Si es nodo padre (producto): no necesita warehouseName
+            else {
+                productName = item.getValue().getProductName();
+                warehouseName = null; // ← Ignora warehouseName para nodos padres
+            }
+
+            Product product = productService.getByProductNameAndClient(productName, client);
+            if (product == null) {
+                log.warn("Product not found: {}", productName);
+                return null;
+            }
+
+            // Solo busca warehouse si es un nodo hoja (warehouse)
+            Warehouse warehouse = (warehouseName != null) ?
+                    warehouseService.getWarehouseByWarehouseNameAndClient(warehouseName, client) : null;
+
+            return (warehouse != null) ?
+                    inventoryService.getByProductAndWarehouseAndClient(product, warehouse, client) : null;
+        } catch (Exception e) {
+            log.error("Error getting inventory from tree item", e);
+            return null;
+        }
+    }
+
+
     /**
-     * Sets up listeners for filter fields to trigger table filtering.
+     * Display warning manager.
+     *
+     * @throws SceneSwitcher.WindowLoadException the window load exception
      */
+    @FXML
+    public void displayWarningManager() throws SceneSwitcher.WindowLoadException {
+        sceneSwitcher.displayWindow(
+                "Administrador de Alertas", "/images/RTS_logo.png", "/views/warningManagerView.fxml"
+        );
+    }
+
+// --- Métodos auxiliares ---
+
+    private record FilterCriteria(
+            String productNameFilter,
+            String warehouseNameFilter,
+            Integer minAmount,
+            Integer maxAmount,
+            Double minPrice,
+            Double maxPrice
+    ) {
+    }
+
+    private FilterCriteria getFilterCriteria() {
+        return new FilterCriteria(
+                tfFilterProductName.getText().trim().toLowerCase(),
+                tfFilterWarehouseName.getText().trim().toLowerCase(),
+                tfMinFilterAmount.getText().isEmpty() ? null : parseDataTypes.parseInt(tfMinFilterAmount.getText()),
+                tfMaxFilterAmount.getText().isEmpty() ? null : parseDataTypes.parseInt(tfMaxFilterAmount.getText()),
+                tfMinFilterPrice.getText().isEmpty() ? null : parseDataTypes.parseDouble(tfMinFilterPrice.getText()),
+                tfMaxFilterPrice.getText().isEmpty() ? null : parseDataTypes.parseDouble(tfMaxFilterPrice.getText())
+        );
+    }
+
+    private List<Inventory> getInventories() {
+        List<Inventory> inventories = inventoryService.getAllInventoriesByClient(client);
+        return inventories != null ? inventories : Collections.emptyList();
+    }
+
+    private TreeItem<SellDataTable> processInventories(List<Inventory> inventories, FilterCriteria filters) {
+        originalItems.clear();
+        TreeItem<SellDataTable> root = new TreeItem<>(new SellDataTable());
+
+        Map<Product, List<Inventory>> inventoriesByProduct = groupAndFilterInventories(inventories, filters);
+
+        inventoriesByProduct.forEach((product, invList) -> {
+            List<Inventory> filteredInvList = filterByWarehouseAndAmount(invList, filters);
+
+            if (!filteredInvList.isEmpty()) {
+                addToTree(root, product, filteredInvList);
+            }
+        });
+
+        return root;
+    }
+
+    private Map<Product, List<Inventory>> groupAndFilterInventories(List<Inventory> inventories, FilterCriteria filters) {
+        return inventories.stream()
+                .filter(inv -> inv != null && inv.getProduct() != null && inv.getWarehouse() != null)
+                .filter(inv -> matchesProductFilters(inv.getProduct(), filters))
+                .collect(Collectors.groupingBy(Inventory::getProduct));
+    }
+
+    private boolean matchesProductFilters(Product product, FilterCriteria filters) {
+        if (!filters.productNameFilter().isEmpty() &&
+                !product.getProductName().toLowerCase().contains(filters.productNameFilter())) {
+            return false;
+        }
+        if (filters.minPrice() != null && (product.getSellPrice() == null || product.getSellPrice() < filters.minPrice())) {
+            return false;
+        }
+        return filters.maxPrice() == null || (product.getSellPrice() != null && product.getSellPrice() <= filters.maxPrice());
+    }
+
+    private List<Inventory> filterByWarehouseAndAmount(List<Inventory> invList, FilterCriteria filters) {
+        return invList.stream()
+                .filter(inv -> {
+                    if (!filters.warehouseNameFilter().isEmpty() &&
+                            !inv.getWarehouse().getWarehouseName().toLowerCase().contains(filters.warehouseNameFilter())) {
+                        return false;
+                    }
+                    if (filters.minAmount() != null && inv.getAmount() < filters.minAmount()) {
+                        return false;
+                    }
+                    return filters.maxAmount() == null || inv.getAmount() <= filters.maxAmount();
+                })
+                .toList();
+    }
+
+    private void addToTree(TreeItem<SellDataTable> root, Product product, List<Inventory> filteredInvList) {
+        String currency = product.getCurrency() != null ? product.getCurrency().getCurrencyName() : "";
+        int totalAmount = filteredInvList.stream().mapToInt(Inventory::getAmount).sum();
+
+        if (filteredInvList.size() > 1) {
+            TreeItem<SellDataTable> productItem = createProductNode(product, currency, filteredInvList.size(), totalAmount);
+            filteredInvList.forEach(inv -> productItem.getChildren().add(createWarehouseNode(inv)));
+            root.getChildren().add(productItem);
+            originalItems.add(productItem);
+        } else {
+            TreeItem<SellDataTable> singleNode = createSingleNode(product, currency, filteredInvList.getFirst(), totalAmount);
+            root.getChildren().add(singleNode);
+            originalItems.add(singleNode);
+        }
+    }
+
+    private TreeItem<SellDataTable> createProductNode(Product product, String currency, int warehouseCount, int totalAmount) {
+        return new TreeItem<>(
+                new SellDataTable(
+                        product.getProductName(),
+                        product.getSellPrice(),
+                        currency,
+                        "Almacenes: " + warehouseCount,
+                        totalAmount
+                )
+        );
+    }
+
+    private TreeItem<SellDataTable> createWarehouseNode(Inventory inv) {
+        return new TreeItem<>(
+                new SellDataTable(
+                        "",
+                        null,
+                        null,
+                        inv.getWarehouse().getWarehouseName(),
+                        inv.getAmount()
+                )
+        );
+    }
+
+    private TreeItem<SellDataTable> createSingleNode(Product product, String currency, Inventory inv, int totalAmount) {
+        return new TreeItem<>(
+                new SellDataTable(
+                        product.getProductName(),
+                        product.getSellPrice(),
+                        currency,
+                        inv.getWarehouse().getWarehouseName(),
+                        totalAmount
+                )
+        );
+    }
+
+    private void displayResults(TreeItem<SellDataTable> root) {
+        ttvInventory.setRoot(root);
+        ttvInventory.setShowRoot(false);
+    }
+
+    private void handleLoadError(Exception e) {
+        displayAlerts.showAlert("Error al cargar inventario");
+        e.printStackTrace();
+    }
+
     private void setupFilterListeners() {
         // Add listeners to all filter fields
         tfFilterProductName.textProperty().addListener((obs, oldVal, newVal) -> loadProductTable());
@@ -707,29 +1074,56 @@ public class SellViewController {
     }
 
     private void setupOtherTextFieldListeners() {
-        tfSellProductAmount.textProperty().addListener((obs, oldVal, newVal) -> updatePricePerAmount());
+        tfSellProductAmount.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null && !newVal.isEmpty()) {
+                updatePricePerAmount();
+            }
+        });
     }
 
     private void updatePricePerAmount() {
         try {
-            double price = productService.getByProductNameAndClient(tfSellProductName.getText(), client).getSellPrice();
-            double pricePerAmount = Double.parseDouble(tfSellProductAmount.getText()) * price;
-            tfSellProductPrice.setText(String.valueOf(pricePerAmount));
-        } catch (NullPointerException e) {
-            System.out.println("No hay precios para este producto en la base de datos");
+            // Validar que el campo de producto no esté vacío
+            if (tfSellProductName.getText() == null || tfSellProductName.getText().isEmpty()) {
+                return;
+            }
+
+            // Validar que el campo de cantidad no esté vacío
+            String amountText = tfSellProductAmount.getText();
+            if (amountText == null || amountText.isEmpty()) {
+                return;
+            }
+
+            // Obtener el producto y su precio
+            Product product = productService.getByProductNameAndClient(
+                    tfSellProductName.getText(),
+                    client
+            );
+
+            if (product == null || product.getSellPrice() == null) {
+                System.out.println("No hay precios para este producto en la base de datos");
+                return;
+            }
+
+            // Calcular el precio total
+            double price = product.getSellPrice();
+            double amount = Double.parseDouble(amountText);
+            double pricePerAmount = amount * price;
+
+            // Actualizar el campo de precio
+            tfSellProductPrice.setText(String.format("%.2f", pricePerAmount));
+
+        } catch (NumberFormatException e) {
+            System.out.println("La cantidad debe ser un número válido");
+        } catch (Exception e) {
+            System.out.println("Error al calcular el precio: " + e.getMessage());
         }
     }
 
-    /**
-     * Initializes the date picker with the current date.
-     */
     private void initDatePicker() {
         dpSellProductDate.setValue(LocalDate.now());
     }
 
-    /**
-     * Initializes the warehouse menu with all warehouses for the current client.
-     */
     private void initMbWarehouse() {
         mbSellWarehouse.getItems().clear();
         List<Warehouse> warehouses = warehouseService.getWarehousesByClient(clientService.getClientByName(userLogged.getName()));
@@ -744,9 +1138,6 @@ public class SellViewController {
         }
     }
 
-    /**
-     * Initializes the product menu for the selected warehouse.
-     */
     private void initMbSellProduct(Warehouse w) {
         if (w == null || w.getWarehouseName() == null) return;
 
@@ -769,17 +1160,11 @@ public class SellViewController {
         }
     }
 
-    /**
-     * Initializes both currency menus for selling and assigning price.
-     */
     private void initAllMbCurrency() {
         initMbCurrency(mbSellCurrency, tfSellProductCurrency);
         initMbCurrency(mbAssignPriceCurrency, tfAssignPriceCurrency);
     }
 
-    /**
-     * Initializes a currency menu with all available currencies.
-     */
     private void initMbCurrency(MenuButton mb, TextField tf) {
         mb.getItems().clear();
         List<Currency> currencies = currencyService.getAllCurrencies();

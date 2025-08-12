@@ -20,13 +20,28 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+/**
+ * The type Registry view controller.
+ */
 @Lazy
 @Controller
 public class RegistryViewController {
 
+    /**
+     * The General registry data tables.
+     */
     ObservableList<GeneralRegistryDataTable> generalRegistryDataTables;
+    /**
+     * The Investment registry data tables.
+     */
     ObservableList<InvestmentRegistryDataTable> investmentRegistryDataTables;
+    /**
+     * The Sell registry data tables.
+     */
     ObservableList<SellRegistryDataTable> sellRegistryDataTables;
+    /**
+     * The Warehouse registry data tables.
+     */
     ObservableList<WarehouseRegistryDataTable> warehouseRegistryDataTables;
 
     private Client client;
@@ -41,7 +56,18 @@ public class RegistryViewController {
     private final InvestmentRegistryServiceImpl investmentRegistryService;
     private final DisplayAlerts displayAlerts;
 
-    @Lazy
+    /**
+     * Instantiates a new Registry view controller.
+     *
+     * @param investmentRegistryService the investment registry service
+     * @param sellRegistryService the sell registry service
+     * @param generalRegistryService the general registry service
+     * @param warehouseRegistryService the warehouse registry service
+     * @param userLogged the user logged
+     * @param clientService the client service
+     * @param sceneSwitcher the scene switcher
+     * @param displayAlerts the display alerts
+     */
     public RegistryViewController(
             InvestmentRegistryServiceImpl investmentRegistryService, SellRegistryServiceImpl sellRegistryService,
             GeneralRegistryServiceImpl generalRegistryService, WarehouseRegistryServiceImpl warehouseRegistryService,
@@ -108,6 +134,9 @@ public class RegistryViewController {
     @FXML
     private TabPane tbpRegistry;
 
+    /**
+     * Initialize.
+     */
     @FXML
     public void initialize() {
         client = clientService.getClientByName(userLogged.getName());
@@ -140,7 +169,6 @@ public class RegistryViewController {
     }
 
     private void initGeneralRegistryTableValues() {
-
         generalRegistryDataTables = FXCollections.observableArrayList();
         List<GeneralRegistry> generalRegistries = generalRegistryService.getAllGeneralRegistriesByClient(client);
         generalRegistryDataTables.clear();
@@ -156,6 +184,7 @@ public class RegistryViewController {
         tcGeneralRegistryZone.setCellValueFactory(new PropertyValueFactory<>("affectedZone"));
         tcGeneralRegistryType.setCellValueFactory(new PropertyValueFactory<>("registryType"));
         tcGeneralRegistryDateTime.setCellValueFactory(new PropertyValueFactory<>("registryDateTime"));
+
 
         // Formatear LocalDateTime
         tcGeneralRegistryDateTime.setCellFactory(column -> new TableCell<>() {
@@ -299,40 +328,67 @@ public class RegistryViewController {
             tvInvestment.setItems(investmentRegistryDataTables);
 
         } catch (Exception e) {
-            displayAlerts.showAlert("Ha ocurrido un error: " + e.getMessage());
+            displayAlerts.showError("Ha ocurrido un error: " + e.getMessage());
         }
     }
 
-    // ============================
-    // MÉTODOS DE NAVEGACIÓN
-    // ============================
+    /**
+     * Switch to configuration.
+     *
+     * @param actionEvent the action event
+     */
     @FXML
     public void switchToConfiguration(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/configurationView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/configurationView.fxml");
     }
 
+    /**
+     * Switch to support.
+     *
+     * @param actionEvent the action event
+     */
     @FXML
     public void switchToSupport(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/supportView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/supportView.fxml");
     }
 
+    /**
+     * Switch to investment.
+     *
+     * @param actionEvent the action event
+     */
     @FXML
     public void switchToInvestment(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/investmentView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/investmentView.fxml");
     }
 
+    /**
+     * Switch to warehouse.
+     *
+     * @param actionEvent the action event
+     */
     @FXML
     public void switchToWarehouse(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/warehouseView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/warehouseView.fxml");
     }
 
+    /**
+     * Switch to balance.
+     *
+     * @param actionEvent the action event
+     */
     @FXML
     public void switchToBalance(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/balanceView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/balanceView.fxml");
     }
 
+    /**
+     * Switch to sell.
+     *
+     * @param actionEvent the action event
+     */
     @FXML
     public void switchToSell(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/sellView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/sellView.fxml");
     }
 }

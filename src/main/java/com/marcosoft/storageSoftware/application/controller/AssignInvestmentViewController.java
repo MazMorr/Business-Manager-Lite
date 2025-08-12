@@ -42,6 +42,17 @@ public class AssignInvestmentViewController {
 
     /**
      * Constructor for dependency injection.
+     * @param generalRegistryService the general registry service
+     * @param parseDataTypes the parse data types
+     * @param displayAlerts the display alerts
+     * @param inventoryService the inventory service
+     * @param userLogged the user logged
+     * @param warehouseService the warehouse service
+     * @param clientService the client service
+     * @param investmentService the investment service
+     * @param productService the product service
+     * @param warehouseRegistryService the warehouse registry service
+     * @param warehouseViewController the warehouse view controller
      */
     public AssignInvestmentViewController(
             GeneralRegistryServiceImpl generalRegistryService, ParseDataTypes parseDataTypes, DisplayAlerts displayAlerts,
@@ -84,6 +95,7 @@ public class AssignInvestmentViewController {
     /**
      * Assigns all available product amount from the selected investment.
      * Shows alerts in Spanish if validation fails.
+     * @param actionEvent the action event
      */
     @FXML
     public void assignAllProductAmount(ActionEvent actionEvent) {
@@ -102,6 +114,7 @@ public class AssignInvestmentViewController {
 
     /**
      * Closes the assign investment window.
+     * @param actionEvent the action event
      */
     @FXML
     public void goOut(ActionEvent actionEvent) {
@@ -112,6 +125,7 @@ public class AssignInvestmentViewController {
     /**
      * Handles the assignment of a product from an investment to a warehouse.
      * Validates fields, updates inventory and investment, and shows alerts in Spanish.
+     * @param actionEvent the action event
      */
     @FXML
     public void assignProduct(ActionEvent actionEvent) {

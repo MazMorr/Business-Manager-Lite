@@ -42,6 +42,13 @@ public class ChangeProductNameViewController {
 
     /**
      * Constructor for dependency injection.
+     * @param warehouseViewController the warehouse view controller
+     * @param investmentService the investment service
+     * @param generalRegistryService the general registry service
+     * @param displayAlerts the display alerts
+     * @param userLogged the user logged
+     * @param clientService the client service
+     * @param productService the product service
      */
     @Lazy
     public ChangeProductNameViewController(
@@ -77,6 +84,7 @@ public class ChangeProductNameViewController {
     /**
      * Handles the update of a product name when the user clicks the update button.
      * Validates input and shows alerts in Spanish if validation fails.
+     * @param actionEvent the action event
      */
     @FXML
     public void updateProductName(ActionEvent actionEvent) {
@@ -112,6 +120,7 @@ public class ChangeProductNameViewController {
 
     /**
      * Closes the change product name window.
+     * @param actionEvent the action event
      */
     @FXML
     public void goOut(ActionEvent actionEvent) {

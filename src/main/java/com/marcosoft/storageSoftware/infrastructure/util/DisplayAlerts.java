@@ -11,7 +11,7 @@ import java.util.Optional;
 @Component
 public class DisplayAlerts {
 
-    public void showAlert(String message) {
+    public void showAlert( String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setContentText(message);
         alert.showAndWait();
@@ -25,5 +25,11 @@ public class DisplayAlerts {
 
         Optional<ButtonType> result = alert.showAndWait();
         return result.isPresent() && result.get() == ButtonType.OK;
+    }
+
+    public void showError(String message){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

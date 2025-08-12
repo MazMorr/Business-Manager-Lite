@@ -17,7 +17,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="650.0" prefWidth="1024.0" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.RegistryViewController">
+<StackPane prefHeight="650.0" prefWidth="1024.0" stylesheets="@../Styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.RegistryViewController">
    <children>
       <AnchorPane>
          <children>
@@ -102,9 +102,9 @@
                   </Tab>
               </tabs>
             </TabPane>
-            <HBox alignment="CENTER" prefHeight="80.0" prefWidth="800.0" spacing="120.0" styleClass="slogan" stylesheets="@Styles.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <HBox alignment="CENTER" prefHeight="80.0" prefWidth="800.0" spacing="120.0" styleClass="slogan" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <Label alignment="CENTER" graphicTextGap="14.0" prefHeight="68.0" prefWidth="421.0" styleClass="title" stylesheets="@Styles.css" text="Registros" textFill="#eeeeee">
+                  <Label alignment="CENTER" graphicTextGap="14.0" prefHeight="68.0" prefWidth="421.0" styleClass="title" text="Registros" textFill="#eeeeee">
                      <font>
                         <Font name="Constantia Bold" size="60.0" />
                      </font>
@@ -114,7 +114,7 @@
                      <graphic>
                         <ImageView fitHeight="150.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@images/monitoring.png" />
+                              <Image url="@../images/monitoring.png" />
                            </image>
                            <effect>
                               <InnerShadow choke="1.0" radius="68.5" width="255.0">
@@ -128,16 +128,16 @@
                   </Label>
                </children>
             </HBox>
-            <VBox styleClass="index" stylesheets="@Styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="80.0">
+            <VBox styleClass="index" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="80.0">
                <children>
-                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToInvestment" styleClass="btnIndex" stylesheets="@Styles.css" text="Inversiones">
+                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToInvestment" styleClass="btnIndex" text="Inversiones">
                      <font>
                         <Font name="System Bold" size="17.0" />
                      </font>
                      <graphic>
                         <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
                            <image>
-                              <Image url="@images/goods.png" />
+                              <Image url="@../images/goods.png" />
                            </image>
                            <effect>
                               <InnerShadow choke="1.0">
@@ -149,14 +149,14 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToSell" styleClass="btnIndex" stylesheets="@Styles.css" text="Ventas">
+                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToSell" styleClass="btnIndex" text="Ventas">
                      <font>
                         <Font name="System Bold" size="17.0" />
                      </font>
                      <graphic>
                         <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
                            <image>
-                              <Image url="@images/agreement.png" />
+                              <Image url="@../images/purchase.png" />
                            </image>
                            <effect>
                               <InnerShadow choke="1.0">
@@ -168,14 +168,14 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToWarehouse" styleClass="btnIndex" stylesheets="@Styles.css" text="Almacenes">
+                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToWarehouse" styleClass="btnIndex" text="Almacenes">
                      <font>
                         <Font name="System Bold" size="17.0" />
                      </font>
                      <graphic>
                         <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
                            <image>
-                              <Image url="@images/warehouse.png" />
+                              <Image url="@../images/warehouse.png" />
                            </image>
                            <effect>
                               <InnerShadow choke="1.0">
@@ -187,7 +187,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button alignment="CENTER_LEFT" disable="true" graphicTextGap="5.0" mnemonicParsing="false" styleClass="btnIndex" stylesheets="@Styles.css" text="Registros">
+                  <Button alignment="CENTER_LEFT" disable="true" graphicTextGap="5.0" mnemonicParsing="false" styleClass="btnIndex" text="Registros">
                      <font>
                         <Font name="System Bold" size="17.0" />
                      </font>
@@ -197,7 +197,7 @@
                      <graphic>
                         <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
                            <image>
-                              <Image url="@images/monitoring.png" />
+                              <Image url="@../images/monitoring.png" />
                            </image>
                            <effect>
                               <InnerShadow choke="1.0" radius="68.5" width="255.0">
@@ -209,14 +209,14 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToBalance" styleClass="btnIndex" stylesheets="@Styles.css" text="Balance">
+                  <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToBalance" styleClass="btnIndex" text="Balance">
                      <font>
                         <Font name="System Bold" size="17.0" />
                      </font>
                      <graphic>
                         <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
                            <image>
-                              <Image url="@images/interest-rate.png" />
+                              <Image url="@../images/interest-rate.png" />
                            </image>
                            <effect>
                               <InnerShadow choke="1.0">
@@ -228,14 +228,14 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToSupport" styleClass="btnIndex" stylesheets="@Styles.css" text="Soporte">
+                  <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToSupport" styleClass="btnIndex" text="Soporte">
                      <font>
                         <Font name="System Bold" size="17.0" />
                      </font>
                      <graphic>
                         <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
                            <image>
-                              <Image url="@images/support.png" />
+                              <Image url="@../images/support.png" />
                            </image>
                            <effect>
                               <InnerShadow choke="1.0" height="255.0" radius="127.0" width="255.0">
@@ -249,11 +249,11 @@
                   </Button>
                </children>
             </VBox>
-            <Button alignment="CENTER_LEFT" mnemonicParsing="false" onAction="#switchToConfiguration" prefHeight="60.0" styleClass="btnIndex" stylesheets="@Styles.css" text="Ajustes" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+            <Button alignment="CENTER_LEFT" mnemonicParsing="false" onAction="#switchToConfiguration" prefHeight="60.0" styleClass="btnIndex" text="Ajustes" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
                <graphic>
                   <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@images/settings.png" />
+                        <Image url="@../images/settings.png" />
                      </image>
                      <effect>
                         <InnerShadow choke="1.0">
@@ -268,14 +268,14 @@
                   <Font size="14.0" />
                </font>
             </Button>
-            <Label fx:id="txtClientName" contentDisplay="TOP" prefHeight="69.0" prefWidth="172.0" styleClass="clientName" stylesheets="@Styles.css" text="Marco A. Romeros" textFill="#eeeeee" wrapText="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="5.0">
+            <Label fx:id="txtClientName" contentDisplay="TOP" prefHeight="69.0" prefWidth="172.0" styleClass="clientName" text="Marco A. Romeros" textFill="#eeeeee" wrapText="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="5.0">
                <font>
                   <Font name="SansSerif Regular" size="14.0" />
                </font>
                <graphic>
                   <ImageView fitHeight="47.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@images/Avatar.png" />
+                        <Image url="@../images/Avatar.png" />
                      </image>
                   </ImageView>
                </graphic>

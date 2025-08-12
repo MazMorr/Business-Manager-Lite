@@ -1,5 +1,6 @@
 package com.marcosoft.storageSoftware;
 
+import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
 import com.marcosoft.storageSoftware.infrastructure.util.SpringFXMLLoader;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -7,7 +8,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -59,6 +59,7 @@ public class Main extends Application {
     private static SpringFXMLLoader springFXMLLoader;
     private static Stage primaryStage;
     private static Scene scene;
+    private static DisplayAlerts displayAlerts;
 
     @Override
     public void start(Stage primaryStage) {
@@ -75,10 +76,8 @@ public class Main extends Application {
 
         ImageView logo = new ImageView();
         try {
-            // Cambio clave: Usar getResource() en lugar de getResourceAsStream()
             String imagePath = Objects.requireNonNull(getClass().getResource("/images/lazy_compile_logo.png")).toString();
             logo.setImage(new Image(imagePath));
-            System.out.println("Ruta de la imagen: " + imagePath); // Para depuración
         } catch (Exception e) {
             System.err.println("Error al cargar el logo: " + e.getMessage());
             e.printStackTrace(); // Muestra el stack trace completo
@@ -117,7 +116,7 @@ public class Main extends Application {
     }
 
     private void loadMainInterface() throws IOException {
-        Parent root = springFXMLLoader.load("/clientView.fxml");
+        Parent root = springFXMLLoader.load("/views/clientView.fxml");
         scene = new Scene(root);
         scene.setCursor(Cursor.DEFAULT);
         primaryStage.setScene(scene);
@@ -126,11 +125,7 @@ public class Main extends Application {
 
     private void showErrorAndExit(Exception e) {
         e.printStackTrace();
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText("Error al cargar la aplicación");
-        alert.setContentText(e.getMessage());
-        alert.showAndWait();
+        displayAlerts.showError("Error al cargar la aplicación");
         Platform.exit();
     }
 

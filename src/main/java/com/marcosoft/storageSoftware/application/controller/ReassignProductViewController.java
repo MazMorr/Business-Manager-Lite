@@ -42,6 +42,16 @@ public class ReassignProductViewController {
 
     /**
      * Constructor for dependency injection.
+     * @param generalRegistryService the general registry service
+     * @param warehouseRegistryService the warehouse registry service
+     * @param parseDataTypes the parse data types
+     * @param productService the product service
+     * @param displayAlerts the display alerts
+     * @param warehouseService the warehouse service
+     * @param clientService the client service
+     * @param userLogged the user logged
+     * @param inventoryService the inventory service
+     * @param warehouseViewController the warehouse view controller
      */
     @Lazy
     public ReassignProductViewController(
@@ -89,6 +99,7 @@ public class ReassignProductViewController {
 
     /**
      * Closes the current window.
+     * @param actionEvent the action event
      */
     @FXML
     public void goOut(ActionEvent actionEvent) {
@@ -99,6 +110,7 @@ public class ReassignProductViewController {
     /**
      * Handles the product reassignment between warehouses.
      * Validates fields, updates inventories, and shows alerts in Spanish.
+     * @param actionEvent the action event
      */
     @FXML
     public void reassignProduct(ActionEvent actionEvent) {
@@ -148,13 +160,14 @@ public class ReassignProductViewController {
 
             warehouseViewController.initTreeTable();
         } catch (Exception e) {
-            displayAlerts.showAlert("Ha ocurrido un error" + e.getMessage());
+            displayAlerts.showError("Ha ocurrido un error" + e.getMessage());
         }
     }
 
     /**
      * Assigns all available product amount from the origin warehouse to the destination.
      * Shows alerts in Spanish if validation fails.
+     * @param actionEvent the action event
      */
     @FXML
     public void assignAllProductAmount(ActionEvent actionEvent) {

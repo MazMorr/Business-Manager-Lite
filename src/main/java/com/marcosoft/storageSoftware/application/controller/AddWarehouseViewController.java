@@ -34,6 +34,14 @@ public class AddWarehouseViewController {
 
     /**
      * Constructor for dependency injection.
+     * @param inventoryService the inventory service
+     * @param warehouseViewController the warehouse view controller
+     * @param warehouseRegistryService the warehouse registry service
+     * @param generalRegistryService the general registry service
+     * @param displayAlerts the display alerts
+     * @param warehouseService the warehouse service
+     * @param userLogged the user logged
+     * @param clientService the client service
      */
     @Lazy
     public AddWarehouseViewController(
@@ -64,6 +72,7 @@ public class AddWarehouseViewController {
     /**
      * Handles the creation of a new warehouse when the user clicks the add button.
      * Validates input and shows alerts in Spanish if validation fails.
+     * @param actionEvent the action event
      */
     @FXML
     public void addWarehouse(ActionEvent actionEvent) {
@@ -122,6 +131,7 @@ public class AddWarehouseViewController {
 
     /**
      * Closes the add warehouse window.
+     * @param actionEvent the action event
      */
     @FXML
     public void goOut(ActionEvent actionEvent) {

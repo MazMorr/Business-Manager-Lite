@@ -28,6 +28,7 @@ public class CreateClientViewController {
 
     /**
      * Constructor for dependency injection.
+     * @param clientService the client service
      */
     @Lazy
     public CreateClientViewController(ClientServiceImpl clientService){

@@ -39,6 +39,10 @@ public class ClientViewController {
 
     /**
      * Constructor for dependency injection.
+     * @param userLogged the user logged
+     * @param licenseValidator the license validator
+     * @param clientService the client service
+     * @param springFXMLLoader the spring fxml loader
      */
     public ClientViewController(UserLogged userLogged, LicenseValidator licenseValidator, ClientServiceImpl clientService, SpringFXMLLoader springFXMLLoader) {
         this.userLogged = userLogged;
@@ -89,7 +93,7 @@ public class ClientViewController {
             userLogged.setName(username);
 
             // Load the support view
-            Parent root = springFXMLLoader.load("/supportView.fxml");
+            Parent root = springFXMLLoader.load("/views/supportView.fxml");
             SupportViewController primaryController = springFXMLLoader.getController(SupportViewController.class);
             primaryController.setAccountController(this);
 

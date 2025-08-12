@@ -40,6 +40,12 @@ public class UpdateWarehouseViewController {
 
     /**
      * Constructor for dependency injection.
+     * @param userLogged the user logged
+     * @param displayAlerts the display alerts
+     * @param clientService the client service
+     * @param warehouseService the warehouse service
+     * @param generalRegistryService the general registry service
+     * @param warehouseViewController the warehouse view controller
      */
     @Lazy
     public UpdateWarehouseViewController(
@@ -92,6 +98,7 @@ public class UpdateWarehouseViewController {
     /**
      * Handles the update of a warehouse name when the user clicks the update button.
      * Validates input and shows alerts in Spanish if validation fails.
+     * @param actionEvent the action event
      */
     @FXML
     public void updateWarehouseName(ActionEvent actionEvent) {
@@ -101,7 +108,7 @@ public class UpdateWarehouseViewController {
                 String actualName = tfActualName.getText().trim();
 
                 if (client == null) {
-                    displayAlerts.showAlert("Cliente no encontrado");
+                    displayAlerts.showError("Cliente no encontrado");
                     return;
                 }
 
@@ -124,7 +131,7 @@ public class UpdateWarehouseViewController {
                 warehouseViewController.initTreeTable();
             }
         } catch (Exception e) {
-            displayAlerts.showAlert("Error al actualizar el nombre: " + e.getMessage());
+            displayAlerts.showError("Error al actualizar el nombre: " + e.getMessage());
         }
     }
 
@@ -177,6 +184,7 @@ public class UpdateWarehouseViewController {
 
     /**
      * Closes the update warehouse window.
+     * @param actionEvent the action event
      */
     @FXML
     public void goOut(ActionEvent actionEvent) {

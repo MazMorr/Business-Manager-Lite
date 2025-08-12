@@ -25,11 +25,11 @@
 
 <StackPane prefHeight="650.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.InvestmentViewController">
    <children>
-      <AnchorPane styleClass="background" stylesheets="@Styles.css">
+      <AnchorPane styleClass="background" stylesheets="@../Styles.css">
          <children>
-            <HBox alignment="CENTER" layoutY="6.0" prefHeight="80.0" prefWidth="800.0" spacing="120.0" styleClass="slogan" stylesheets="@Styles.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <HBox alignment="CENTER" layoutY="6.0" prefHeight="80.0" prefWidth="800.0" spacing="120.0" styleClass="slogan" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <Label alignment="CENTER" graphicTextGap="14.0" prefHeight="68.0" prefWidth="421.0" styleClass="title" stylesheets="@Styles.css" text="Inversiones" textFill="#eeeeee">
+                  <Label alignment="CENTER" graphicTextGap="14.0" prefHeight="68.0" prefWidth="421.0" styleClass="title" text="Inversiones" textFill="#eeeeee">
                      <font>
                         <Font name="Constantia Bold" size="60.0" />
                      </font>
@@ -39,7 +39,7 @@
                      <graphic>
                         <ImageView fitHeight="150.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@images/goods.png" />
+                              <Image url="@../images/goods.png" />
                            </image>
                            <effect>
                               <InnerShadow choke="1.0" radius="68.5" width="255.0">
@@ -53,9 +53,9 @@
                   </Label>
                </children>
             </HBox>
-            <VBox layoutX="-9.0" layoutY="88.0" styleClass="index" stylesheets="@Styles.css" AnchorPane.bottomAnchor="55.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="80.0">
+            <VBox layoutX="-9.0" layoutY="88.0" styleClass="index" AnchorPane.bottomAnchor="55.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="80.0">
                <children>
-                  <Button alignment="CENTER_LEFT" disable="true" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" styleClass="btnIndex" stylesheets="@Styles.css" text="Inversiones">
+                  <Button alignment="CENTER_LEFT" disable="true" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" styleClass="btnIndex" text="Inversiones">
                      <font>
                         <Font name="System Bold" size="17.0" />
                      </font>
@@ -65,7 +65,7 @@
                      <graphic>
                         <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
                            <image>
-                              <Image url="@images/goods.png" />
+                              <Image url="@../images/goods.png" />
                            </image>
                            <effect>
                               <InnerShadow choke="1.0">
@@ -77,14 +77,14 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToSell" styleClass="btnIndex" stylesheets="@Styles.css" text="Ventas">
+                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToSell" styleClass="btnIndex" text="Ventas">
                      <font>
                         <Font name="System Bold" size="17.0" />
                      </font>
                      <graphic>
                         <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
                            <image>
-                              <Image url="@images/agreement.png" />
+                              <Image url="@../images/purchase.png" />
                            </image>
                            <effect>
                               <InnerShadow choke="1.0">
@@ -96,14 +96,14 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToWarehouse" styleClass="btnIndex" stylesheets="@Styles.css" text="Almacenes">
+                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToWarehouse" styleClass="btnIndex" text="Almacenes">
                      <font>
                         <Font name="System Bold" size="17.0" />
                      </font>
                      <graphic>
                         <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
                            <image>
-                              <Image url="@images/warehouse.png" />
+                              <Image url="@../images/warehouse.png" />
                            </image>
                            <effect>
                               <InnerShadow choke="1.0">
@@ -115,7 +115,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToRegistry" styleClass="btnIndex" stylesheets="@Styles.css" text="Registros">
+                  <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToRegistry" styleClass="btnIndex" text="Registros">
                      <font>
                         <Font name="System Bold" size="17.0" />
                      </font>
@@ -128,7 +128,7 @@
                      <graphic>
                         <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
                            <image>
-                              <Image url="@images/monitoring.png" />
+                              <Image url="@../images/monitoring.png" />
                            </image>
                            <effect>
                               <InnerShadow choke="1.0">
@@ -140,14 +140,14 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToBalance" styleClass="btnIndex" stylesheets="@Styles.css" text="Balance">
+                  <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToBalance" styleClass="btnIndex" text="Balance">
                      <font>
                         <Font name="System Bold" size="17.0" />
                      </font>
                      <graphic>
                         <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
                            <image>
-                              <Image url="@images/interest-rate.png" />
+                              <Image url="@../images/interest-rate.png" />
                            </image>
                            <effect>
                               <InnerShadow choke="1.0">
@@ -159,7 +159,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToSupport" styleClass="btnIndex" stylesheets="@Styles.css" text="Soporte">
+                  <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToSupport" styleClass="btnIndex" text="Soporte">
                      <font>
                         <Font name="System Bold" size="17.0" />
                      </font>
@@ -169,7 +169,7 @@
                      <graphic>
                         <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
                            <image>
-                              <Image url="@images/support.png" />
+                              <Image url="@../images/support.png" />
                            </image>
                            <effect>
                               <InnerShadow choke="1.0" height="255.0" radius="127.0" width="255.0">
@@ -183,7 +183,7 @@
                   </Button>
                </children>
             </VBox>
-            <TableView fx:id="tvInvestment" editable="true" layoutX="159.0" layoutY="115.0" onMouseClicked="#selectInventory" prefHeight="445.0" prefWidth="550.0" styleClass="table" stylesheets="@Styles.css" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="310.0" AnchorPane.topAnchor="230.0">
+            <TableView fx:id="tvInvestment" editable="true" layoutX="159.0" layoutY="115.0" onMouseClicked="#selectInventory" prefHeight="445.0" prefWidth="550.0" styleClass="table" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="310.0" AnchorPane.topAnchor="230.0">
                <columns>
                   <TableColumn fx:id="tcId" prefWidth="41.0" text="ID" />
                   <TableColumn fx:id="tcInvestmentName" prefWidth="145.0" sortable="false" text="Nombre Inversión" />
@@ -200,9 +200,9 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </TableView>
-            <VBox layoutY="632.0" prefHeight="55.0" prefWidth="150.0" styleClass="index" stylesheets="@Styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+            <VBox layoutY="632.0" prefHeight="55.0" prefWidth="150.0" styleClass="index" stylesheets="@../Styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
                <children>
-                  <Button alignment="CENTER_LEFT" mnemonicParsing="false" onAction="#switchToConfiguration" prefHeight="60.0" styleClass="btnIndex" stylesheets="@Styles.css" text="Ajustes">
+                  <Button alignment="CENTER_LEFT" mnemonicParsing="false" onAction="#switchToConfiguration" prefHeight="60.0" styleClass="btnIndex" text="Ajustes">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin>
@@ -211,7 +211,7 @@
                      <graphic>
                         <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@images/settings.png" />
+                              <Image url="@../images/settings.png" />
                            </image>
                            <effect>
                               <InnerShadow choke="1.0">
@@ -236,9 +236,9 @@
                            <children>
                               <Button mnemonicParsing="false" onAction="#cleanFilters" prefHeight="32.0" prefWidth="21.0" styleClass="btnStock">
                                  <graphic>
-                                    <ImageView fitHeight="22.0" fitWidth="24.0" pickOnBounds="true">
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@images/filter-line-11-256.png" />
+                                          <Image url="@../images/filter.png" />
                                        </image>
                                        <effect>
                                           <InnerShadow choke="1.0">
@@ -258,7 +258,7 @@
                         <HBox alignment="CENTER_RIGHT" prefWidth="200.0">
                            <children>
                               <Label text="Inversión" />
-                              <TextField fx:id="tfFilterName" prefHeight="25.0" prefWidth="172.0" styleClass="inputForm" stylesheets="@Styles.css">
+                              <TextField fx:id="tfFilterName" prefHeight="25.0" prefWidth="172.0" styleClass="inputForm">
                                  <HBox.margin>
                                     <Insets left="25.0" />
                                  </HBox.margin>
@@ -343,21 +343,21 @@
                   </VBox>
                </children>
             </AnchorPane>
-            <Label fx:id="lblClientName" contentDisplay="TOP" layoutX="70.0" layoutY="178.0" prefHeight="69.0" prefWidth="172.0" styleClass="clientName" stylesheets="@Styles.css" text="Marco A. Romeros" textFill="#eeeeee" wrapText="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="5.0">
+            <Label fx:id="lblClientName" contentDisplay="TOP" layoutX="70.0" layoutY="178.0" prefHeight="69.0" prefWidth="172.0" styleClass="clientName" text="Marco A. Romeros" textFill="#eeeeee" wrapText="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="5.0">
                <font>
                   <Font name="SansSerif Regular" size="14.0" />
                </font>
                <graphic>
                   <ImageView fitHeight="47.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@images/Avatar.png" />
+                        <Image url="@../images/Avatar.png" />
                      </image>
                   </ImageView>
                </graphic>
             </Label>
             <AnchorPane layoutX="690.0" layoutY="338.0" prefHeight="200.0" prefWidth="300.0" styleClass="rightIndex" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="80.0">
                <children>
-                  <TabPane layoutX="-83.0" layoutY="-192.0" maxHeight="570.0" prefHeight="570.0" prefWidth="300.0" styleClass="crudOperations" stylesheets="@Styles.css" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="10.0">
+                  <TabPane layoutX="-83.0" layoutY="-192.0" maxHeight="570.0" prefHeight="570.0" prefWidth="300.0" styleClass="crudOperations" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="10.0">
                     <tabs>
                       <Tab text="Agregar o Actualizar">
                         <content>
@@ -368,21 +368,21 @@
                                           <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="95.0">
                                              <children>
                                                 <Label text="ID" />
-                                                <TextField fx:id="tfId" alignment="CENTER" disable="true" opacity="0.7" prefHeight="25.0" prefWidth="150.0" promptText="Autogenerado" styleClass="inputForm" stylesheets="@Styles.css" />
+                                                <TextField fx:id="tfId" alignment="CENTER" disable="true" opacity="0.7" prefHeight="25.0" prefWidth="150.0" promptText="Autogenerado" styleClass="inputForm" />
                                              </children>
                                           </HBox>
                                           <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="49.0">
                                              <children>
                                                 <Label text="Inversión" />
-                                                <TextField fx:id="tfAddProductName" prefHeight="25.0" prefWidth="150.0" styleClass="inputForm" stylesheets="@Styles.css" />
+                                                <TextField fx:id="tfAddProductName" prefHeight="25.0" prefWidth="150.0" styleClass="inputForm" />
                                              </children>
                                           </HBox>
                                           <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="15.0">
                                              <children>
                                                 <Label text="Tipo Inversión" />
-                                                <MenuButton fx:id="mbInvestmentType" mnemonicParsing="false" prefWidth="150.0" styleClass="progressBar" stylesheets="@Styles.css" textFill="WHITE">
+                                                <MenuButton fx:id="mbInvestmentType" mnemonicParsing="false" prefWidth="150.0" styleClass="progressBar" textFill="WHITE">
                                                    <graphic>
-                                                      <TextField fx:id="tfAddInvestmentType" alignment="CENTER" disable="true" opacity="0.99" prefHeight="34.0" prefWidth="10.0" promptText="Seleccionar" styleClass="inputForm" stylesheets="@Styles.css">
+                                                      <TextField fx:id="tfAddInvestmentType" alignment="CENTER" disable="true" opacity="0.99" prefHeight="34.0" prefWidth="10.0" promptText="Seleccionar" styleClass="inputForm">
                                                          <tooltip>
                                                             <Tooltip text="Precio al que deseas vender cada unidad del producto  (en la zona de ventas este precio puede ser cambiado)" wrapText="true">
                                                                <font>
@@ -411,13 +411,13 @@
                                           <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="50.0">
                                              <children>
                                                 <Label text="Cantidad" />
-                                                <TextField fx:id="tfAddProductAmount" prefHeight="25.0" prefWidth="150.0" promptText="0" styleClass="inputForm" stylesheets="@Styles.css" />
+                                                <TextField fx:id="tfAddProductAmount" prefHeight="25.0" prefWidth="150.0" promptText="0" styleClass="inputForm" />
                                              </children>
                                           </HBox>
                                           <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="13.0">
                                              <children>
                                                 <Label text="Precio Compra" />
-                                                <TextField fx:id="tfAddInvestmentPrice" prefHeight="34.0" prefWidth="150.0" promptText="0.00" styleClass="inputForm" stylesheets="@Styles.css">
+                                                <TextField fx:id="tfAddInvestmentPrice" prefHeight="34.0" prefWidth="150.0" promptText="0.00" styleClass="inputForm">
                                                    <tooltip>
                                                       <Tooltip text="Precio al que deseas vender cada unidad del producto  (en la zona de ventas este precio puede ser cambiado)" wrapText="true">
                                                          <font>
@@ -431,9 +431,9 @@
                                           <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="55.0">
                                              <children>
                                                 <Label text="Moneda" />
-                                                <MenuButton fx:id="mbCurrency" mnemonicParsing="false" prefWidth="150.0" styleClass="progressBar" stylesheets="@Styles.css" textFill="WHITE">
+                                                <MenuButton fx:id="mbCurrency" mnemonicParsing="false" prefWidth="150.0" styleClass="progressBar" textFill="WHITE">
                                                    <graphic>
-                                                      <TextField fx:id="tfAddInvestmentCurrency" alignment="CENTER" disable="true" opacity="0.99" prefHeight="34.0" prefWidth="10.0" promptText="Seleccionar" styleClass="inputForm" stylesheets="@Styles.css">
+                                                      <TextField fx:id="tfAddInvestmentCurrency" alignment="CENTER" disable="true" opacity="0.99" prefHeight="34.0" prefWidth="10.0" promptText="Seleccionar" styleClass="inputForm">
                                                          <tooltip>
                                                             <Tooltip text="Precio al que deseas vender cada unidad del producto  (en la zona de ventas este precio puede ser cambiado)" wrapText="true">
                                                                <font>
@@ -458,7 +458,7 @@
                                                 <DatePicker fx:id="dpAddInvestmentDate" editable="false" prefWidth="150.0" />
                                              </children>
                                           </HBox>
-                                        <Button mnemonicParsing="false" onAction="#addOrUpgradeProduct" prefHeight="33.0" prefWidth="331.0" styleClass="btnStock" stylesheets="@Styles.css" text="Agregar o Actualizar">
+                                        <Button mnemonicParsing="false" onAction="#addOrUpgradeProduct" prefHeight="33.0" prefWidth="331.0" styleClass="btnStock" text="Agregar o Actualizar">
                                              <tooltip>
                                                 <Tooltip consumeAutoHidingEvents="false" text="Si el nombre y la categoria coinciden con algún producto ya registrado, este se actualizará y en caso diferente se agregará al registro" wrapText="true">
                                                    <font>
@@ -469,7 +469,7 @@
                                              <graphic>
                                                 <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
-                                                      <Image url="@images/add.png" />
+                                                      <Image url="@../images/add.png" />
                                                    </image>
                                                    <effect>
                                                       <InnerShadow choke="1.0">
@@ -497,11 +497,11 @@
                                           </Label>
                                        </children>
                                     </VBox>
-                                    <Button layoutX="62.0" layoutY="457.0" mnemonicParsing="false" onAction="#cleanForm" prefHeight="30.0" prefWidth="275.0" styleClass="btnStock" stylesheets="@Styles.css" text="Vaciar Campos" AnchorPane.bottomAnchor="48.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                                    <Button layoutX="62.0" layoutY="457.0" mnemonicParsing="false" onAction="#cleanForm" prefHeight="30.0" prefWidth="275.0" styleClass="btnStock" text="Vaciar Campos" AnchorPane.bottomAnchor="48.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
                                        <graphic>
                                           <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@images/alert%20(2).png" />
+                                                <Image url="@../images/refresh.png" />
                                              </image>
                                              <effect>
                                                 <InnerShadow choke="1.0">
@@ -513,11 +513,11 @@
                                           </ImageView>
                                        </graphic>
                                     </Button>
-                                    <Button layoutX="42.0" layoutY="483.0" mnemonicParsing="false" onAction="#removeInvestment" prefHeight="30.0" prefWidth="281.0" style="-fx-background-color: linear-gradient(to bottom, #eb5050, #ec3030);" styleClass="btnDelete" stylesheets="@Styles.css" text="Eliminar Inversión" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                                    <Button layoutX="42.0" layoutY="483.0" mnemonicParsing="false" onAction="#removeInvestment" prefHeight="30.0" prefWidth="281.0" style="-fx-background-color: linear-gradient(to bottom, #eb5050, #ec3030);" styleClass="btnDelete" text="Eliminar Inversión" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
                                        <graphic>
                                           <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@images/trash.png" />
+                                                <Image url="@../images/trash.png" />
                                              </image>
                                              <effect>
                                                 <InnerShadow choke="1.0">

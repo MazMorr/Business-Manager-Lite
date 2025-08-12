@@ -53,6 +53,16 @@ public class InvestmentViewController {
     /**
      * Constructor for dependency injection.
      * All required services and utilities are injected here.
+     * @param productService the product service
+     * @param generalRegistryService the general registry service
+     * @param displayAlerts the display alerts
+     * @param parseDataTypes the parse data types
+     * @param userLogged the user logged
+     * @param clientService the client service
+     * @param investmentService the investment service
+     * @param currencyService the currency service
+     * @param investmentRegistryService the investment registry service
+     * @param sceneSwitcher the scene switcher
      */
     @Lazy
     public InvestmentViewController(ProductServiceImpl productService, GeneralRegistryServiceImpl generalRegistryService, DisplayAlerts displayAlerts, ParseDataTypes parseDataTypes, UserLogged userLogged, ClientServiceImpl clientService, InvestmentServiceImpl investmentService, CurrencyServiceImpl currencyService, InvestmentRegistryServiceImpl investmentRegistryService, SceneSwitcher sceneSwitcher) {
@@ -199,6 +209,7 @@ public class InvestmentViewController {
     /**
      * Adds or updates an investment record based on form input.
      * Validates input fields and saves the investment.
+     * @param actionEvent the action event
      */
     @FXML
     public void addOrUpgradeProduct(ActionEvent actionEvent) {
@@ -315,6 +326,7 @@ public class InvestmentViewController {
     /**
      * Removes the selected investment record from the database.
      * Prompts user for confirmation before deletion (alert in Spanish).
+     * @param actionEvent the action event
      */
     @FXML
     public void removeInvestment(ActionEvent actionEvent) {
@@ -361,6 +373,7 @@ public class InvestmentViewController {
 
     /**
      * Clears all input fields in the investment form.
+     * @param actionEvent the action event
      */
     @FXML
     public void cleanForm(ActionEvent actionEvent) {
@@ -375,6 +388,7 @@ public class InvestmentViewController {
 
     /**
      * Clears all filter fields for investment table.
+     * @param actionEvent the action event
      */
     @FXML
     public void cleanFilters(ActionEvent actionEvent) {
@@ -453,6 +467,7 @@ public class InvestmentViewController {
 
     /**
      * Populates form fields with the selected investment from the table.
+     * @param event the event
      */
     @FXML
     public void selectInventory(Event event) {
@@ -468,50 +483,56 @@ public class InvestmentViewController {
 
     /**
      * Navigates to the configuration view.
+     * @param actionEvent the action event
      */
     @FXML
     public void switchToConfiguration(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/configurationView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/configurationView.fxml");
     }
 
     /**
      * Navigates to the support view.
+     * @param actionEvent the action event
      */
     @FXML
     public void switchToSupport(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/supportView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/supportView.fxml");
     }
 
     /**
      * Navigates to the registry view.
+     * @param actionEvent the action event
      */
     @FXML
     public void switchToRegistry(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/registryView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/registryView.fxml");
     }
 
     /**
      * Navigates to the warehouse view.
+     * @param actionEvent the action event
      */
     @FXML
     public void switchToWarehouse(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/warehouseView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/warehouseView.fxml");
     }
 
     /**
      * Navigates to the balance view.
+     * @param actionEvent the action event
      */
     @FXML
     public void switchToBalance(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/balanceView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/balanceView.fxml");
     }
 
     /**
      * Navigates to the sell view.
+     * @param actionEvent the action event
      */
     @FXML
     public void switchToSell(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/sellView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/sellView.fxml");
     }
 
 

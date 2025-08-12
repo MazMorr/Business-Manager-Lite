@@ -19,16 +19,16 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="350.0" prefWidth="450.0" stylesheets="@Styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.CreateClientViewController">
+<StackPane prefHeight="350.0" prefWidth="450.0" stylesheets="@../Styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.CreateClientViewController">
    <children>
       <AnchorPane id="AnchorPane" prefHeight="350.0" prefWidth="450.0" styleClass="background">
           <stylesheets>
-              <URL value="@Styles.css" />
+              <URL value="@../Styles.css" />
           </stylesheets>
          <children>
-            <HBox alignment="CENTER" layoutX="5.0" prefHeight="64.0" prefWidth="323.0" styleClass="slogan" stylesheets="@Styles.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <HBox alignment="CENTER" layoutX="5.0" prefHeight="64.0" prefWidth="323.0" styleClass="slogan" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <Label styleClass="title" stylesheets="@Styles.css" text="Regístrese">
+                  <Label styleClass="title" text="Regístrese">
                      <font>
                         <Font name="Constantia Bold Italic" size="40.0" />
                      </font>
@@ -48,7 +48,7 @@
                         <Font name="System Bold Italic" size="14.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="txtFieldUserName" onKeyTyped="#txtFieldTypingUserName" prefHeight="25.0" prefWidth="295.0" promptText="De 4-20 carácteres" styleClass="inputForm" stylesheets="@Styles.css" />
+                  <TextField fx:id="txtFieldUserName" onKeyTyped="#txtFieldTypingUserName" prefHeight="25.0" prefWidth="295.0" promptText="De 4-20 carácteres" styleClass="inputForm" />
                   <Label text="Contraseña:">
                      <font>
                         <Font name="System Bold Italic" size="14.0" />
@@ -57,7 +57,7 @@
                         <Insets top="2.0" />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="txtFieldPassword" onKeyTyped="#txtFieldTypingPassword" promptText="De 4-16 carácteres " styleClass="inputForm" stylesheets="@Styles.css" />
+                  <TextField fx:id="txtFieldPassword" onKeyTyped="#txtFieldTypingPassword" promptText="De 4-16 carácteres " styleClass="inputForm" />
                   <Label text="Confirmar Contraseña:">
                      <font>
                         <Font name="System Bold Italic" size="14.0" />
@@ -65,7 +65,7 @@
                      <VBox.margin>
                         <Insets top="2.0" />
                      </VBox.margin></Label>
-                  <PasswordField fx:id="passFieldPasswordConfirmed" onKeyTyped="#txtFieldTypingPassword" promptText="De 4-16 carácteres" styleClass="inputForm" stylesheets="@Styles.css" />
+                  <PasswordField fx:id="passFieldPasswordConfirmed" onKeyTyped="#txtFieldTypingPassword" promptText="De 4-16 carácteres" styleClass="inputForm" />
                   <Label text="Compañía Asociada (OPCIONAL):">
                      <font>
                         <Font name="System Bold Italic" size="14.0" />
@@ -74,8 +74,8 @@
                         <Insets top="2.0" />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="txtFieldCompany" onKeyTyped="#txtFieldTypingCompany" promptText="De 4-16 carácteres " styleClass="inputForm" stylesheets="@Styles.css" />
-                  <Button defaultButton="true" mnemonicParsing="false" onAction="#createAccount" prefHeight="27.0" prefWidth="308.0" styleClass="btnStock" stylesheets="@Styles.css" text="Crear Cuenta">
+                  <TextField fx:id="txtFieldCompany" onKeyTyped="#txtFieldTypingCompany" promptText="De 4-16 carácteres " styleClass="inputForm" />
+                  <Button defaultButton="true" mnemonicParsing="false" onAction="#createAccount" prefHeight="27.0" prefWidth="308.0" styleClass="btnStock" text="Crear Cuenta">
                      <font>
                         <Font name="System Bold Italic" size="14.0" />
                      </font>
@@ -91,7 +91,7 @@
                      <graphic>
                         <ImageView fitHeight="131.0" fitWidth="133.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@images/Avatar.png" />
+                              <Image url="@../images/Avatar.png" />
                            </image>
                            <cursor>
                               <Cursor fx:constant="HAND" />
@@ -109,14 +109,14 @@
                   </Label>
                </children>
             </VBox>
-            <Button layoutX="-17.0" layoutY="11.0" mnemonicParsing="false" onAction="#goBack" prefHeight="77.0" prefWidth="65.0" style="-fx-background-color: transparent;" styleClass="btnGoBackCreateAccount" stylesheets="@Styles.css" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <Button layoutX="-17.0" layoutY="11.0" mnemonicParsing="false" onAction="#goBack" prefHeight="77.0" prefWidth="65.0" style="-fx-background-color: transparent;" styleClass="btnGoBackCreateAccount" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                <font>
                   <Font size="10.0" />
                </font>
                <graphic>
                   <ImageView fitHeight="52.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@images/left-arrow-28-512.png" />
+                        <Image url="@../images/left-arrow-28-512.png" />
                      </image>
                      <effect>
                         <InnerShadow choke="1.0">

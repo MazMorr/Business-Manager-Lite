@@ -24,7 +24,6 @@ import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -51,12 +50,22 @@ public class WarehouseViewController {
 
     /**
      * Constructor for dependency injection.
+     * @param investmentService the investment service
+     * @param displayAlerts the display alerts
+     * @param warehouseService the warehouse service
+     * @param userLogged the user logged
+     * @param sceneSwitcher the scene switcher
+     * @param parseDataTypes the parse data types
+     * @param inventoryService the inventory service
+     * @param clientService the client service
+     * @param inventoryRepository the inventory repository
      */
     public WarehouseViewController(
             InvestmentServiceImpl investmentService, DisplayAlerts displayAlerts, WarehouseServiceImpl warehouseService,
             UserLogged userLogged, SceneSwitcher sceneSwitcher, ParseDataTypes parseDataTypes,
             InventoryServiceImpl inventoryService, ClientServiceImpl clientService,
-            InventoryRepository inventoryRepository) {
+            InventoryRepository inventoryRepository
+    ) {
         this.clientService = clientService;
         this.investmentService = investmentService;
         this.inventoryService = inventoryService;
@@ -223,18 +232,20 @@ public class WarehouseViewController {
 
     /**
      * Opens the reassign product view in a new window.
+     * @throws WindowLoadException the window load exception
      */
     @FXML
-    public void reassignProduct(ActionEvent actionEvent) throws SceneSwitcher.WindowLoadException {
-        sceneSwitcher.displayWindow("Sistema de cuentas", "/images/RTS_logo.png", "/reassignProductView.fxml");
+    public void reassignProduct() throws SceneSwitcher.WindowLoadException {
+        sceneSwitcher.displayWindow("Sistema de cuentas", "/images/RTS_logo.png", "/views/reassignProductView.fxml");
     }
 
     /**
      * Opens the add warehouse view in a new window.
+     * @throws WindowLoadException the window load exception
      */
     @FXML
-    public void addWarehouse(ActionEvent actionEvent) throws SceneSwitcher.WindowLoadException {
-        sceneSwitcher.displayWindow("Añadir Almacén", "/images/RTS_logo.png", "/addWarehouseView.fxml");
+    public void addWarehouse() throws SceneSwitcher.WindowLoadException {
+        sceneSwitcher.displayWindow("Añadir Almacén", "/images/RTS_logo.png", "/views/addWarehouseView.fxml");
     }
 
 
@@ -243,7 +254,7 @@ public class WarehouseViewController {
      * Shows confirmation alert in Spanish.
      */
     @FXML
-    public void deleteWarehouse(ActionEvent actionEvent) {
+    public void deleteWarehouse() {
         WarehouseDataTable w = ttvWarehouse.getSelectionModel().getSelectedItem().getValue();
         Warehouse warehouse = warehouseService.getWarehouseByWarehouseNameAndClient(w.getWarehouseName(), client);
         if (displayAlerts.showConfirmationAlert("Está seguro de querer eliminar el almacén seleccionado:\n" +
@@ -262,34 +273,37 @@ public class WarehouseViewController {
 
     /**
      * Opens the assign investment view in a new window.
+     * @throws WindowLoadException the window load exception
      */
     @FXML
-    public void assignInvestment(ActionEvent actionEvent) throws SceneSwitcher.WindowLoadException {
-        sceneSwitcher.displayWindow("Asignar Inversión", "/images/RTS_logo.png", "/assignInvestmentView.fxml");
+    public void assignInvestment() throws SceneSwitcher.WindowLoadException {
+        sceneSwitcher.displayWindow("Asignar Inversión", "/images/RTS_logo.png", "/views/assignInvestmentView.fxml");
     }
 
     /**
      * Shows a placeholder alert for checking investments (feature coming soon).
      */
     @FXML
-    public void checkInvestment(ActionEvent actionEvent) {
+    public void checkInvestment() {
         displayAlerts.showAlert("Próximamente");
     }
 
     /**
      * Opens the update warehouse view in a new window.
+     * @throws WindowLoadException the window load exception
      */
     @FXML
-    public void updateWarehouse(ActionEvent actionEvent) throws IOException, SceneSwitcher.WindowLoadException {
-        sceneSwitcher.displayWindow("Actualizar Almacén", "/images/RTS_logo.png", "/updateWarehouseView.fxml");
+    public void updateWarehouse() throws SceneSwitcher.WindowLoadException {
+        sceneSwitcher.displayWindow("Actualizar Almacén", "/images/RTS_logo.png", "/views/updateWarehouseView.fxml");
     }
 
     /**
      * Opens the change product name view in a new window.
+     * @throws WindowLoadException the window load exception
      */
     @FXML
-    public void changeProductName(ActionEvent actionEvent) throws IOException, SceneSwitcher.WindowLoadException {
-        sceneSwitcher.displayWindow("Asignar Inversión a un Almacén", "/images/RTS_logo.png", "/changeProductNameView.fxml");
+    public void changeProductName() throws SceneSwitcher.WindowLoadException {
+        sceneSwitcher.displayWindow("Asignar Inversión a un Almacén", "/images/RTS_logo.png", "/views/changeProductNameView.fxml");
     }
 
     // ============================
@@ -298,50 +312,56 @@ public class WarehouseViewController {
 
     /**
      * Navigates to the configuration view.
+     * @param actionEvent the action event
      */
     @FXML
     public void switchToConfiguration(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/configurationView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/configurationView.fxml");
     }
 
     /**
      * Navigates to the support view.
+     * @param actionEvent the action event
      */
     @FXML
     public void switchToSupport(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/supportView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/supportView.fxml");
     }
 
     /**
      * Navigates to the registry view.
+     * @param actionEvent the action event
      */
     @FXML
     public void switchToRegistry(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/registryView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/registryView.fxml");
     }
 
     /**
      * Navigates to the balance view.
+     * @param actionEvent the action event
      */
     @FXML
     public void switchToBalance(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/balanceView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/balanceView.fxml");
     }
 
     /**
      * Navigates to the investment view.
+     * @param actionEvent the action event
      */
     @FXML
     public void switchToInvestment(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/investmentView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/investmentView.fxml");
     }
 
     /**
      * Navigates to the sell view.
+     * @param actionEvent the action event
      */
     @FXML
     public void switchToSell(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/sellView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/sellView.fxml");
     }
 
 }

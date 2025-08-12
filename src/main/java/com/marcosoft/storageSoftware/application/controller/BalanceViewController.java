@@ -15,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.context.annotation.Lazy;
@@ -102,14 +103,10 @@ public class BalanceViewController {
 
     // Clase de apoyo para encapsular la lógica de rangos de fecha
     @Getter
+    @AllArgsConstructor
     private static class DateRangeOption {
         private final String label;
         private final Period period;
-
-        public DateRangeOption(String label, Period period) {
-            this.label = label;
-            this.period = period;
-        }
 
     }
 
@@ -117,8 +114,8 @@ public class BalanceViewController {
         startDate = LocalDate.now().minusMonths(1);
         endDate = LocalDate.now();
         currency = currencyService.getCurrencyByName("CUP");
-        lblClientName.setText(userLogged.getName());
         client = clientService.getClientByName(userLogged.getName());
+        lblClientName.setText(client.getClientName());
     }
 
     public void refreshBalance() {
@@ -175,32 +172,32 @@ public class BalanceViewController {
 
     @FXML
     public void switchToWarehouse(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/warehouseView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/warehouseView.fxml");
     }
 
     @FXML
     public void switchToSell(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/sellView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/sellView.fxml");
     }
 
     @FXML
     public void switchToConfiguration(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/configurationView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/configurationView.fxml");
     }
 
     @FXML
     public void switchToInvestment(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/investmentView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/investmentView.fxml");
     }
 
     @FXML
     public void switchToSupport(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/supportView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/supportView.fxml");
     }
 
     @FXML
     public void switchToRegistry(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/registryView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/registryView.fxml");
     }
 
     @FXML
@@ -215,6 +212,6 @@ public class BalanceViewController {
 
     @FXML
     public void displayCurrencyValues(ActionEvent actionEvent) throws SceneSwitcher.WindowLoadException {
-        sceneSwitcher.displayWindow("Valor de Monedas", "/images/RTS_logo", "/currencyValuesView.fxml");
+        sceneSwitcher.displayWindow("Valor de Monedas", "/images/RTS_logo", "/views/currencyValuesView.fxml");
     }
 }

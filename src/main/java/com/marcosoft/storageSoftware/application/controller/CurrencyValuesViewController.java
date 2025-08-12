@@ -16,6 +16,9 @@ import org.springframework.stereotype.Controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * The type Currency values view controller.
+ */
 @Lazy
 @Controller
 public class CurrencyValuesViewController {
@@ -29,6 +32,13 @@ public class CurrencyValuesViewController {
     private final CurrencyServiceImpl currencyService;
     private final BalanceViewController balanceViewController;
 
+    /**
+     * Instantiates a new Currency values view controller.
+     *
+     * @param displayAlerts the display alerts
+     * @param currencyService the currency service
+     * @param balanceViewController the balance view controller
+     */
     public CurrencyValuesViewController(
             DisplayAlerts displayAlerts,
             CurrencyServiceImpl currencyService,
@@ -46,6 +56,11 @@ public class CurrencyValuesViewController {
         Platform.runLater(this::initMbCurrency);
     }
 
+    /**
+     * Update currency values.
+     *
+     * @param actionEvent the action event
+     */
     @FXML
     public void updateCurrencyValues(ActionEvent actionEvent) {
         if (!validateAllPrices()) {
@@ -103,6 +118,11 @@ public class CurrencyValuesViewController {
         field.requestFocus();
     }
 
+    /**
+     * Go out.
+     *
+     * @param actionEvent the action event
+     */
     @FXML
     public void goOut(ActionEvent actionEvent) {
         Stage stage = (Stage) mbCurrency.getScene().getWindow();
@@ -120,6 +140,11 @@ public class CurrencyValuesViewController {
         });
     }
 
+    /**
+     * Update balance.
+     *
+     * @param actionEvent the action event
+     */
     @FXML
     public void updateBalance(ActionEvent actionEvent) {
         if (!validateCurrencySelection()) {

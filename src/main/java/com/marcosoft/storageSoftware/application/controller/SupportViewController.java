@@ -37,8 +37,12 @@ public class SupportViewController {
 
     /**
      * Constructor for dependency injection.
+     * @param currencyService the currency service
+     * @param sceneSwitcher the scene switcher
+     * @param clientService the client service
+     * @param userLogged the user logged
+     * @param licenseValidator the license validator
      */
-    @Lazy
     public SupportViewController(
             CurrencyServiceImpl currencyService, SceneSwitcher sceneSwitcher, ClientServiceImpl clientService,
             UserLogged userLogged, LicenseValidator licenseValidator
@@ -75,6 +79,7 @@ public class SupportViewController {
 
     /**
      * Sets the account controller reference for session management.
+     * @param clientViewController the client view controller
      */
     public void setAccountController(ClientViewController clientViewController) {
         this.accountController = clientViewController;
@@ -107,7 +112,7 @@ public class SupportViewController {
      */
     private void initWelcomeLabels() {
         lblLicenseDays.setText(LocalDate.now().until(licenseValidator.getRemainingTime()).getDays() + " Días");
-        versionLabel.setText("0.9.7");
+        versionLabel.setText("0.9.8");
         lblWelcomeTitle.setText("Bienvenido, " + userLogged.getName());
         lblWelcome.setText(
                 """
@@ -129,7 +134,7 @@ public class SupportViewController {
      */
     @FXML
     private void switchToRegistry(ActionEvent event) {
-        sceneSwitcher.switchView(event, "/registryView.fxml");
+        sceneSwitcher.switchView(event, "/views/registryView.fxml");
     }
 
     /**
@@ -137,7 +142,7 @@ public class SupportViewController {
      */
     @FXML
     private void switchToInvestment(ActionEvent event) {
-        sceneSwitcher.switchView(event, "/investmentView.fxml");
+        sceneSwitcher.switchView(event, "/views/investmentView.fxml");
     }
 
     /**
@@ -145,31 +150,34 @@ public class SupportViewController {
      */
     @FXML
     private void switchToConfiguration(ActionEvent event) {
-        sceneSwitcher.switchView(event, "/configurationView.fxml");
+        sceneSwitcher.switchView(event, "/views/configurationView.fxml");
     }
 
     /**
      * Navigates to the warehouse view.
+     * @param event the event
      */
     @FXML
     public void switchToWarehouse(ActionEvent event) {
-        sceneSwitcher.switchView(event, "/warehouseView.fxml");
+        sceneSwitcher.switchView(event, "/views/warehouseView.fxml");
     }
 
     /**
      * Navigates to the balance view.
+     * @param event the event
      */
     @FXML
     public void switchToBalance(ActionEvent event) {
-        sceneSwitcher.switchView(event, "/balanceView.fxml");
+        sceneSwitcher.switchView(event, "/views/balanceView.fxml");
     }
 
     /**
      * Navigates to the inventory (sell) view.
+     * @param event the event
      */
     @FXML
     public void switchToInventory(ActionEvent event) {
-        sceneSwitcher.switchView(event, "/sellView.fxml");
+        sceneSwitcher.switchView(event, "/views/sellView.fxml");
     }
 
     /**
