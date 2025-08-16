@@ -18,7 +18,7 @@ Este proyecto es una aplicación de escritorio que permite a los usuarios gestio
 
 - Java 21
 - Maven
-- JavaFX 22.0.1
+- JavaFX 21.0.0
 - Spring Boot 3.4.3
 
 ## Instalación
@@ -61,7 +61,7 @@ src/main/resources: Contiene los archivos de recursos como archivos FXML y propi
 src/test/java/com/marcosoft/storageSoftware: Contiene las pruebas unitarias.
 
 ## Contribución
-¡Las contribuciones son bienvenidas! Si deseas contribuir, sigue estos pasos:
+NO SE ACEPTAN CONTRIBUCIONES
 
 ## Contacto
 Para cualquier pregunta o sugerencia, por favor contacta a marconchelo12@gmail.com.
