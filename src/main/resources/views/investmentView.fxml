@@ -298,7 +298,7 @@
                   </VBox>
                   <VBox layoutX="29.0" layoutY="29.0" prefHeight="107.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <Label prefHeight="35.0" prefWidth="82.0" text="Filtrado:">
+                        <Label prefHeight="40.0" prefWidth="82.0" text="Filtrado:">
                            <font>
                               <Font name="SansSerif Bold" size="14.0" />
                            </font>

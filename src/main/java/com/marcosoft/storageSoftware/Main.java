@@ -138,17 +138,6 @@ public class Main extends Application {
         System.exit(0);
     }
 
-    public static void setRoot(String fxml) {
-        try {
-            Parent root = springFXMLLoader.load("/" + fxml + ".fxml");
-            scene.setRoot(root);
-            primaryStage.sizeToScene();
-            primaryStage.centerOnScreen();
-        } catch (IOException e) {
-            System.err.println("Error al cargar la vista: " + fxml + " Error: " + e.getMessage());
-        }
-    }
-
     public static void main(String[] args) {
         // Lanzar JavaFX primero
         launch(args);

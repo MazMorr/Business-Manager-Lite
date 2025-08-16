@@ -91,7 +91,6 @@ public class RegistryViewController {
     @FXML
     private TableColumn<GeneralRegistryDataTable, String> tcGeneralRegistryType, tcGeneralRegistryZone;
 
-
     //Investment Registry Table
     @FXML
     private TableView<InvestmentRegistryDataTable> tvInvestment;
@@ -171,6 +170,10 @@ public class RegistryViewController {
     private void initGeneralRegistryTableValues() {
         generalRegistryDataTables = FXCollections.observableArrayList();
         List<GeneralRegistry> generalRegistries = generalRegistryService.getAllGeneralRegistriesByClient(client);
+
+        // Ordenar por fecha más reciente primero
+        generalRegistries.sort((r1, r2) -> r2.getRegistryDateTime().compareTo(r1.getRegistryDateTime()));
+
         generalRegistryDataTables.clear();
 
         for (GeneralRegistry generalRegistry : generalRegistries) {
@@ -184,7 +187,6 @@ public class RegistryViewController {
         tcGeneralRegistryZone.setCellValueFactory(new PropertyValueFactory<>("affectedZone"));
         tcGeneralRegistryType.setCellValueFactory(new PropertyValueFactory<>("registryType"));
         tcGeneralRegistryDateTime.setCellValueFactory(new PropertyValueFactory<>("registryDateTime"));
-
 
         // Formatear LocalDateTime
         tcGeneralRegistryDateTime.setCellFactory(column -> new TableCell<>() {
@@ -200,13 +202,15 @@ public class RegistryViewController {
         });
 
         tvGeneralRegistry.setItems(generalRegistryDataTables);
-
     }
 
     private void initWarehouseRegistryTableValues() {
-
         warehouseRegistryDataTables = FXCollections.observableArrayList();
         List<WarehouseRegistry> warehouseRegistries = warehouseRegistryService.getAllWarehouseRegistriesByClient(client);
+
+        // Ordenar por fecha más reciente primero
+        warehouseRegistries.sort((r1, r2) -> r2.getRegistryDateTime().compareTo(r1.getRegistryDateTime()));
+
         warehouseRegistryDataTables.clear();
 
         for (WarehouseRegistry w : warehouseRegistries) {
@@ -242,9 +246,12 @@ public class RegistryViewController {
     }
 
     private void initSellRegistryTableValues() {
-
         sellRegistryDataTables = FXCollections.observableArrayList();
         List<SellRegistry> sellRegistries = sellRegistryService.getAllSellRegistriesByClient(client);
+
+        // Ordenar por fecha más reciente primero
+        sellRegistries.sort((r1, r2) -> r2.getRegistryDate().compareTo(r1.getRegistryDate()));
+
         sellRegistryDataTables.clear();
 
         for (SellRegistry sellRegistry : sellRegistries) {
@@ -287,10 +294,13 @@ public class RegistryViewController {
         try {
             investmentRegistryDataTables = FXCollections.observableArrayList();
             List<InvestmentRegistry> investmentRegistries = investmentRegistryService.getAllInvestmentRegistryByClient(client);
+
+            // Ordenar por fecha más reciente primero
+            investmentRegistries.sort((r1, r2) -> r2.getRegistryDateTime().compareTo(r1.getRegistryDateTime()));
+
             investmentRegistryDataTables.clear();
 
             for (InvestmentRegistry investmentRegistry : investmentRegistries) {
-
                 // Formatear el precio y moneda
                 String priceCurrency = String.format("%.2f %s",
                         investmentRegistry.getInvestmentPrice(),
@@ -331,6 +341,7 @@ public class RegistryViewController {
             displayAlerts.showError("Ha ocurrido un error: " + e.getMessage());
         }
     }
+
 
     /**
      * Switch to configuration.

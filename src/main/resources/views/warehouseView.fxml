@@ -205,7 +205,7 @@
                      <children>
                         <AnchorPane prefHeight="450.0" prefWidth="450.0">
                            <children>
-                              <TreeTableView fx:id="ttvWarehouse" layoutX="-11.0" layoutY="-121.0" prefHeight="450.0" prefWidth="460.0" style="-fx-border-color: #2563eb; -fx-background-radius: 10px; -fx-border-radius: 10px; -fx-padding: 5px 3px 5px 3px;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <TreeTableView fx:id="ttvWarehouse" layoutX="-11.0" layoutY="-121.0" prefHeight="1000.0" prefWidth="460.0" style="-fx-border-color: #2563eb; -fx-background-radius: 10px; -fx-border-radius: 10px; -fx-padding: 5px 3px 5px 3px;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                 <columns>
                                   <TreeTableColumn fx:id="ttcWarehouseName" prefWidth="115.0" text="Almacen" />
                                     <TreeTableColumn fx:id="ttcProductName" prefWidth="151.0" text="Producto" />

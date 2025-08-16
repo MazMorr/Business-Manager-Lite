@@ -1,18 +1,14 @@
 package com.marcosoft.storageSoftware.application.controller;
 
-import com.marcosoft.storageSoftware.Main;
 import com.marcosoft.storageSoftware.domain.model.Client;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.ProgressIndicator;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
-
-import java.io.IOException;
 
 import static javafx.scene.paint.Color.*;
 
@@ -25,21 +21,26 @@ import static javafx.scene.paint.Color.*;
 public class CreateClientViewController {
 
     private final ClientServiceImpl clientService;
+    private final SceneSwitcher sceneSwitcher;
+
 
     /**
      * Constructor for dependency injection.
      * @param clientService the client service
      */
     @Lazy
-    public CreateClientViewController(ClientServiceImpl clientService){
+    public CreateClientViewController(SceneSwitcher sceneSwitcher, ClientServiceImpl clientService) {
         this.clientService = clientService;
+        this.sceneSwitcher = sceneSwitcher;
     }
 
     // FXML UI components
     @FXML
-    private PasswordField passFieldPasswordConfirmed;
+    private CheckBox cbShowPassword;
     @FXML
-    private TextField txtFieldPassword, txtFieldUserName, txtFieldCompany;
+    private PasswordField passFieldPasswordConfirmed, passFieldPassword;
+    @FXML
+    private TextField txtFieldUserName, txtFieldCompany, textFieldPassword;
     @FXML
     private ProgressIndicator percentageBar;
     @FXML
@@ -54,8 +55,9 @@ public class CreateClientViewController {
      */
     @FXML
     public void initialize() {
+        textFieldPassword.setVisible(false);
+        textFieldPassword.setManaged(false);
         percentageBar.setProgress(0);
-        txtDebugForm.setText("");
     }
 
     /**
@@ -63,7 +65,7 @@ public class CreateClientViewController {
      * Validates input and shows alerts in Spanish if validation fails.
      */
     @FXML
-    private void createAccount() throws IOException {
+    private void createAccount(ActionEvent actionEvent) {
         if (!userNameIsSet || !passwordIsSet || !confirmedPasswordIsSet) {
             txtDebugForm.setTextFill(RED);
             txtDebugForm.setText("Por favor, complete correctamente todos los campos obligatorios.");
@@ -76,9 +78,14 @@ public class CreateClientViewController {
             return;
         }
 
+        // Obtener la contraseña del campo visible actual
+        String password = cbShowPassword.isSelected()
+                ? textFieldPassword.getText()
+                : passFieldPassword.getText();
+
         Client client = new Client(
                 txtFieldUserName.getText(),
-                txtFieldPassword.getText(),
+                password,
                 txtFieldCompany.getText(),
                 false
         );
@@ -86,7 +93,11 @@ public class CreateClientViewController {
 
         Alert alert = getAlert(txtFieldCompany, txtFieldUserName);
         alert.showAndWait();
-        goBack();
+        try {
+            goBack(actionEvent);
+        } catch (SceneSwitcher.ViewLoadException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -142,7 +153,7 @@ public class CreateClientViewController {
      */
     @FXML
     public void txtFieldTypingPassword() {
-        String password = txtFieldPassword.getText();
+        String password = cbShowPassword.isSelected() ? textFieldPassword.getText() : passFieldPassword.getText();
         String confirm = passFieldPasswordConfirmed.getText();
 
         if (password.length() > 16) {
@@ -195,8 +206,35 @@ public class CreateClientViewController {
      * Navigates back to the client view.
      */
     @FXML
-    private void goBack() throws IOException {
-        Main.setRoot("clientView");
+    private void goBack(ActionEvent actionEvent) throws SceneSwitcher.ViewLoadException {
+        sceneSwitcher.setRootWithEvent(actionEvent, "/views/clientView.fxml");
     }
 
+    /**
+     * Alterna entre mostrar/ocultar la contraseña.
+     */
+    @FXML
+    public void showPassword(ActionEvent actionEvent) {
+        if (cbShowPassword.isSelected()) {
+            // Mostrar contraseña en texto plano
+            textFieldPassword.setText(passFieldPassword.getText());
+            textFieldPassword.setVisible(true);
+            textFieldPassword.setManaged(true);
+            passFieldPassword.setVisible(false);
+            passFieldPassword.setManaged(false);
+
+            // Trasladar el foco al campo de texto
+            Platform.runLater(() -> textFieldPassword.requestFocus());
+        } else {
+            // Ocultar contraseña
+            passFieldPassword.setText(textFieldPassword.getText());
+            passFieldPassword.setVisible(true);
+            passFieldPassword.setManaged(true);
+            textFieldPassword.setVisible(false);
+            textFieldPassword.setManaged(false);
+
+            // Trasladar el foco al campo de contraseña
+            Platform.runLater(() -> passFieldPassword.requestFocus());
+        }
+    }
 }

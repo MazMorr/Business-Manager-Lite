@@ -209,6 +209,7 @@ public class SellViewController {
         );
         cleanTextFields(textFields);
         dpSellProductDate.setValue(LocalDate.now());
+        txtSellDebug.setText("El precio de venta es el de toda la venta, NO PRECIOS INDIVIDUALES");
     }
 
     private void cleanTextFields(List<TextField> textFields) {
@@ -249,8 +250,6 @@ public class SellViewController {
             displayAlerts.showAlert(e.getMessage());
         }
     }
-
-// --- Métodos auxiliares simplificados ---
 
     private Inventory getAndValidateInventory(String warehouseName, String productName, int productAmount) {
         Product product = productService.getByProductNameAndClient(productName, client);
@@ -309,7 +308,7 @@ public class SellViewController {
                 ? "Venta registrada. Stock restante: " + remainingStock
                 : "Venta registrada. Producto AGOTADO";
 
-        displayAlerts.showAlert(message);
+        txtSellDebug.setText(message);
     }
 
     /**

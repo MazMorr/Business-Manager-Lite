@@ -219,7 +219,7 @@
                               </ImageView>
                            </children>
                         </HBox>
-                        <Label fx:id="txtClientCompany1" text="Usuario:">
+                        <Label fx:id="lblUser" text="Usuario:">
                            <graphic>
                               <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -234,7 +234,7 @@
                               <Insets top="10.0" />
                            </VBox.margin>
                         </Label>
-                        <Label fx:id="txtClientCompany" text="Compañía: ">
+                        <Label fx:id="lblCompany" text="Compañía: ">
                            <graphic>
                               <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -246,7 +246,7 @@
                               <Font name="System Bold" size="16.0" />
                            </font>
                         </Label>
-                        <Label fx:id="txtClientCompany2" text="Fecha Vencimiento Licencia:">
+                        <Label fx:id="lblDateLicense" text="Fecha Vencimiento Licencia:">
                            <graphic>
                               <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -258,7 +258,7 @@
                               <Font name="System Bold" size="16.0" />
                            </font>
                         </Label>
-                        <Label fx:id="txtClientCompany11" text="Productos:">
+                        <Label fx:id="lblProducts" text="Productos:">
                            <graphic>
                               <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -270,7 +270,7 @@
                               <Font name="System Bold" size="16.0" />
                            </font>
                         </Label>
-                        <Label fx:id="txtClientCompany12" text="Ventas:">
+                        <Label fx:id="lblSell" text="Ventas:">
                            <graphic>
                               <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -286,8 +286,8 @@
                   </VBox>
                   <VBox alignment="CENTER" prefHeight="400.0" prefWidth="1000.0" spacing="20.0" styleClass="crudOperations">
                      <children>
-                        <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="250.0" styleClass="btnStock" text="Importar Base de Datos" />
-                        <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="250.0" styleClass="btnStock" text="Exportar Base de Datos" />
+                        <Button mnemonicParsing="false" onAction="#ImportDatabase" prefHeight="40.0" prefWidth="250.0" styleClass="btnStock" text="Importar Base de Datos" />
+                        <Button mnemonicParsing="false" onAction="#exportDatabase" prefHeight="40.0" prefWidth="250.0" styleClass="btnStock" text="Exportar Base de Datos" />
                         <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="250.0" styleClass="btnStock" text="Establecer Nombre Compañía" />
                         <Button mnemonicParsing="false" onAction="#closeSession" prefHeight="40.0" prefWidth="250.0" styleClass="btnStock" text="Cerrar Sesión" textFill="#eeeeee" />
                      </children>

@@ -1,10 +1,10 @@
 package com.marcosoft.storageSoftware.application.controller;
 
-import com.marcosoft.storageSoftware.Main;
 import com.marcosoft.storageSoftware.application.dto.UserLogged;
 import com.marcosoft.storageSoftware.domain.model.Client;
 import com.marcosoft.storageSoftware.infrastructure.security.LicenseValidator;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
 import com.marcosoft.storageSoftware.infrastructure.util.SpringFXMLLoader;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -36,6 +36,7 @@ public class ClientViewController {
     private final ClientServiceImpl clientServiceImpl;
     private final UserLogged userLogged;
     private final LicenseValidator licenseValidator;
+    private final SceneSwitcher sceneSwitcher;
 
     /**
      * Constructor for dependency injection.
@@ -44,8 +45,12 @@ public class ClientViewController {
      * @param clientService the client service
      * @param springFXMLLoader the spring fxml loader
      */
-    public ClientViewController(UserLogged userLogged, LicenseValidator licenseValidator, ClientServiceImpl clientService, SpringFXMLLoader springFXMLLoader) {
+    public ClientViewController(
+            UserLogged userLogged, LicenseValidator licenseValidator, ClientServiceImpl clientService,
+            SpringFXMLLoader springFXMLLoader, SceneSwitcher sceneSwitcher
+    ) {
         this.userLogged = userLogged;
+        this.sceneSwitcher = sceneSwitcher;
         this.clientServiceImpl = clientService;
         this.licenseValidator = licenseValidator;
         this.springFXMLLoader = springFXMLLoader;
@@ -155,9 +160,9 @@ public class ClientViewController {
      * Clears input fields before switching view.
      */
     @FXML
-    private void switchToCreateClient() {
+    private void switchToCreateClient(ActionEvent actionEvent) throws SceneSwitcher.ViewLoadException {
         clearFields();
-        Main.setRoot("createClientView");
+        sceneSwitcher.setRootWithEvent(actionEvent, "/views/createClientView.fxml");
     }
 
     /**
