@@ -186,7 +186,7 @@
             <TableView fx:id="tvExpense" editable="true" layoutX="159.0" layoutY="115.0" onMouseClicked="#selectInventory" prefHeight="445.0" prefWidth="550.0" styleClass="table" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="310.0" AnchorPane.topAnchor="230.0">
                <columns>
                   <TableColumn fx:id="tcId" prefWidth="41.0" text="ID" />
-                  <TableColumn fx:id="tcExpenseName" prefWidth="145.0" sortable="false" text="Nombre Inversión" />
+                  <TableColumn fx:id="tcExpenseName" prefWidth="145.0" sortable="false" text="Nombre Gasto" />
                   <TableColumn fx:id="tcExpenseType" prefWidth="92.0" text="Tipo" />
                   <TableColumn fx:id="tcAmount" prefWidth="75.0" sortable="false" text="Cantidad" />
                   <TableColumn fx:id="tcPrice" prefWidth="89.0" sortable="false" text="Precio" />
@@ -513,7 +513,7 @@
                                           </ImageView>
                                        </graphic>
                                     </Button>
-                                    <Button layoutX="42.0" layoutY="483.0" mnemonicParsing="false" onAction="#removeExpense" prefHeight="30.0" prefWidth="281.0" style="-fx-background-color: linear-gradient(to bottom, #eb5050, #ec3030);" styleClass="btnDelete" text="Eliminar Inversión" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                                    <Button layoutX="42.0" layoutY="483.0" mnemonicParsing="false" onAction="#removeExpense" prefHeight="30.0" prefWidth="281.0" style="-fx-background-color: linear-gradient(to bottom, #eb5050, #ec3030);" styleClass="btnDelete" text="Eliminar Gasto" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
                                        <graphic>
                                           <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                              <image>

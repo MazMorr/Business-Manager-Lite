@@ -304,7 +304,7 @@
                      <children>
                         <TableView fx:id="tvExpenses" prefHeight="1000.0" prefWidth="460.0" style="-fx-border-color: #2563eb; -fx-background-radius: 10px; -fx-border-radius: 10px; -fx-padding: 5px 3px 5px 3px;">
                           <columns>
-                            <TableColumn fx:id="tcIdExpense" prefWidth="92.0" text="ID Inversión" />
+                            <TableColumn fx:id="tcIdExpense" prefWidth="92.0" text="ID Gasto" />
                             <TableColumn fx:id="tcProductName" prefWidth="123.0" text="Producto" />
                               <TableColumn fx:id="tcProductAmount" prefWidth="76.0" text="Cantidad" />
                               <TableColumn fx:id="tcProductDate" prefWidth="75.0" text="Fecha" />

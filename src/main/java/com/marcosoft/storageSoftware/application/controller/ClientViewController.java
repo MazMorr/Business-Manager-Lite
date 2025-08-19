@@ -107,7 +107,7 @@ public class ClientViewController {
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResource("/images/RTS_logo.png")).toString()));
-            stage.setTitle("Almacenamiento");
+            stage.setTitle("Business Manager");
             stage.centerOnScreen();
             stage.setMinWidth(1100);
             stage.setMinHeight(650);

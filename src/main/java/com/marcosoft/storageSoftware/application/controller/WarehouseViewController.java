@@ -153,7 +153,7 @@ public class WarehouseViewController {
         tvExpenses.setPlaceholder(new Label("""
                 💼 Aquí aparecerán tus gastos
                 Cuando registres GASTOS de tipo PRODUCTO
-                y estas no hayan sido asignadas, se mostrarán aquí"""));
+                y estos no hayan sido asignados, se mostrarán aquí"""));
 
         // Common style for both placeholders
         String commonStyle = "-fx-font-family: 'Segoe UI'; " +
