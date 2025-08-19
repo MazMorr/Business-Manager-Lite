@@ -7,5 +7,5 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface ExpenseRegistryRepository extends CrudRepository<ExpenseRegistry, Long> {
-    List<ExpenseRegistry> findAllInvestmentRegistryByClient(Client client);
+    List<ExpenseRegistry> findAllExpenseRegistryByClient(Client client);
 }

@@ -8,11 +8,11 @@ import java.util.List;
 public interface ExpenseRegistryService {
     ExpenseRegistry save(ExpenseRegistry expenseRegistry);
 
-    ExpenseRegistry getInventoryRegistryById(Long id);
+    ExpenseRegistry getExpenseRegistryById(Long id);
 
-    List<ExpenseRegistry> getAllInventoryRegistries();
+    List<ExpenseRegistry> getAllExpenseRegistries();
 
-    void deleteInventoryRegistryById(Long id);
+    void deleteExpenseRegistryById(Long id);
 
-    List<ExpenseRegistry> getAllInvestmentRegistryByClient(Client client);
+    List<ExpenseRegistry> getAllExpenseRegistryByClient(Client client);
 }

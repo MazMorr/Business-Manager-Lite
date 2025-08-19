@@ -10,19 +10,21 @@ import java.util.List;
 public interface ExpenseService {
     Expense save(Expense expense);
 
-    Expense getInvestmentById(Long id);
+    Expense getExpenseById(Long id);
 
-    List<Expense> getAllInvestments();
+    List<Expense> getAllExpenses();
 
-    void deleteInvestmentById(Long id);
+    List<Expense> getAllExpensesByClient(Client client);
 
-    boolean existsByInvestmentId(Long investmentId);
+    void deleteExpenseById(Long id);
 
-    Expense getByClientAndInvestmentNameAndInvestmentPriceAndCurrencyAndAmountAndReceivedDateAndInvestmentType(Client client, String investmentName, Double investmentPrice, Currency currency, Integer amount, LocalDate receivedDate, String investmentType);
+    boolean existsByExpenseId(Long investmentId);
 
-    List<Expense> getAllInvestmentsByClientAndAmountGreaterThanZeroAndInvestmentType(Client client, String investmentType);
+    Expense getByClientAndExpenseNameAndExpensePriceAndCurrencyAndAmountAndReceivedDateAndExpenseType(Client client, String expenseName, Double expensePrice, Currency currency, Integer amount, LocalDate receivedDate, String expenseType);
 
-    List<Expense> getAllProductInvestmentsGreaterThanZeroByClient(Client client);
+    List<Expense> getAllExpensesByClientAndAmountGreaterThanZeroAndInvestmentType(Client client, String expenseType);
 
-    List<Expense> getAllInvestmentsByLeftAmountGreaterThanAndClient(Integer leftAmount, Client client);
+    List<Expense> getAllProductExpensesGreaterThanZeroByClient(Client client);
+
+    List<Expense> getAllExpensesByLeftAmountGreaterThanAndClient(Integer leftAmount, Client client);
 }

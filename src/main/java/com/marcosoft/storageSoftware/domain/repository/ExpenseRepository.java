@@ -10,17 +10,17 @@ import java.util.List;
 
 public interface ExpenseRepository extends CrudRepository<Expense, Long> {
 
-    boolean existsByInvestmentId(Long investmentId);
+    boolean existsByExpenseId(Long investmentId);
 
     List<Expense> findByLeftAmountGreaterThanAndClient(Integer leftAmount, Client client);
 
-    List<Expense> findAllInvestmentsByClientAndAmountGreaterThanAndInvestmentType(Client client, Integer amount, String investmentType);
+    List<Expense> findAllExpensesByClientAndAmountGreaterThanAndExpenseType(Client client, Integer amount, String investmentType);
 
-    Expense findByClientAndInvestmentNameAndInvestmentPriceAndCurrencyAndAmountAndReceivedDateAndInvestmentType(Client client, String investmentName, Double investmentPrice, Currency currency, Integer amount, LocalDate receivedDate, String investmentType);
+    Expense findByClientAndExpenseNameAndExpensePriceAndCurrencyAndAmountAndReceivedDateAndExpenseType(Client client, String investmentName, Double investmentPrice, Currency currency, Integer amount, LocalDate receivedDate, String investmentType);
 
-    List<Expense> findByClientAndLeftAmountGreaterThanAndInvestmentType(Client client, Integer leftAmount, String investmentType);
+    List<Expense> findByClientAndLeftAmountGreaterThanAndExpenseType(Client client, Integer leftAmount, String investmentType);
 
-    List<Expense> findAllInvestmentsByClient(Client client);
+    List<Expense> findAllExpensesByClient(Client client);
 
-    List<Expense> findAllInvestmentsByClientAndInvestmentType(Client client, String investmentType);
+    List<Expense> findAllExpensesByClientAndExpenseType(Client client, String expenseType);
 }

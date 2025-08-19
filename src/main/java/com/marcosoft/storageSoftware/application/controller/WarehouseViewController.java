@@ -116,7 +116,7 @@ public class WarehouseViewController {
         tvExpenses.getItems().clear();
 
         // Get all expenses for the client with amount > 0 (not fully assigned)
-        List<Expense> expenses = expenseService.getAllProductInvestmentsGreaterThanZeroByClient(client)
+        List<Expense> expenses = expenseService.getAllProductExpensesGreaterThanZeroByClient(client)
                 .stream().toList();
 
         // Map expenses to ExpenseWarehouseDataTable

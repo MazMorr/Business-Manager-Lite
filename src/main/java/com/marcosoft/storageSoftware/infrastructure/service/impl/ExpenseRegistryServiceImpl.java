@@ -26,22 +26,22 @@ public class ExpenseRegistryServiceImpl implements ExpenseRegistryService {
     }
 
     @Override
-    public ExpenseRegistry getInventoryRegistryById(Long id) {
+    public ExpenseRegistry getExpenseRegistryById(Long id) {
         return expenseRegistryRepository.findById(id).orElse(null);
     }
 
     @Override
-    public List<ExpenseRegistry> getAllInventoryRegistries() {
+    public List<ExpenseRegistry> getAllExpenseRegistries() {
         return (List<ExpenseRegistry>) expenseRegistryRepository.findAll();
     }
 
     @Override
-    public void deleteInventoryRegistryById(Long id) {
+    public void deleteExpenseRegistryById(Long id) {
         expenseRegistryRepository.deleteById(id);
     }
 
     @Override
-    public List<ExpenseRegistry> getAllInvestmentRegistryByClient(Client client) {
-        return expenseRegistryRepository.findAllInvestmentRegistryByClient(client);
+    public List<ExpenseRegistry> getAllExpenseRegistryByClient(Client client) {
+        return expenseRegistryRepository.findAllExpenseRegistryByClient(client);
     }
 }

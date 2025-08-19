@@ -48,47 +48,52 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     @Override
     @Transactional(readOnly = true)
-    public Expense getInvestmentById(Long id) {
+    public Expense getExpenseById(Long id) {
         return expenseRepository.findById(id).orElse(null);
     }
 
     @Override
-    public List<Expense> getAllInvestments() {
+    public List<Expense> getAllExpenses() {
         return (List<Expense>) expenseRepository.findAll();
     }
 
     @Override
+    public List<Expense> getAllExpensesByClient(Client client) {
+        return expenseRepository.findAllExpensesByClient(client);
+    }
+
+    @Override
     @Transactional
-    public void deleteInvestmentById(Long id) {
+    public void deleteExpenseById(Long id) {
         expenseRepository.deleteById(id);
     }
 
     @Override
-    public boolean existsByInvestmentId(Long investmentId) {
-        return expenseRepository.existsByInvestmentId(investmentId);
+    public boolean existsByExpenseId(Long investmentId) {
+        return expenseRepository.existsByExpenseId(investmentId);
     }
 
     @Override
-    public Expense getByClientAndInvestmentNameAndInvestmentPriceAndCurrencyAndAmountAndReceivedDateAndInvestmentType(Client client, String investmentName, Double investmentPrice, Currency currency, Integer amount, LocalDate receivedDate, String investmentType) {
-        return expenseRepository.findByClientAndInvestmentNameAndInvestmentPriceAndCurrencyAndAmountAndReceivedDateAndInvestmentType(client, investmentName, investmentPrice, currency, amount, receivedDate, investmentType);
+    public Expense getByClientAndExpenseNameAndExpensePriceAndCurrencyAndAmountAndReceivedDateAndExpenseType(Client client, String expenseName, Double expensePrice, Currency currency, Integer amount, LocalDate receivedDate, String expenseType) {
+        return expenseRepository.findByClientAndExpenseNameAndExpensePriceAndCurrencyAndAmountAndReceivedDateAndExpenseType(client, expenseName, expensePrice, currency, amount, receivedDate, expenseType);
     }
 
     @Override
-    public List<Expense> getAllInvestmentsByClientAndAmountGreaterThanZeroAndInvestmentType(Client client, String investmentType) {
-        return expenseRepository.findAllInvestmentsByClientAndAmountGreaterThanAndInvestmentType(client, 0, investmentType);
+    public List<Expense> getAllExpensesByClientAndAmountGreaterThanZeroAndInvestmentType(Client client, String investmentType) {
+        return expenseRepository.findAllExpensesByClientAndAmountGreaterThanAndExpenseType(client, 0, investmentType);
     }
 
     @Override
-    public List<Expense> getAllProductInvestmentsGreaterThanZeroByClient(Client client) {
-        return expenseRepository.findByClientAndLeftAmountGreaterThanAndInvestmentType(client, 0, "Producto");
+    public List<Expense> getAllProductExpensesGreaterThanZeroByClient(Client client) {
+        return expenseRepository.findByClientAndLeftAmountGreaterThanAndExpenseType(client, 0, "Producto");
     }
 
     @Override
-    public List<Expense> getAllInvestmentsByLeftAmountGreaterThanAndClient(Integer leftAmount, Client client) {
+    public List<Expense> getAllExpensesByLeftAmountGreaterThanAndClient(Integer leftAmount, Client client) {
         return expenseRepository.findByLeftAmountGreaterThanAndClient(leftAmount, client);
     }
 
-    public List<Expense> getNonZeroInvestmentsByClient(Client client) {
+    public List<Expense> getNonZeroExpensesByClient(Client client) {
         return expenseRepository.findByLeftAmountGreaterThanAndClient(0, client);
     }
 
@@ -121,7 +126,7 @@ public class ExpenseServiceImpl implements ExpenseService {
         amounts.put(USD, 0.0);
         amounts.put(EUR, 0.0);
 
-        expenseRepository.findAllInvestmentsByClientAndInvestmentType(client, investmentType)
+        expenseRepository.findAllExpensesByClientAndExpenseType(client, investmentType)
                 .stream()
                 .filter(inv -> isWithinDateRange(inv.getReceivedDate(), initDate, endDate))
                 .forEach(inv -> {

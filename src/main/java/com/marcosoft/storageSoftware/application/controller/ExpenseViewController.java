@@ -164,7 +164,7 @@ public class ExpenseViewController {
      */
     public void initializeTableValues() {
         expenseList = FXCollections.observableArrayList();
-        List<Expense> investmentsDB = expenseService.getAllInvestments();
+        List<Expense> investmentsDB = expenseService.getAllExpensesByClient(client);
         expenseList.clear();
 
         for (Expense expense : investmentsDB) {
@@ -208,7 +208,7 @@ public class ExpenseViewController {
         String currency = tfAddExpenseCurrency.getText();
         String investmentType = tfAddExpenseType.getText();
         String registryType;
-        if (!expenseService.existsByInvestmentId(investmentId)) {
+        if (!expenseService.existsByExpenseId(investmentId)) {
             registryType = "Adición";
         } else {
             registryType = "Actualización";
@@ -230,7 +230,7 @@ public class ExpenseViewController {
         initializeTableValues();
 
         Expense inv = expenseService
-                .getByClientAndInvestmentNameAndInvestmentPriceAndCurrencyAndAmountAndReceivedDateAndInvestmentType(
+                .getByClientAndExpenseNameAndExpensePriceAndCurrencyAndAmountAndReceivedDateAndExpenseType(
                         client, investmentName, price, currencyService.getCurrencyByName(currency), amount, receivedDate, investmentType
                 );
 
@@ -307,17 +307,17 @@ public class ExpenseViewController {
      */
     @FXML
     public void removeExpense() {
-        Long investmentId = parseDataTypes.parseLong(tfId.getText());
+        Long expenseId = parseDataTypes.parseLong(tfId.getText());
         String registryType = "Eliminación";
-        if (investmentId == null) {
+        if (expenseId == null) {
             displayAlerts.showAlert("Debes seleccionar un registro para eliminar.");
             return;
         }
 
         if (displayAlerts.showConfirmationAlert("¿Está seguro que desea eliminar este gasto?")) {
-            Expense expenseDB = expenseService.getInvestmentById(investmentId);
+            Expense expenseDB = expenseService.getExpenseById(expenseId);
             if (expenseDB != null) {
-                expenseService.deleteInvestmentById(investmentId);
+                expenseService.deleteExpenseById(expenseId);
                 initializeTableValues();
 
                 ExpenseRegistry expenseRegistry = new ExpenseRegistry(

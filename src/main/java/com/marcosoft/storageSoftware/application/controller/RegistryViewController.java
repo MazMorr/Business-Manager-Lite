@@ -263,7 +263,7 @@ public class RegistryViewController {
     private void initExpenseRegistryTableValues() {
         try {
             expenseRegistryDataTables = FXCollections.observableArrayList();
-            List<ExpenseRegistry> investmentRegistries = expenseRegistryService.getAllInvestmentRegistryByClient(client);
+            List<ExpenseRegistry> investmentRegistries = expenseRegistryService.getAllExpenseRegistryByClient(client);
 
             // Ordenar por fecha más reciente primero
             investmentRegistries.sort((r1, r2) -> r2.getRegistryDateTime().compareTo(r1.getRegistryDateTime()));

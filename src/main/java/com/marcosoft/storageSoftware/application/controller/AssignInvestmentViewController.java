@@ -101,12 +101,12 @@ public class AssignInvestmentViewController {
     public void assignAllProductAmount(ActionEvent actionEvent) {
         if (tfInvestment.getText().isEmpty()) {
             displayAlerts.showAlert("Debe asignar un gasto primero");
-        } else if (!investmentService.existsByInvestmentId(Long.parseLong(tfInvestment.getText()))) {
+        } else if (!investmentService.existsByExpenseId(Long.parseLong(tfInvestment.getText()))) {
             displayAlerts.showAlert("No se encontró el identificador del gasto en la base de datos");
-        } else if (investmentService.getInvestmentById(parseDataTypes.parseLong(tfInvestment.getText())).getAmount() == 0) {
+        } else if (investmentService.getExpenseById(parseDataTypes.parseLong(tfInvestment.getText())).getAmount() == 0) {
             displayAlerts.showAlert("Este gasto ha sido completamente asignado, debe seleccionar otra o reasignar los productos de esta");
         } else {
-            tfAmount.setText(String.valueOf(investmentService.getInvestmentById(
+            tfAmount.setText(String.valueOf(investmentService.getExpenseById(
                     Long.parseLong(tfInvestment.getText())).getLeftAmount())
             );
         }
@@ -138,7 +138,7 @@ public class AssignInvestmentViewController {
             long investmentId = Long.parseLong(tfInvestment.getText());
             int amountToAssign = Integer.parseInt(tfAmount.getText());
 
-            Expense expense = investmentService.getInvestmentById(investmentId);
+            Expense expense = investmentService.getExpenseById(investmentId);
 
             if (expense == null) {
                 displayAlerts.showAlert("No se encontró el gasto en la base de datos");
@@ -224,7 +224,7 @@ public class AssignInvestmentViewController {
      */
     private void initMbExpense() {
         mbExpense.getItems().clear();
-        List<Expense> expenses = investmentService.getAllProductInvestmentsGreaterThanZeroByClient(client);
+        List<Expense> expenses = investmentService.getAllProductExpensesGreaterThanZeroByClient(client);
 
         for (Expense i : expenses) {
             MenuItem item = new MenuItem(String.valueOf(i.getExpenseId()));
