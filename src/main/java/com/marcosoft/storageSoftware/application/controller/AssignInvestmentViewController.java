@@ -227,10 +227,10 @@ public class AssignInvestmentViewController {
         List<Expense> expenses = investmentService.getAllProductInvestmentsGreaterThanZeroByClient(client);
 
         for (Expense i : expenses) {
-            MenuItem item = new MenuItem(String.valueOf(i.getInvestmentId()));
+            MenuItem item = new MenuItem(String.valueOf(i.getExpenseId()));
             item.setOnAction(e -> {
                 tfInvestment.setText(item.getText());
-                tfProduct.setText(i.getInvestmentName());
+                tfProduct.setText(i.getExpenseName());
             });
             mbExpense.getItems().add(item);
         }
@@ -245,9 +245,7 @@ public class AssignInvestmentViewController {
 
         for (Warehouse w : warehouses) {
             MenuItem item = new MenuItem(w.getWarehouseName());
-            item.setOnAction(e_ -> {
-                tfWarehouse.setText(item.getText());
-            });
+            item.setOnAction(e -> tfWarehouse.setText(item.getText()));
             mbWarehouse.getItems().add(item);
         }
     }
