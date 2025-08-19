@@ -6,18 +6,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "Investment")
-public class Investment {
-
+@Table(name = "Investment_Registry")
+public class ExpenseRegistry {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @Column(name = "investment_id", nullable = false)
     private Long investmentId;
 
     @Column(name = "investment_name", nullable = false)
@@ -26,22 +28,15 @@ public class Investment {
     @Column(name = "transaction_price", nullable = false)
     private Double investmentPrice;
 
-    @ManyToOne
-    private Currency currency;
-
-    @Column(name = "amount", nullable = false)
-    private Integer amount;
-
-    @Column(name = "is_assigned")
-    private Integer leftAmount;
-
-    @Column(name = "received_date", nullable = false)
-    private LocalDate receivedDate;
-
-    @Column(name="investment_type")
-    private String investmentType;
+    @Column(name = "currency_name")
+    private String currency;
 
     @ManyToOne
     private Client client;
 
+    @Column(name= "registry_type")
+    private String registryType;
+
+    @Column(name="date")
+    private LocalDateTime registryDateTime;
 }

@@ -5,7 +5,7 @@ import com.marcosoft.storageSoftware.domain.model.Client;
 import com.marcosoft.storageSoftware.domain.model.Currency;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.CurrencyServiceImpl;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.InvestmentServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.ExpenseServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.SellRegistryServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
 import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
@@ -42,17 +42,17 @@ public class BalanceViewController {
     private final SellRegistryServiceImpl sellRegistryService;
     private final ClientServiceImpl clientService;
     private final CurrencyServiceImpl currencyService;
-    private final InvestmentServiceImpl investmentService;
+    private final ExpenseServiceImpl expenseService;
 
     public BalanceViewController(
-            DisplayAlerts displayAlerts, UserLogged userLogged, SceneSwitcher sceneSwitcher, InvestmentServiceImpl investmentService,
+            DisplayAlerts displayAlerts, UserLogged userLogged, SceneSwitcher sceneSwitcher, ExpenseServiceImpl expenseService,
             SellRegistryServiceImpl sellRegistryService, ClientServiceImpl clientService, CurrencyServiceImpl currencyService
 
     ) {
         this.sceneSwitcher = sceneSwitcher;
         this.currencyService = currencyService;
         this.clientService = clientService;
-        this.investmentService = investmentService;
+        this.expenseService = expenseService;
         this.sellRegistryService = sellRegistryService;
         this.displayAlerts = displayAlerts;
         this.userLogged = userLogged;
@@ -126,11 +126,11 @@ public class BalanceViewController {
 
     private void initExpenseLabels() {
         try {
-            double rent = investmentService.getTotalRentExpense(client, startDate, endDate, currency);
-            double salary = investmentService.getTotalSalaryExpense(client, startDate, endDate, currency);
-            double publicity = investmentService.getTotalPublicityExpense(client, startDate, endDate, currency);
-            double product = investmentService.getTotalProductExpense(client, startDate, endDate, currency);
-            double service = investmentService.getTotalServiceExpense(client, startDate, endDate, currency);
+            double rent = expenseService.getTotalRentExpense(client, startDate, endDate, currency);
+            double salary = expenseService.getTotalSalaryExpense(client, startDate, endDate, currency);
+            double publicity = expenseService.getTotalPublicityExpense(client, startDate, endDate, currency);
+            double product = expenseService.getTotalProductExpense(client, startDate, endDate, currency);
+            double service = expenseService.getTotalServiceExpense(client, startDate, endDate, currency);
 
             totalExpense = rent + salary + publicity + product + service;
 
@@ -186,8 +186,8 @@ public class BalanceViewController {
     }
 
     @FXML
-    public void switchToInvestment(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/investmentView.fxml");
+    public void switchToExpense(ActionEvent actionEvent) {
+        sceneSwitcher.switchView(actionEvent, "/views/expenseView.fxml");
     }
 
     @FXML
@@ -201,17 +201,17 @@ public class BalanceViewController {
     }
 
     @FXML
-    public void exportToExcel(ActionEvent actionEvent) {
+    public void exportToExcel() {
         displayAlerts.showAlert("Próximamente");
     }
 
     @FXML
-    public void exportToPdf(ActionEvent actionEvent) {
+    public void exportToPdf() {
         displayAlerts.showAlert("Próximamente");
     }
 
     @FXML
-    public void displayCurrencyValues(ActionEvent actionEvent) throws SceneSwitcher.WindowLoadException {
+    public void displayCurrencyValues() throws SceneSwitcher.WindowLoadException {
         sceneSwitcher.displayWindow("Valor de Monedas", "/images/RTS_logo", "/views/currencyValuesView.fxml");
     }
 }

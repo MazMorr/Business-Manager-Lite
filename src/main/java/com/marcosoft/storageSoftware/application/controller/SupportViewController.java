@@ -95,10 +95,10 @@ public class SupportViewController {
             if (!currencyService.existsByCurrencyName(currencyName)) {
                 Currency currency = new Currency(null, currencyName, 0.0);
                 switch (currencyName) {
-                    case "MLC" -> currency = new Currency(null, currencyName, 215.00);
+                    case "MLC" -> currency = new Currency(null, currencyName, 200.00);
                     case "CUP" -> currency = new Currency(null, currencyName, 1.00);
-                    case "USD" -> currency = new Currency(null, currencyName, 395.00);
-                    case "EUR" -> currency = new Currency(null, currencyName, 445.00);
+                    case "USD" -> currency = new Currency(null, currencyName, 400.00);
+                    case "EUR" -> currency = new Currency(null, currencyName, 450.00);
                 }
 
                 currencyService.save(currency);
@@ -141,8 +141,8 @@ public class SupportViewController {
      * Navigates to the investment view.
      */
     @FXML
-    private void switchToInvestment(ActionEvent event) {
-        sceneSwitcher.switchView(event, "/views/investmentView.fxml");
+    private void switchToExpense(ActionEvent event) {
+        sceneSwitcher.switchView(event, "/views/expenseView.fxml");
     }
 
     /**
@@ -191,9 +191,8 @@ public class SupportViewController {
         alert.setHeaderText("Información de la licencia");
         alert.setContentText(
                 "Pasado el tiempo disponible para renovar su licencia, el programa se bloqueará " +
-                        "instantáneamente y no podrá ser usado. Es posible que pierda los datos de la base de datos. " +
-                        "Por favor, llame al +53 5550 5961 antes de que eso ocurra para renovar su licencia y continuar " +
-                        "usando el software sin interrupciones."
+                        "instantáneamente y no podrá ser usado. Por favor, llame al +53 5550 5961 antes de que eso ocurra" +
+                        " para renovar su licencia y continuar usando el software sin interrupciones."
         );
         alert.showAndWait();
     }

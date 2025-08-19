@@ -6,7 +6,6 @@ import com.marcosoft.storageSoftware.domain.model.GeneralRegistry;
 import com.marcosoft.storageSoftware.domain.model.Product;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.GeneralRegistryServiceImpl;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.InvestmentServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.ProductServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
 import javafx.application.Platform;
@@ -36,14 +35,12 @@ public class ChangeProductNameViewController {
     private final ClientServiceImpl clientService;
     private final ProductServiceImpl productService;
     private final DisplayAlerts displayAlerts;
-    private final InvestmentServiceImpl investmentService;
     private final GeneralRegistryServiceImpl generalRegistryService;
     private final WarehouseViewController warehouseViewController;
 
     /**
      * Constructor for dependency injection.
      * @param warehouseViewController the warehouse view controller
-     * @param investmentService the investment service
      * @param generalRegistryService the general registry service
      * @param displayAlerts the display alerts
      * @param userLogged the user logged
@@ -52,13 +49,12 @@ public class ChangeProductNameViewController {
      */
     @Lazy
     public ChangeProductNameViewController(
-            WarehouseViewController warehouseViewController, InvestmentServiceImpl investmentService,
-            GeneralRegistryServiceImpl generalRegistryService, DisplayAlerts displayAlerts, UserLogged userLogged,
-            ClientServiceImpl clientService, ProductServiceImpl productService
+            WarehouseViewController warehouseViewController, GeneralRegistryServiceImpl generalRegistryService,
+            DisplayAlerts displayAlerts, UserLogged userLogged, ClientServiceImpl clientService,
+            ProductServiceImpl productService
     ) {
         this.productService = productService;
         this.warehouseViewController = warehouseViewController;
-        this.investmentService = investmentService;
         this.generalRegistryService = generalRegistryService;
         this.displayAlerts = displayAlerts;
         this.clientService = clientService;
@@ -84,10 +80,9 @@ public class ChangeProductNameViewController {
     /**
      * Handles the update of a product name when the user clicks the update button.
      * Validates input and shows alerts in Spanish if validation fails.
-     * @param actionEvent the action event
      */
     @FXML
-    public void updateProductName(ActionEvent actionEvent) {
+    public void updateProductName() {
         if (!validateAllFields()) {
             return;
         }

@@ -49,12 +49,12 @@
             </HBox>
             <VBox styleClass="index" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="80.0">
                <children>
-                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToInvestment" styleClass="btnIndex" text="Inversiones">
+                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToExpense" styleClass="btnIndex" text="Gastos">
                      <font>
                         <Font name="System Bold" size="17.0" />
                      </font>
                      <graphic>
-                        <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
+                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
                            <image>
                               <Image url="@../images/goods.png" />
                            </image>
@@ -73,7 +73,7 @@
                         <Font name="System Bold" size="17.0" />
                      </font>
                      <graphic>
-                        <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
+                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
                            <image>
                               <Image url="@../images/agreement.png" />
                            </image>
@@ -92,7 +92,7 @@
                         <Font name="System Bold" size="17.0" />
                      </font>
                      <graphic>
-                        <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
+                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
                            <image>
                               <Image url="@../images/warehouse.png" />
                            </image>
@@ -114,7 +114,7 @@
                         <Insets />
                      </VBox.margin>
                      <graphic>
-                        <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
+                        <ImageView fitHeight="39.0" fitWidth="39.0" pickOnBounds="true">
                            <image>
                               <Image url="@../images/monitoring.png" />
                            </image>
@@ -133,7 +133,7 @@
                         <Font name="System Bold" size="17.0" />
                      </font>
                      <graphic>
-                        <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
+                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
                            <image>
                               <Image url="@../images/interest-rate.png" />
                            </image>
@@ -152,7 +152,7 @@
                         <Font name="System Bold" size="17.0" />
                      </font>
                      <graphic>
-                        <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
+                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
                            <image>
                               <Image url="@../images/support.png" />
                            </image>
@@ -170,7 +170,7 @@
             </VBox>
             <Button alignment="CENTER_LEFT" mnemonicParsing="false" onAction="#switchToConfiguration" prefHeight="60.0" styleClass="btnIndex" text="Ajustes" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
                <graphic>
-                  <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../images/settings.png" />
                      </image>
@@ -187,7 +187,7 @@
                   <Font size="14.0" />
                </font>
             </Button>
-            <Label fx:id="txtClientName" contentDisplay="TOP" prefHeight="69.0" prefWidth="172.0" styleClass="clientName" text="Marco A. Romeros" textFill="#eeeeee" wrapText="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="5.0">
+            <Label fx:id="lblClientName" contentDisplay="TOP" prefHeight="69.0" prefWidth="172.0" styleClass="clientName" text="Marco A. Romeros" textFill="#eeeeee" wrapText="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="5.0">
                <font>
                   <Font name="SansSerif Regular" size="14.0" />
                </font>
@@ -302,9 +302,9 @@
                   </VBox>
                   <VBox prefHeight="1000.0" prefWidth="1000.0" spacing="5.0" style="-fx-background-radius: 20;" styleClass="rightIndex">
                      <children>
-                        <TableView fx:id="tvInvestments" prefHeight="1000.0" prefWidth="460.0" style="-fx-border-color: #2563eb; -fx-background-radius: 10px; -fx-border-radius: 10px; -fx-padding: 5px 3px 5px 3px;">
+                        <TableView fx:id="tvExpenses" prefHeight="1000.0" prefWidth="460.0" style="-fx-border-color: #2563eb; -fx-background-radius: 10px; -fx-border-radius: 10px; -fx-padding: 5px 3px 5px 3px;">
                           <columns>
-                            <TableColumn fx:id="tcIdInvestment" prefWidth="92.0" text="ID Inversión" />
+                            <TableColumn fx:id="tcIdExpense" prefWidth="92.0" text="ID Inversión" />
                             <TableColumn fx:id="tcProductName" prefWidth="123.0" text="Producto" />
                               <TableColumn fx:id="tcProductAmount" prefWidth="76.0" text="Cantidad" />
                               <TableColumn fx:id="tcProductDate" prefWidth="75.0" text="Fecha" />
@@ -331,7 +331,7 @@
                         </Button>
                         <HBox prefHeight="40.0" prefWidth="460.0" spacing="5.0">
                            <children>
-                              <Button mnemonicParsing="false" onAction="#assignInvestment" prefHeight="35.0" prefWidth="450.0" styleClass="btnStock" text="Asignar Inversión">
+                              <Button mnemonicParsing="false" onAction="#assignExpense" prefHeight="35.0" prefWidth="450.0" styleClass="btnStock" text="Asignar Inversión">
                                  <graphic>
                                     <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
                                        <image>
@@ -347,7 +347,7 @@
                                     </ImageView>
                                  </graphic>
                               </Button>
-                              <Button mnemonicParsing="false" onAction="#checkInvestment" prefWidth="450.0" styleClass="btnStock" text="Revisar Inversión">
+                              <Button mnemonicParsing="false" onAction="#checkExpense" prefWidth="450.0" styleClass="btnStock" text="Revisar Inversión">
                                  <graphic>
                                     <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
                                        <image>

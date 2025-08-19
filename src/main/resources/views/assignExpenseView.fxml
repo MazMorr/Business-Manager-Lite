@@ -19,14 +19,14 @@
    <children>
       <VBox alignment="CENTER" layoutX="88.0" layoutY="87.0" prefHeight="200.0" prefWidth="338.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="10.0">
          <children>
-            <HBox alignment="CENTER_LEFT" spacing="40.0">
+            <HBox alignment="CENTER_LEFT" spacing="63.0">
                <children>
-                  <Label text="ID Inversión">
+                  <Label text="ID Gasto">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </Label>
-                  <MenuButton fx:id="mbInvestment" mnemonicParsing="false" prefWidth="150.0">
+                  <MenuButton fx:id="mbExpense" mnemonicParsing="false" prefWidth="150.0">
                      <graphic>
                         <TextField fx:id="tfInvestment" prefWidth="150.0" />
                      </graphic>

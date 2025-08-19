@@ -23,13 +23,13 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="650.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.InvestmentViewController">
+<StackPane prefHeight="650.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.ExpenseViewController">
    <children>
       <AnchorPane styleClass="background" stylesheets="@../Styles.css">
          <children>
             <HBox alignment="CENTER" layoutY="6.0" prefHeight="80.0" prefWidth="800.0" spacing="120.0" styleClass="slogan" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <Label alignment="CENTER" graphicTextGap="14.0" prefHeight="68.0" prefWidth="421.0" styleClass="title" text="Inversiones" textFill="#eeeeee">
+                  <Label alignment="CENTER" graphicTextGap="14.0" prefHeight="68.0" prefWidth="421.0" styleClass="title" text="Gastos" textFill="#eeeeee">
                      <font>
                         <Font name="Constantia Bold" size="60.0" />
                      </font>
@@ -55,7 +55,7 @@
             </HBox>
             <VBox layoutX="-9.0" layoutY="88.0" styleClass="index" AnchorPane.bottomAnchor="55.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="80.0">
                <children>
-                  <Button alignment="CENTER_LEFT" disable="true" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" styleClass="btnIndex" text="Inversiones">
+                  <Button alignment="CENTER_LEFT" disable="true" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" styleClass="btnIndex" text="Gastos">
                      <font>
                         <Font name="System Bold" size="17.0" />
                      </font>
@@ -63,7 +63,7 @@
 
                      </graphic>
                      <graphic>
-                        <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
+                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
                            <image>
                               <Image url="@../images/goods.png" />
                            </image>
@@ -82,7 +82,7 @@
                         <Font name="System Bold" size="17.0" />
                      </font>
                      <graphic>
-                        <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
+                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
                            <image>
                               <Image url="@../images/purchase.png" />
                            </image>
@@ -101,7 +101,7 @@
                         <Font name="System Bold" size="17.0" />
                      </font>
                      <graphic>
-                        <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
+                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
                            <image>
                               <Image url="@../images/warehouse.png" />
                            </image>
@@ -126,7 +126,7 @@
 
                      </graphic>
                      <graphic>
-                        <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
+                        <ImageView fitHeight="39.0" fitWidth="39.0" pickOnBounds="true">
                            <image>
                               <Image url="@../images/monitoring.png" />
                            </image>
@@ -145,7 +145,7 @@
                         <Font name="System Bold" size="17.0" />
                      </font>
                      <graphic>
-                        <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
+                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
                            <image>
                               <Image url="@../images/interest-rate.png" />
                            </image>
@@ -167,7 +167,7 @@
 
                      </graphic>
                      <graphic>
-                        <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
+                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
                            <image>
                               <Image url="@../images/support.png" />
                            </image>
@@ -183,11 +183,11 @@
                   </Button>
                </children>
             </VBox>
-            <TableView fx:id="tvInvestment" editable="true" layoutX="159.0" layoutY="115.0" onMouseClicked="#selectInventory" prefHeight="445.0" prefWidth="550.0" styleClass="table" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="310.0" AnchorPane.topAnchor="230.0">
+            <TableView fx:id="tvExpense" editable="true" layoutX="159.0" layoutY="115.0" onMouseClicked="#selectInventory" prefHeight="445.0" prefWidth="550.0" styleClass="table" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="310.0" AnchorPane.topAnchor="230.0">
                <columns>
                   <TableColumn fx:id="tcId" prefWidth="41.0" text="ID" />
-                  <TableColumn fx:id="tcInvestmentName" prefWidth="145.0" sortable="false" text="Nombre Inversión" />
-                  <TableColumn fx:id="tcTypeInvestment" prefWidth="92.0" text="Tipo" />
+                  <TableColumn fx:id="tcExpenseName" prefWidth="145.0" sortable="false" text="Nombre Inversión" />
+                  <TableColumn fx:id="tcExpenseType" prefWidth="92.0" text="Tipo" />
                   <TableColumn fx:id="tcAmount" prefWidth="75.0" sortable="false" text="Cantidad" />
                   <TableColumn fx:id="tcPrice" prefWidth="89.0" sortable="false" text="Precio" />
                   <TableColumn fx:id="tcCurrency" prefWidth="76.0" text="Moneda" />
@@ -209,7 +209,7 @@
                      <graphic>
                                  </graphic>
                      <graphic>
-                        <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../images/settings.png" />
                            </image>
@@ -380,9 +380,9 @@
                                           <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="15.0">
                                              <children>
                                                 <Label text="Tipo Inversión" />
-                                                <MenuButton fx:id="mbInvestmentType" mnemonicParsing="false" prefWidth="150.0" styleClass="progressBar" textFill="WHITE">
+                                                <MenuButton fx:id="mbExpenseType" mnemonicParsing="false" prefWidth="150.0" styleClass="progressBar" textFill="WHITE">
                                                    <graphic>
-                                                      <TextField fx:id="tfAddInvestmentType" alignment="CENTER" disable="true" opacity="0.99" prefHeight="34.0" prefWidth="10.0" promptText="Seleccionar" styleClass="inputForm">
+                                                      <TextField fx:id="tfAddExpenseType" alignment="CENTER" disable="true" opacity="0.99" prefHeight="34.0" prefWidth="10.0" promptText="Seleccionar" styleClass="inputForm">
                                                          <tooltip>
                                                             <Tooltip text="Precio al que deseas vender cada unidad del producto  (en la zona de ventas este precio puede ser cambiado)" wrapText="true">
                                                                <font>
@@ -417,7 +417,7 @@
                                           <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="13.0">
                                              <children>
                                                 <Label text="Precio Compra" />
-                                                <TextField fx:id="tfAddInvestmentPrice" prefHeight="34.0" prefWidth="150.0" promptText="0.00" styleClass="inputForm">
+                                                <TextField fx:id="tfAddExpensePrice" prefHeight="34.0" prefWidth="150.0" promptText="0.00" styleClass="inputForm">
                                                    <tooltip>
                                                       <Tooltip text="Precio al que deseas vender cada unidad del producto  (en la zona de ventas este precio puede ser cambiado)" wrapText="true">
                                                          <font>
@@ -433,7 +433,7 @@
                                                 <Label text="Moneda" />
                                                 <MenuButton fx:id="mbCurrency" mnemonicParsing="false" prefWidth="150.0" styleClass="progressBar" textFill="WHITE">
                                                    <graphic>
-                                                      <TextField fx:id="tfAddInvestmentCurrency" alignment="CENTER" disable="true" opacity="0.99" prefHeight="34.0" prefWidth="10.0" promptText="Seleccionar" styleClass="inputForm">
+                                                      <TextField fx:id="tfAddExpenseCurrency" alignment="CENTER" disable="true" opacity="0.99" prefHeight="34.0" prefWidth="10.0" promptText="Seleccionar" styleClass="inputForm">
                                                          <tooltip>
                                                             <Tooltip text="Precio al que deseas vender cada unidad del producto  (en la zona de ventas este precio puede ser cambiado)" wrapText="true">
                                                                <font>
@@ -455,7 +455,7 @@
                                           <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="72.0">
                                              <children>
                                                 <Label text="Fecha" />
-                                                <DatePicker fx:id="dpAddInvestmentDate" editable="false" prefWidth="150.0" />
+                                                <DatePicker fx:id="dpAddExpenseDate" editable="false" prefWidth="150.0" />
                                              </children>
                                           </HBox>
                                         <Button mnemonicParsing="false" onAction="#addOrUpgradeProduct" prefHeight="33.0" prefWidth="331.0" styleClass="btnStock" text="Agregar o Actualizar">
@@ -484,7 +484,7 @@
                                                 <Insets top="5.0" />
                                              </VBox.margin>
                                           </Button>
-                                          <Label fx:id="lblAddDebugForm" alignment="TOP_LEFT" prefHeight="118.0" prefWidth="260.0" text="Puede actualizar las inversiones existentes si el ID coincide, para ello debe pinchar el elemento en la tabla y cambiar los valores que desee" textAlignment="CENTER" wrapText="true">
+                                          <Label fx:id="lblAddDebugForm" alignment="TOP_LEFT" prefHeight="118.0" prefWidth="260.0" text="Puede actualizar los gastos existentes si el ID coincide, para ello debe pinchar el elemento en la tabla y cambiar los valores que desee" textAlignment="CENTER" wrapText="true">
                                              <padding>
                                                 <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                              </padding>
@@ -513,7 +513,7 @@
                                           </ImageView>
                                        </graphic>
                                     </Button>
-                                    <Button layoutX="42.0" layoutY="483.0" mnemonicParsing="false" onAction="#removeInvestment" prefHeight="30.0" prefWidth="281.0" style="-fx-background-color: linear-gradient(to bottom, #eb5050, #ec3030);" styleClass="btnDelete" text="Eliminar Inversión" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                                    <Button layoutX="42.0" layoutY="483.0" mnemonicParsing="false" onAction="#removeExpense" prefHeight="30.0" prefWidth="281.0" style="-fx-background-color: linear-gradient(to bottom, #eb5050, #ec3030);" styleClass="btnDelete" text="Eliminar Inversión" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
                                        <graphic>
                                           <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                              <image>

@@ -1,6 +1,6 @@
 package com.marcosoft.storageSoftware.application.controller;
 
-import com.marcosoft.storageSoftware.application.dto.InvestmentDataTable;
+import com.marcosoft.storageSoftware.application.dto.ExpenseDataTable;
 import com.marcosoft.storageSoftware.application.dto.UserLogged;
 import com.marcosoft.storageSoftware.domain.model.*;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.*;
@@ -11,7 +11,6 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -26,15 +25,14 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
- * Controller for the Investment view.
- * Handles CRUD operations, filtering, and navigation for investments.
+ * The type Expense view controller.
  */
 @Lazy
 @Controller
-public class InvestmentViewController {
+public class ExpenseViewController {
 
     // Observable list for table data
-    private ObservableList<InvestmentDataTable> investmentList;
+    private ObservableList<ExpenseDataTable> expenseList;
     private Client client;
     private String registryZone;
 
@@ -42,8 +40,8 @@ public class InvestmentViewController {
     private final ParseDataTypes parseDataTypes;
     private final UserLogged userLogged;
     private final ClientServiceImpl clientService;
-    private final InvestmentServiceImpl investmentService;
-    private final InvestmentRegistryServiceImpl investmentRegistryService;
+    private final ExpenseServiceImpl expenseService;
+    private final ExpenseRegistryServiceImpl expenseRegistryService;
     private final SceneSwitcher sceneSwitcher;
     private final CurrencyServiceImpl currencyService;
     private final DisplayAlerts displayAlerts;
@@ -51,28 +49,32 @@ public class InvestmentViewController {
     private final ProductServiceImpl productService;
 
     /**
-     * Constructor for dependency injection.
-     * All required services and utilities are injected here.
+     * Instantiates a new Expense view controller.
+     *
      * @param productService the product service
      * @param generalRegistryService the general registry service
      * @param displayAlerts the display alerts
      * @param parseDataTypes the parse data types
      * @param userLogged the user logged
      * @param clientService the client service
-     * @param investmentService the investment service
+     * @param expenseService the expense service
      * @param currencyService the currency service
-     * @param investmentRegistryService the investment registry service
+     * @param expenseRegistryService the expense registry service
      * @param sceneSwitcher the scene switcher
      */
     @Lazy
-    public InvestmentViewController(ProductServiceImpl productService, GeneralRegistryServiceImpl generalRegistryService, DisplayAlerts displayAlerts, ParseDataTypes parseDataTypes, UserLogged userLogged, ClientServiceImpl clientService, InvestmentServiceImpl investmentService, CurrencyServiceImpl currencyService, InvestmentRegistryServiceImpl investmentRegistryService, SceneSwitcher sceneSwitcher) {
+    public ExpenseViewController(
+            ProductServiceImpl productService, GeneralRegistryServiceImpl generalRegistryService, DisplayAlerts displayAlerts,
+            ParseDataTypes parseDataTypes, UserLogged userLogged, ClientServiceImpl clientService, ExpenseServiceImpl expenseService,
+            CurrencyServiceImpl currencyService, ExpenseRegistryServiceImpl expenseRegistryService, SceneSwitcher sceneSwitcher
+    ) {
         this.currencyService = currencyService;
         this.productService = productService;
         this.generalRegistryService = generalRegistryService;
         this.displayAlerts = displayAlerts;
         this.sceneSwitcher = sceneSwitcher;
-        this.investmentService = investmentService;
-        this.investmentRegistryService = investmentRegistryService;
+        this.expenseService = expenseService;
+        this.expenseRegistryService = expenseRegistryService;
         this.clientService = clientService;
         this.userLogged = userLogged;
         this.parseDataTypes = parseDataTypes;
@@ -82,36 +84,33 @@ public class InvestmentViewController {
     @FXML
     private Label lblAddDebugForm, lblClientName;
     @FXML
-    private TextField tfAddProductName, tfAddProductAmount, tfId, tfAddInvestmentPrice, tfAddInvestmentCurrency, tfAddInvestmentType;
+    private TextField tfAddProductName, tfAddProductAmount, tfId, tfAddExpensePrice, tfAddExpenseCurrency, tfAddExpenseType;
     @FXML
     private TextField tfFilterId, tfFilterName, tfMinFilterPrice, tfMaxFilterPrice, tfMaxFilterAmount, tfMinFilterAmount;
     @FXML
-    private DatePicker dpAddInvestmentDate;
+    private DatePicker dpAddExpenseDate;
     @FXML
-    private MenuButton mbCurrency, mbInvestmentType;
-    @FXML
-    private Pagination paginator;
+    private MenuButton mbCurrency, mbExpenseType;
 
     @FXML
-    private TableView<InvestmentDataTable> tvInvestment;
+    private TableView<ExpenseDataTable> tvExpense;
     @FXML
-    private TableColumn<InvestmentDataTable, String> tcInvestmentName, tcTypeInvestment, tcCurrency;
+    private TableColumn<ExpenseDataTable, String> tcExpenseName, tcExpenseType, tcCurrency;
     @FXML
-    private TableColumn<InvestmentDataTable, Double> tcPrice;
+    private TableColumn<ExpenseDataTable, Double> tcPrice;
     @FXML
-    private TableColumn<InvestmentDataTable, Integer> tcAmount;
+    private TableColumn<ExpenseDataTable, Integer> tcAmount;
     @FXML
-    private TableColumn<InvestmentDataTable, Long> tcId;
+    private TableColumn<ExpenseDataTable, Long> tcId;
     @FXML
-    private TableColumn<InvestmentDataTable, LocalDate> tcDate;
+    private TableColumn<ExpenseDataTable, LocalDate> tcDate;
 
     /**
-     * Initializes the controller after its root element has been completely processed.
-     * Sets up table values, listeners, and default currencies.
+     * Initialize.
      */
     @FXML
     public void initialize() {
-        registryZone = "Inversiones";
+        registryZone = "Gastos";
         lblClientName.setText(userLogged.getName());
         client = clientService.getClientByName(userLogged.getName());
         Platform.runLater(() -> {
@@ -120,119 +119,103 @@ public class InvestmentViewController {
             setupTableSelectionListener();
             updateCurrencyMenu();
             initDpDefaultValue();
-            initMbInvestmentTypeItemsOnAction();
+            initMbExpenseTypeItemsOnAction();
         });
     }
 
-
-
-    /**
-     * Sets up listeners for filter and input text fields.
-     * Triggers table filtering and formatting.
-     */
     private void setupTextFieldListeners() {
-        tfFilterId.textProperty().addListener((obs, oldVal, newVal) -> filterInvestmentTable());
-        tfFilterName.textProperty().addListener((obs, oldVal, newVal) -> filterInvestmentTable());
-        tfMinFilterAmount.textProperty().addListener((obs, oldVal, newVal) -> filterInvestmentTable());
-        tfMaxFilterAmount.textProperty().addListener((obs, oldVal, newVal) -> filterInvestmentTable());
-        tfMinFilterPrice.textProperty().addListener((obs, oldVal, newVal) -> filterInvestmentTable());
-        tfAddInvestmentCurrency.textProperty().addListener((obs, oldVal, newVal) -> uppercaseCurrencyText());
+        tfFilterId.textProperty().addListener((obs, oldVal, newVal) -> filterExpenseTable());
+        tfFilterName.textProperty().addListener((obs, oldVal, newVal) -> filterExpenseTable());
+        tfMinFilterAmount.textProperty().addListener((obs, oldVal, newVal) -> filterExpenseTable());
+        tfMaxFilterAmount.textProperty().addListener((obs, oldVal, newVal) -> filterExpenseTable());
+        tfMinFilterPrice.textProperty().addListener((obs, oldVal, newVal) -> filterExpenseTable());
+        tfAddExpenseCurrency.textProperty().addListener((obs, oldVal, newVal) -> uppercaseCurrencyText());
     }
 
-    /**
-     * Converts the currency text to uppercase for consistency.
-     */
     private void uppercaseCurrencyText() {
-        tfAddInvestmentCurrency.setText(tfAddInvestmentCurrency.getText().toUpperCase());
+        tfAddExpenseCurrency.setText(tfAddExpenseCurrency.getText().toUpperCase());
     }
 
-    /**
-     * Sets up listener for table row selection.
-     * Populates form fields with selected investment data.
-     */
     private void setupTableSelectionListener() {
-        tvInvestment.getSelectionModel().selectedItemProperty().addListener((obs, oldSel, newSel) -> {
+        tvExpense.getSelectionModel().selectedItemProperty().addListener((obs, oldSel, newSel) -> {
             if (newSel != null) {
                 tfId.setText(newSel.getId() != null ? String.valueOf(newSel.getId()) : "");
                 tfAddProductName.setText(newSel.getInvestmentName());
                 tfAddProductAmount.setText(newSel.getAmount() != null ? String.valueOf(newSel.getAmount()) : "");
-                tfAddInvestmentPrice.setText(newSel.getPrice() != null ? String.valueOf(newSel.getPrice()) : "");
-                tfAddInvestmentCurrency.setText(newSel.getCurrency());
-                dpAddInvestmentDate.setValue(newSel.getReceivedDate());
+                tfAddExpensePrice.setText(newSel.getPrice() != null ? String.valueOf(newSel.getPrice()) : "");
+                tfAddExpenseCurrency.setText(newSel.getCurrency());
+                dpAddExpenseDate.setValue(newSel.getReceivedDate());
             }
         });
     }
 
-    private void initMbInvestmentTypeItemsOnAction() {
-        List<MenuItem> items = mbInvestmentType.getItems().stream().toList();
-        mbInvestmentType.getItems().clear();
+    private void initMbExpenseTypeItemsOnAction() {
+        List<MenuItem> items = mbExpenseType.getItems().stream().toList();
+        mbExpenseType.getItems().clear();
 
         for (MenuItem mi : items) {
-            mi.setOnAction(e -> tfAddInvestmentType.setText(mi.getText()));
-            mbInvestmentType.getItems().add(mi);
+            mi.setOnAction(e -> tfAddExpenseType.setText(mi.getText()));
+            mbExpenseType.getItems().add(mi);
         }
     }
 
     /**
-     * Loads investment data from the database and populates the table.
-     * Also sets up table columns and triggers filtering.
+     * Initialize table values.
      */
     public void initializeTableValues() {
-        investmentList = FXCollections.observableArrayList();
-        List<Investment> investmentsDB = investmentService.getAllInvestments();
-        investmentList.clear();
+        expenseList = FXCollections.observableArrayList();
+        List<Expense> investmentsDB = expenseService.getAllInvestments();
+        expenseList.clear();
 
-        for (Investment investment : investmentsDB) {
-            investmentList.add(new InvestmentDataTable(
-                    investment.getInvestmentId(),
-                    investment.getInvestmentName(),
-                    investment.getInvestmentType(),
-                    investment.getInvestmentPrice(),
-                    investment.getCurrency().getCurrencyName(),
-                    investment.getAmount(),
-                    investment.getReceivedDate()
+        for (Expense expense : investmentsDB) {
+            expenseList.add(new ExpenseDataTable(
+                    expense.getExpenseId(),
+                    expense.getExpenseName(),
+                    expense.getExpenseType(),
+                    expense.getExpensePrice(),
+                    expense.getCurrency().getCurrencyName(),
+                    expense.getAmount(),
+                    expense.getReceivedDate()
             ));
         }
 
         tcId.setCellValueFactory(new PropertyValueFactory<>("id"));
-        tcInvestmentName.setCellValueFactory(new PropertyValueFactory<>("investmentName"));
-        tcTypeInvestment.setCellValueFactory(new PropertyValueFactory<>("investmentType"));
+        tcExpenseName.setCellValueFactory(new PropertyValueFactory<>("expenseName"));
+        tcExpenseType.setCellValueFactory(new PropertyValueFactory<>("expenseType"));
         tcPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
         tcCurrency.setCellValueFactory(new PropertyValueFactory<>("currency"));
         tcAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
         tcDate.setCellValueFactory(new PropertyValueFactory<>("receivedDate"));
 
-        tvInvestment.setItems(investmentList);
-        filterInvestmentTable();
+        tvExpense.setItems(expenseList);
+        filterExpenseTable();
     }
 
     /**
-     * Adds or updates an investment record based on form input.
-     * Validates input fields and saves the investment.
-     * @param actionEvent the action event
+     * Add or upgrade product.
      */
     @FXML
-    public void addOrUpgradeProduct(ActionEvent actionEvent) {
+    public void addOrUpgradeProduct() {
         if (!validateAllFields()) {
             return;
         }
 
         Long investmentId = parseDataTypes.parseLong(tfId.getText());
         String investmentName = tfAddProductName.getText();
-        Double price = parseDataTypes.parseDouble(tfAddInvestmentPrice.getText());
+        Double price = parseDataTypes.parseDouble(tfAddExpensePrice.getText());
         Integer amount = parseDataTypes.parseInt(tfAddProductAmount.getText());
-        LocalDate receivedDate = dpAddInvestmentDate.getValue();
-        String currency = tfAddInvestmentCurrency.getText();
-        String investmentType = tfAddInvestmentType.getText();
+        LocalDate receivedDate = dpAddExpenseDate.getValue();
+        String currency = tfAddExpenseCurrency.getText();
+        String investmentType = tfAddExpenseType.getText();
         String registryType;
-        if (!investmentService.existsByInvestmentId(investmentId)) {
+        if (!expenseService.existsByInvestmentId(investmentId)) {
             registryType = "Adición";
         } else {
             registryType = "Actualización";
         }
 
-        //Add the investment to DB
-        Investment investment = new Investment(
+        //Add the expense to DB
+        Expense expense = new Expense(
                 investmentId,
                 investmentName,
                 price,
@@ -243,10 +226,10 @@ public class InvestmentViewController {
                 investmentType,
                 client
         );
-        investmentService.save(investment);
+        expenseService.save(expense);
         initializeTableValues();
 
-        Investment inv = investmentService
+        Expense inv = expenseService
                 .getByClientAndInvestmentNameAndInvestmentPriceAndCurrencyAndAmountAndReceivedDateAndInvestmentType(
                         client, investmentName, price, currencyService.getCurrencyByName(currency), amount, receivedDate, investmentType
                 );
@@ -262,10 +245,10 @@ public class InvestmentViewController {
             productService.save(product);
         }
 
-        //Add the investment registry to DB
-        InvestmentRegistry investmentRegistry = new InvestmentRegistry(
+        //Add the expense registry to DB
+        ExpenseRegistry expenseRegistry = new ExpenseRegistry(
                 null,
-                inv.getInvestmentId(),
+                inv.getExpenseId(),
                 investmentName,
                 price,
                 currency,
@@ -273,7 +256,7 @@ public class InvestmentViewController {
                 registryType,
                 LocalDateTime.now()
         );
-        investmentRegistryService.save(investmentRegistry);
+        expenseRegistryService.save(expenseRegistry);
 
         //Add the general registry to DB
         GeneralRegistry generalRegistry = new GeneralRegistry(
@@ -285,27 +268,23 @@ public class InvestmentViewController {
         );
         generalRegistryService.save(generalRegistry);
 
-        cleanForm(null);
+        cleanForm();
         updateCurrencyMenu();
     }
 
-    /**
-     * Validates all required fields before saving or updating an investment.
-     * Shows alerts in Spanish if validation fails.
-     */
     private boolean validateAllFields() {
         if (tfAddProductName.getText().isEmpty() ||
                 tfAddProductAmount.getText().isEmpty() ||
-                tfAddInvestmentType.getText().isEmpty() ||
-                tfAddInvestmentPrice.getText().isEmpty() ||
-                dpAddInvestmentDate.getValue() == null) {
+                tfAddExpenseType.getText().isEmpty() ||
+                tfAddExpensePrice.getText().isEmpty() ||
+                dpAddExpenseDate.getValue() == null) {
             displayAlerts.showAlert("Todos los campos son obligatorios.");
             return false;
         }
 
-        Double price = parseDataTypes.parseDouble(tfAddInvestmentPrice.getText());
+        Double price = parseDataTypes.parseDouble(tfAddExpensePrice.getText());
         Integer amount = parseDataTypes.parseInt(tfAddProductAmount.getText());
-        String currency = tfAddInvestmentCurrency.getText();
+        String currency = tfAddExpenseCurrency.getText();
 
         // Additional validations
         if (price == null || price <= 0) {
@@ -324,12 +303,10 @@ public class InvestmentViewController {
     }
 
     /**
-     * Removes the selected investment record from the database.
-     * Prompts user for confirmation before deletion (alert in Spanish).
-     * @param actionEvent the action event
+     * Remove investment.
      */
     @FXML
-    public void removeInvestment(ActionEvent actionEvent) {
+    public void removeExpense() {
         Long investmentId = parseDataTypes.parseLong(tfId.getText());
         String registryType = "Eliminación";
         if (investmentId == null) {
@@ -337,23 +314,23 @@ public class InvestmentViewController {
             return;
         }
 
-        if (displayAlerts.showConfirmationAlert("¿Está seguro que desea eliminar esta inversión?")) {
-            Investment investmentDB = investmentService.getInvestmentById(investmentId);
-            if (investmentDB != null) {
-                investmentService.deleteInvestmentById(investmentId);
+        if (displayAlerts.showConfirmationAlert("¿Está seguro que desea eliminar este gasto?")) {
+            Expense expenseDB = expenseService.getInvestmentById(investmentId);
+            if (expenseDB != null) {
+                expenseService.deleteInvestmentById(investmentId);
                 initializeTableValues();
 
-                InvestmentRegistry investmentRegistry = new InvestmentRegistry(
+                ExpenseRegistry expenseRegistry = new ExpenseRegistry(
                         null,
-                        investmentDB.getInvestmentId(),
-                        investmentDB.getInvestmentName(),
-                        investmentDB.getInvestmentPrice(),
-                        investmentDB.getCurrency().getCurrencyName(),
+                        expenseDB.getExpenseId(),
+                        expenseDB.getExpenseName(),
+                        expenseDB.getExpensePrice(),
+                        expenseDB.getCurrency().getCurrencyName(),
                         client,
                         registryType,
                         LocalDateTime.now()
                 );
-                investmentRegistryService.save(investmentRegistry);
+                expenseRegistryService.save(expenseRegistry);
 
                 //Add the general registry to DB
                 GeneralRegistry generalRegistry = new GeneralRegistry(
@@ -364,7 +341,7 @@ public class InvestmentViewController {
                         LocalDateTime.now()
                 );
                 generalRegistryService.save(generalRegistry);
-                cleanForm(null);
+                cleanForm();
             } else {
                 displayAlerts.showAlert("No hay ningún registro con ese ID");
             }
@@ -372,39 +349,34 @@ public class InvestmentViewController {
     }
 
     /**
-     * Clears all input fields in the investment form.
-     * @param actionEvent the action event
+     * Clean form.
      */
     @FXML
-    public void cleanForm(ActionEvent actionEvent) {
+    public void cleanForm() {
         tfId.clear();
-        tfAddInvestmentType.clear();
+        tfAddExpenseType.clear();
         tfAddProductName.clear();
         tfAddProductAmount.clear();
-        tfAddInvestmentPrice.clear();
-        dpAddInvestmentDate.setValue(LocalDate.now());
-        tfAddInvestmentCurrency.clear();
+        tfAddExpensePrice.clear();
+        dpAddExpenseDate.setValue(LocalDate.now());
+        tfAddExpenseCurrency.clear();
     }
 
     /**
-     * Clears all filter fields for investment table.
-     * @param actionEvent the action event
+     * Clean filters.
      */
     @FXML
-    public void cleanFilters(ActionEvent actionEvent) {
+    public void cleanFilters() {
         tfFilterId.clear();
         tfFilterName.clear();
         tfMinFilterAmount.clear();
         tfMaxFilterAmount.clear();
-        tfAddInvestmentCurrency.clear();
+        tfAddExpenseCurrency.clear();
         tfMinFilterPrice.clear();
         tfMaxFilterPrice.clear();
     }
 
-    /**
-     * Filters the investment table based on filter field values.
-     */
-    private void filterInvestmentTable() {
+    private void filterExpenseTable() {
         String id = tfFilterId.getText().trim();
         String name = tfFilterName.getText().trim().toLowerCase();
         Integer minAmount = parseDataTypes.parseInt(tfMinFilterAmount.getText());
@@ -412,7 +384,7 @@ public class InvestmentViewController {
         Double minPrice = parseDataTypes.parseDouble(tfMinFilterPrice.getText());
         Double maxPrice = parseDataTypes.parseDouble(tfMaxFilterPrice.getText());
 
-        Predicate<InvestmentDataTable> filter = investment -> {
+        Predicate<ExpenseDataTable> filter = investment -> {
             boolean matches = true;
 
             if (!id.isEmpty())
@@ -437,16 +409,13 @@ public class InvestmentViewController {
             return matches;
         };
 
-        ObservableList<InvestmentDataTable> filteredList = investmentList.stream()
+        ObservableList<ExpenseDataTable> filteredList = expenseList.stream()
                 .filter(filter)
                 .collect(Collectors.toCollection(FXCollections::observableArrayList));
 
-        tvInvestment.setItems(filteredList);
+        tvExpense.setItems(filteredList);
     }
 
-    /**
-     * Updates the currency menu with all available currencies from the database.
-     */
     private void updateCurrencyMenu() {
         mbCurrency.getItems().clear();
         List<Currency> currencyList = currencyService.getAllCurrencies();
@@ -458,31 +427,29 @@ public class InvestmentViewController {
 
         for (String currency : currencies) {
             MenuItem item = new MenuItem(currency);
-            item.setOnAction(e -> {
-                tfAddInvestmentCurrency.setText(currency);
-            });
+            item.setOnAction(e -> tfAddExpenseCurrency.setText(currency));
             mbCurrency.getItems().add(item);
         }
     }
 
     /**
-     * Populates form fields with the selected investment from the table.
-     * @param event the event
+     * Select inventory.
      */
     @FXML
-    public void selectInventory(Event event) {
-        InvestmentDataTable selectedInvestment = tvInvestment.getSelectionModel().getSelectedItem();
+    public void selectInventory() {
+        ExpenseDataTable selectedInvestment = tvExpense.getSelectionModel().getSelectedItem();
         tfId.setText(String.valueOf(selectedInvestment.getId()));
-        dpAddInvestmentDate.setValue(selectedInvestment.getReceivedDate());
+        dpAddExpenseDate.setValue(selectedInvestment.getReceivedDate());
         tfAddProductName.setText(selectedInvestment.getInvestmentName());
-        tfAddInvestmentType.setText(selectedInvestment.getInvestmentType());
+        tfAddExpenseType.setText(selectedInvestment.getInvestmentType());
         tfAddProductAmount.setText(String.valueOf(selectedInvestment.getAmount()));
-        tfAddInvestmentCurrency.setText(selectedInvestment.getCurrency());
-        tfAddInvestmentPrice.setText(String.valueOf(selectedInvestment.getPrice()));
+        tfAddExpenseCurrency.setText(selectedInvestment.getCurrency());
+        tfAddExpensePrice.setText(String.valueOf(selectedInvestment.getPrice()));
     }
 
     /**
-     * Navigates to the configuration view.
+     * Switch to configuration.
+     *
      * @param actionEvent the action event
      */
     @FXML
@@ -491,7 +458,8 @@ public class InvestmentViewController {
     }
 
     /**
-     * Navigates to the support view.
+     * Switch to support.
+     *
      * @param actionEvent the action event
      */
     @FXML
@@ -500,7 +468,8 @@ public class InvestmentViewController {
     }
 
     /**
-     * Navigates to the registry view.
+     * Switch to registry.
+     *
      * @param actionEvent the action event
      */
     @FXML
@@ -509,7 +478,8 @@ public class InvestmentViewController {
     }
 
     /**
-     * Navigates to the warehouse view.
+     * Switch to warehouse.
+     *
      * @param actionEvent the action event
      */
     @FXML
@@ -518,7 +488,8 @@ public class InvestmentViewController {
     }
 
     /**
-     * Navigates to the balance view.
+     * Switch to balance.
+     *
      * @param actionEvent the action event
      */
     @FXML
@@ -527,7 +498,8 @@ public class InvestmentViewController {
     }
 
     /**
-     * Navigates to the sell view.
+     * Switch to sell.
+     *
      * @param actionEvent the action event
      */
     @FXML
@@ -536,11 +508,8 @@ public class InvestmentViewController {
     }
 
 
-    /**
-     * Initializes the date picker with the current date.
-     */
     private void initDpDefaultValue() {
-        dpAddInvestmentDate.setValue(LocalDate.now());
+        dpAddExpenseDate.setValue(LocalDate.now());
     }
 
 }

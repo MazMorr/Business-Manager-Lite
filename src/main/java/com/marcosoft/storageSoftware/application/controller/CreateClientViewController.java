@@ -214,7 +214,7 @@ public class CreateClientViewController {
      * Alterna entre mostrar/ocultar la contraseña.
      */
     @FXML
-    public void showPassword(ActionEvent actionEvent) {
+    public void showPassword() {
         if (cbShowPassword.isSelected()) {
             // Mostrar contraseña en texto plano
             textFieldPassword.setText(passFieldPassword.getText());

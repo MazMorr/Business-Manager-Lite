@@ -32,7 +32,7 @@ public class AssignInvestmentViewController {
     private final UserLogged userLogged;
     private final ClientServiceImpl clientService;
     private final WarehouseServiceImpl warehouseService;
-    private final InvestmentServiceImpl investmentService;
+    private final ExpenseServiceImpl investmentService;
     private final ProductServiceImpl productService;
     private final DisplayAlerts displayAlerts;
     private final ParseDataTypes parseDataTypes;
@@ -57,7 +57,7 @@ public class AssignInvestmentViewController {
     public AssignInvestmentViewController(
             GeneralRegistryServiceImpl generalRegistryService, ParseDataTypes parseDataTypes, DisplayAlerts displayAlerts,
             InventoryServiceImpl inventoryService, UserLogged userLogged, WarehouseServiceImpl warehouseService,
-            ClientServiceImpl clientService, InvestmentServiceImpl investmentService, ProductServiceImpl productService,
+            ClientServiceImpl clientService, ExpenseServiceImpl investmentService, ProductServiceImpl productService,
             WarehouseRegistryServiceImpl warehouseRegistryService, WarehouseViewController warehouseViewController
     ) {
         this.productService = productService;
@@ -75,7 +75,7 @@ public class AssignInvestmentViewController {
 
     // FXML UI components
     @FXML
-    private MenuButton mbWarehouse, mbInvestment;
+    private MenuButton mbWarehouse, mbExpense;
     @FXML
     private TextField tfWarehouse, tfProduct, tfInvestment, tfAmount;
 
@@ -88,7 +88,7 @@ public class AssignInvestmentViewController {
         client = clientService.getClientByName(userLogged.getName());
         Platform.runLater(() -> {
             initMbWarehouse();
-            initMbInvestment();
+            initMbExpense();
         });
     }
 
@@ -100,11 +100,11 @@ public class AssignInvestmentViewController {
     @FXML
     public void assignAllProductAmount(ActionEvent actionEvent) {
         if (tfInvestment.getText().isEmpty()) {
-            displayAlerts.showAlert("Debe asignar una inversión primero");
+            displayAlerts.showAlert("Debe asignar un gasto primero");
         } else if (!investmentService.existsByInvestmentId(Long.parseLong(tfInvestment.getText()))) {
-            displayAlerts.showAlert("No se encontró el identificador de la inversión en la base de datos");
+            displayAlerts.showAlert("No se encontró el identificador del gasto en la base de datos");
         } else if (investmentService.getInvestmentById(parseDataTypes.parseLong(tfInvestment.getText())).getAmount() == 0) {
-            displayAlerts.showAlert("Esta inversión ha sido completamente asignada, debe seleccionar otra o reasignar los productos de esta");
+            displayAlerts.showAlert("Este gasto ha sido completamente asignado, debe seleccionar otra o reasignar los productos de esta");
         } else {
             tfAmount.setText(String.valueOf(investmentService.getInvestmentById(
                     Long.parseLong(tfInvestment.getText())).getLeftAmount())
@@ -138,13 +138,13 @@ public class AssignInvestmentViewController {
             long investmentId = Long.parseLong(tfInvestment.getText());
             int amountToAssign = Integer.parseInt(tfAmount.getText());
 
-            Investment investment = investmentService.getInvestmentById(investmentId);
+            Expense expense = investmentService.getInvestmentById(investmentId);
 
-            if (investment == null) {
-                displayAlerts.showAlert("No se encontró la inversión en la base de datos");
-            } else if (investment.getAmount() == 0) {
+            if (expense == null) {
+                displayAlerts.showAlert("No se encontró el gasto en la base de datos");
+            } else if (expense.getAmount() == 0) {
                 displayAlerts.showAlert("Esta inversión ha sido completamente asignada");
-            } else if (amountToAssign > investment.getAmount()) {
+            } else if (amountToAssign > expense.getAmount()) {
                 displayAlerts.showAlert("La cantidad excede el monto de la inversión");
             } else if (!warehouseExistsForClient()) {
                 displayAlerts.showAlert("No se encuentra el Almacén especificado");
@@ -177,9 +177,9 @@ public class AssignInvestmentViewController {
 
                 inventoryService.save(inventory);
 
-                int actualInvestmentAmount = investment.getLeftAmount() - amountToAssign;
-                investment.setLeftAmount(actualInvestmentAmount);
-                investmentService.save(investment);
+                int actualInvestmentAmount = expense.getLeftAmount() - amountToAssign;
+                expense.setLeftAmount(actualInvestmentAmount);
+                investmentService.save(expense);
 
 
                 LocalDateTime registryMoment = LocalDateTime.now();
@@ -222,17 +222,17 @@ public class AssignInvestmentViewController {
     /**
      * Initializes the investment menu with investments that have remaining amount.
      */
-    private void initMbInvestment() {
-        mbInvestment.getItems().clear();
-        List<Investment> investments = investmentService.getAllProductInvestmentsGreaterThanZeroByClient(client);
+    private void initMbExpense() {
+        mbExpense.getItems().clear();
+        List<Expense> expenses = investmentService.getAllProductInvestmentsGreaterThanZeroByClient(client);
 
-        for (Investment i : investments) {
+        for (Expense i : expenses) {
             MenuItem item = new MenuItem(String.valueOf(i.getInvestmentId()));
             item.setOnAction(e -> {
                 tfInvestment.setText(item.getText());
                 tfProduct.setText(i.getInvestmentName());
             });
-            mbInvestment.getItems().add(item);
+            mbExpense.getItems().add(item);
         }
     }
 

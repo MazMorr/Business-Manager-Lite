@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class InvestmentDataTable {
+public class ExpenseDataTable {
     private Long id;
     private String investmentName;
     private String investmentType;

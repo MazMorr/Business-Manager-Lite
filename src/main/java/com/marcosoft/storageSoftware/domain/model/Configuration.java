@@ -28,4 +28,7 @@ public class Configuration {
 
     @Column(name="language", unique = true)
     private String language;
+
+    @Column(name= "enabled_database_backup", unique = true)
+    private Boolean enabledDatabaseBackup;
 }

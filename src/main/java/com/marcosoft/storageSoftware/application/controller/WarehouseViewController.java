@@ -1,19 +1,17 @@
 package com.marcosoft.storageSoftware.application.controller;
 
-import com.marcosoft.storageSoftware.application.dto.InvestmentWarehouseDataTable;
+import com.marcosoft.storageSoftware.application.dto.ExpenseWarehouseDataTable;
 import com.marcosoft.storageSoftware.application.dto.UserLogged;
 import com.marcosoft.storageSoftware.application.dto.WarehouseDataTable;
 import com.marcosoft.storageSoftware.domain.model.Client;
+import com.marcosoft.storageSoftware.domain.model.Expense;
 import com.marcosoft.storageSoftware.domain.model.Inventory;
-import com.marcosoft.storageSoftware.domain.model.Investment;
 import com.marcosoft.storageSoftware.domain.model.Warehouse;
-import com.marcosoft.storageSoftware.domain.repository.InventoryRepository;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.ExpenseServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.InventoryServiceImpl;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.InvestmentServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.WarehouseServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
-import com.marcosoft.storageSoftware.infrastructure.util.ParseDataTypes;
 import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -42,44 +40,38 @@ public class WarehouseViewController {
     private final WarehouseServiceImpl warehouseService;
     private final UserLogged userLogged;
     private final SceneSwitcher sceneSwitcher;
-    private final ParseDataTypes parseDataTypes;
     private final DisplayAlerts displayAlerts;
     private final InventoryServiceImpl inventoryService;
     private final ClientServiceImpl clientService;
-    private final InvestmentServiceImpl investmentService;
+    private final ExpenseServiceImpl expenseService;
 
     /**
      * Constructor for dependency injection.
-     * @param investmentService the investment service
+     * @param expenseService the investment service
      * @param displayAlerts the display alerts
      * @param warehouseService the warehouse service
      * @param userLogged the user logged
      * @param sceneSwitcher the scene switcher
-     * @param parseDataTypes the parse data types
      * @param inventoryService the inventory service
      * @param clientService the client service
-     * @param inventoryRepository the inventory repository
      */
     public WarehouseViewController(
-            InvestmentServiceImpl investmentService, DisplayAlerts displayAlerts, WarehouseServiceImpl warehouseService,
-            UserLogged userLogged, SceneSwitcher sceneSwitcher, ParseDataTypes parseDataTypes,
-            InventoryServiceImpl inventoryService, ClientServiceImpl clientService,
-            InventoryRepository inventoryRepository
+            ExpenseServiceImpl expenseService, DisplayAlerts displayAlerts, WarehouseServiceImpl warehouseService,
+            UserLogged userLogged, SceneSwitcher sceneSwitcher, InventoryServiceImpl inventoryService,
+            ClientServiceImpl clientService
     ) {
         this.clientService = clientService;
-        this.investmentService = investmentService;
+        this.expenseService = expenseService;
         this.inventoryService = inventoryService;
-        this.parseDataTypes = parseDataTypes;
         this.sceneSwitcher = sceneSwitcher;
         this.displayAlerts = displayAlerts;
         this.userLogged = userLogged;
         this.warehouseService = warehouseService;
-        this.inventoryRepository = inventoryRepository;
     }
 
     // FXML UI components
     @FXML
-    private TableView<InvestmentWarehouseDataTable> tvInvestments;
+    private TableView<ExpenseWarehouseDataTable> tvExpenses;
     @FXML
     private TreeTableView<WarehouseDataTable> ttvWarehouse;
     @FXML
@@ -89,17 +81,16 @@ public class WarehouseViewController {
 
 
     @FXML
-    private TableColumn<InvestmentWarehouseDataTable, Long> tcIdInvestment;
+    private TableColumn<ExpenseWarehouseDataTable, Long> tcIdExpense;
     @FXML
-    private TableColumn<InvestmentWarehouseDataTable, String> tcProductName;
+    private TableColumn<ExpenseWarehouseDataTable, String> tcProductName;
     @FXML
-    private TableColumn<InvestmentWarehouseDataTable, Integer> tcProductAmount;
+    private TableColumn<ExpenseWarehouseDataTable, Integer> tcProductAmount;
     @FXML
-    private TableColumn<InvestmentWarehouseDataTable, LocalDate> tcProductDate;
+    private TableColumn<ExpenseWarehouseDataTable, LocalDate> tcProductDate;
 
     @FXML
-    private Label txtClientName;
-    private final InventoryRepository inventoryRepository;
+    private Label lblClientName;
 
     /**
      * Initializes the controller after its root element has been completely processed.
@@ -108,7 +99,7 @@ public class WarehouseViewController {
     @FXML
     public void initialize() {
         client = clientService.getClientByName(userLogged.getName());
-        txtClientName.setText(userLogged.getName());
+        lblClientName.setText(userLogged.getName());
         Platform.runLater(() -> {
             initTableValues();
             initTreeTable();
@@ -118,34 +109,34 @@ public class WarehouseViewController {
 
     /**
      * Loads investment data into the investments table.
-     * Populates the tvInvestments TableView with unassigned investments for the current client.
+     * Populates the tvExpenses TableView with unassigned investments for the current client.
      */
     public void initTableValues() {
         // Clear previous data
-        tvInvestments.getItems().clear();
+        tvExpenses.getItems().clear();
 
-        // Get all investments for the client with amount > 0 (not fully assigned)
-        List<Investment> investments = investmentService.getAllProductInvestmentsGreaterThanZeroByClient(client)
+        // Get all expenses for the client with amount > 0 (not fully assigned)
+        List<Expense> expenses = expenseService.getAllProductInvestmentsGreaterThanZeroByClient(client)
                 .stream().toList();
 
-        // Map investments to InvestmentWarehouseDataTable
-        List<InvestmentWarehouseDataTable> investmentData = investments.stream()
-                .map(inv -> new InvestmentWarehouseDataTable(
-                        inv.getInvestmentId(),
-                        inv.getInvestmentName(),
+        // Map expenses to ExpenseWarehouseDataTable
+        List<ExpenseWarehouseDataTable> investmentData = expenses.stream()
+                .map(inv -> new ExpenseWarehouseDataTable(
+                        inv.getExpenseId(),
+                        inv.getExpenseName(),
                         inv.getLeftAmount(),
                         inv.getReceivedDate()
                 ))
                 .toList();
 
         // Set up columns if not already set (optional, for safety)
-        tcIdInvestment.setCellValueFactory(new PropertyValueFactory<>("investmentId"));
-        tcProductName.setCellValueFactory(new PropertyValueFactory<>("investmentName"));
+        tcIdExpense.setCellValueFactory(new PropertyValueFactory<>("expenseId"));
+        tcProductName.setCellValueFactory(new PropertyValueFactory<>("expenseName"));
         tcProductAmount.setCellValueFactory(new PropertyValueFactory<>("productAmount"));
-        tcProductDate.setCellValueFactory(new PropertyValueFactory<>("investmentDate"));
+        tcProductDate.setCellValueFactory(new PropertyValueFactory<>("expenseDate"));
 
         // Add data to the table
-        tvInvestments.getItems().addAll(investmentData);
+        tvExpenses.getItems().addAll(investmentData);
     }
 
     /**
@@ -158,10 +149,10 @@ public class WarehouseViewController {
                 Añade tu primer almacén con el botón\s
                 '(+) Agregar Almacén'"""));
 
-        // Placeholder for TableView (tvInvestments)
-        tvInvestments.setPlaceholder(new Label("""
-                💼 Aquí aparecerán tus inversiones
-                Cuando registres inversiones de tipo producto
+        // Placeholder for TableView (tvExpenses)
+        tvExpenses.setPlaceholder(new Label("""
+                💼 Aquí aparecerán tus gastos
+                Cuando registres GASTOS de tipo PRODUCTO
                 y estas no hayan sido asignadas, se mostrarán aquí"""));
 
         // Common style for both placeholders
@@ -173,7 +164,7 @@ public class WarehouseViewController {
                 "-fx-padding: 10px; ";
 
         ttvWarehouse.getPlaceholder().setStyle(commonStyle);
-        tvInvestments.getPlaceholder().setStyle(commonStyle);
+        tvExpenses.getPlaceholder().setStyle(commonStyle);
     }
 
     /**
@@ -232,7 +223,7 @@ public class WarehouseViewController {
 
     /**
      * Opens the reassign product view in a new window.
-     * @throws WindowLoadException the window load exception
+     * @throws SceneSwitcher.WindowLoadException the window load exception
      */
     @FXML
     public void reassignProduct() throws SceneSwitcher.WindowLoadException {
@@ -241,7 +232,7 @@ public class WarehouseViewController {
 
     /**
      * Opens the add warehouse view in a new window.
-     * @throws WindowLoadException the window load exception
+     * @throws SceneSwitcher.WindowLoadException the window load exception
      */
     @FXML
     public void addWarehouse() throws SceneSwitcher.WindowLoadException {
@@ -273,24 +264,24 @@ public class WarehouseViewController {
 
     /**
      * Opens the assign investment view in a new window.
-     * @throws WindowLoadException the window load exception
+     * @throws SceneSwitcher.WindowLoadException the window load exception
      */
     @FXML
-    public void assignInvestment() throws SceneSwitcher.WindowLoadException {
-        sceneSwitcher.displayWindow("Asignar Inversión", "/images/RTS_logo.png", "/views/assignInvestmentView.fxml");
+    public void assignExpense() throws SceneSwitcher.WindowLoadException {
+        sceneSwitcher.displayWindow("Asignar Inversión", "/images/RTS_logo.png", "/views/assignExpenseView.fxml");
     }
 
     /**
      * Shows a placeholder alert for checking investments (feature coming soon).
      */
     @FXML
-    public void checkInvestment() {
+    public void checkExpense() {
         displayAlerts.showAlert("Próximamente");
     }
 
     /**
      * Opens the update warehouse view in a new window.
-     * @throws WindowLoadException the window load exception
+     * @throws SceneSwitcher.WindowLoadException the window load exception
      */
     @FXML
     public void updateWarehouse() throws SceneSwitcher.WindowLoadException {
@@ -299,7 +290,7 @@ public class WarehouseViewController {
 
     /**
      * Opens the change product name view in a new window.
-     * @throws WindowLoadException the window load exception
+     * @throws SceneSwitcher.WindowLoadException the window load exception
      */
     @FXML
     public void changeProductName() throws SceneSwitcher.WindowLoadException {
@@ -351,8 +342,8 @@ public class WarehouseViewController {
      * @param actionEvent the action event
      */
     @FXML
-    public void switchToInvestment(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/investmentView.fxml");
+    public void switchToExpense(ActionEvent actionEvent) {
+        sceneSwitcher.switchView(actionEvent, "/views/expenseView.fxml");
     }
 
     /**

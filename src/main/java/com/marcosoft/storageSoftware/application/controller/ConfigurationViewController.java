@@ -158,8 +158,8 @@ public class ConfigurationViewController {
      * @param actionEvent the action event
      */
     @FXML
-    public void switchToInvestment(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/investmentView.fxml");
+    public void switchToExpense(ActionEvent actionEvent) {
+        sceneSwitcher.switchView(actionEvent, "/views/expenseView.fxml");
     }
 
     /**

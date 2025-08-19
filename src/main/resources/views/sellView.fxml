@@ -172,12 +172,12 @@
             </HBox>
             <VBox styleClass="index" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="80.0">
                <children>
-                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToInvestment" styleClass="btnIndex" text="Inversiones">
+                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToExpense" styleClass="btnIndex" text="Gastos">
                      <font>
                         <Font name="System Bold" size="17.0" />
                      </font>
                      <graphic>
-                        <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
+                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
                            <image>
                               <Image url="@../images/goods.png" />
                            </image>
@@ -196,7 +196,7 @@
                         <Font name="System Bold" size="17.0" />
                      </font>
                      <graphic>
-                        <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
+                        <ImageView fitHeight="37.0" fitWidth="40.0" pickOnBounds="true">
                            <image>
                               <Image url="@../images/purchase.png" />
                            </image>
@@ -215,7 +215,7 @@
                         <Font name="System Bold" size="17.0" />
                      </font>
                      <graphic>
-                        <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
+                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
                            <image>
                               <Image url="@../images/warehouse.png" />
                            </image>
@@ -237,7 +237,7 @@
                         <Insets />
                      </VBox.margin>
                      <graphic>
-                        <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
+                        <ImageView fitHeight="40.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../images/monitoring.png" />
                            </image>
@@ -256,7 +256,7 @@
                         <Font name="System Bold" size="17.0" />
                      </font>
                      <graphic>
-                        <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
+                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
                            <image>
                               <Image url="@../images/interest-rate.png" />
                            </image>
@@ -275,7 +275,7 @@
                         <Font name="System Bold" size="17.0" />
                      </font>
                      <graphic>
-                        <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true">
+                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
                            <image>
                               <Image url="@../images/support.png" />
                            </image>
@@ -293,7 +293,7 @@
             </VBox>
             <Button alignment="CENTER_LEFT" mnemonicParsing="false" onAction="#switchToConfiguration" prefHeight="60.0" styleClass="btnIndex" text="Ajustes" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
                <graphic>
-                  <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../images/settings.png" />
                      </image>

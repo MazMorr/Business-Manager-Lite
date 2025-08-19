@@ -2,10 +2,10 @@ package com.marcosoft.storageSoftware.infrastructure.service.impl;
 
 import com.marcosoft.storageSoftware.domain.model.Client;
 import com.marcosoft.storageSoftware.domain.model.Currency;
-import com.marcosoft.storageSoftware.domain.model.Investment;
+import com.marcosoft.storageSoftware.domain.model.Expense;
 import com.marcosoft.storageSoftware.domain.repository.CurrencyRepository;
-import com.marcosoft.storageSoftware.domain.repository.InvestmentRepository;
-import com.marcosoft.storageSoftware.domain.service.InvestmentService;
+import com.marcosoft.storageSoftware.domain.repository.ExpenseRepository;
+import com.marcosoft.storageSoftware.domain.service.ExpenseService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,19 +16,19 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
-public class InvestmentServiceImpl implements InvestmentService {
+public class ExpenseServiceImpl implements ExpenseService {
 
     private static final String CUP = "CUP";
     private static final String MLC = "MLC";
     private static final String USD = "USD";
     private static final String EUR = "EUR";
 
-    private final InvestmentRepository investmentRepository;
+    private final ExpenseRepository expenseRepository;
     private final CurrencyRepository currencyRepository;
     private Map<String, Double> currencyRatesCache = new ConcurrentHashMap<>();
 
-    public InvestmentServiceImpl(CurrencyRepository currencyRepository, InvestmentRepository investmentRepository) {
-        this.investmentRepository = investmentRepository;
+    public ExpenseServiceImpl(CurrencyRepository currencyRepository, ExpenseRepository expenseRepository) {
+        this.expenseRepository = expenseRepository;
         this.currencyRepository = currencyRepository;
         initializeCurrencyCache();
     }
@@ -42,54 +42,54 @@ public class InvestmentServiceImpl implements InvestmentService {
 
     @Override
     @Transactional
-    public Investment save(Investment investment) {
-        return investmentRepository.save(investment);
+    public Expense save(Expense expense) {
+        return expenseRepository.save(expense);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Investment getInvestmentById(Long id) {
-        return investmentRepository.findById(id).orElse(null);
+    public Expense getInvestmentById(Long id) {
+        return expenseRepository.findById(id).orElse(null);
     }
 
     @Override
-    public List<Investment> getAllInvestments() {
-        return (List<Investment>) investmentRepository.findAll();
+    public List<Expense> getAllInvestments() {
+        return (List<Expense>) expenseRepository.findAll();
     }
 
     @Override
     @Transactional
     public void deleteInvestmentById(Long id) {
-        investmentRepository.deleteById(id);
+        expenseRepository.deleteById(id);
     }
 
     @Override
     public boolean existsByInvestmentId(Long investmentId) {
-        return investmentRepository.existsByInvestmentId(investmentId);
+        return expenseRepository.existsByInvestmentId(investmentId);
     }
 
     @Override
-    public Investment getByClientAndInvestmentNameAndInvestmentPriceAndCurrencyAndAmountAndReceivedDateAndInvestmentType(Client client, String investmentName, Double investmentPrice, Currency currency, Integer amount, LocalDate receivedDate, String investmentType) {
-        return investmentRepository.findByClientAndInvestmentNameAndInvestmentPriceAndCurrencyAndAmountAndReceivedDateAndInvestmentType(client, investmentName, investmentPrice, currency, amount, receivedDate, investmentType);
+    public Expense getByClientAndInvestmentNameAndInvestmentPriceAndCurrencyAndAmountAndReceivedDateAndInvestmentType(Client client, String investmentName, Double investmentPrice, Currency currency, Integer amount, LocalDate receivedDate, String investmentType) {
+        return expenseRepository.findByClientAndInvestmentNameAndInvestmentPriceAndCurrencyAndAmountAndReceivedDateAndInvestmentType(client, investmentName, investmentPrice, currency, amount, receivedDate, investmentType);
     }
 
     @Override
-    public List<Investment> getAllInvestmentsByClientAndAmountGreaterThanZeroAndInvestmentType(Client client, String investmentType) {
-        return investmentRepository.findAllInvestmentsByClientAndAmountGreaterThanAndInvestmentType(client, 0, investmentType);
+    public List<Expense> getAllInvestmentsByClientAndAmountGreaterThanZeroAndInvestmentType(Client client, String investmentType) {
+        return expenseRepository.findAllInvestmentsByClientAndAmountGreaterThanAndInvestmentType(client, 0, investmentType);
     }
 
     @Override
-    public List<Investment> getAllProductInvestmentsGreaterThanZeroByClient(Client client) {
-        return investmentRepository.findByClientAndLeftAmountGreaterThanAndInvestmentType(client, 0, "Producto");
+    public List<Expense> getAllProductInvestmentsGreaterThanZeroByClient(Client client) {
+        return expenseRepository.findByClientAndLeftAmountGreaterThanAndInvestmentType(client, 0, "Producto");
     }
 
     @Override
-    public List<Investment> getAllInvestmentsByLeftAmountGreaterThanAndClient(Integer leftAmount, Client client) {
-        return investmentRepository.findByLeftAmountGreaterThanAndClient(leftAmount, client);
+    public List<Expense> getAllInvestmentsByLeftAmountGreaterThanAndClient(Integer leftAmount, Client client) {
+        return expenseRepository.findByLeftAmountGreaterThanAndClient(leftAmount, client);
     }
 
-    public List<Investment> getNonZeroInvestmentsByClient(Client client) {
-        return investmentRepository.findByLeftAmountGreaterThanAndClient(0, client);
+    public List<Expense> getNonZeroInvestmentsByClient(Client client) {
+        return expenseRepository.findByLeftAmountGreaterThanAndClient(0, client);
     }
 
     public Double getTotalRentExpense(Client client, LocalDate initDate, LocalDate endDate, Currency currency) {
@@ -121,12 +121,12 @@ public class InvestmentServiceImpl implements InvestmentService {
         amounts.put(USD, 0.0);
         amounts.put(EUR, 0.0);
 
-        investmentRepository.findAllInvestmentsByClientAndInvestmentType(client, investmentType)
+        expenseRepository.findAllInvestmentsByClientAndInvestmentType(client, investmentType)
                 .stream()
                 .filter(inv -> isWithinDateRange(inv.getReceivedDate(), initDate, endDate))
                 .forEach(inv -> {
                     String curr = inv.getCurrency().getCurrencyName();
-                    amounts.merge(curr, inv.getInvestmentPrice(), Double::sum);
+                    amounts.merge(curr, inv.getExpensePrice(), Double::sum);
                 });
 
         return convertToTargetCurrency(amounts, currency);

@@ -20,28 +20,13 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-/**
- * The type Registry view controller.
- */
 @Lazy
 @Controller
 public class RegistryViewController {
 
-    /**
-     * The General registry data tables.
-     */
     ObservableList<GeneralRegistryDataTable> generalRegistryDataTables;
-    /**
-     * The Investment registry data tables.
-     */
-    ObservableList<InvestmentRegistryDataTable> investmentRegistryDataTables;
-    /**
-     * The Sell registry data tables.
-     */
+    ObservableList<ExpenseRegistryDataTable> expenseRegistryDataTables;
     ObservableList<SellRegistryDataTable> sellRegistryDataTables;
-    /**
-     * The Warehouse registry data tables.
-     */
     ObservableList<WarehouseRegistryDataTable> warehouseRegistryDataTables;
 
     private Client client;
@@ -53,29 +38,17 @@ public class RegistryViewController {
     private final SellRegistryServiceImpl sellRegistryService;
     private final GeneralRegistryServiceImpl generalRegistryService;
     private final WarehouseRegistryServiceImpl warehouseRegistryService;
-    private final InvestmentRegistryServiceImpl investmentRegistryService;
+    private final ExpenseRegistryServiceImpl expenseRegistryService;
     private final DisplayAlerts displayAlerts;
 
-    /**
-     * Instantiates a new Registry view controller.
-     *
-     * @param investmentRegistryService the investment registry service
-     * @param sellRegistryService the sell registry service
-     * @param generalRegistryService the general registry service
-     * @param warehouseRegistryService the warehouse registry service
-     * @param userLogged the user logged
-     * @param clientService the client service
-     * @param sceneSwitcher the scene switcher
-     * @param displayAlerts the display alerts
-     */
     public RegistryViewController(
-            InvestmentRegistryServiceImpl investmentRegistryService, SellRegistryServiceImpl sellRegistryService,
+            ExpenseRegistryServiceImpl expenseRegistryService, SellRegistryServiceImpl sellRegistryService,
             GeneralRegistryServiceImpl generalRegistryService, WarehouseRegistryServiceImpl warehouseRegistryService,
             UserLogged userLogged, ClientServiceImpl clientService, SceneSwitcher sceneSwitcher, DisplayAlerts displayAlerts
     ) {
         this.userLogged = userLogged;
         this.displayAlerts = displayAlerts;
-        this.investmentRegistryService = investmentRegistryService;
+        this.expenseRegistryService = expenseRegistryService;
         this.sellRegistryService = sellRegistryService;
         this.warehouseRegistryService = warehouseRegistryService;
         this.generalRegistryService = generalRegistryService;
@@ -91,15 +64,15 @@ public class RegistryViewController {
     @FXML
     private TableColumn<GeneralRegistryDataTable, String> tcGeneralRegistryType, tcGeneralRegistryZone;
 
-    //Investment Registry Table
+    //Expense Registry Table
     @FXML
-    private TableView<InvestmentRegistryDataTable> tvInvestment;
+    private TableView<ExpenseRegistryDataTable> tvExpense;
     @FXML
-    private TableColumn<InvestmentRegistryDataTable, String> tcInvestmentName, tcInvestmentPriceCurrency, tcInvestmentRegistryType;
+    private TableColumn<ExpenseRegistryDataTable, String> tcExpenseName, tcExpensePriceCurrency, tcExpenseRegistryType;
     @FXML
-    private TableColumn<InvestmentRegistryDataTable, Long> tcIdInvestment;
+    private TableColumn<ExpenseRegistryDataTable, Long> tcIdExpense;
     @FXML
-    private TableColumn<InvestmentRegistryDataTable, LocalDateTime> tcInvestmentRegistryDateTime;
+    private TableColumn<ExpenseRegistryDataTable, LocalDateTime> tcExpenseRegistryDateTime;
 
 
     //Sell Registry Table
@@ -133,9 +106,6 @@ public class RegistryViewController {
     @FXML
     private TabPane tbpRegistry;
 
-    /**
-     * Initialize.
-     */
     @FXML
     public void initialize() {
         client = clientService.getClientByName(userLogged.getName());
@@ -159,7 +129,7 @@ public class RegistryViewController {
         if (selectedTab.equals(tabGeneral)) {
             initGeneralRegistryTableValues();
         } else if (selectedTab.equals(tabInvestment)) {
-            initInvestmentRegistryTableValues();
+            initExpenseRegistryTableValues();
         } else if (selectedTab.equals(tabSell)) {
             initSellRegistryTableValues();
         } else if (selectedTab.equals(tabWarehouse)) {
@@ -290,40 +260,40 @@ public class RegistryViewController {
         tvSell.setItems(sellRegistryDataTables);
     }
 
-    private void initInvestmentRegistryTableValues() {
+    private void initExpenseRegistryTableValues() {
         try {
-            investmentRegistryDataTables = FXCollections.observableArrayList();
-            List<InvestmentRegistry> investmentRegistries = investmentRegistryService.getAllInvestmentRegistryByClient(client);
+            expenseRegistryDataTables = FXCollections.observableArrayList();
+            List<ExpenseRegistry> investmentRegistries = expenseRegistryService.getAllInvestmentRegistryByClient(client);
 
             // Ordenar por fecha más reciente primero
             investmentRegistries.sort((r1, r2) -> r2.getRegistryDateTime().compareTo(r1.getRegistryDateTime()));
 
-            investmentRegistryDataTables.clear();
+            expenseRegistryDataTables.clear();
 
-            for (InvestmentRegistry investmentRegistry : investmentRegistries) {
+            for (ExpenseRegistry expenseRegistry : investmentRegistries) {
                 // Formatear el precio y moneda
                 String priceCurrency = String.format("%.2f %s",
-                        investmentRegistry.getInvestmentPrice(),
-                        investmentRegistry.getCurrency());
+                        expenseRegistry.getInvestmentPrice(),
+                        expenseRegistry.getCurrency());
 
                 // Agregar a la lista observable
-                investmentRegistryDataTables.add(new InvestmentRegistryDataTable(
-                        investmentRegistry.getRegistryType(),
-                        investmentRegistry.getRegistryDateTime(),
-                        investmentRegistry.getInvestmentId(),
-                        investmentRegistry.getInvestmentName(),
+                expenseRegistryDataTables.add(new ExpenseRegistryDataTable(
+                        expenseRegistry.getRegistryType(),
+                        expenseRegistry.getRegistryDateTime(),
+                        expenseRegistry.getInvestmentId(),
+                        expenseRegistry.getInvestmentName(),
                         priceCurrency
                 ));
             }
 
-            tcInvestmentRegistryType.setCellValueFactory(new PropertyValueFactory<>("registryType"));
-            tcInvestmentRegistryDateTime.setCellValueFactory(new PropertyValueFactory<>("registryDate"));
-            tcIdInvestment.setCellValueFactory(new PropertyValueFactory<>("investmentId"));
-            tcInvestmentName.setCellValueFactory(new PropertyValueFactory<>("investmentName"));
-            tcInvestmentPriceCurrency.setCellValueFactory(new PropertyValueFactory<>("buyPriceAndCurrency"));
+            tcExpenseRegistryType.setCellValueFactory(new PropertyValueFactory<>("registryType"));
+            tcExpenseRegistryDateTime.setCellValueFactory(new PropertyValueFactory<>("registryDate"));
+            tcIdExpense.setCellValueFactory(new PropertyValueFactory<>("expenseId"));
+            tcExpenseName.setCellValueFactory(new PropertyValueFactory<>("expenseName"));
+            tcExpensePriceCurrency.setCellValueFactory(new PropertyValueFactory<>("buyPriceAndCurrency"));
 
             // Formatear LocalDateTime
-            tcInvestmentRegistryDateTime.setCellFactory(column -> new TableCell<>() {
+            tcExpenseRegistryDateTime.setCellFactory(column -> new TableCell<>() {
                 @Override
                 protected void updateItem(LocalDateTime item, boolean empty) {
                     super.updateItem(item, empty);
@@ -335,7 +305,7 @@ public class RegistryViewController {
                 }
             });
 
-            tvInvestment.setItems(investmentRegistryDataTables);
+            tvExpense.setItems(expenseRegistryDataTables);
 
         } catch (Exception e) {
             displayAlerts.showError("Ha ocurrido un error: " + e.getMessage());
@@ -343,61 +313,31 @@ public class RegistryViewController {
     }
 
 
-    /**
-     * Switch to configuration.
-     *
-     * @param actionEvent the action event
-     */
     @FXML
     public void switchToConfiguration(ActionEvent actionEvent) {
         sceneSwitcher.switchView(actionEvent, "/views/configurationView.fxml");
     }
 
-    /**
-     * Switch to support.
-     *
-     * @param actionEvent the action event
-     */
     @FXML
     public void switchToSupport(ActionEvent actionEvent) {
         sceneSwitcher.switchView(actionEvent, "/views/supportView.fxml");
     }
 
-    /**
-     * Switch to investment.
-     *
-     * @param actionEvent the action event
-     */
     @FXML
-    public void switchToInvestment(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/investmentView.fxml");
+    public void switchToExpense(ActionEvent actionEvent) {
+        sceneSwitcher.switchView(actionEvent, "/views/expenseView.fxml");
     }
 
-    /**
-     * Switch to warehouse.
-     *
-     * @param actionEvent the action event
-     */
     @FXML
     public void switchToWarehouse(ActionEvent actionEvent) {
         sceneSwitcher.switchView(actionEvent, "/views/warehouseView.fxml");
     }
 
-    /**
-     * Switch to balance.
-     *
-     * @param actionEvent the action event
-     */
     @FXML
     public void switchToBalance(ActionEvent actionEvent) {
         sceneSwitcher.switchView(actionEvent, "/views/balanceView.fxml");
     }
 
-    /**
-     * Switch to sell.
-     *
-     * @param actionEvent the action event
-     */
     @FXML
     public void switchToSell(ActionEvent actionEvent) {
         sceneSwitcher.switchView(actionEvent, "/views/sellView.fxml");
