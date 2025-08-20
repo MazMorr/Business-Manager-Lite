@@ -8,11 +8,12 @@ import com.marcosoft.storageSoftware.infrastructure.service.impl.CurrencyService
 import com.marcosoft.storageSoftware.infrastructure.service.impl.InventoryServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.ProductServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.WarehouseServiceImpl;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 
-
+@Lazy
 @Component
 public class SellFieldsValidator {
 

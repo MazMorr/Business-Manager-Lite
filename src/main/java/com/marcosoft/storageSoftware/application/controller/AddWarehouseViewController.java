@@ -31,17 +31,6 @@ public class AddWarehouseViewController {
     private final GeneralRegistryServiceImpl generalRegistryService;
     private final InventoryServiceImpl inventoryService;
 
-    /**
-     * Constructor for dependency injection.
-     * @param inventoryService the inventory service
-     * @param warehouseViewController the warehouse view controller
-     * @param warehouseRegistryService the warehouse registry service
-     * @param generalRegistryService the general registry service
-     * @param displayAlerts the display alerts
-     * @param warehouseService the warehouse service
-     * @param userLogged the user logged
-     */
-    @Lazy
     public AddWarehouseViewController(
             InventoryServiceImpl inventoryService, WarehouseViewController warehouseViewController,
             WarehouseRegistryServiceImpl warehouseRegistryService, GeneralRegistryServiceImpl generalRegistryService,

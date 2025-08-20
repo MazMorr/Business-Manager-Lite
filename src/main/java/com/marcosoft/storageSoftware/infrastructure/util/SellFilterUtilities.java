@@ -3,12 +3,14 @@ package com.marcosoft.storageSoftware.infrastructure.util;
 import com.marcosoft.storageSoftware.domain.model.Inventory;
 import com.marcosoft.storageSoftware.domain.model.Product;
 import com.marcosoft.storageSoftware.domain.model.SellFilterCriteria;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Lazy
 @Component
 public class SellFilterUtilities {
 
