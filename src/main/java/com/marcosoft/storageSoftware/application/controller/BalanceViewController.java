@@ -3,7 +3,6 @@ package com.marcosoft.storageSoftware.application.controller;
 import com.marcosoft.storageSoftware.application.dto.UserLogged;
 import com.marcosoft.storageSoftware.domain.model.Client;
 import com.marcosoft.storageSoftware.domain.model.Currency;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.CurrencyServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.ExpenseServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.SellRegistryServiceImpl;
@@ -40,18 +39,15 @@ public class BalanceViewController {
     private final UserLogged userLogged;
     private final DisplayAlerts displayAlerts;
     private final SellRegistryServiceImpl sellRegistryService;
-    private final ClientServiceImpl clientService;
     private final CurrencyServiceImpl currencyService;
     private final ExpenseServiceImpl expenseService;
 
     public BalanceViewController(
             DisplayAlerts displayAlerts, UserLogged userLogged, SceneSwitcher sceneSwitcher, ExpenseServiceImpl expenseService,
-            SellRegistryServiceImpl sellRegistryService, ClientServiceImpl clientService, CurrencyServiceImpl currencyService
-
+            SellRegistryServiceImpl sellRegistryService, CurrencyServiceImpl currencyService
     ) {
         this.sceneSwitcher = sceneSwitcher;
         this.currencyService = currencyService;
-        this.clientService = clientService;
         this.expenseService = expenseService;
         this.sellRegistryService = sellRegistryService;
         this.displayAlerts = displayAlerts;
@@ -114,7 +110,7 @@ public class BalanceViewController {
         startDate = LocalDate.now().minusMonths(1);
         endDate = LocalDate.now();
         currency = currencyService.getCurrencyByName("CUP");
-        client = clientService.getClientByName(userLogged.getName());
+        client = userLogged.getClient();
         lblClientName.setText(client.getClientName());
     }
 

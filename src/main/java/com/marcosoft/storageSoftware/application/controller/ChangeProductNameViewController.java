@@ -4,7 +4,6 @@ import com.marcosoft.storageSoftware.application.dto.UserLogged;
 import com.marcosoft.storageSoftware.domain.model.Client;
 import com.marcosoft.storageSoftware.domain.model.GeneralRegistry;
 import com.marcosoft.storageSoftware.domain.model.Product;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.GeneralRegistryServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.ProductServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
@@ -32,7 +31,6 @@ public class ChangeProductNameViewController {
 
     // Service and utility dependencies
     private final UserLogged userLogged;
-    private final ClientServiceImpl clientService;
     private final ProductServiceImpl productService;
     private final DisplayAlerts displayAlerts;
     private final GeneralRegistryServiceImpl generalRegistryService;
@@ -44,20 +42,17 @@ public class ChangeProductNameViewController {
      * @param generalRegistryService the general registry service
      * @param displayAlerts the display alerts
      * @param userLogged the user logged
-     * @param clientService the client service
      * @param productService the product service
      */
     @Lazy
     public ChangeProductNameViewController(
             WarehouseViewController warehouseViewController, GeneralRegistryServiceImpl generalRegistryService,
-            DisplayAlerts displayAlerts, UserLogged userLogged, ClientServiceImpl clientService,
-            ProductServiceImpl productService
+            DisplayAlerts displayAlerts, UserLogged userLogged, ProductServiceImpl productService
     ) {
         this.productService = productService;
         this.warehouseViewController = warehouseViewController;
         this.generalRegistryService = generalRegistryService;
         this.displayAlerts = displayAlerts;
-        this.clientService = clientService;
         this.userLogged = userLogged;
     }
 
@@ -73,7 +68,7 @@ public class ChangeProductNameViewController {
      */
     @FXML
     private void initialize() {
-        client = clientService.getClientByName(userLogged.getName());
+        client = userLogged.getClient();
         Platform.runLater(this::initMbActualName);
     }
 

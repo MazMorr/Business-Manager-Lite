@@ -5,7 +5,6 @@ import com.marcosoft.storageSoftware.domain.model.Client;
 import com.marcosoft.storageSoftware.domain.model.Inventory;
 import com.marcosoft.storageSoftware.domain.model.Product;
 import com.marcosoft.storageSoftware.domain.model.Warehouse;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.InventoryServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.ProductServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.WarehouseServiceImpl;
@@ -19,7 +18,9 @@ import javafx.stage.Stage;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * The type Warning manager view controller.
@@ -31,7 +32,6 @@ public class WarningManagerViewController {
 
     private final InventoryServiceImpl inventoryService;
     private final UserLogged userLogged;
-    private final ClientServiceImpl clientService;
     private final WarehouseServiceImpl warehouseService;
     private final ProductServiceImpl productService;
     private final DisplayAlerts displayAlerts;
@@ -41,7 +41,6 @@ public class WarningManagerViewController {
      * Instantiates a new Warning manager view controller.
      *
      * @param inventoryService the inventory service
-     * @param clientService the client service
      * @param userLogged the user logged
      * @param warehouseService the warehouse service
      * @param displayAlerts the display alerts
@@ -49,7 +48,7 @@ public class WarningManagerViewController {
      * @param sellViewController the sell view controller
      */
     public WarningManagerViewController(
-            InventoryServiceImpl inventoryService, ClientServiceImpl clientService, UserLogged userLogged,
+            InventoryServiceImpl inventoryService, UserLogged userLogged,
             WarehouseServiceImpl warehouseService, DisplayAlerts displayAlerts, ProductServiceImpl productService,
             SellViewController sellViewController
     ) {
@@ -58,7 +57,6 @@ public class WarningManagerViewController {
         this.displayAlerts = displayAlerts;
         this.productService = productService;
         this.warehouseService = warehouseService;
-        this.clientService = clientService;
         this.inventoryService = inventoryService;
     }
 
@@ -70,7 +68,7 @@ public class WarningManagerViewController {
 
     @FXML
     private void initialize() {
-        client = clientService.getClientByName(userLogged.getName());
+        client = userLogged.getClient();
         Platform.runLater(() -> {
             initMbProducts();
             initTfProductListener();

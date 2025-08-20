@@ -33,7 +33,7 @@ public class ClientViewController {
 
     // Dependencies injected via constructor
     private final SpringFXMLLoader springFXMLLoader;
-    private final ClientServiceImpl clientServiceImpl;
+    private final ClientServiceImpl clientService;
     private final UserLogged userLogged;
     private final LicenseValidator licenseValidator;
     private final SceneSwitcher sceneSwitcher;
@@ -51,7 +51,7 @@ public class ClientViewController {
     ) {
         this.userLogged = userLogged;
         this.sceneSwitcher = sceneSwitcher;
-        this.clientServiceImpl = clientService;
+        this.clientService = clientService;
         this.licenseValidator = licenseValidator;
         this.springFXMLLoader = springFXMLLoader;
     }
@@ -81,7 +81,7 @@ public class ClientViewController {
 
         try {
             // Authenticate user credentials (ahora verifica directamente)
-            Client client = clientServiceImpl.authenticate(username, password);
+            Client client = clientService.authenticate(username, password);
 
             if (client == null) {
                 showError("Usuario o contraseña incorrecta.");
@@ -94,7 +94,7 @@ public class ClientViewController {
             }
 
             // Mark client as active in the database
-            clientServiceImpl.updateIsClientActiveByClientName(true, username);
+            clientService.updateIsClientActiveByClientName(true, username);
             userLogged.setName(username);
 
             // Load the support view
@@ -115,7 +115,7 @@ public class ClientViewController {
             // Handle window close event
             stage.setOnCloseRequest(e -> {
                 if (showExitAlert()) {
-                    clientServiceImpl.updateIsClientActiveByClientName(false, username);
+                    clientService.updateIsClientActiveByClientName(false, username);
                     stage.close();
                 } else {
                     e.consume();
@@ -181,9 +181,9 @@ public class ClientViewController {
     public void initialize() {
         Platform.runLater(() -> {
             // Close any previous active client session
-            if (clientServiceImpl.existsByIsClientActive(true)) {
-                clientServiceImpl.updateIsClientActiveByClientName(false,
-                        clientServiceImpl.getByIsClientActive(true).getClientName());
+            if (clientService.existsByIsClientActive(true)) {
+                clientService.updateIsClientActiveByClientName(false,
+                        clientService.getByIsClientActive(true).getClientName());
             }
             clearFields();
         });

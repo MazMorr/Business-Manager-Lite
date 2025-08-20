@@ -472,7 +472,7 @@
                                                 <Insets top="5.0" />
                                              </VBox.margin>
                                           </Button>
-                                          <Label fx:id="txtSellDebug" alignment="TOP_LEFT" prefHeight="50.0" prefWidth="260.0" text="El precio de venta es el de toda la venta, NO PRECIOS INDIVIDUALES" textAlignment="CENTER" wrapText="true">
+                                          <Label fx:id="lblSellDebug" alignment="TOP_LEFT" prefHeight="50.0" prefWidth="260.0" text="El precio de venta es el de toda la venta, NO PRECIOS INDIVIDUALES" textAlignment="CENTER" wrapText="true">
                                              <padding>
                                                 <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                              </padding>
@@ -565,7 +565,7 @@
                                                 <Insets top="5.0" />
                                              </VBox.margin>
                                           </Button>
-                                          <Label fx:id="txtAssignPriceDebug" alignment="TOP_LEFT" prefHeight="118.0" prefWidth="260.0" text="Si pincha un elemento en la tabla este se insertará en los campos del formulario" textAlignment="CENTER" wrapText="true">
+                                          <Label fx:id="lblAssignPriceDebug" alignment="TOP_LEFT" prefHeight="118.0" prefWidth="260.0" text="Si pincha un elemento en la tabla este se insertará en los campos del formulario" textAlignment="CENTER" wrapText="true">
                                              <padding>
                                                 <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                              </padding>

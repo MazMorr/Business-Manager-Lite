@@ -30,7 +30,6 @@ public class ReassignProductViewController {
 
     // Service and utility dependencies
     private final InventoryServiceImpl inventoryService;
-    private final ClientServiceImpl clientService;
     private final UserLogged userLogged;
     private final WarehouseServiceImpl warehouseService;
     private final DisplayAlerts displayAlerts;
@@ -48,7 +47,6 @@ public class ReassignProductViewController {
      * @param productService the product service
      * @param displayAlerts the display alerts
      * @param warehouseService the warehouse service
-     * @param clientService the client service
      * @param userLogged the user logged
      * @param inventoryService the inventory service
      * @param warehouseViewController the warehouse view controller
@@ -57,7 +55,7 @@ public class ReassignProductViewController {
     public ReassignProductViewController(
             GeneralRegistryServiceImpl generalRegistryService, WarehouseRegistryServiceImpl warehouseRegistryService,
             ParseDataTypes parseDataTypes, ProductServiceImpl productService, DisplayAlerts displayAlerts,
-            WarehouseServiceImpl warehouseService, ClientServiceImpl clientService, UserLogged userLogged,
+            WarehouseServiceImpl warehouseService, UserLogged userLogged,
             InventoryServiceImpl inventoryService, WarehouseViewController warehouseViewController
     ) {
         this.inventoryService = inventoryService;
@@ -67,7 +65,6 @@ public class ReassignProductViewController {
         this.parseDataTypes = parseDataTypes;
         this.productService = productService;
         this.displayAlerts = displayAlerts;
-        this.clientService = clientService;
         this.userLogged = userLogged;
         this.warehouseService = warehouseService;
     }
@@ -85,16 +82,14 @@ public class ReassignProductViewController {
     @FXML
     public void initialize() {
         initClient();
-        Platform.runLater(() -> {
-            initMbWarehouse();
-        });
+        Platform.runLater(this::initMbWarehouse);
     }
 
     /**
      * Loads the client based on the logged user.
      */
     private void initClient() {
-        client = clientService.getClientByName(userLogged.getName());
+        client = userLogged.getClient();
     }
 
     /**

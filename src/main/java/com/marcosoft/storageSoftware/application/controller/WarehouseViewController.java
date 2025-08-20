@@ -7,7 +7,6 @@ import com.marcosoft.storageSoftware.domain.model.Client;
 import com.marcosoft.storageSoftware.domain.model.Expense;
 import com.marcosoft.storageSoftware.domain.model.Inventory;
 import com.marcosoft.storageSoftware.domain.model.Warehouse;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.ExpenseServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.InventoryServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.WarehouseServiceImpl;
@@ -42,7 +41,6 @@ public class WarehouseViewController {
     private final SceneSwitcher sceneSwitcher;
     private final DisplayAlerts displayAlerts;
     private final InventoryServiceImpl inventoryService;
-    private final ClientServiceImpl clientService;
     private final ExpenseServiceImpl expenseService;
 
     /**
@@ -53,14 +51,11 @@ public class WarehouseViewController {
      * @param userLogged the user logged
      * @param sceneSwitcher the scene switcher
      * @param inventoryService the inventory service
-     * @param clientService the client service
      */
     public WarehouseViewController(
             ExpenseServiceImpl expenseService, DisplayAlerts displayAlerts, WarehouseServiceImpl warehouseService,
-            UserLogged userLogged, SceneSwitcher sceneSwitcher, InventoryServiceImpl inventoryService,
-            ClientServiceImpl clientService
+            UserLogged userLogged, SceneSwitcher sceneSwitcher, InventoryServiceImpl inventoryService
     ) {
-        this.clientService = clientService;
         this.expenseService = expenseService;
         this.inventoryService = inventoryService;
         this.sceneSwitcher = sceneSwitcher;
@@ -98,8 +93,8 @@ public class WarehouseViewController {
      */
     @FXML
     public void initialize() {
-        client = clientService.getClientByName(userLogged.getName());
-        lblClientName.setText(userLogged.getName());
+        client = userLogged.getClient();
+        lblClientName.setText(client.getClientName());
         Platform.runLater(() -> {
             initTableValues();
             initTreeTable();

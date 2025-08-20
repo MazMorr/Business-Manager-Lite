@@ -33,7 +33,6 @@ public class RegistryViewController {
     private DateTimeFormatter formatter;
 
     private final UserLogged userLogged;
-    private final ClientServiceImpl clientService;
     private final SceneSwitcher sceneSwitcher;
     private final SellRegistryServiceImpl sellRegistryService;
     private final GeneralRegistryServiceImpl generalRegistryService;
@@ -44,7 +43,7 @@ public class RegistryViewController {
     public RegistryViewController(
             ExpenseRegistryServiceImpl expenseRegistryService, SellRegistryServiceImpl sellRegistryService,
             GeneralRegistryServiceImpl generalRegistryService, WarehouseRegistryServiceImpl warehouseRegistryService,
-            UserLogged userLogged, ClientServiceImpl clientService, SceneSwitcher sceneSwitcher, DisplayAlerts displayAlerts
+            UserLogged userLogged, SceneSwitcher sceneSwitcher, DisplayAlerts displayAlerts
     ) {
         this.userLogged = userLogged;
         this.displayAlerts = displayAlerts;
@@ -52,7 +51,6 @@ public class RegistryViewController {
         this.sellRegistryService = sellRegistryService;
         this.warehouseRegistryService = warehouseRegistryService;
         this.generalRegistryService = generalRegistryService;
-        this.clientService = clientService;
         this.sceneSwitcher = sceneSwitcher;
     }
 
@@ -108,7 +106,7 @@ public class RegistryViewController {
 
     @FXML
     public void initialize() {
-        client = clientService.getClientByName(userLogged.getName());
+        client = userLogged.getClient();
         formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         txtClientName.setText(userLogged.getName());
         Platform.runLater(() -> {

@@ -39,7 +39,6 @@ public class ExpenseViewController {
     // Dependency injection for required services and utilities
     private final ParseDataTypes parseDataTypes;
     private final UserLogged userLogged;
-    private final ClientServiceImpl clientService;
     private final ExpenseServiceImpl expenseService;
     private final ExpenseRegistryServiceImpl expenseRegistryService;
     private final SceneSwitcher sceneSwitcher;
@@ -56,7 +55,6 @@ public class ExpenseViewController {
      * @param displayAlerts the display alerts
      * @param parseDataTypes the parse data types
      * @param userLogged the user logged
-     * @param clientService the client service
      * @param expenseService the expense service
      * @param currencyService the currency service
      * @param expenseRegistryService the expense registry service
@@ -65,7 +63,7 @@ public class ExpenseViewController {
     @Lazy
     public ExpenseViewController(
             ProductServiceImpl productService, GeneralRegistryServiceImpl generalRegistryService, DisplayAlerts displayAlerts,
-            ParseDataTypes parseDataTypes, UserLogged userLogged, ClientServiceImpl clientService, ExpenseServiceImpl expenseService,
+            ParseDataTypes parseDataTypes, UserLogged userLogged, ExpenseServiceImpl expenseService,
             CurrencyServiceImpl currencyService, ExpenseRegistryServiceImpl expenseRegistryService, SceneSwitcher sceneSwitcher
     ) {
         this.currencyService = currencyService;
@@ -75,7 +73,6 @@ public class ExpenseViewController {
         this.sceneSwitcher = sceneSwitcher;
         this.expenseService = expenseService;
         this.expenseRegistryService = expenseRegistryService;
-        this.clientService = clientService;
         this.userLogged = userLogged;
         this.parseDataTypes = parseDataTypes;
     }
@@ -112,7 +109,7 @@ public class ExpenseViewController {
     public void initialize() {
         registryZone = "Gastos";
         lblClientName.setText(userLogged.getName());
-        client = clientService.getClientByName(userLogged.getName());
+        client = userLogged.getClient();
         Platform.runLater(() -> {
             initializeTableValues();
             setupTextFieldListeners();

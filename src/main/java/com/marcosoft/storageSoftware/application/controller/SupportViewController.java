@@ -1,9 +1,9 @@
 package com.marcosoft.storageSoftware.application.controller;
 
 import com.marcosoft.storageSoftware.application.dto.UserLogged;
+import com.marcosoft.storageSoftware.domain.model.Client;
 import com.marcosoft.storageSoftware.domain.model.Currency;
 import com.marcosoft.storageSoftware.infrastructure.security.LicenseValidator;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.CurrencyServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
 import javafx.application.Platform;
@@ -26,32 +26,30 @@ import java.util.List;
 @Controller
 public class SupportViewController {
     // Reference to the account controller for session management
+    private Client client;
     private ClientViewController accountController;
 
     // Service and utility dependencies
     private final UserLogged userLogged;
     private final LicenseValidator licenseValidator;
     private final SceneSwitcher sceneSwitcher;
-    private final ClientServiceImpl clientService;
     private final CurrencyServiceImpl currencyService;
 
     /**
      * Constructor for dependency injection.
      * @param currencyService the currency service
      * @param sceneSwitcher the scene switcher
-     * @param clientService the client service
      * @param userLogged the user logged
      * @param licenseValidator the license validator
      */
     public SupportViewController(
-            CurrencyServiceImpl currencyService, SceneSwitcher sceneSwitcher, ClientServiceImpl clientService,
+            CurrencyServiceImpl currencyService, SceneSwitcher sceneSwitcher,
             UserLogged userLogged, LicenseValidator licenseValidator
     ) {
         this.userLogged = userLogged;
         this.licenseValidator = licenseValidator;
         this.currencyService = currencyService;
         this.sceneSwitcher = sceneSwitcher;
-        this.clientService = clientService;
     }
 
     // FXML UI components
@@ -64,12 +62,13 @@ public class SupportViewController {
      */
     @FXML
     private void initialize() {
+        client= userLogged.getClient();
         Platform.runLater(() -> {
             initWelcomeLabels();
             initCurrencyDefaultValues();
 
             try {
-                String clientName = clientService.getByIsClientActive(true).getClientName();
+                String clientName = client.getClientName();
                 lblClientName.setText(clientName != null ? clientName : "Usuario");
             } catch (Exception e) {
                 lblClientName.setText("Usuario");
@@ -112,7 +111,7 @@ public class SupportViewController {
      */
     private void initWelcomeLabels() {
         lblLicenseDays.setText(LocalDate.now().until(licenseValidator.getRemainingTime()).getDays() + " Días");
-        versionLabel.setText("0.9.8");
+        versionLabel.setText("0.9.9");
         lblWelcomeTitle.setText("Bienvenido, " + userLogged.getName());
         lblWelcome.setText(
                 """

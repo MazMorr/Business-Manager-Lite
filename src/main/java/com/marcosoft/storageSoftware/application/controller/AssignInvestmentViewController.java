@@ -30,7 +30,6 @@ public class AssignInvestmentViewController {
     // Service and utility dependencies
     private final InventoryServiceImpl inventoryService;
     private final UserLogged userLogged;
-    private final ClientServiceImpl clientService;
     private final WarehouseServiceImpl warehouseService;
     private final ExpenseServiceImpl investmentService;
     private final ProductServiceImpl productService;
@@ -48,7 +47,6 @@ public class AssignInvestmentViewController {
      * @param inventoryService the inventory service
      * @param userLogged the user logged
      * @param warehouseService the warehouse service
-     * @param clientService the client service
      * @param investmentService the investment service
      * @param productService the product service
      * @param warehouseRegistryService the warehouse registry service
@@ -57,7 +55,7 @@ public class AssignInvestmentViewController {
     public AssignInvestmentViewController(
             GeneralRegistryServiceImpl generalRegistryService, ParseDataTypes parseDataTypes, DisplayAlerts displayAlerts,
             InventoryServiceImpl inventoryService, UserLogged userLogged, WarehouseServiceImpl warehouseService,
-            ClientServiceImpl clientService, ExpenseServiceImpl investmentService, ProductServiceImpl productService,
+            ExpenseServiceImpl investmentService, ProductServiceImpl productService,
             WarehouseRegistryServiceImpl warehouseRegistryService, WarehouseViewController warehouseViewController
     ) {
         this.productService = productService;
@@ -68,7 +66,6 @@ public class AssignInvestmentViewController {
         this.userLogged = userLogged;
         this.warehouseService = warehouseService;
         this.investmentService = investmentService;
-        this.clientService = clientService;
         this.parseDataTypes = parseDataTypes;
         this.warehouseViewController = warehouseViewController;
     }
@@ -85,7 +82,7 @@ public class AssignInvestmentViewController {
      */
     @FXML
     public void initialize() {
-        client = clientService.getClientByName(userLogged.getName());
+        client = userLogged.getClient();
         Platform.runLater(() -> {
             initMbWarehouse();
             initMbExpense();
@@ -212,7 +209,6 @@ public class AssignInvestmentViewController {
      * Checks if the warehouse exists for the current client.
      */
     private boolean warehouseExistsForClient() {
-        Client client = clientService.getClientByName(userLogged.getName());
         return warehouseService.existsByWarehouseNameAndClient(
                 tfWarehouse.getText(),
                 client
