@@ -12,8 +12,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ExpenseWarehouseDataTable {
-    private Long investmentId;
-    private String investmentName;
+    private Long expenseId;
+    private String expenseName;
     private Integer productAmount;
-    private LocalDate investmentDate;
+    private LocalDate expenseDate;
 }

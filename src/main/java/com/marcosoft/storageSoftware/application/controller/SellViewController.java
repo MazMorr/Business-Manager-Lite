@@ -922,6 +922,14 @@ public class SellViewController {
         );
     }
 
+    @FXML
+    public void loadMbSellProduct() {
+        if(warehouseService.existsByWarehouseNameAndClient(tfSellWarehouse.getText(), client)){
+            Warehouse warehouse = warehouseService.getWarehouseByWarehouseNameAndClient(tfSellWarehouse.getText(), client);
+            initMbSellProduct(warehouse);
+        }
+    }
+
 // --- Métodos auxiliares ---
 
     private record FilterCriteria(

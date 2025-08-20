@@ -140,7 +140,7 @@ public class ExpenseViewController {
         tvExpense.getSelectionModel().selectedItemProperty().addListener((obs, oldSel, newSel) -> {
             if (newSel != null) {
                 tfId.setText(newSel.getId() != null ? String.valueOf(newSel.getId()) : "");
-                tfAddProductName.setText(newSel.getInvestmentName());
+                tfAddProductName.setText(newSel.getExpenseName());
                 tfAddProductAmount.setText(newSel.getAmount() != null ? String.valueOf(newSel.getAmount()) : "");
                 tfAddExpensePrice.setText(newSel.getPrice() != null ? String.valueOf(newSel.getPrice()) : "");
                 tfAddExpenseCurrency.setText(newSel.getCurrency());
@@ -391,8 +391,8 @@ public class ExpenseViewController {
                 matches &= investment.getId() != null && investment.getId().toString().contains(id);
 
             if (!name.isEmpty())
-                matches &= investment.getInvestmentName() != null &&
-                        investment.getInvestmentName().toLowerCase().contains(name);
+                matches &= investment.getExpenseName() != null &&
+                        investment.getExpenseName().toLowerCase().contains(name);
 
             if (minAmount != null && minAmount > 0)
                 matches &= investment.getAmount() != null && investment.getAmount() >= minAmount;
@@ -440,8 +440,8 @@ public class ExpenseViewController {
         ExpenseDataTable selectedInvestment = tvExpense.getSelectionModel().getSelectedItem();
         tfId.setText(String.valueOf(selectedInvestment.getId()));
         dpAddExpenseDate.setValue(selectedInvestment.getReceivedDate());
-        tfAddProductName.setText(selectedInvestment.getInvestmentName());
-        tfAddExpenseType.setText(selectedInvestment.getInvestmentType());
+        tfAddProductName.setText(selectedInvestment.getExpenseName());
+        tfAddExpenseType.setText(selectedInvestment.getExpenseType());
         tfAddProductAmount.setText(String.valueOf(selectedInvestment.getAmount()));
         tfAddExpenseCurrency.setText(selectedInvestment.getCurrency());
         tfAddExpensePrice.setText(String.valueOf(selectedInvestment.getPrice()));

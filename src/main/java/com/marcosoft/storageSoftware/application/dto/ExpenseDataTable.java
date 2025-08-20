@@ -13,8 +13,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class ExpenseDataTable {
     private Long id;
-    private String investmentName;
-    private String investmentType;
+    private String expenseName;
+    private String expenseType;
     private Double price;
     private String currency;
     private Integer amount;

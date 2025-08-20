@@ -109,8 +109,8 @@ public class ClientViewController {
             stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResource("/images/RTS_logo.png")).toString()));
             stage.setTitle("Business Manager");
             stage.centerOnScreen();
-            stage.setMinWidth(1100);
-            stage.setMinHeight(650);
+            stage.setMinWidth(1140);
+            stage.setMinHeight(690);
 
             // Handle window close event
             stage.setOnCloseRequest(e -> {

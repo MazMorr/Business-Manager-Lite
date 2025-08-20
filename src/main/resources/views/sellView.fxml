@@ -386,7 +386,7 @@
                                           <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="49.0">
                                              <children>
                                                 <Label text="Producto" />
-                                                <MenuButton fx:id="mbSellProduct" mnemonicParsing="false" prefWidth="150.0">
+                                                <MenuButton fx:id="mbSellProduct" mnemonicParsing="false" onAction="#loadMbSellProduct" prefWidth="150.0">
                                                    <padding>
                                                       <Insets bottom="-6.0" left="-9.0" right="2.0" top="-5.0" />
                                                    </padding>
