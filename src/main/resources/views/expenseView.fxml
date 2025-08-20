@@ -257,10 +257,10 @@
                         </HBox>
                         <HBox alignment="CENTER_RIGHT" prefWidth="200.0">
                            <children>
-                              <Label text="Inversión" />
+                              <Label text="N. Gasto" />
                               <TextField fx:id="tfFilterName" prefHeight="25.0" prefWidth="172.0" styleClass="inputForm">
                                  <HBox.margin>
-                                    <Insets left="25.0" />
+                                    <Insets left="30.0" />
                                  </HBox.margin>
                               </TextField>
                            </children>

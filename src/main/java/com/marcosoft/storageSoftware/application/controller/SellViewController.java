@@ -299,16 +299,29 @@ public class SellViewController {
         generalRegistryService.save(generalRegistry);
     }
 
+    /**
+     * Updates the UI after a sale operation.
+     * Reloads the product table, clears the form, and displays a message with the remaining stock.
+     * The message is shown in Spanish.
+     */
     private void updateUIAfterSale(Inventory inventory) {
         loadProductTable();
         cleanForm();
 
         int remainingStock = inventory.getAmount();
-        String message = remainingStock > 0
-                ? "Venta registrada. Stock restante: " + remainingStock
-                : "Venta registrada. Producto AGOTADO";
+        String message = "";
+        String color= "black";
+
+        if (remainingStock > 0) {
+            message = "Venta registrada. Stock restante: " + remainingStock;
+            color = "#16a34a"; // green
+        } else if (remainingStock == 0) {
+            message = "Venta registrada. Producto AGOTADO";
+            color = "#dc2626"; // red
+        }
 
         txtSellDebug.setText(message);
+        txtSellDebug.setStyle("-fx-text-fill:" + color + "; -fx-font-weight: bold;");
     }
 
     /**
@@ -438,7 +451,7 @@ public class SellViewController {
                 String currency = product.getCurrency() != null ? product.getCurrency().getCurrencyName() : "";
 
                 // Get warehouse name - only if it's a child node (warehouse)
-                String warehouseName = warehouseName = selectedData.getWarehouseName();
+                String warehouseName = selectedData.getWarehouseName();
                 if (isParentWithChildren) {
                     warehouseName = "";
                 }
@@ -451,6 +464,7 @@ public class SellViewController {
                 tfSellProductName.setText(productName);
                 tfSellProductPrice.setText(price);
                 tfSellProductCurrency.setText(currency);
+                txtSellDebug.setText("El precio de venta es el de toda la venta, NO PRECIOS INDIVIDUALES");
             }
         });
     }
