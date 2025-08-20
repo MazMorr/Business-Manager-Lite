@@ -351,7 +351,32 @@ public class SellViewController {
     }
 
 
-    // Método para columnas de tipo Double
+    private void configureStringColumn(TreeTableColumn<SellDataTable, String> column, String property) {
+        column.setCellValueFactory(new TreeItemPropertyValueFactory<>(property));
+        column.setCellFactory(col -> new TreeTableCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    setText(item);
+                    updateStyle();
+                }
+            }
+
+            private void updateStyle() {
+                TreeItem<SellDataTable> treeItem = getTableRow().getTreeItem();
+                if (treeItem != null && treeItem.getValue() != null) {
+                    setStyle(treeItem.getValue().getStyle());
+                } else {
+                    setStyle("");
+                }
+            }
+        });
+    }
+
     private void configureDoubleColumn(TreeTableColumn<SellDataTable, Double> column, String property) {
         column.setCellValueFactory(new TreeItemPropertyValueFactory<>(property));
         column.setCellFactory(col -> new TreeTableCell<>() {
@@ -360,17 +385,17 @@ public class SellViewController {
                 super.updateItem(item, empty);
                 if (empty || item == null) {
                     setText(null);
-                    setStyle("");
                 } else {
-                    setText(String.format("%.2f", item)); // Formatear a 2 decimales
+                    setText(String.format("%.2f", item));
                 }
-                applyRowStyle();
+
+                updateStyle();
             }
 
-            private void applyRowStyle() {
-                TreeTableRow<SellDataTable> row = getTableRow();
-                if (row != null && row.getItem() != null) {
-                    setStyle(row.getItem().getStyle());
+            private void updateStyle() {
+                TreeItem<SellDataTable> treeItem = getTableRow().getTreeItem();
+                if (treeItem != null && treeItem.getValue() != null) {
+                    setStyle(treeItem.getValue().getStyle());
                 } else {
                     setStyle("");
                 }
@@ -379,7 +404,7 @@ public class SellViewController {
         column.setSortable(false);
     }
 
-    // Método para columnas de tipo Integer
+    // Aplicar el mismo patrón a configureIntegerColumn
     private void configureIntegerColumn(TreeTableColumn<SellDataTable, Integer> column, String property) {
         column.setCellValueFactory(new TreeItemPropertyValueFactory<>(property));
         column.setCellFactory(col -> new TreeTableCell<>() {
@@ -388,17 +413,17 @@ public class SellViewController {
                 super.updateItem(item, empty);
                 if (empty || item == null) {
                     setText(null);
-                    setStyle("");
+
                 } else {
                     setText(item.toString());
                 }
-                applyRowStyle();
+                updateStyle();
             }
 
-            private void applyRowStyle() {
-                TreeTableRow<SellDataTable> row = getTableRow();
-                if (row != null && row.getItem() != null) {
-                    setStyle(row.getItem().getStyle());
+            private void updateStyle() {
+                TreeItem<SellDataTable> treeItem = getTableRow().getTreeItem();
+                if (treeItem != null && treeItem.getValue() != null) {
+                    setStyle(treeItem.getValue().getStyle());
                 } else {
                     setStyle("");
                 }
@@ -443,115 +468,63 @@ public class SellViewController {
         }
     }
 
-    private void configureStringColumn(TreeTableColumn<SellDataTable, String> column, String property) {
-        column.setCellValueFactory(new TreeItemPropertyValueFactory<>(property));
-        column.setCellFactory(col -> new TreeTableCell<>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-
-                if (empty || item == null) {
-                    setText(null);
-                    setStyle("");
-                } else {
-                    setText(item);
-                    TreeTableRow<SellDataTable> row = getTableRow();
-                    if (row != null && row.getItem() != null && row.getItem().getStyle() != null) {
-                        String style = row.getItem().getStyle();
-                        if (style != null && !style.isEmpty()) {
-                            setStyle(style);
-                            log.debug("Applied style to cell: {}", style);
-                        }
-                    }
-                }
-            }
-        });
-    }
-
     private void applyStockWarningStyles(TreeItem<SellDataTable> root) {
-        if (root == null || root.getChildren() == null) {
-            log.warn("Root or its children are null");
-            return;
-        }
+        if (root == null || root.getChildren() == null) return;
 
         final String alertStyle = "-fx-background-color: #ffcccc;";
         final String warningStyle = "-fx-background-color: #ffff99;";
 
-        for (TreeItem<SellDataTable> productItem : root.getChildren()) {
-            try {
-                if (productItem == null || productItem.getValue() == null) {
-                    continue;
-                }
-
-                // Debug: Log current item
-                log.debug("Processing product: {}", productItem.getValue().getProductName());
-
-                // Reset style
-                productItem.getValue().setStyle("");
-
-                if (!productItem.getChildren().isEmpty()) {
-                    processParentItem(productItem, alertStyle, warningStyle);
-                } else {
-                    processSingleItem(productItem, alertStyle, warningStyle);
-                }
-            } catch (Exception e) {
-                log.error("Error processing product item", e);
+        for (TreeItem<SellDataTable> item : root.getChildren()) {
+            if (item.getChildren().isEmpty()) {
+                // Es un nodo hoja (item individual)
+                applyStyleToSingleItem(item, alertStyle, warningStyle);
+            } else {
+                // Es un nodo padre con hijos
+                processParentItemWithChildren(item, alertStyle, warningStyle);
             }
         }
+        Platform.runLater(() -> ttvInventory.refresh());
     }
 
-    private void processParentItem(TreeItem<SellDataTable> productItem, String alertStyle, String warningStyle) {
+    private void processParentItemWithChildren(TreeItem<SellDataTable> parentItem, String alertStyle, String warningStyle) {
         boolean hasAlert = false;
         boolean hasWarning = false;
 
-        for (TreeItem<SellDataTable> warehouseItem : productItem.getChildren()) {
-            try {
-                if (warehouseItem == null || warehouseItem.getValue() == null) {
-                    continue;
-                }
+        for (TreeItem<SellDataTable> child : parentItem.getChildren()) {
+            applyStyleToSingleItem(child, alertStyle, warningStyle);
 
-                warehouseItem.getValue().setStyle("");
-                Inventory inventory = getInventoryFromTreeItem(warehouseItem);
-
-                if (inventory != null) {
-                    if (inventoryService.shouldShowAlert(inventory)) {
-                        hasAlert = true;
-                        warehouseItem.getValue().setStyle(alertStyle);
-                        log.debug("Applied alert style to warehouse: {}", warehouseItem.getValue().getWarehouseName());
-                    } else if (inventoryService.shouldShowWarning(inventory)) {
-                        hasWarning = true;
-                        warehouseItem.getValue().setStyle(warningStyle);
-                        log.debug("Applied warning style to warehouse: {}", warehouseItem.getValue().getWarehouseName());
-                    }
+            Inventory inventory = getInventoryFromTreeItem(child);
+            if (inventory != null) {
+                if (inventoryService.shouldShowAlert(inventory)) {
+                    hasAlert = true;
+                } else if (inventoryService.shouldShowWarning(inventory)) {
+                    hasWarning = true;
                 }
-            } catch (Exception e) {
-                log.error("Error processing warehouse item", e);
             }
         }
 
+        // Aplicar estilo al padre basado en el estado de los hijos
         if (hasAlert) {
-            productItem.getValue().setStyle(alertStyle);
-            log.debug("Applied alert style to product: {}", productItem.getValue().getProductName());
+            parentItem.getValue().setStyle(alertStyle);
         } else if (hasWarning) {
-            productItem.getValue().setStyle(warningStyle);
-            log.debug("Applied warning style to product: {}", productItem.getValue().getProductName());
+            parentItem.getValue().setStyle(warningStyle);
+        } else {
+            parentItem.getValue().setStyle("");
         }
     }
 
-    private void processSingleItem(TreeItem<SellDataTable> item, String alertStyle, String warningStyle) {
-        try {
-            Inventory inventory = getInventoryFromTreeItem(item);
-            if (inventory != null) {
-                if (inventoryService.shouldShowAlert(inventory)) {
-                    item.getValue().setStyle(alertStyle);
-                    log.debug("Applied alert style to single item: {}", item.getValue().getProductName());
-                } else if (inventoryService.shouldShowWarning(inventory)) {
-                    item.getValue().setStyle(warningStyle);
-                    log.debug("Applied warning style to single item: {}", item.getValue().getProductName());
-                }
+    private void applyStyleToSingleItem(TreeItem<SellDataTable> item, String alertStyle, String warningStyle) {
+        Inventory inventory = getInventoryFromTreeItem(item);
+        if (inventory != null) {
+            if (inventoryService.shouldShowAlert(inventory)) {
+                item.getValue().setStyle(alertStyle);
+            } else if (inventoryService.shouldShowWarning(inventory)) {
+                item.getValue().setStyle(warningStyle);
+            } else {
+                item.getValue().setStyle("");
             }
-        } catch (Exception e) {
-            log.error("Error processing single item", e);
+        } else {
+            item.getValue().setStyle("");
         }
     }
 
@@ -560,16 +533,21 @@ public class SellViewController {
             if (item == null || item.getValue() == null) return null;
 
             String productName;
-            String warehouseName = item.getValue().getWarehouseName();
+            String warehouseName;
 
-            // 1. Si es nodo hijo (warehouse): obtener productName del padre
             if (item.getParent() != null && item.getParent() != ttvInventory.getRoot()) {
+                // Es un nodo hijo (warehouse)
                 productName = item.getParent().getValue().getProductName();
-            }
-            // 2. Si es nodo padre (producto): no necesita warehouseName
-            else {
+                warehouseName = item.getValue().getWarehouseName();
+            } else {
+                // Es un nodo padre (product) o item individual
                 productName = item.getValue().getProductName();
-                warehouseName = null; // ← Ignora warehouseName para nodos padres
+                warehouseName = item.getValue().getWarehouseName();
+
+                // Ignorar warehouseName si es un texto de resumen (nodo padre)
+                if (warehouseName != null && warehouseName.startsWith("Almacenes:")) {
+                    warehouseName = null;
+                }
             }
 
             Product product = productService.getByProductNameAndClient(productName, client);
@@ -578,9 +556,15 @@ public class SellViewController {
                 return null;
             }
 
-            // Solo busca warehouse si es un nodo hoja (warehouse)
-            Warehouse warehouse = (warehouseName != null) ?
-                    warehouseService.getWarehouseByWarehouseNameAndClient(warehouseName, client) : null;
+            // Solo buscar warehouse si tenemos un nombre válido
+            Warehouse warehouse = null;
+            if (warehouseName != null && !warehouseName.trim().isEmpty()) {
+                warehouse = warehouseService.getWarehouseByWarehouseNameAndClient(warehouseName, client);
+                if (warehouse == null) {
+                    log.warn("Warehouse not found: {}", warehouseName);
+                    return null;
+                }
+            }
 
             return (warehouse != null) ?
                     inventoryService.getByProductAndWarehouseAndClient(product, warehouse, client) : null;

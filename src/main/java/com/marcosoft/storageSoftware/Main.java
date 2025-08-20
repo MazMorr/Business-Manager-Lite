@@ -56,7 +56,7 @@ public class Main extends Application {
 
     @Getter
     private static ConfigurableApplicationContext context;
-    private static SpringFXMLLoader springFXMLLoader;
+    public static SpringFXMLLoader springFXMLLoader;
     private static Stage primaryStage;
     private static Scene scene;
     private static DisplayAlerts displayAlerts;
