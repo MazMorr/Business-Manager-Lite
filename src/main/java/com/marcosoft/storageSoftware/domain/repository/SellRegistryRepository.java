@@ -9,4 +9,5 @@ import java.util.List;
 public interface SellRegistryRepository extends CrudRepository<SellRegistry, Long> {
 
   List<SellRegistry> findAllSellRegistriesByClient(Client client);
+
 }

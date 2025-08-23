@@ -9,6 +9,7 @@ import com.marcosoft.storageSoftware.infrastructure.service.impl.InventoryServic
 import com.marcosoft.storageSoftware.infrastructure.service.impl.SellRegistryServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
 import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -17,21 +18,26 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.marcosoft.storageSoftware.Main.primaryStage;
 import static com.marcosoft.storageSoftware.Main.springFXMLLoader;
 
 /**
@@ -72,7 +78,7 @@ public class ConfigurationViewController {
     }
 
     @FXML
-    private Label lblSell, txtClientName, lblUser, lblProducts, lblCompany, lblDateLicense;
+    private Label lblSell, lblClientName, lblUser, lblProducts, lblCompany, lblDateLicense;
 
     /**
      * Close session.
@@ -96,6 +102,8 @@ public class ConfigurationViewController {
 
             // Mostrar la ventana de login y cerrar la actual
             Stage currentStage = (Stage) lblUser.getScene().getWindow();
+
+            //TODO: hay que cerrar también todas las demás ventanas si están, hay q ver como se puede hacer eso
             loginStage.show();
             currentStage.close();
 
@@ -104,6 +112,21 @@ public class ConfigurationViewController {
         } catch (Exception e) {
             displayAlerts.showError("Error inesperado: " + e.getMessage());
         }
+    }
+
+
+    private void closeAllWindows() {
+        Platform.runLater(() -> {
+            // Crear una copia de la lista para evitar modificaciones concurrentes
+            List<Window> windows = new ArrayList<>(Window.getWindows());
+            for (Window window : windows) {
+                if (window instanceof Stage stage) {
+                    if (primaryStage != null && !stage.equals(primaryStage) && stage.isShowing()) {
+                        stage.close();
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -115,8 +138,8 @@ public class ConfigurationViewController {
     }
 
     private void initAllLabels() {
-        client = clientService.getClientByName(userLogged.getName());
-        lblUser.setText(client.getClientName());
+        client = userLogged.getClient();
+        lblClientName.setText(client.getClientName());
         int productCounter = 0;
         int sellCounter;
         try {
@@ -136,49 +159,29 @@ public class ConfigurationViewController {
             throw new RuntimeException(e);
         }
 
-        txtClientName.setText("Usuario: " + client.getClientName());
-        lblCompany.setText("Compañía: " + clientService.getByIsClientActive(true).getClientCompany());
+        lblUser.setText("Usuario: " + client.getClientName());
+        lblCompany.setText("Compañía: " + client.getClientCompany());
         lblProducts.setText("Productos: " + productCounter);
         lblSell.setText("Ventas: " + sellCounter);
         lblDateLicense.setText("Fecha Vencimiento Licencia: "
                 + LocalDate.now().until(licenseValidator.getRemainingTime()).getDays() + " Días");
     }
 
-    /**
-     * Switch to support.
-     *
-     * @param actionEvent the action event
-     */
     @FXML
     public void switchToSupport(ActionEvent actionEvent) {
         sceneSwitcher.switchView(actionEvent, "/views/supportView.fxml");
     }
 
-    /**
-     * Switch to warehouse.
-     *
-     * @param actionEvent the action event
-     */
     @FXML
     public void switchToWarehouse(ActionEvent actionEvent) {
         sceneSwitcher.switchView(actionEvent, "/views/warehouseView.fxml");
     }
 
-    /**
-     * Switch to registry.
-     *
-     * @param actionEvent the action event
-     */
     @FXML
     public void switchToRegistry(ActionEvent actionEvent) {
         sceneSwitcher.switchView(actionEvent, "/views/registryView.fxml");
     }
 
-    /**
-     * Switch to balance.
-     *
-     * @param actionEvent the action event
-     */
     @FXML
     public void switchToBalance(ActionEvent actionEvent) {
         sceneSwitcher.switchView(actionEvent, "/views/balanceView.fxml");
@@ -204,12 +207,8 @@ public class ConfigurationViewController {
         sceneSwitcher.switchView(actionEvent, "/views/sellView.fxml");
     }
 
-    // ============================
-    // MÉTODOS DE IMPORTACIÓN/EXPORTACIÓN
-    // ============================
-
     @FXML
-    public void ImportDatabase(ActionEvent event) {
+    public void ImportDatabase() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Seleccionar archivo de respaldo");
         fileChooser.getExtensionFilters().add(
@@ -225,7 +224,6 @@ public class ConfigurationViewController {
             Optional<ButtonType> result = confirmAlert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 try {
-                    importDataFromCSV(file);
 
                     Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
                     successAlert.setTitle("Importación exitosa");
@@ -242,119 +240,43 @@ public class ConfigurationViewController {
     }
 
     @FXML
-    public void exportDatabase(ActionEvent event) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Guardar respaldo");
-        fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
-        fileChooser.setInitialFileName("backup_" + LocalDate.now() + ".csv");
-        File file = fileChooser.showSaveDialog(null);
+    public void exportDatabase() {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle("Seleccionar carpeta para guardar la copia de seguridad");
+        File selectedDirectory = directoryChooser.showDialog(null);
 
-        if (file != null) {
+        if (selectedDirectory != null) {
             try {
-                exportDataToCSV(file);
+                String sourcePath = "C:/BusinessManager/Database.mv.db";
+                String destinationPath = selectedDirectory.getAbsolutePath() + "\\Database_backup_" + LocalDate.now() + ".mv.db";
+
+                exportDB(sourcePath, destinationPath);
 
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
                 successAlert.setTitle("Exportación exitosa");
-                successAlert.setHeaderText("Datos exportados correctamente");
-                successAlert.setContentText("Ubicación: " + file.getAbsolutePath());
+                successAlert.setHeaderText("Base de datos exportada correctamente");
+                successAlert.setContentText("Ubicación: " + destinationPath);
                 successAlert.showAndWait();
-            } catch (Exception e) {
-                displayAlerts.showError("Error al exportar datos: " + e.getMessage());
+            } catch (IOException e) {
+                displayAlerts.showError("Error al exportar la base de datos: " + e.getMessage());
             }
         }
     }
 
-    private void exportDataToCSV(File file) throws IOException {
-        try (BufferedWriter writer = Files.newBufferedWriter(file.toPath())) {
-            // Escribir encabezados
-            writer.write("Tipo,ID,Nombre,Cantidad,Precio,Fecha");
-            writer.newLine();
+    private void exportDB(String sourcePath, String destinationPath) throws IOException {
+        Path source = Paths.get(sourcePath);
+        Path destination = Paths.get(destinationPath);
 
-            // Exportar inventarios
-            /*
-             * List<Inventory> inventories =
-             * inventoryService.getAllInventoriesByClient(client);
-             * for (Inventory inv : inventories) {
-             * writer.write(String.format("INVENTORY,%d,%s,%d,%.2f,%s",
-             * inv.getId(),
-             * escapeCsv(inv.getProduct().getProductName()),
-             * inv.getAmount(),
-             * inv.getWarehouse().getWarehouseName(),
-             * inv.get()));
-             * writer.newLine();
-             * }
-             */
-            // Exportar otras entidades según sea necesario...
-            // Ejemplo para ventas:
-            /*
-             * List<SellRegistry> sales =
-             * sellRegistryService.getAllSellRegistriesByClient(client);
-             * for (SellRegistry sale : sales) {
-             * writer.write(String.format("SALE,%d,%s,%d,%.2f,%s",
-             * sale.getId(),
-             * escapeCsv(sale.getProductName()),
-             * sale.getProductAmount(),
-             * sale.getSellPrice(),
-             * sale.getSellDate()));
-             * writer.newLine();
-             * }
-             */
+        // Verificar si el archivo fuente existe
+        if (!Files.exists(source)) {
+            throw new IOException("El archivo de base de datos no existe en la ruta: " + sourcePath);
         }
-    }
 
-    private void importDataFromCSV(File file) throws IOException {
-        try (BufferedReader reader = Files.newBufferedReader(file.toPath())) {
-            String line;
-            boolean firstLine = true;
+        // Crear directorios padres si no existen
+        Files.createDirectories(destination.getParent());
 
-            while ((line = reader.readLine()) != null) {
-                if (firstLine) {
-                    firstLine = false;
-                    continue; // Saltar encabezados
-                }
-
-                String[] values = parseCsvLine(line);
-                if (values.length < 6)
-                    continue;
-
-                /*
-                 * String type = values[0];
-                 * switch (type) {
-                 * case "INVENTORY":
-                 * Inventory inv = new Inventory();
-                 * inv.setId(Long.parseLong(values[1]));
-                 * inv.setProductName(unescapeCsv(values[2]));
-                 * inv.setAmount(Integer.parseInt(values[3]));
-                 * inv.setPrice(Double.parseDouble(values[4]));
-                 * inv.setDateAdded(LocalDate.parse(values[5]));
-                 * // inventoryService.save(inv);
-                 * break;
-                 * 
-                 * // Manejar otros tipos...
-                 * }
-                 */
-            }
-        }
-    }
-
-    private String escapeCsv(String value) {
-        if (value.contains(",") || value.contains("\"") || value.contains("\n")) {
-            return "\"" + value.replace("\"", "\"\"") + "\"";
-        }
-        return value;
-    }
-
-    private String unescapeCsv(String value) {
-        if (value.startsWith("\"") && value.endsWith("\"")) {
-            return value.substring(1, value.length() - 1).replace("\"\"", "\"");
-        }
-        return value;
-    }
-
-    private String[] parseCsvLine(String line) {
-        // Implementación simple de parser CSV
-        return line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
+        // Copiar el archivo
+        Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
     }
 
 }

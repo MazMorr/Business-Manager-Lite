@@ -77,14 +77,14 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToSell" styleClass="btnIndex" text="Ventas">
+                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToWarehouse" styleClass="btnIndex" text="Almacenes">
                      <font>
                         <Font name="System Bold" size="17.0" />
                      </font>
                      <graphic>
                         <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
                            <image>
-                              <Image url="@../images/purchase.png" />
+                              <Image url="@../images/warehouse.png" />
                            </image>
                            <effect>
                               <InnerShadow choke="1.0">
@@ -96,14 +96,14 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToWarehouse" styleClass="btnIndex" text="Almacenes">
+                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToSell" styleClass="btnIndex" text="Ventas">
                      <font>
                         <Font name="System Bold" size="17.0" />
                      </font>
                      <graphic>
                         <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
                            <image>
-                              <Image url="@../images/warehouse.png" />
+                              <Image url="@../images/purchase.png" />
                            </image>
                            <effect>
                               <InnerShadow choke="1.0">
@@ -234,18 +234,14 @@
                      <children>
                         <HBox alignment="TOP_RIGHT" prefWidth="200.0">
                            <children>
-                              <Button mnemonicParsing="false" onAction="#cleanFilters" prefHeight="32.0" prefWidth="21.0" styleClass="btnStock">
+                              <Button mnemonicParsing="false" onAction="#cleanFilters" prefHeight="32.0" prefWidth="21.0" style="-fx-background-color: transparent;">
                                  <graphic>
                                     <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../images/filter.png" />
                                        </image>
                                        <effect>
-                                          <InnerShadow choke="1.0">
-                                             <color>
-                                                <Color red="1.0" green="1.0" blue="1.0" />
-                                             </color>
-                                          </InnerShadow>
+                                          <InnerShadow choke="1.0" />
                                        </effect>
                                     </ImageView>
                                  </graphic>
@@ -276,7 +272,7 @@
                                     <Insets left="20.0" />
                                  </HBox.margin>
                               </Label>
-                              <TextField fx:id="tfMinFilterPrice" prefWidth="70.0" promptText="0.00">
+                              <TextField fx:id="tfMinFilterPrice" prefWidth="70.0" promptText="0.00" styleClass="inputForm">
                                  <HBox.margin>
                                     <Insets left="2.0" />
                                  </HBox.margin></TextField>
@@ -285,7 +281,7 @@
                                     <Insets left="6.0" />
                                  </HBox.margin>
                               </Label>
-                              <TextField fx:id="tfMaxFilterPrice" prefWidth="70.0" promptText="0.00">
+                              <TextField fx:id="tfMaxFilterPrice" prefWidth="70.0" promptText="0.00" styleClass="inputForm">
                                  <HBox.margin>
                                     <Insets left="2.0" />
                                  </HBox.margin></TextField>
@@ -306,7 +302,7 @@
                         <HBox alignment="CENTER_LEFT" prefWidth="200.0">
                            <children>
                               <Label text="ID" />
-                              <TextField fx:id="tfFilterId" prefWidth="172.0">
+                              <TextField fx:id="tfFilterId" prefWidth="172.0" styleClass="inputForm">
                                  <HBox.margin>
                                     <Insets left="85.0" />
                                  </HBox.margin>
@@ -321,7 +317,7 @@
                                     <Insets left="20.0" />
                                  </HBox.margin>
                               </Label>
-                              <TextField fx:id="tfMinFilterAmount" prefWidth="70.0" promptText="0">
+                              <TextField fx:id="tfMinFilterAmount" prefWidth="70.0" promptText="0" styleClass="inputForm">
                                  <HBox.margin>
                                     <Insets left="2.0" />
                                  </HBox.margin></TextField>
@@ -330,7 +326,7 @@
                                     <Insets left="6.0" />
                                  </HBox.margin>
                               </Label>
-                              <TextField fx:id="tfMaxFilterAmount" prefWidth="70.0" promptText="0">
+                              <TextField fx:id="tfMaxFilterAmount" prefWidth="70.0" promptText="0" styleClass="inputForm">
                                  <HBox.margin>
                                     <Insets left="2.0" />
                                  </HBox.margin></TextField>
@@ -359,7 +355,7 @@
                <children>
                   <TabPane layoutX="-83.0" layoutY="-192.0" maxHeight="570.0" prefHeight="570.0" prefWidth="300.0" styleClass="crudOperations" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="10.0">
                     <tabs>
-                      <Tab text="Agregar o Actualizar">
+                      <Tab text="Agregar o Corregir">
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="406.0" prefWidth="233.0">
                                  <children>
@@ -371,9 +367,9 @@
                                                 <TextField fx:id="tfId" alignment="CENTER" disable="true" opacity="0.7" prefHeight="25.0" prefWidth="150.0" promptText="Autogenerado" styleClass="inputForm" />
                                              </children>
                                           </HBox>
-                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="49.0">
+                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="72.0">
                                              <children>
-                                                <Label text="Inversión" />
+                                                <Label text="Gasto" />
                                                 <TextField fx:id="tfAddProductName" prefHeight="25.0" prefWidth="150.0" styleClass="inputForm" />
                                              </children>
                                           </HBox>
@@ -455,10 +451,10 @@
                                           <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="72.0">
                                              <children>
                                                 <Label text="Fecha" />
-                                                <DatePicker fx:id="dpAddExpenseDate" editable="false" prefWidth="150.0" />
+                                                <DatePicker fx:id="dpAddExpenseDate" editable="false" prefWidth="150.0" styleClass="inputForm" />
                                              </children>
                                           </HBox>
-                                        <Button mnemonicParsing="false" onAction="#addOrUpgradeProduct" prefHeight="33.0" prefWidth="331.0" styleClass="btnStock" text="Agregar o Actualizar">
+                                        <Button mnemonicParsing="false" onAction="#addOrUpgradeProduct" prefHeight="33.0" prefWidth="331.0" styleClass="btnStock" text="Agregar o Corregir">
                                              <tooltip>
                                                 <Tooltip consumeAutoHidingEvents="false" text="Si el nombre y la categoria coinciden con algún producto ya registrado, este se actualizará y en caso diferente se agregará al registro" wrapText="true">
                                                    <font>
@@ -484,7 +480,7 @@
                                                 <Insets top="5.0" />
                                              </VBox.margin>
                                           </Button>
-                                          <Label fx:id="lblAddDebugForm" alignment="TOP_LEFT" prefHeight="118.0" prefWidth="260.0" text="Puede actualizar los gastos existentes si el ID coincide, para ello debe pinchar el elemento en la tabla y cambiar los valores que desee" textAlignment="CENTER" wrapText="true">
+                                          <Label fx:id="lblAddDebugForm" alignment="TOP_LEFT" prefHeight="118.0" prefWidth="260.0" text="Puede corregir los gastos existentes si el ID coincide, para ello debe pinchar el elemento en la tabla, cambiar los valores que desee y presionar el botón" textAlignment="CENTER" wrapText="true">
                                              <padding>
                                                 <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                              </padding>

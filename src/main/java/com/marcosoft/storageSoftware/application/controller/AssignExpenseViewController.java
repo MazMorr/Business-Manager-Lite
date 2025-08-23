@@ -24,14 +24,14 @@ import java.util.List;
  */
 @Lazy
 @Controller
-public class AssignInvestmentViewController {
+public class AssignExpenseViewController {
     private Client client;
 
     // Service and utility dependencies
     private final InventoryServiceImpl inventoryService;
     private final UserLogged userLogged;
     private final WarehouseServiceImpl warehouseService;
-    private final ExpenseServiceImpl investmentService;
+    private final ExpenseServiceImpl expenseService;
     private final ProductServiceImpl productService;
     private final DisplayAlerts displayAlerts;
     private final ParseDataTypes parseDataTypes;
@@ -47,15 +47,15 @@ public class AssignInvestmentViewController {
      * @param inventoryService the inventory service
      * @param userLogged the user logged
      * @param warehouseService the warehouse service
-     * @param investmentService the investment service
+     * @param expenseService the investment service
      * @param productService the product service
      * @param warehouseRegistryService the warehouse registry service
      * @param warehouseViewController the warehouse view controller
      */
-    public AssignInvestmentViewController(
+    public AssignExpenseViewController(
             GeneralRegistryServiceImpl generalRegistryService, ParseDataTypes parseDataTypes, DisplayAlerts displayAlerts,
             InventoryServiceImpl inventoryService, UserLogged userLogged, WarehouseServiceImpl warehouseService,
-            ExpenseServiceImpl investmentService, ProductServiceImpl productService,
+            ExpenseServiceImpl expenseService, ProductServiceImpl productService,
             WarehouseRegistryServiceImpl warehouseRegistryService, WarehouseViewController warehouseViewController
     ) {
         this.productService = productService;
@@ -65,7 +65,7 @@ public class AssignInvestmentViewController {
         this.inventoryService = inventoryService;
         this.userLogged = userLogged;
         this.warehouseService = warehouseService;
-        this.investmentService = investmentService;
+        this.expenseService = expenseService;
         this.parseDataTypes = parseDataTypes;
         this.warehouseViewController = warehouseViewController;
     }
@@ -84,26 +84,36 @@ public class AssignInvestmentViewController {
     public void initialize() {
         client = userLogged.getClient();
         Platform.runLater(() -> {
+            initTfInvestmentListener();
             initMbWarehouse();
             initMbExpense();
         });
     }
 
+    private void initTfInvestmentListener() {
+        tfInvestment.textProperty().addListener((obs, oldVal, newVal) -> searchProduct());
+    }
+
+    private void searchProduct() {
+        if(expenseService.existsByExpenseId(Long.parseLong(tfInvestment.getText()))){
+            tfProduct.setText(expenseService.getExpenseById(Long.parseLong(tfInvestment.getText())).getExpenseName());
+        }
+    }
+
     /**
      * Assigns all available product amount from the selected investment.
      * Shows alerts in Spanish if validation fails.
-     * @param actionEvent the action event
      */
     @FXML
-    public void assignAllProductAmount(ActionEvent actionEvent) {
+    public void assignAllProductAmount() {
         if (tfInvestment.getText().isEmpty()) {
             displayAlerts.showAlert("Debe asignar un gasto primero");
-        } else if (!investmentService.existsByExpenseId(Long.parseLong(tfInvestment.getText()))) {
+        } else if (!expenseService.existsByExpenseId(Long.parseLong(tfInvestment.getText()))) {
             displayAlerts.showAlert("No se encontró el identificador del gasto en la base de datos");
-        } else if (investmentService.getExpenseById(parseDataTypes.parseLong(tfInvestment.getText())).getAmount() == 0) {
+        } else if (expenseService.getExpenseById(parseDataTypes.parseLong(tfInvestment.getText())).getAmount() == 0) {
             displayAlerts.showAlert("Este gasto ha sido completamente asignado, debe seleccionar otra o reasignar los productos de esta");
         } else {
-            tfAmount.setText(String.valueOf(investmentService.getExpenseById(
+            tfAmount.setText(String.valueOf(expenseService.getExpenseById(
                     Long.parseLong(tfInvestment.getText())).getLeftAmount())
             );
         }
@@ -135,7 +145,7 @@ public class AssignInvestmentViewController {
             long investmentId = Long.parseLong(tfInvestment.getText());
             int amountToAssign = Integer.parseInt(tfAmount.getText());
 
-            Expense expense = investmentService.getExpenseById(investmentId);
+            Expense expense = expenseService.getExpenseById(investmentId);
 
             if (expense == null) {
                 displayAlerts.showAlert("No se encontró el gasto en la base de datos");
@@ -176,7 +186,7 @@ public class AssignInvestmentViewController {
 
                 int actualInvestmentAmount = expense.getLeftAmount() - amountToAssign;
                 expense.setLeftAmount(actualInvestmentAmount);
-                investmentService.save(expense);
+                expenseService.save(expense);
 
 
                 LocalDateTime registryMoment = LocalDateTime.now();
@@ -193,6 +203,7 @@ public class AssignInvestmentViewController {
                 warehouseViewController.initTreeTable();
                 warehouseViewController.initTableValues();
                 displayAlerts.showAlert("Producto asignado exitosamente");
+                clearFields();
             }
         } catch (NumberFormatException e) {
             displayAlerts.showAlert("Los campos numéricos deben contener valores válidos");
@@ -201,9 +212,11 @@ public class AssignInvestmentViewController {
         }
     }
 
-    // ============================
-    // UTILITIES
-    // ============================
+    private void clearFields() {
+        tfWarehouse.clear();
+        tfAmount.clear();
+    }
+
 
     /**
      * Checks if the warehouse exists for the current client.
@@ -220,7 +233,7 @@ public class AssignInvestmentViewController {
      */
     private void initMbExpense() {
         mbExpense.getItems().clear();
-        List<Expense> expenses = investmentService.getAllProductExpensesGreaterThanZeroByClient(client);
+        List<Expense> expenses = expenseService.getAllProductExpensesGreaterThanZeroByClient(client);
 
         for (Expense i : expenses) {
             MenuItem item = new MenuItem(String.valueOf(i.getExpenseId()));

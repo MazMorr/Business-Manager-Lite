@@ -31,6 +31,7 @@ public class BalanceViewController {
     private LocalDate startDate;
     private LocalDate endDate;
     @Setter
+    @Getter
     private Currency currency;
     private double totalExpense;
     private double totalProfit;
@@ -158,7 +159,8 @@ public class BalanceViewController {
 
     private void initNetProfit() {
         double netProfit = totalProfit - totalExpense;
-        lblNetProfit.setText(String.format("$ %.2f", netProfit));
+        String currencyName = currency.getCurrencyName();
+        lblNetProfit.setText(netProfit + " " + currencyName );
         if (netProfit < 0) {
             lblNetProfit.setStyle("-fx-text-fill: #e40000");
         } else if (netProfit > 0) {
@@ -208,6 +210,6 @@ public class BalanceViewController {
 
     @FXML
     public void displayCurrencyValues() throws SceneSwitcher.WindowLoadException {
-        sceneSwitcher.displayWindow("Valor de Monedas", "/images/RTS_logo", "/views/currencyValuesView.fxml");
+        sceneSwitcher.displayWindow("Valor de Monedas", "/images/lc_logo.png", "/views/currencyValuesView.fxml");
     }
 }

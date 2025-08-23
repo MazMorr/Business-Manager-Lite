@@ -48,12 +48,27 @@ public class CurrencyValuesViewController {
         this.displayAlerts = displayAlerts;
     }
 
-    @FXML private TextField tfCurrency, tfMLCtoCUP, tfUSDtoCUP, tfEURtoCUP;
-    @FXML private MenuButton mbCurrency;
+    @FXML
+    private TextField tfCurrency, tfMLCtoCUP, tfUSDtoCUP, tfEURtoCUP;
+    @FXML
+    private MenuButton mbCurrency;
 
     @FXML
     private void initialize() {
-        Platform.runLater(this::initMbCurrency);
+        Platform.runLater(() -> {
+            initMbCurrency();
+            initTfValues();
+        });
+    }
+
+    private void initTfValues() {
+        String MLC = currencyService.getCurrencyByName("MLC").getCurrencyPriceInCUP()+"";
+        String USD = currencyService.getCurrencyByName("USD").getCurrencyPriceInCUP()+"";
+        String EUR = currencyService.getCurrencyByName("EUR").getCurrencyPriceInCUP()+"";
+        tfCurrency.setText(balanceViewController.getCurrency().getCurrencyName());
+        tfMLCtoCUP.setText(MLC);
+        tfUSDtoCUP.setText(USD);
+        tfEURtoCUP.setText(EUR);
     }
 
     /**
@@ -80,6 +95,7 @@ public class CurrencyValuesViewController {
             }
             currencyService.save(currency);
         });
+        balanceViewController.refreshBalance();
     }
 
     private double parseDouble(TextField field) {
@@ -113,8 +129,8 @@ public class CurrencyValuesViewController {
         }
     }
 
-    private void showFieldError(TextField field,  String message) {
-        displayAlerts.showAlert( message);
+    private void showFieldError(TextField field, String message) {
+        displayAlerts.showAlert(message);
         field.requestFocus();
     }
 

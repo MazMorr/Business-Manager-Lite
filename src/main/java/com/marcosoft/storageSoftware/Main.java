@@ -57,7 +57,7 @@ public class Main extends Application {
     @Getter
     private static ConfigurableApplicationContext context;
     public static SpringFXMLLoader springFXMLLoader;
-    private static Stage primaryStage;
+    public static Stage primaryStage;
     private static Scene scene;
     private static DisplayAlerts displayAlerts;
 
@@ -92,7 +92,7 @@ public class Main extends Application {
         loadingScene.setCursor(Cursor.WAIT);
         stage.setScene(loadingScene);
         stage.setResizable(false);
-        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResource("/images/RTS_logo.png")).toString()));
+        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResource("/images/lc_logo.png")).toString()));
         stage.show();
     }
 

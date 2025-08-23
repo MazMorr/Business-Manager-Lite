@@ -3,6 +3,8 @@ package com.marcosoft.storageSoftware.domain.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Setter
@@ -22,5 +24,8 @@ public class Client {
     private String clientCompany;
 
     @Column(name="is_client_active", nullable = false)
-    private boolean isClientActive;
+    private Boolean isClientActive;
+
+    @Column(name = "last_date_time")
+    private LocalDateTime lastDateTime;
 }

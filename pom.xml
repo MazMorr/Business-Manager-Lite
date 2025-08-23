@@ -5,12 +5,12 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.3</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<version>3.5.5</version>
+		<relativePath/>
 	</parent>
 	<groupId>com.marcosoft</groupId>
 	<artifactId>BusinessManager</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.9.9</version>
 	<name>storageSoftware</name>
 	<description>Software for managing little companies like hardware shops or coffee shops</description>
 	<url/>

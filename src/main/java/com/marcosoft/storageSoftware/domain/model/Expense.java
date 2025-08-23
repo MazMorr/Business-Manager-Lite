@@ -43,5 +43,4 @@ public class Expense {
 
     @ManyToOne
     private Client client;
-
 }

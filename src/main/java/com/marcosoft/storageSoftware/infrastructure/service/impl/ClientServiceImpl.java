@@ -3,18 +3,23 @@ package com.marcosoft.storageSoftware.infrastructure.service.impl;
 import com.marcosoft.storageSoftware.domain.model.Client;
 import com.marcosoft.storageSoftware.domain.repository.ClientRepository;
 import com.marcosoft.storageSoftware.domain.service.ClientService;
+import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
 public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository clientRepository;
+    private final DisplayAlerts displayAlerts;
 
-    public ClientServiceImpl(ClientRepository clientRepository) {
+    public ClientServiceImpl(ClientRepository clientRepository, DisplayAlerts displayAlerts) {
         this.clientRepository = clientRepository;
+        this.displayAlerts = displayAlerts;
     }
 
     @Override
@@ -68,14 +73,38 @@ public class ClientServiceImpl implements ClientService {
     }
 
 
-
     @Override
     public Client authenticate(String clientName, String clientPassword) {
-        Client client = getClientByName(clientName);
-        if (client != null && verifyCredentials(clientName, clientPassword)) {
-            return client;
+        if (clientName == null || clientPassword == null || clientName.isBlank() || clientPassword.isBlank()) {
+            displayAlerts.showError("Nombre de cliente o contraseña no pueden estar vacíos");
+            return null;
         }
-        return null;
+
+        Client client = getClientByName(clientName);
+        if (client == null) {
+            // No mostrar mensaje específico por seguridad
+            return null;
+        }
+
+        if (!verifyCredentials(clientName, clientPassword)) {
+            // No mostrar mensaje específico sobre credenciales incorrectas por seguridad
+            return null;
+        }
+
+        LocalDateTime lastLogging = client.getLastDateTime();
+        LocalDateTime now = LocalDateTime.now();
+
+        if (lastLogging != null && now.isBefore(lastLogging)) {
+            String formattedDate = lastLogging.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            displayAlerts.showError("La fecha de su computador es anterior a la última sesión registrada: "
+                    + formattedDate + ". Verifique la configuración de fecha y hora.");
+            return null;
+        }
+
+        // Actualizar la fecha del último inicio de sesión
+        client.setLastDateTime(now);
+
+        return client;
     }
 
     @Override

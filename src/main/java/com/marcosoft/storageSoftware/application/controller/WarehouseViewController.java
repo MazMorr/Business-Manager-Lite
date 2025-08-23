@@ -263,7 +263,7 @@ public class WarehouseViewController {
      */
     @FXML
     public void assignExpense() throws SceneSwitcher.WindowLoadException {
-        sceneSwitcher.displayWindow("Asignar Inversión", "/images/RTS_logo.png", "/views/assignExpenseView.fxml");
+        sceneSwitcher.displayWindow("Asignar Inversión", "/images/lc_logo.png", "/views/assignExpenseView.fxml");
     }
 
     /**
@@ -280,7 +280,7 @@ public class WarehouseViewController {
      */
     @FXML
     public void updateWarehouse() throws SceneSwitcher.WindowLoadException {
-        sceneSwitcher.displayWindow("Actualizar Almacén", "/images/RTS_logo.png", "/views/updateWarehouseView.fxml");
+        sceneSwitcher.displayWindow("Actualizar Almacén", "/images/lc_logo.png", "/views/updateWarehouseView.fxml");
     }
 
     /**
@@ -289,7 +289,7 @@ public class WarehouseViewController {
      */
     @FXML
     public void changeProductName() throws SceneSwitcher.WindowLoadException {
-        sceneSwitcher.displayWindow("Asignar Inversión a un Almacén", "/images/RTS_logo.png", "/views/changeProductNameView.fxml");
+        sceneSwitcher.displayWindow("Asignar Inversión a un Almacén", "/images/lc_logo.png", "/views/changeProductNameView.fxml");
     }
 
     // ============================
@@ -349,5 +349,4 @@ public class WarehouseViewController {
     public void switchToSell(ActionEvent actionEvent) {
         sceneSwitcher.switchView(actionEvent, "/views/sellView.fxml");
     }
-
 }

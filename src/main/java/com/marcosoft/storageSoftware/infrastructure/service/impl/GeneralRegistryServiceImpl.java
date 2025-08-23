@@ -25,6 +25,6 @@ public class GeneralRegistryServiceImpl implements GeneralRegistryService {
 
     @Override
     public List<GeneralRegistry> getAllGeneralRegistriesByClient(Client client){
-        return  (List<GeneralRegistry>) generalRegistryRepository.findAllGeneralRegistriesByClient(client);
-    };
+        return generalRegistryRepository.findAllGeneralRegistriesByClient(client);
+    }
 }

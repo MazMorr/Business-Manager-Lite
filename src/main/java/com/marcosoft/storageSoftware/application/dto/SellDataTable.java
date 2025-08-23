@@ -23,12 +23,4 @@ public class SellDataTable {
         this.warehouseName = warehouseName;
         this.productAmount = productAmount;
     }
-
-    // Método para obtener precio formateado con moneda
-    public String getFormattedPrice() {
-        if (sellPrice == null || currency == null) {
-            return "";
-        }
-        return String.format("%.2f %s", sellPrice, currency);
-    }
 }

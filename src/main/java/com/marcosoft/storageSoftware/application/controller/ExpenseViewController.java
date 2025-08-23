@@ -396,12 +396,15 @@ public class ExpenseViewController {
             if (maxAmount != null && maxAmount > 0)
                 matches &= investment.getAmount() != null && investment.getAmount() <= maxAmount;
 
-            if (minPrice != null && minPrice > 0.0)
+            // Filtro para precio mínimo
+            if (minPrice != null) {
                 matches &= investment.getPrice() != null && investment.getPrice() >= minPrice;
+            }
 
-            if (maxPrice != null && maxPrice > 0.0)
+            // Filtro para precio máximo
+            if (maxPrice != null) {
                 matches &= investment.getPrice() != null && investment.getPrice() <= maxPrice;
-
+            }
             return matches;
         };
 
@@ -503,9 +506,7 @@ public class ExpenseViewController {
         sceneSwitcher.switchView(actionEvent, "/views/sellView.fxml");
     }
 
-
     private void initDpDefaultValue() {
         dpAddExpenseDate.setValue(LocalDate.now());
     }
-
 }

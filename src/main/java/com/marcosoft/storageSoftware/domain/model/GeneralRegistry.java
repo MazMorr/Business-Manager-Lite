@@ -30,5 +30,4 @@ public class GeneralRegistry {
 
     @Column(name = "registrydate_time")
     private LocalDateTime registryDateTime;
-
 }

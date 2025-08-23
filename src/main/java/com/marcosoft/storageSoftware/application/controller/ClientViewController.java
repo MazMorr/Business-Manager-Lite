@@ -4,6 +4,7 @@ import com.marcosoft.storageSoftware.application.dto.UserLogged;
 import com.marcosoft.storageSoftware.domain.model.Client;
 import com.marcosoft.storageSoftware.infrastructure.security.LicenseValidator;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
 import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
 import com.marcosoft.storageSoftware.infrastructure.util.SpringFXMLLoader;
 import javafx.application.Platform;
@@ -12,15 +13,15 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
 import java.util.Objects;
-import java.util.Optional;
 
 import static javafx.scene.paint.Color.RED;
 
@@ -36,6 +37,7 @@ public class ClientViewController {
     private final ClientServiceImpl clientService;
     private final UserLogged userLogged;
     private final LicenseValidator licenseValidator;
+    private final DisplayAlerts displayAlerts;
     private final SceneSwitcher sceneSwitcher;
 
     /**
@@ -47,9 +49,10 @@ public class ClientViewController {
      */
     public ClientViewController(
             UserLogged userLogged, LicenseValidator licenseValidator, ClientServiceImpl clientService,
-            SpringFXMLLoader springFXMLLoader, SceneSwitcher sceneSwitcher
+            SpringFXMLLoader springFXMLLoader, DisplayAlerts displayAlerts, SceneSwitcher sceneSwitcher
     ) {
         this.userLogged = userLogged;
+        this.displayAlerts = displayAlerts;
         this.sceneSwitcher = sceneSwitcher;
         this.clientService = clientService;
         this.licenseValidator = licenseValidator;
@@ -106,7 +109,7 @@ public class ClientViewController {
             Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
-            stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResource("/images/RTS_logo.png")).toString()));
+            stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResource("/images/lc_logo.png")).toString()));
             stage.setTitle("Business Manager");
             stage.centerOnScreen();
             stage.setMinWidth(1140);
@@ -146,13 +149,7 @@ public class ClientViewController {
      * @return true if the user confirms exit, false otherwise.
      */
     private boolean showExitAlert() {
-        Alert alert = new Alert(AlertType.CONFIRMATION);
-        alert.setTitle("Confirmación");
-        alert.setHeaderText("¿Seguro que quiere salir?");
-        alert.setContentText("Asegúrese de tener todo en orden antes de cerrar la aplicación, por favor.");
-
-        Optional<ButtonType> result = alert.showAndWait();
-        return result.isPresent() && result.get() == ButtonType.OK;
+        return displayAlerts.showConfirmationAlert("Asegúrese de tener todo en orden antes de cerrar la aplicaciónJason.");
     }
 
     /**

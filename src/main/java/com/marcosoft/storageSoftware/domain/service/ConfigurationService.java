@@ -15,5 +15,4 @@ public interface ConfigurationService {
     List<Configuration> getAllConfigurations();
 
     void deleteById(Long id);
-
 }

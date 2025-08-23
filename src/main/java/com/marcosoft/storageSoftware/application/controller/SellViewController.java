@@ -2,16 +2,39 @@ package com.marcosoft.storageSoftware.application.controller;
 
 import com.marcosoft.storageSoftware.application.dto.SellDataTable;
 import com.marcosoft.storageSoftware.application.dto.UserLogged;
-import com.marcosoft.storageSoftware.domain.model.*;
+import com.marcosoft.storageSoftware.domain.model.Client;
+import com.marcosoft.storageSoftware.domain.model.Currency;
+import com.marcosoft.storageSoftware.domain.model.GeneralRegistry;
+import com.marcosoft.storageSoftware.domain.model.Inventory;
+import com.marcosoft.storageSoftware.domain.model.Product;
+import com.marcosoft.storageSoftware.domain.model.SellFilterCriteria;
+import com.marcosoft.storageSoftware.domain.model.Warehouse;
 import com.marcosoft.storageSoftware.domain.service.WarehouseService;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.*;
-import com.marcosoft.storageSoftware.infrastructure.util.*;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.CurrencyServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.GeneralRegistryServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.InventoryServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.ProductServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.SellRegistryServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.util.CleanHelper;
+import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
+import com.marcosoft.storageSoftware.infrastructure.util.ParseDataTypes;
+import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
+import com.marcosoft.storageSoftware.infrastructure.util.SellFieldsValidator;
+import com.marcosoft.storageSoftware.infrastructure.util.SellFilterUtilities;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableCell;
+import javafx.scene.control.TreeTableColumn;
+import javafx.scene.control.TreeTableView;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -50,8 +73,8 @@ public class SellViewController {
             CurrencyServiceImpl currencyService, DisplayAlerts displayAlerts, SellFieldsValidator sellFieldsValidator,
             UserLogged userLogged, ParseDataTypes parseDataTypes, SceneSwitcher sceneSwitcher,
             InventoryServiceImpl inventoryService, ProductServiceImpl productService, WarehouseService warehouseService,
-            SellRegistryServiceImpl sellRegistryService, GeneralRegistryServiceImpl generalRegistryService, CleanHelper cleanHelper,
-            SellFilterUtilities sellFilterUtilities
+            SellRegistryServiceImpl sellRegistryService, GeneralRegistryServiceImpl generalRegistryService,
+            CleanHelper cleanHelper, SellFilterUtilities sellFilterUtilities
     ) {
         this.inventoryService = inventoryService;
         this.sellFilterUtilities = sellFilterUtilities;
@@ -99,6 +122,7 @@ public class SellViewController {
             setupTableColumns();
             loadProductTable();
             setupFilterListeners();
+            setupMbListeners();
             initDatePicker();
             initMbWarehouse();
             initAllMbCurrency();
@@ -170,7 +194,6 @@ public class SellViewController {
         loadProductTable();
     }
 
-
     @FXML
     public void cleanForm() {
         List<TextField> textFields = List.of(
@@ -221,6 +244,7 @@ public class SellViewController {
 
     private void updateUIAfterSale(Inventory inventory) {
         loadProductTable();
+        loadWarningAndAlertLabels();
         cleanForm();
 
         int remainingStock = inventory.getAmount();
@@ -242,7 +266,10 @@ public class SellViewController {
     @FXML
     public void assignProductPrice() {
         if (!sellFieldsValidator.validateAllAssignPriceFields(
-                tfAssignPriceProductName.getText(), tfAssignPriceProductPrice.getText(), tfAssignPriceCurrency.getText(), client
+                tfAssignPriceProductName.getText(),
+                tfAssignPriceCurrency.getText(),
+                tfAssignPriceProductPrice.getText(),
+                client
         )) {
             return;
         }
@@ -455,6 +482,7 @@ public class SellViewController {
                 displayAlerts.showAlert("Error al aplicar estilos a la tabla");
             }
 
+            loadWarningAndAlertLabels();
         } catch (Exception e) {
             handleLoadError(e);
         } finally {
@@ -681,6 +709,11 @@ public class SellViewController {
         tfMaxFilterPrice.textProperty().addListener((obs, oldVal, newVal) -> loadProductTable());
     }
 
+    private void setupMbListeners() {
+        mbSellProduct.onActionProperty().addListener((obs, oldVal, newVal)
+                -> initMbSellProduct(warehouseService.getWarehouseByWarehouseNameAndClient(tfSellWarehouse.getText(), client)));
+    }
+
     private void setupOtherTextFieldListeners() {
         tfSellProductAmount.textProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null && !newVal.isEmpty()) {
@@ -782,5 +815,12 @@ public class SellViewController {
             item.setOnAction(e -> tf.setText(item.getText()));
             mb.getItems().add(item);
         }
+    }
+
+    @FXML
+    public void displayLastSells() throws SceneSwitcher.WindowLoadException {
+        sceneSwitcher.displayWindow(
+                "Ventas Realizadas", "/images/lc_logo.png", "/views/realizedSells.fxml"
+        );
     }
 }

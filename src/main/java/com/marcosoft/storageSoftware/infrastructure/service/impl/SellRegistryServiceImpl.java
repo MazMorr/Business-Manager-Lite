@@ -41,6 +41,14 @@ public class SellRegistryServiceImpl implements SellRegistryService {
         return sellRegistryRepository.findAllSellRegistriesByClient(client);
     }
 
+    public SellRegistry getById(Long id) {
+        return sellRegistryRepository.findById(id).orElse(null);
+    }
+
+    public boolean existsById(Long id) {
+        return sellRegistryRepository.existsById(id);
+    }
+
     public Double getTotalProductProfit(Client client, LocalDate initDate, LocalDate endDate, Currency currency) {
         double cup = 0.0, mlc = 0.0, usd = 0.0, eur = 0.0;
 
@@ -77,6 +85,8 @@ public class SellRegistryServiceImpl implements SellRegistryService {
         };
     }
 
+
+
     public void registerSaleTransaction(
             String productName, int productAmount, String sellProductPrice, String currency, LocalDate date,
             String sellWarehouse, Client client
@@ -106,12 +116,9 @@ public class SellRegistryServiceImpl implements SellRegistryService {
     ) {
         // Actualizar inventario
         int newAmount = inventory.getAmount() - productAmount;
-        if (newAmount == 0) {
-            inventoryService.deleteInventoryById(inventory.getId());
-        } else {
-            inventory.setAmount(newAmount);
-            inventoryService.save(inventory);
-        }
+
+        inventory.setAmount(newAmount);
+        inventoryService.save(inventory);
 
         // Registrar venta
         registerSaleTransaction(

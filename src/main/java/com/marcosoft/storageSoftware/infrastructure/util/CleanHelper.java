@@ -9,9 +9,11 @@ import java.util.List;
 @Lazy
 @Component
 public class CleanHelper {
-
-    public void cleanTextFields(List<TextField> tf){
-
+    public void cleanTextFields(List<TextField> textFields){
+        for(TextField tf: textFields){
+            if (tf != null) {
+                tf.clear();
+            }
+        }
     }
-
 }

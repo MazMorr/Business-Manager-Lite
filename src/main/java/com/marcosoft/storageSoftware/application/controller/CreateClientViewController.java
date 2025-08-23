@@ -66,28 +66,27 @@ public class CreateClientViewController {
      */
     @FXML
     private void createAccount(ActionEvent actionEvent) {
-        if (!userNameIsSet || !passwordIsSet || !confirmedPasswordIsSet) {
-            txtDebugForm.setTextFill(RED);
-            txtDebugForm.setText("Por favor, complete correctamente todos los campos obligatorios.");
-            return;
-        }
-
         if (clientService.existsByClientName(txtFieldUserName.getText())) {
             txtDebugForm.setTextFill(RED);
             txtDebugForm.setText("Está intentando crear una cuenta que ya existe.");
             return;
         }
 
+        if (!userNameIsSet || !passwordIsSet || !confirmedPasswordIsSet) {
+            txtDebugForm.setTextFill(RED);
+            txtDebugForm.setText("Por favor, complete correctamente todos los campos obligatorios.");
+            return;
+        }
+
         // Obtener la contraseña del campo visible actual
-        String password = cbShowPassword.isSelected()
-                ? textFieldPassword.getText()
-                : passFieldPassword.getText();
+        String password = cbShowPassword.isSelected() ? textFieldPassword.getText() : passFieldPassword.getText();
 
         Client client = new Client(
                 txtFieldUserName.getText(),
                 password,
                 txtFieldCompany.getText(),
-                false
+                false,
+                null
         );
         clientService.save(client);
 

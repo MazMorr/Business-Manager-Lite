@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -87,7 +86,8 @@ public class InventoryServiceImpl implements InventoryService {
 
     public List<Inventory> getInventories(Client client) {
         List<Inventory> inventories = getAllInventoriesByClient(client);
-        return inventories != null ? inventories : Collections.emptyList();
+        inventories.removeIf(inv -> inv.getAmount() == null || inv.getAmount() == 0);
+        return inventories;
     }
 
     public boolean shouldShowAlert(Inventory inventory) {

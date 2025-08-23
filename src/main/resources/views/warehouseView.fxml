@@ -68,14 +68,14 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToSell" styleClass="btnIndex" text="Ventas">
+                  <Button alignment="CENTER_LEFT" disable="true" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" styleClass="btnIndex" text="Almacenes">
                      <font>
                         <Font name="System Bold" size="17.0" />
                      </font>
                      <graphic>
                         <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
                            <image>
-                              <Image url="@../images/purchase.png" />
+                              <Image url="@../images/warehouse.png" />
                            </image>
                            <effect>
                               <InnerShadow choke="1.0">
@@ -87,14 +87,14 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button alignment="CENTER_LEFT" disable="true" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" styleClass="btnIndex" text="Almacenes">
+                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToSell" styleClass="btnIndex" text="Ventas">
                      <font>
                         <Font name="System Bold" size="17.0" />
                      </font>
                      <graphic>
                         <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
                            <image>
-                              <Image url="@../images/warehouse.png" />
+                              <Image url="@../images/purchase.png" />
                            </image>
                            <effect>
                               <InnerShadow choke="1.0">

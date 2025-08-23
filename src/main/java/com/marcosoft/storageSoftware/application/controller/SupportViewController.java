@@ -62,17 +62,14 @@ public class SupportViewController {
      */
     @FXML
     private void initialize() {
-        client= userLogged.getClient();
+        client = userLogged.getClient();
+        lblClientName.setText(client.getClientName());
+
         Platform.runLater(() -> {
             initWelcomeLabels();
             initCurrencyDefaultValues();
 
-            try {
-                String clientName = client.getClientName();
-                lblClientName.setText(clientName != null ? clientName : "Usuario");
-            } catch (Exception e) {
-                lblClientName.setText("Usuario");
-            }
+
         });
     }
 
@@ -96,8 +93,8 @@ public class SupportViewController {
                 switch (currencyName) {
                     case "MLC" -> currency = new Currency(null, currencyName, 200.00);
                     case "CUP" -> currency = new Currency(null, currencyName, 1.00);
-                    case "USD" -> currency = new Currency(null, currencyName, 400.00);
-                    case "EUR" -> currency = new Currency(null, currencyName, 450.00);
+                    case "USD" -> currency = new Currency(null, currencyName, 120.00);
+                    case "EUR" -> currency = new Currency(null, currencyName, 160.00);
                 }
 
                 currencyService.save(currency);
@@ -116,7 +113,7 @@ public class SupportViewController {
         lblWelcome.setText(
                 """
                         Este sistema ha sido diseñado para brindarle un control eficiente y seguro sobre los recursos de su negocio. \
-                        Aquí podrá gestionar inventarios, inversiones, ventas y mucho más de manera sencilla y centralizada.
+                        Aquí podrá gestionar inventarios, gastos, ventas y mucho más de manera sencilla y centralizada.
                         
                         Recuerde que el uso de este software está protegido por una licencia. La distribución o comercialización fuera de los canales oficiales \
                         puede resultar en sanciones legales, multas o la cancelación permanente de la licencia.
