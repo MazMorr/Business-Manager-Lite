@@ -59,7 +59,7 @@ public class RealizedSellsViewController {
     }
 
     @FXML
-    private MenuButton mbId, mbProduct, mbCurrency, mbWarehouse;
+    private MenuButton mbId, mbCurrency;
     @FXML
     private TextField tfProduct, tfProductCurrency, tfProductPrice, tfId, tfWarehouse, tfProductAmount;
     @FXML
@@ -99,17 +99,29 @@ public class RealizedSellsViewController {
     }
 
     private void searchSell() {
-        if (sellRegistryService.existsById(parseDataTypes.parseLong(tfId.getText()))) {
-            SellRegistry sellRegistry = sellRegistryService.getById(parseDataTypes.parseLong(tfId.getText()));
-            tfProduct.setText(sellRegistry.getProductName());
-            tfWarehouse.setText(sellRegistry.getWarehouseName());
-            tfProductAmount.setText(sellRegistry.getProductAmount() + "");
-            tfProductCurrency.setText(sellRegistry.getSellCurrency());
-            tfProductPrice.setText(sellRegistry.getSellPrice() + "");
-            dpSellProductDate.setValue(sellRegistry.getSellDate());
-        } else {
+        String idText = tfId.getText();
+        if (idText == null || idText.trim().isEmpty()) {
+            clearFieldsExceptId();
+            return;
+        }
+
+        try{
+            Long id = parseDataTypes.parseLong(idText);
+            if (sellRegistryService.existsByIdAndClient(id, client)) {
+                SellRegistry sellRegistry = sellRegistryService.getByIdAndClient(id, client);
+                tfProduct.setText(sellRegistry.getProductName());
+                tfWarehouse.setText(sellRegistry.getWarehouseName());
+                tfProductAmount.setText(sellRegistry.getProductAmount() + "");
+                tfProductCurrency.setText(sellRegistry.getSellCurrency());
+                tfProductPrice.setText(sellRegistry.getSellPrice() + "");
+                dpSellProductDate.setValue(sellRegistry.getSellDate());
+            } else {
+                clearFieldsExceptId();
+            }
+        }catch(NumberFormatException e){
             clearFieldsExceptId();
         }
+
     }
 
     private void clearFieldsExceptId() {
@@ -168,7 +180,7 @@ public class RealizedSellsViewController {
         LocalDate sellDate = dpSellProductDate.getValue();
 
         // 3. Obtener venta original
-        SellRegistry originalSell = sellRegistryService.getById(id);
+        SellRegistry originalSell = sellRegistryService.getByIdAndClient(id, client);
         if (originalSell == null) {
             displayAlerts.showAlert("No se encontró el registro de venta a actualizar.");
             return;
@@ -294,7 +306,7 @@ public class RealizedSellsViewController {
         // Aquí puedes cargar los datos de una venta seleccionada en la tabla
         RealizedSellsDataTable selected = tvSells.getSelectionModel().getSelectedItem();
         if (selected != null) {
-            SellRegistry sellRegistry = sellRegistryService.getById(selected.getId());
+            SellRegistry sellRegistry = sellRegistryService.getByIdAndClient(selected.getId(), client);
             tfId.setText(sellRegistry.getId() + "");
             tfProduct.setText(sellRegistry.getProductName());
             tfWarehouse.setText(sellRegistry.getWarehouseName());

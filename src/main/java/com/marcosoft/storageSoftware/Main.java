@@ -48,7 +48,8 @@ import java.util.concurrent.Executors;
         "com.marcosoft.storageSoftware.infrastructure.service.impl",
         "com.marcosoft.storageSoftware.application.controller",
         "com.marcosoft.storageSoftware.application.dto",
-        "com.marcosoft.storageSoftware.infrastructure.security"
+        "com.marcosoft.storageSoftware.infrastructure.security",
+        "com.marcosoft.storageSoftware.infrastructure.config"
 })
 @EntityScan(basePackages = "com.marcosoft.storageSoftware.domain.model")
 @EnableJpaRepositories(basePackages = "com.marcosoft.storageSoftware.domain.repository")

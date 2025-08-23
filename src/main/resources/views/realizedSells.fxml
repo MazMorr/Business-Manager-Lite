@@ -121,7 +121,7 @@
                   <HBox alignment="CENTER_LEFT" prefHeight="34.0" prefWidth="244.0">
                      <children>
                         <Label text="Precio Venta" />
-                        <TextField fx:id="tfProductPrice" prefHeight="34.0" prefWidth="80.0" promptText="0.00">
+                        <TextField fx:id="tfProductPrice" prefHeight="34.0" prefWidth="80.0" promptText="0.00" styleClass="inputForm">
                            <tooltip>
                               <Tooltip text="Precio al que deseas vender cada unidad del producto  (en la zona de ventas este precio puede ser cambiado)" wrapText="true">
                                  <font>
@@ -160,7 +160,7 @@
                   <HBox alignment="CENTER_LEFT" prefHeight="34.0" prefWidth="200.0" spacing="75.0">
                      <children>
                         <Label text="Fecha" />
-                        <DatePicker fx:id="dpSellProductDate" editable="false" prefWidth="160.0" />
+                        <DatePicker fx:id="dpSellProductDate" editable="false" prefWidth="160.0" styleClass="inputForm" />
                      </children>
                   </HBox>
                   <Button mnemonicParsing="false" onAction="#goOut" prefWidth="1000.0" styleClass="btnStock" text="Salir">

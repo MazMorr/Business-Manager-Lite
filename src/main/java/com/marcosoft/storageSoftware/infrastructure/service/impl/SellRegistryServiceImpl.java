@@ -41,12 +41,14 @@ public class SellRegistryServiceImpl implements SellRegistryService {
         return sellRegistryRepository.findAllSellRegistriesByClient(client);
     }
 
-    public SellRegistry getById(Long id) {
-        return sellRegistryRepository.findById(id).orElse(null);
+    @Override
+    public SellRegistry getByIdAndClient(Long id, Client client) {
+        return sellRegistryRepository.findByIdAndClient(id, client);
     }
 
-    public boolean existsById(Long id) {
-        return sellRegistryRepository.existsById(id);
+    @Override
+    public boolean existsByIdAndClient(Long id, Client client) {
+        return sellRegistryRepository.existsByIdAndClient(id, client);
     }
 
     public Double getTotalProductProfit(Client client, LocalDate initDate, LocalDate endDate, Currency currency) {

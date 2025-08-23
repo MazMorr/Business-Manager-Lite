@@ -3,6 +3,7 @@ package com.marcosoft.storageSoftware.application.controller;
 import com.marcosoft.storageSoftware.application.dto.UserLogged;
 import com.marcosoft.storageSoftware.domain.model.Client;
 import com.marcosoft.storageSoftware.domain.model.Inventory;
+import com.marcosoft.storageSoftware.infrastructure.config.DatabaseManager;
 import com.marcosoft.storageSoftware.infrastructure.security.LicenseValidator;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.InventoryServiceImpl;
@@ -27,10 +28,6 @@ import org.springframework.stereotype.Controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +54,7 @@ public class ConfigurationViewController {
     private final InventoryServiceImpl inventoryService;
     private final LicenseValidator licenseValidator;
     private final SellRegistryServiceImpl sellRegistryService;
+    private final DatabaseManager databaseManager;
 
     /**
      * Instantiates a new Configuration view controller.
@@ -67,7 +65,7 @@ public class ConfigurationViewController {
     public ConfigurationViewController(
             ClientServiceImpl clientService, SceneSwitcher sceneSwitcher, DisplayAlerts displayAlerts,
             UserLogged userLogged, LicenseValidator licenseValidator,
-            InventoryServiceImpl inventoryService, SellRegistryServiceImpl sellRegistryService) {
+            InventoryServiceImpl inventoryService, SellRegistryServiceImpl sellRegistryService, DatabaseManager databaseManager) {
         this.displayAlerts = displayAlerts;
         this.userLogged = userLogged;
         this.licenseValidator = licenseValidator;
@@ -75,6 +73,7 @@ public class ConfigurationViewController {
         this.clientService = clientService;
         this.inventoryService = inventoryService;
         this.sceneSwitcher = sceneSwitcher;
+        this.databaseManager = databaseManager;
     }
 
     @FXML
@@ -187,21 +186,11 @@ public class ConfigurationViewController {
         sceneSwitcher.switchView(actionEvent, "/views/balanceView.fxml");
     }
 
-    /**
-     * Switch to investment.
-     *
-     * @param actionEvent the action event
-     */
     @FXML
     public void switchToExpense(ActionEvent actionEvent) {
         sceneSwitcher.switchView(actionEvent, "/views/expenseView.fxml");
     }
 
-    /**
-     * Switch to sell.
-     *
-     * @param actionEvent the action event
-     */
     @FXML
     public void switchToSell(ActionEvent actionEvent) {
         sceneSwitcher.switchView(actionEvent, "/views/sellView.fxml");
@@ -247,36 +236,19 @@ public class ConfigurationViewController {
 
         if (selectedDirectory != null) {
             try {
-                String sourcePath = "C:/BusinessManager/Database.mv.db";
-                String destinationPath = selectedDirectory.getAbsolutePath() + "\\Database_backup_" + LocalDate.now() + ".mv.db";
+                String destinationPath = selectedDirectory.getAbsolutePath() +
+                        "\\Database_backup_" +
+                        LocalDate.now() +
+                        ".zip"; // H2 crea un zip por defecto
 
-                exportDB(sourcePath, destinationPath);
+                databaseManager.exportDB(destinationPath);
+                displayAlerts.showAlert("Base de datos exportada correctamente");
 
-                Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
-                successAlert.setTitle("Exportación exitosa");
-                successAlert.setHeaderText("Base de datos exportada correctamente");
-                successAlert.setContentText("Ubicación: " + destinationPath);
-                successAlert.showAndWait();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 displayAlerts.showError("Error al exportar la base de datos: " + e.getMessage());
             }
         }
     }
 
-    private void exportDB(String sourcePath, String destinationPath) throws IOException {
-        Path source = Paths.get(sourcePath);
-        Path destination = Paths.get(destinationPath);
-
-        // Verificar si el archivo fuente existe
-        if (!Files.exists(source)) {
-            throw new IOException("El archivo de base de datos no existe en la ruta: " + sourcePath);
-        }
-
-        // Crear directorios padres si no existen
-        Files.createDirectories(destination.getParent());
-
-        // Copiar el archivo
-        Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
-    }
 
 }

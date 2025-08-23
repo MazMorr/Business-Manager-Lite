@@ -2,39 +2,16 @@ package com.marcosoft.storageSoftware.application.controller;
 
 import com.marcosoft.storageSoftware.application.dto.SellDataTable;
 import com.marcosoft.storageSoftware.application.dto.UserLogged;
-import com.marcosoft.storageSoftware.domain.model.Client;
-import com.marcosoft.storageSoftware.domain.model.Currency;
-import com.marcosoft.storageSoftware.domain.model.GeneralRegistry;
-import com.marcosoft.storageSoftware.domain.model.Inventory;
-import com.marcosoft.storageSoftware.domain.model.Product;
-import com.marcosoft.storageSoftware.domain.model.SellFilterCriteria;
-import com.marcosoft.storageSoftware.domain.model.Warehouse;
+import com.marcosoft.storageSoftware.domain.model.*;
 import com.marcosoft.storageSoftware.domain.service.WarehouseService;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.CurrencyServiceImpl;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.GeneralRegistryServiceImpl;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.InventoryServiceImpl;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.ProductServiceImpl;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.SellRegistryServiceImpl;
-import com.marcosoft.storageSoftware.infrastructure.util.CleanHelper;
-import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
-import com.marcosoft.storageSoftware.infrastructure.util.ParseDataTypes;
-import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
-import com.marcosoft.storageSoftware.infrastructure.util.SellFieldsValidator;
-import com.marcosoft.storageSoftware.infrastructure.util.SellFilterUtilities;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.*;
+import com.marcosoft.storageSoftware.infrastructure.util.*;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeTableCell;
-import javafx.scene.control.TreeTableColumn;
-import javafx.scene.control.TreeTableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -43,6 +20,8 @@ import org.springframework.stereotype.Controller;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -375,6 +354,15 @@ public class SellViewController {
         configureStringColumn(ttcProductName, "productName");
         configureDoubleColumn(ttcSellPrice, "sellPrice"); // Asumo que el campo se llama "sellPrice" y no "formattedPrice"
         configureIntegerColumn(ttcProductAmount, "productAmount");
+
+        ttvInventory.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 1) {
+                Platform.runLater(() -> {
+                    applyStockWarningStyles(ttvInventory.getRoot());
+                    ttvInventory.refresh();
+                });
+            }
+        });
     }
 
 
@@ -549,9 +537,10 @@ public class SellViewController {
             } else if (inventoryService.shouldShowWarning(inventory)) {
                 item.getValue().setStyle(warningStyle);
             } else {
-                item.getValue().setStyle("");
+                item.getValue().setStyle(""); // Limpiar estilo si no aplica
             }
         } else {
+            // Manejar casos donde no se encuentra el inventory
             item.getValue().setStyle("");
         }
     }
@@ -563,39 +552,33 @@ public class SellViewController {
             String productName;
             String warehouseName;
 
+            // Determinar si es nodo hijo o individual
             if (item.getParent() != null && item.getParent() != ttvInventory.getRoot()) {
-                // Es un nodo hijo (warehouse)
                 productName = item.getParent().getValue().getProductName();
                 warehouseName = item.getValue().getWarehouseName();
             } else {
-                // Es un nodo padre (product) o item individual
                 productName = item.getValue().getProductName();
                 warehouseName = item.getValue().getWarehouseName();
 
-                // Ignorar warehouseName si es un texto de resumen (nodo padre)
+                // Solo ignorar si es un nodo de resumen (multiple almacenes)
                 if (warehouseName != null && warehouseName.startsWith("Almacenes:")) {
                     warehouseName = null;
                 }
             }
 
+            if (productName == null) return null;
+
             Product product = productService.getByProductNameAndClient(productName, client);
-            if (product == null) {
-                log.warn("Product not found: {}", productName);
-                return null;
+            if (product == null) return null;
+
+            if (warehouseName == null || warehouseName.trim().isEmpty()) {
+                return null; // No hay warehouse específico
             }
 
-            // Solo buscar warehouse si tenemos un nombre válido
-            Warehouse warehouse = null;
-            if (warehouseName != null && !warehouseName.trim().isEmpty()) {
-                warehouse = warehouseService.getWarehouseByWarehouseNameAndClient(warehouseName, client);
-                if (warehouse == null) {
-                    log.warn("Warehouse not found: {}", warehouseName);
-                    return null;
-                }
-            }
+            Warehouse warehouse = warehouseService.getWarehouseByWarehouseNameAndClient(warehouseName, client);
+            if (warehouse == null) return null;
 
-            return (warehouse != null) ?
-                    inventoryService.getByProductAndWarehouseAndClient(product, warehouse, client) : null;
+            return inventoryService.getByProductAndWarehouseAndClient(product, warehouse, client);
         } catch (Exception e) {
             log.error("Error getting inventory from tree item", e);
             return null;
@@ -625,17 +608,28 @@ public class SellViewController {
 
         Map<Product, List<Inventory>> inventoriesByProduct = sellFilterUtilities.groupAndFilterInventories(inventories, filters);
 
-        inventoriesByProduct.forEach((product, invList) -> {
+        // Ordenar productos alfabéticamente por nombre
+        List<Product> sortedProducts = inventoriesByProduct.keySet().stream()
+                .sorted(Comparator.comparing(Product::getProductName)).toList();
+
+        for (Product product : sortedProducts) {
+            List<Inventory> invList = inventoriesByProduct.get(product);
             List<Inventory> filteredInvList = sellFilterUtilities.filterByWarehouseAndAmount(invList, filters);
 
             if (!filteredInvList.isEmpty()) {
-                addToTree(root, product, filteredInvList);
+                // Crear una copia mutable de la lista para poder ordenarla
+                List<Inventory> mutableList = new ArrayList<>(filteredInvList);
+
+                // Ordenar inventarios alfabéticamente por nombre de almacén
+                mutableList.sort(Comparator.comparing(inv ->
+                        inv.getWarehouse().getWarehouseName().toLowerCase()));
+
+                addToTree(root, product, mutableList);
             }
-        });
+        }
 
         return root;
     }
-
 
     private void addToTree(TreeItem<SellDataTable> root, Product product, List<Inventory> filteredInvList) {
         String currency = product.getCurrency() != null ? product.getCurrency().getCurrencyName() : "";
