@@ -4,7 +4,6 @@ import com.marcosoft.storageSoftware.application.dto.UserLogged;
 import com.marcosoft.storageSoftware.domain.model.Client;
 import com.marcosoft.storageSoftware.domain.model.GeneralRegistry;
 import com.marcosoft.storageSoftware.domain.model.Warehouse;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.GeneralRegistryServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.WarehouseServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
@@ -32,7 +31,6 @@ public class UpdateWarehouseViewController {
 
     // Service and utility dependencies
     private final WarehouseServiceImpl warehouseService;
-    private final ClientServiceImpl clientService;
     private final UserLogged userLogged;
     private final DisplayAlerts displayAlerts;
     private final GeneralRegistryServiceImpl generalRegistryService;
@@ -40,18 +38,21 @@ public class UpdateWarehouseViewController {
 
     /**
      * Constructor for dependency injection.
+     * @param userLogged the user logged
+     * @param displayAlerts the display alerts
+     * @param warehouseService the warehouse service
+     * @param generalRegistryService the general registry service
+     * @param warehouseViewController the warehouse view controller
      */
     @Lazy
     public UpdateWarehouseViewController(
-            UserLogged userLogged, DisplayAlerts displayAlerts, ClientServiceImpl clientService,
-            WarehouseServiceImpl warehouseService, GeneralRegistryServiceImpl generalRegistryService,
-            WarehouseViewController warehouseViewController
+            UserLogged userLogged, DisplayAlerts displayAlerts, WarehouseServiceImpl warehouseService,
+            GeneralRegistryServiceImpl generalRegistryService, WarehouseViewController warehouseViewController
     ) {
         this.warehouseService = warehouseService;
         this.warehouseViewController = warehouseViewController;
         this.generalRegistryService = generalRegistryService;
         this.displayAlerts = displayAlerts;
-        this.clientService = clientService;
         this.userLogged = userLogged;
     }
 
@@ -67,7 +68,7 @@ public class UpdateWarehouseViewController {
      */
     @FXML
     public void initialize() {
-        client = clientService.getClientByName(userLogged.getName());
+        client = userLogged.getClient();
         Platform.runLater(() -> {
             initMbActualName();
         });
@@ -78,7 +79,6 @@ public class UpdateWarehouseViewController {
      */
     private void initMbActualName() {
         mbActualName.getItems().clear();
-        Client client = clientService.getClientByName(userLogged.getName());
         List<Warehouse> warehouses = warehouseService.getAllWarehousesByClient(client);
         for (Warehouse w : warehouses) {
             MenuItem item = new MenuItem(w.getWarehouseName());
@@ -92,6 +92,7 @@ public class UpdateWarehouseViewController {
     /**
      * Handles the update of a warehouse name when the user clicks the update button.
      * Validates input and shows alerts in Spanish if validation fails.
+     * @param actionEvent the action event
      */
     @FXML
     public void updateWarehouseName(ActionEvent actionEvent) {
@@ -101,7 +102,7 @@ public class UpdateWarehouseViewController {
                 String actualName = tfActualName.getText().trim();
 
                 if (client == null) {
-                    displayAlerts.showAlert("Cliente no encontrado");
+                    displayAlerts.showError("Cliente no encontrado");
                     return;
                 }
 
@@ -124,7 +125,7 @@ public class UpdateWarehouseViewController {
                 warehouseViewController.initTreeTable();
             }
         } catch (Exception e) {
-            displayAlerts.showAlert("Error al actualizar el nombre: " + e.getMessage());
+            displayAlerts.showError("Error al actualizar el nombre: " + e.getMessage());
         }
     }
 
@@ -142,7 +143,6 @@ public class UpdateWarehouseViewController {
      */
     private boolean validateTfNewName() {
         String newName = tfNewName.getText();
-        Client client = clientService.getClientByName(userLogged.getName());
         if (newName.isEmpty()) {
             displayAlerts.showAlert("No ha establecido el nuevo nombre que desea para su almacén");
             return false;
@@ -163,7 +163,6 @@ public class UpdateWarehouseViewController {
      */
     private boolean validateTfActualName() {
         String actualName = tfActualName.getText();
-        Client client = clientService.getClientByName(userLogged.getName());
         if (actualName.isEmpty()) {
             displayAlerts.showAlert("No ha seleccionado ningún almacén al que actualizarle el nombre");
             return false;
@@ -179,7 +178,7 @@ public class UpdateWarehouseViewController {
      * Closes the update warehouse window.
      */
     @FXML
-    public void goOut(ActionEvent actionEvent) {
+    public void goOut() {
         Stage stage = (Stage) mbActualName.getScene().getWindow();
         stage.close();
     }

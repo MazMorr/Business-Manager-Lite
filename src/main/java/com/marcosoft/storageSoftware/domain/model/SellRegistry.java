@@ -46,5 +46,4 @@ public class SellRegistry {
 
     @Column(name = "product_amount")
     private Integer productAmount;
-
 }

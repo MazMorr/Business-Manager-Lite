@@ -1,10 +1,11 @@
 package com.marcosoft.storageSoftware.application.controller;
 
-import com.marcosoft.storageSoftware.Main;
 import com.marcosoft.storageSoftware.application.dto.UserLogged;
 import com.marcosoft.storageSoftware.domain.model.Client;
 import com.marcosoft.storageSoftware.infrastructure.security.LicenseValidator;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
+import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
 import com.marcosoft.storageSoftware.infrastructure.util.SpringFXMLLoader;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -12,15 +13,15 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
 import java.util.Objects;
-import java.util.Optional;
 
 import static javafx.scene.paint.Color.RED;
 
@@ -33,16 +34,27 @@ public class ClientViewController {
 
     // Dependencies injected via constructor
     private final SpringFXMLLoader springFXMLLoader;
-    private final ClientServiceImpl clientServiceImpl;
+    private final ClientServiceImpl clientService;
     private final UserLogged userLogged;
     private final LicenseValidator licenseValidator;
+    private final DisplayAlerts displayAlerts;
+    private final SceneSwitcher sceneSwitcher;
 
     /**
      * Constructor for dependency injection.
+     * @param userLogged the user logged
+     * @param licenseValidator the license validator
+     * @param clientService the client service
+     * @param springFXMLLoader the spring fxml loader
      */
-    public ClientViewController(UserLogged userLogged, LicenseValidator licenseValidator, ClientServiceImpl clientService, SpringFXMLLoader springFXMLLoader) {
+    public ClientViewController(
+            UserLogged userLogged, LicenseValidator licenseValidator, ClientServiceImpl clientService,
+            SpringFXMLLoader springFXMLLoader, DisplayAlerts displayAlerts, SceneSwitcher sceneSwitcher
+    ) {
         this.userLogged = userLogged;
-        this.clientServiceImpl = clientService;
+        this.displayAlerts = displayAlerts;
+        this.sceneSwitcher = sceneSwitcher;
+        this.clientService = clientService;
         this.licenseValidator = licenseValidator;
         this.springFXMLLoader = springFXMLLoader;
     }
@@ -72,7 +84,7 @@ public class ClientViewController {
 
         try {
             // Authenticate user credentials (ahora verifica directamente)
-            Client client = clientServiceImpl.authenticate(username, password);
+            Client client = clientService.authenticate(username, password);
 
             if (client == null) {
                 showError("Usuario o contraseña incorrecta.");
@@ -85,11 +97,11 @@ public class ClientViewController {
             }
 
             // Mark client as active in the database
-            clientServiceImpl.updateIsClientActiveByClientName(true, username);
+            clientService.updateIsClientActiveByClientName(true, username);
             userLogged.setName(username);
 
             // Load the support view
-            Parent root = springFXMLLoader.load("/supportView.fxml");
+            Parent root = springFXMLLoader.load("/views/supportView.fxml");
             SupportViewController primaryController = springFXMLLoader.getController(SupportViewController.class);
             primaryController.setAccountController(this);
 
@@ -97,16 +109,16 @@ public class ClientViewController {
             Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
-            stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResource("/images/RTS_logo.png")).toString()));
-            stage.setTitle("Almacenamiento");
+            stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResource("/images/lc_logo.png")).toString()));
+            stage.setTitle("Business Manager");
             stage.centerOnScreen();
-            stage.setMinWidth(1100);
-            stage.setMinHeight(650);
+            stage.setMinWidth(1140);
+            stage.setMinHeight(690);
 
             // Handle window close event
             stage.setOnCloseRequest(e -> {
                 if (showExitAlert()) {
-                    clientServiceImpl.updateIsClientActiveByClientName(false, username);
+                    clientService.updateIsClientActiveByClientName(false, username);
                     stage.close();
                 } else {
                     e.consume();
@@ -137,13 +149,7 @@ public class ClientViewController {
      * @return true if the user confirms exit, false otherwise.
      */
     private boolean showExitAlert() {
-        Alert alert = new Alert(AlertType.CONFIRMATION);
-        alert.setTitle("Confirmación");
-        alert.setHeaderText("¿Seguro que quiere salir?");
-        alert.setContentText("Asegúrese de tener todo en orden antes de cerrar la aplicación, por favor.");
-
-        Optional<ButtonType> result = alert.showAndWait();
-        return result.isPresent() && result.get() == ButtonType.OK;
+        return displayAlerts.showConfirmationAlert("Asegúrese de tener todo en orden antes de cerrar la aplicación.");
     }
 
     /**
@@ -151,9 +157,9 @@ public class ClientViewController {
      * Clears input fields before switching view.
      */
     @FXML
-    private void switchToCreateClient() {
+    private void switchToCreateClient(ActionEvent actionEvent) throws SceneSwitcher.ViewLoadException {
         clearFields();
-        Main.setRoot("createClientView");
+        sceneSwitcher.setRootWithEvent(actionEvent, "/views/createClientView.fxml");
     }
 
     /**
@@ -172,9 +178,9 @@ public class ClientViewController {
     public void initialize() {
         Platform.runLater(() -> {
             // Close any previous active client session
-            if (clientServiceImpl.existsByIsClientActive(true)) {
-                clientServiceImpl.updateIsClientActiveByClientName(false,
-                        clientServiceImpl.getByIsClientActive(true).getClientName());
+            if (clientService.existsByIsClientActive(true)) {
+                clientService.updateIsClientActiveByClientName(false,
+                        clientService.getByIsClientActive(true).getClientName());
             }
             clearFields();
         });

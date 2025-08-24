@@ -21,32 +21,26 @@ import java.time.LocalDateTime;
 @Controller
 public class AddWarehouseViewController {
     private Client client;
-    private WarehouseViewController warehouseViewController;
+    private final WarehouseViewController warehouseViewController;
 
     // Dependencies injected via constructor
     private final UserLogged userLogged;
     private final DisplayAlerts displayAlerts;
-    private final ClientServiceImpl clientService;
     private final WarehouseServiceImpl warehouseService;
     private final WarehouseRegistryServiceImpl warehouseRegistryService;
     private final GeneralRegistryServiceImpl generalRegistryService;
     private final InventoryServiceImpl inventoryService;
 
-    /**
-     * Constructor for dependency injection.
-     */
-    @Lazy
     public AddWarehouseViewController(
             InventoryServiceImpl inventoryService, WarehouseViewController warehouseViewController,
             WarehouseRegistryServiceImpl warehouseRegistryService, GeneralRegistryServiceImpl generalRegistryService,
-            DisplayAlerts displayAlerts, WarehouseServiceImpl warehouseService, UserLogged userLogged, ClientServiceImpl clientService
+            DisplayAlerts displayAlerts, WarehouseServiceImpl warehouseService, UserLogged userLogged
     ) {
         this.inventoryService = inventoryService;
         this.warehouseService = warehouseService;
         this.warehouseViewController = warehouseViewController;
         this.generalRegistryService = generalRegistryService;
         this.warehouseRegistryService = warehouseRegistryService;
-        this.clientService = clientService;
         this.displayAlerts = displayAlerts;
         this.userLogged = userLogged;
     }
@@ -57,7 +51,7 @@ public class AddWarehouseViewController {
 
     @FXML
     private void initialize() {
-        client = clientService.getClientByName(userLogged.getName());
+        client = userLogged.getClient();
     }
 
 
@@ -66,7 +60,7 @@ public class AddWarehouseViewController {
      * Validates input and shows alerts in Spanish if validation fails.
      */
     @FXML
-    public void addWarehouse(ActionEvent actionEvent) {
+    public void addWarehouse() {
         LocalDateTime registryMoment = LocalDateTime.now();
         if (tfWarehouseName.getText().isEmpty()) {
             displayAlerts.showAlert("Debe asignar un nombre para el nuevo almacén");
@@ -122,6 +116,7 @@ public class AddWarehouseViewController {
 
     /**
      * Closes the add warehouse window.
+     * @param actionEvent the action event
      */
     @FXML
     public void goOut(ActionEvent actionEvent) {

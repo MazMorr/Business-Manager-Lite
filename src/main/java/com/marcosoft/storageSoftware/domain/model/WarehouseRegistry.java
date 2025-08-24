@@ -35,9 +35,6 @@ public class WarehouseRegistry {
     @Column(name = "product_name")
     private String productName;
 
-
-
     @Column(name = "amount")
     private Integer amount;
-
 }

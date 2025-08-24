@@ -37,18 +37,6 @@ Negro:               #0f172a
     -fx-font-size: 16;
 }
 
-.btnRight{
-    -fx-background-radius: 0px 20px 0px 0px;
-}
-
-.btnRight:hover{
-    -fx-opacity: 0.8;
-}
-
-.btnLeft{
-    -fx-background-radius: 20px 0px 0px 0px;
-}
-
 .button:hover{
     -fx-cursor: hand;
     -fx-background-color: #60a5fa;
@@ -152,16 +140,6 @@ Negro:               #0f172a
     -fx-background-color: #b91c1c;
 }
 
-/* ========================= */
-/* FORMULARIOS               */
-/* ========================= */
-.txtPassword {
-    -fx-font-style: italic;
-}
-
-/* ========================= */
-/* TÍTULOS                   */
-/* ========================= */
 .title {
     -fx-text-fill: #ffffff;
     -fx-font-weight: 700;
@@ -224,29 +202,6 @@ Negro:               #0f172a
 }
 
 /* ========================= */
-/* CONFIGURACIÓN             */
-/* ========================= */
-.configuration {
-    -fx-background-color: #1e293b;
-    -fx-cursor: hand;
-    -fx-font-weight: 900;
-    -fx-text-fill: #fff;
-}
-
-.configuration:hover {
-    -fx-opacity: 0.85;
-    -fx-background-color: #334155;
-}
-
-/* ========================= */
-/* MENÚ                      */
-/* ========================= */
-.menuIndex:hover {
-    -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(30,41,59,0.15), 10, 0, 0, 0);
-}
-
-/* ========================= */
 /* FILTROS                   */
 /* ========================= */
 .filters {
@@ -292,12 +247,19 @@ Negro:               #0f172a
     -fx-font-weight: 800;
 }
 
+.inputForm{
+    -fx-font-weight: 600;
+}
+
 .filter-background {
     -fx-font-size: 13;
-    -fx-border-width: 2;
-    -fx-border-radius: 10;
-    -fx-background-radius: 10;
     -fx-padding: 10;
+    -fx-font-family: 'Segoe UI', sans-serif;
+    -fx-font-weight: 800;
+}
+
+.sell-operations-background {
+    -fx-font-size: 13;
     -fx-font-family: 'Segoe UI', sans-serif;
     -fx-font-weight: 800;
 }
@@ -370,6 +332,21 @@ Negro:               #0f172a
     -fx-faint-focus-color: transparent !important;
 }
 
-.pagination {
-    -fx-page-information-visible: false; /* Oculta el texto de página */
+.alert{
+    -fx-background-color: #f3f4f6;
+    -fx-font-size: 13;
+    -fx-border-color: #2563eb;
+    -fx-border-width: 1;
+    -fx-background-radius: 10;
+    -fx-padding: 10;
+    -fx-font-family: 'Segoe UI', sans-serif;
+    -fx-font-weight: 800;
+}
+
+.alert .header-panel{
+    -fx-background-color: linear-gradient(to right,#2563eb, #60a5fa);
+    -fx-background-radius: 10;
+}
+.alert .header-panel .label{
+    -fx-text-fill: #ffffff;
 }

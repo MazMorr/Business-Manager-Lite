@@ -4,6 +4,20 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+# Archivos de base de datos H2 (deben ser ignorados)
+*.mv.db
+*.trace.db
+StorageDatabase.*
+Database.*
+
+# Archivos de configuración (deben ser ignorados por seguridad)
+/src/main/resources/application.properties
+/src/main/resources/application-dev.properties
+/src/main/resources/application-prod.properties
+
+# Directorios de configuración
+/src/main/resources/config/
+
 ### STS ###
 .apt_generated
 .classpath
@@ -31,4 +45,16 @@ build/
 
 ### VS Code ###
 .vscode/
-!/src/main/resources/StorageDatabase.trace.db
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Archivos temporales
+*.tmp
+*.temp
+

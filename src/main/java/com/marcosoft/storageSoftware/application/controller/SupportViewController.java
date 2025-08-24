@@ -1,17 +1,16 @@
 package com.marcosoft.storageSoftware.application.controller;
 
 import com.marcosoft.storageSoftware.application.dto.UserLogged;
+import com.marcosoft.storageSoftware.domain.model.Client;
 import com.marcosoft.storageSoftware.domain.model.Currency;
 import com.marcosoft.storageSoftware.infrastructure.security.LicenseValidator;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.CurrencyServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
 import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
@@ -26,28 +25,32 @@ import java.util.List;
 @Controller
 public class SupportViewController {
     // Reference to the account controller for session management
+    private Client client;
     private ClientViewController accountController;
 
     // Service and utility dependencies
     private final UserLogged userLogged;
     private final LicenseValidator licenseValidator;
+    private final DisplayAlerts displayAlerts;
     private final SceneSwitcher sceneSwitcher;
-    private final ClientServiceImpl clientService;
     private final CurrencyServiceImpl currencyService;
 
     /**
      * Constructor for dependency injection.
+     * @param currencyService the currency service
+     * @param sceneSwitcher the scene switcher
+     * @param userLogged the user logged
+     * @param licenseValidator the license validator
      */
-    @Lazy
     public SupportViewController(
-            CurrencyServiceImpl currencyService, SceneSwitcher sceneSwitcher, ClientServiceImpl clientService,
-            UserLogged userLogged, LicenseValidator licenseValidator
+            CurrencyServiceImpl currencyService, SceneSwitcher sceneSwitcher,
+            UserLogged userLogged, LicenseValidator licenseValidator, DisplayAlerts displayAlerts
     ) {
         this.userLogged = userLogged;
         this.licenseValidator = licenseValidator;
         this.currencyService = currencyService;
         this.sceneSwitcher = sceneSwitcher;
-        this.clientService = clientService;
+        this.displayAlerts = displayAlerts;
     }
 
     // FXML UI components
@@ -60,21 +63,20 @@ public class SupportViewController {
      */
     @FXML
     private void initialize() {
+        client = userLogged.getClient();
+        lblClientName.setText(client.getClientName());
+
         Platform.runLater(() -> {
             initWelcomeLabels();
             initCurrencyDefaultValues();
 
-            try {
-                String clientName = clientService.getByIsClientActive(true).getClientName();
-                lblClientName.setText(clientName != null ? clientName : "Usuario");
-            } catch (Exception e) {
-                lblClientName.setText("Usuario");
-            }
+
         });
     }
 
     /**
      * Sets the account controller reference for session management.
+     * @param clientViewController the client view controller
      */
     public void setAccountController(ClientViewController clientViewController) {
         this.accountController = clientViewController;
@@ -90,10 +92,10 @@ public class SupportViewController {
             if (!currencyService.existsByCurrencyName(currencyName)) {
                 Currency currency = new Currency(null, currencyName, 0.0);
                 switch (currencyName) {
-                    case "MLC" -> currency = new Currency(null, currencyName, 215.00);
+                    case "MLC" -> currency = new Currency(null, currencyName, 200.00);
                     case "CUP" -> currency = new Currency(null, currencyName, 1.00);
-                    case "USD" -> currency = new Currency(null, currencyName, 395.00);
-                    case "EUR" -> currency = new Currency(null, currencyName, 445.00);
+                    case "USD" -> currency = new Currency(null, currencyName, 120.00);
+                    case "EUR" -> currency = new Currency(null, currencyName, 160.00);
                 }
 
                 currencyService.save(currency);
@@ -107,12 +109,12 @@ public class SupportViewController {
      */
     private void initWelcomeLabels() {
         lblLicenseDays.setText(LocalDate.now().until(licenseValidator.getRemainingTime()).getDays() + " Días");
-        versionLabel.setText("0.9.7");
+        versionLabel.setText("0.9.9");
         lblWelcomeTitle.setText("Bienvenido, " + userLogged.getName());
         lblWelcome.setText(
                 """
                         Este sistema ha sido diseñado para brindarle un control eficiente y seguro sobre los recursos de su negocio. \
-                        Aquí podrá gestionar inventarios, inversiones, ventas y mucho más de manera sencilla y centralizada.
+                        Aquí podrá gestionar inventarios, gastos, ventas y mucho más de manera sencilla y centralizada.
                         
                         Recuerde que el uso de este software está protegido por una licencia. La distribución o comercialización fuera de los canales oficiales \
                         puede resultar en sanciones legales, multas o la cancelación permanente de la licencia.
@@ -129,15 +131,15 @@ public class SupportViewController {
      */
     @FXML
     private void switchToRegistry(ActionEvent event) {
-        sceneSwitcher.switchView(event, "/registryView.fxml");
+        sceneSwitcher.switchView(event, "/views/registryView.fxml");
     }
 
     /**
      * Navigates to the investment view.
      */
     @FXML
-    private void switchToInvestment(ActionEvent event) {
-        sceneSwitcher.switchView(event, "/investmentView.fxml");
+    private void switchToExpense(ActionEvent event) {
+        sceneSwitcher.switchView(event, "/views/expenseView.fxml");
     }
 
     /**
@@ -145,48 +147,36 @@ public class SupportViewController {
      */
     @FXML
     private void switchToConfiguration(ActionEvent event) {
-        sceneSwitcher.switchView(event, "/configurationView.fxml");
+        sceneSwitcher.switchView(event, "/views/configurationView.fxml");
     }
 
     /**
      * Navigates to the warehouse view.
+     * @param event the event
      */
     @FXML
     public void switchToWarehouse(ActionEvent event) {
-        sceneSwitcher.switchView(event, "/warehouseView.fxml");
+        sceneSwitcher.switchView(event, "/views/warehouseView.fxml");
     }
 
     /**
      * Navigates to the balance view.
+     * @param event the event
      */
     @FXML
     public void switchToBalance(ActionEvent event) {
-        sceneSwitcher.switchView(event, "/balanceView.fxml");
+        sceneSwitcher.switchView(event, "/views/balanceView.fxml");
     }
 
-    /**
-     * Navigates to the inventory (sell) view.
-     */
     @FXML
     public void switchToInventory(ActionEvent event) {
-        sceneSwitcher.switchView(event, "/sellView.fxml");
+        sceneSwitcher.switchView(event, "/views/sellView.fxml");
     }
 
-    /**
-     * Displays license information in an alert dialog.
-     * The message is shown in Spanish.
-     */
     @FXML
-    private void licenseInformation(MouseEvent event) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Asistente de Ayuda");
-        alert.setHeaderText("Información de la licencia");
-        alert.setContentText(
-                "Pasado el tiempo disponible para renovar su licencia, el programa se bloqueará " +
-                        "instantáneamente y no podrá ser usado. Es posible que pierda los datos de la base de datos. " +
-                        "Por favor, llame al +53 5550 5961 antes de que eso ocurra para renovar su licencia y continuar " +
-                        "usando el software sin interrupciones."
-        );
-        alert.showAndWait();
+    private void licenseInformation() {
+        displayAlerts.showAlert("Pasado el tiempo disponible para renovar su licencia, el programa se bloqueará " +
+                "instantáneamente y no podrá ser usado. Por favor, llame al +53 5550 5961 antes de que eso ocurra" +
+                " para renovar su licencia y continuar usando la aplicación sin interrupciones.");
     }
 }

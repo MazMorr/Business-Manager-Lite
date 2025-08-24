@@ -116,7 +116,7 @@ public class LicenseValidator {
         } catch (Exception e) {
             System.err.println("ERROR INESPERADO: " + e.getClass().getName() + ": " + e.getMessage());
             e.printStackTrace();
-            displayAlerts.showAlert("Error técnico al validar la licencia.\n" +
+            displayAlerts.showError("Error técnico al validar la licencia.\n" +
                     "Por favor, contacte al soporte técnico.");
             return false;
         }

@@ -1,8 +1,19 @@
 package com.marcosoft.storageSoftware.application.controller;
 
-import com.marcosoft.storageSoftware.application.dto.*;
-import com.marcosoft.storageSoftware.domain.model.*;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.*;
+import com.marcosoft.storageSoftware.application.dto.ExpenseRegistryDataTable;
+import com.marcosoft.storageSoftware.application.dto.GeneralRegistryDataTable;
+import com.marcosoft.storageSoftware.application.dto.SellRegistryDataTable;
+import com.marcosoft.storageSoftware.application.dto.UserLogged;
+import com.marcosoft.storageSoftware.application.dto.WarehouseRegistryDataTable;
+import com.marcosoft.storageSoftware.domain.model.Client;
+import com.marcosoft.storageSoftware.domain.model.ExpenseRegistry;
+import com.marcosoft.storageSoftware.domain.model.GeneralRegistry;
+import com.marcosoft.storageSoftware.domain.model.SellRegistry;
+import com.marcosoft.storageSoftware.domain.model.WarehouseRegistry;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.ExpenseRegistryServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.GeneralRegistryServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.SellRegistryServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.WarehouseRegistryServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
 import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
 import javafx.application.Platform;
@@ -10,7 +21,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
@@ -25,7 +41,7 @@ import java.util.List;
 public class RegistryViewController {
 
     ObservableList<GeneralRegistryDataTable> generalRegistryDataTables;
-    ObservableList<InvestmentRegistryDataTable> investmentRegistryDataTables;
+    ObservableList<ExpenseRegistryDataTable> expenseRegistryDataTables;
     ObservableList<SellRegistryDataTable> sellRegistryDataTables;
     ObservableList<WarehouseRegistryDataTable> warehouseRegistryDataTables;
 
@@ -33,27 +49,24 @@ public class RegistryViewController {
     private DateTimeFormatter formatter;
 
     private final UserLogged userLogged;
-    private final ClientServiceImpl clientService;
     private final SceneSwitcher sceneSwitcher;
     private final SellRegistryServiceImpl sellRegistryService;
     private final GeneralRegistryServiceImpl generalRegistryService;
     private final WarehouseRegistryServiceImpl warehouseRegistryService;
-    private final InvestmentRegistryServiceImpl investmentRegistryService;
+    private final ExpenseRegistryServiceImpl expenseRegistryService;
     private final DisplayAlerts displayAlerts;
 
-    @Lazy
     public RegistryViewController(
-            InvestmentRegistryServiceImpl investmentRegistryService, SellRegistryServiceImpl sellRegistryService,
+            ExpenseRegistryServiceImpl expenseRegistryService, SellRegistryServiceImpl sellRegistryService,
             GeneralRegistryServiceImpl generalRegistryService, WarehouseRegistryServiceImpl warehouseRegistryService,
-            UserLogged userLogged, ClientServiceImpl clientService, SceneSwitcher sceneSwitcher, DisplayAlerts displayAlerts
+            UserLogged userLogged, SceneSwitcher sceneSwitcher, DisplayAlerts displayAlerts
     ) {
         this.userLogged = userLogged;
         this.displayAlerts = displayAlerts;
-        this.investmentRegistryService = investmentRegistryService;
+        this.expenseRegistryService = expenseRegistryService;
         this.sellRegistryService = sellRegistryService;
         this.warehouseRegistryService = warehouseRegistryService;
         this.generalRegistryService = generalRegistryService;
-        this.clientService = clientService;
         this.sceneSwitcher = sceneSwitcher;
     }
 
@@ -65,16 +78,15 @@ public class RegistryViewController {
     @FXML
     private TableColumn<GeneralRegistryDataTable, String> tcGeneralRegistryType, tcGeneralRegistryZone;
 
-
-    //Investment Registry Table
+    //Expense Registry Table
     @FXML
-    private TableView<InvestmentRegistryDataTable> tvInvestment;
+    private TableView<ExpenseRegistryDataTable> tvExpense;
     @FXML
-    private TableColumn<InvestmentRegistryDataTable, String> tcInvestmentName, tcInvestmentPriceCurrency, tcInvestmentRegistryType;
+    private TableColumn<ExpenseRegistryDataTable, String> tcExpenseName, tcExpensePriceCurrency, tcExpenseRegistryType;
     @FXML
-    private TableColumn<InvestmentRegistryDataTable, Long> tcIdInvestment;
+    private TableColumn<ExpenseRegistryDataTable, Long> tcIdExpense;
     @FXML
-    private TableColumn<InvestmentRegistryDataTable, LocalDateTime> tcInvestmentRegistryDateTime;
+    private TableColumn<ExpenseRegistryDataTable, LocalDateTime> tcExpenseRegistryDateTime;
 
 
     //Sell Registry Table
@@ -110,7 +122,7 @@ public class RegistryViewController {
 
     @FXML
     public void initialize() {
-        client = clientService.getClientByName(userLogged.getName());
+        client = userLogged.getClient();
         formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         txtClientName.setText(userLogged.getName());
         Platform.runLater(() -> {
@@ -131,7 +143,7 @@ public class RegistryViewController {
         if (selectedTab.equals(tabGeneral)) {
             initGeneralRegistryTableValues();
         } else if (selectedTab.equals(tabInvestment)) {
-            initInvestmentRegistryTableValues();
+            initExpenseRegistryTableValues();
         } else if (selectedTab.equals(tabSell)) {
             initSellRegistryTableValues();
         } else if (selectedTab.equals(tabWarehouse)) {
@@ -140,9 +152,12 @@ public class RegistryViewController {
     }
 
     private void initGeneralRegistryTableValues() {
-
         generalRegistryDataTables = FXCollections.observableArrayList();
         List<GeneralRegistry> generalRegistries = generalRegistryService.getAllGeneralRegistriesByClient(client);
+
+        // Ordenar por fecha más reciente primero
+        generalRegistries.sort((r1, r2) -> r2.getRegistryDateTime().compareTo(r1.getRegistryDateTime()));
+
         generalRegistryDataTables.clear();
 
         for (GeneralRegistry generalRegistry : generalRegistries) {
@@ -171,13 +186,15 @@ public class RegistryViewController {
         });
 
         tvGeneralRegistry.setItems(generalRegistryDataTables);
-
     }
 
     private void initWarehouseRegistryTableValues() {
-
         warehouseRegistryDataTables = FXCollections.observableArrayList();
         List<WarehouseRegistry> warehouseRegistries = warehouseRegistryService.getAllWarehouseRegistriesByClient(client);
+
+        // Ordenar por fecha más reciente primero
+        warehouseRegistries.sort((r1, r2) -> r2.getRegistryDateTime().compareTo(r1.getRegistryDateTime()));
+
         warehouseRegistryDataTables.clear();
 
         for (WarehouseRegistry w : warehouseRegistries) {
@@ -213,9 +230,12 @@ public class RegistryViewController {
     }
 
     private void initSellRegistryTableValues() {
-
         sellRegistryDataTables = FXCollections.observableArrayList();
         List<SellRegistry> sellRegistries = sellRegistryService.getAllSellRegistriesByClient(client);
+
+        // Ordenar por fecha más reciente primero
+        sellRegistries.sort((r1, r2) -> r2.getRegistryDate().compareTo(r1.getRegistryDate()));
+
         sellRegistryDataTables.clear();
 
         for (SellRegistry sellRegistry : sellRegistries) {
@@ -254,37 +274,40 @@ public class RegistryViewController {
         tvSell.setItems(sellRegistryDataTables);
     }
 
-    private void initInvestmentRegistryTableValues() {
+    private void initExpenseRegistryTableValues() {
         try {
-            investmentRegistryDataTables = FXCollections.observableArrayList();
-            List<InvestmentRegistry> investmentRegistries = investmentRegistryService.getAllInvestmentRegistryByClient(client);
-            investmentRegistryDataTables.clear();
+            expenseRegistryDataTables = FXCollections.observableArrayList();
+            List<ExpenseRegistry> investmentRegistries = expenseRegistryService.getAllExpenseRegistryByClient(client);
 
-            for (InvestmentRegistry investmentRegistry : investmentRegistries) {
+            // Ordenar por fecha más reciente primero
+            investmentRegistries.sort((r1, r2) -> r2.getRegistryDateTime().compareTo(r1.getRegistryDateTime()));
 
+            expenseRegistryDataTables.clear();
+
+            for (ExpenseRegistry expenseRegistry : investmentRegistries) {
                 // Formatear el precio y moneda
                 String priceCurrency = String.format("%.2f %s",
-                        investmentRegistry.getInvestmentPrice(),
-                        investmentRegistry.getCurrency());
+                        expenseRegistry.getInvestmentPrice(),
+                        expenseRegistry.getCurrency());
 
                 // Agregar a la lista observable
-                investmentRegistryDataTables.add(new InvestmentRegistryDataTable(
-                        investmentRegistry.getRegistryType(),
-                        investmentRegistry.getRegistryDateTime(),
-                        investmentRegistry.getInvestmentId(),
-                        investmentRegistry.getInvestmentName(),
+                expenseRegistryDataTables.add(new ExpenseRegistryDataTable(
+                        expenseRegistry.getRegistryType(),
+                        expenseRegistry.getRegistryDateTime(),
+                        expenseRegistry.getInvestmentId(),
+                        expenseRegistry.getInvestmentName(),
                         priceCurrency
                 ));
             }
 
-            tcInvestmentRegistryType.setCellValueFactory(new PropertyValueFactory<>("registryType"));
-            tcInvestmentRegistryDateTime.setCellValueFactory(new PropertyValueFactory<>("registryDate"));
-            tcIdInvestment.setCellValueFactory(new PropertyValueFactory<>("investmentId"));
-            tcInvestmentName.setCellValueFactory(new PropertyValueFactory<>("investmentName"));
-            tcInvestmentPriceCurrency.setCellValueFactory(new PropertyValueFactory<>("buyPriceAndCurrency"));
+            tcExpenseRegistryType.setCellValueFactory(new PropertyValueFactory<>("registryType"));
+            tcExpenseRegistryDateTime.setCellValueFactory(new PropertyValueFactory<>("registryDate"));
+            tcIdExpense.setCellValueFactory(new PropertyValueFactory<>("expenseId"));
+            tcExpenseName.setCellValueFactory(new PropertyValueFactory<>("expenseName"));
+            tcExpensePriceCurrency.setCellValueFactory(new PropertyValueFactory<>("buyPriceAndCurrency"));
 
             // Formatear LocalDateTime
-            tcInvestmentRegistryDateTime.setCellFactory(column -> new TableCell<>() {
+            tcExpenseRegistryDateTime.setCellFactory(column -> new TableCell<>() {
                 @Override
                 protected void updateItem(LocalDateTime item, boolean empty) {
                     super.updateItem(item, empty);
@@ -296,43 +319,41 @@ public class RegistryViewController {
                 }
             });
 
-            tvInvestment.setItems(investmentRegistryDataTables);
+            tvExpense.setItems(expenseRegistryDataTables);
 
         } catch (Exception e) {
-            displayAlerts.showAlert("Ha ocurrido un error: " + e.getMessage());
+            displayAlerts.showError("Ha ocurrido un error: " + e.getMessage());
         }
     }
 
-    // ============================
-    // MÉTODOS DE NAVEGACIÓN
-    // ============================
+
     @FXML
     public void switchToConfiguration(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/configurationView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/configurationView.fxml");
     }
 
     @FXML
     public void switchToSupport(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/supportView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/supportView.fxml");
     }
 
     @FXML
-    public void switchToInvestment(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/investmentView.fxml");
+    public void switchToExpense(ActionEvent actionEvent) {
+        sceneSwitcher.switchView(actionEvent, "/views/expenseView.fxml");
     }
 
     @FXML
     public void switchToWarehouse(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/warehouseView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/warehouseView.fxml");
     }
 
     @FXML
     public void switchToBalance(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/balanceView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/balanceView.fxml");
     }
 
     @FXML
     public void switchToSell(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/sellView.fxml");
+        sceneSwitcher.switchView(actionEvent, "/views/sellView.fxml");
     }
 }

@@ -5,12 +5,12 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.3</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<version>3.5.5</version>
+		<relativePath/>
 	</parent>
 	<groupId>com.marcosoft</groupId>
-	<artifactId>storageSoftware</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>BusinessManager</artifactId>
+	<version>0.9.9</version>
 	<name>storageSoftware</name>
 	<description>Software for managing little companies like hardware shops or coffee shops</description>
 	<url/>
@@ -39,11 +39,6 @@
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-fxml</artifactId>
-			<version>22.0.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.openjfx</groupId>
-			<artifactId>javafx-media</artifactId>
 			<version>22.0.1</version>
 		</dependency>
 
@@ -93,6 +88,9 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
+					<jvmArguments>
+						-Djavafx.autoproxy.disable=true
+					</jvmArguments>
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>
