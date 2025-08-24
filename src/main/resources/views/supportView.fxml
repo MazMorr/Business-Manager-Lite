@@ -270,16 +270,16 @@
                   </ImageView>
                </graphic>
             </Label>
-            <VBox alignment="TOP_CENTER" layoutX="401.0" layoutY="193.0" prefHeight="450.0" prefWidth="580.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="170.0" AnchorPane.topAnchor="120.0">
+            <VBox alignment="TOP_CENTER" layoutX="401.0" layoutY="193.0" prefHeight="450.0" prefWidth="580.0" spacing="5.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="170.0" AnchorPane.topAnchor="120.0">
                <children>
                   <Label fx:id="lblWelcomeTitle" alignment="CENTER" prefHeight="37.0" prefWidth="590.0" text="Bienvenido" wrapText="true">
                      <font>
-                        <Font name="Constantia Bold" size="30.0" />
+                        <Font name="SansSerif Bold" size="35.0" />
                      </font>
                   </Label>
-                  <Label fx:id="lblWelcome" alignment="TOP_CENTER" prefWidth="600.0" stylesheets="@../Styles.css" text="text test 1234 JGH" textAlignment="CENTER" wrapText="true">
+                  <Label fx:id="lblWelcome" alignment="TOP_LEFT" prefWidth="600.0" stylesheets="@../Styles.css" text="text test 1234 JGH" wrapText="true">
                      <font>
-                        <Font name="Constantia" size="20.0" />
+                        <Font name="SansSerif Regular" size="22.0" />
                      </font>
                   </Label>
                </children>

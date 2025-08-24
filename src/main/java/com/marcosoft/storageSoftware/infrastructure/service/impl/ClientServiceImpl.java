@@ -24,12 +24,24 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client save(Client client) {
-        if (client.getClientPassword() == null || client.getClientPassword().isEmpty()) {
-            throw new IllegalArgumentException("La contraseña no puede estar vacía");
-        }
+        // Verificar si el cliente ya existe en la base de datos
+        boolean isExistingClient = clientRepository.existsById(client.getClientName());
 
-        String hashedPassword = BCrypt.hashpw(client.getClientPassword(), BCrypt.gensalt());
-        client.setClientPassword(hashedPassword);
+        if (!isExistingClient) {
+            // Solo hashear si es un nuevo cliente (no existía antes)
+            if (client.getClientPassword() == null || client.getClientPassword().isEmpty()) {
+                throw new IllegalArgumentException("La contraseña no puede estar vacía");
+            }
+            String hashedPassword = BCrypt.hashpw(client.getClientPassword(), BCrypt.gensalt());
+            client.setClientPassword(hashedPassword);
+        } else {
+            // Para clientes existentes, mantener la contraseña actual (ya hasheada)
+            // Obtener la contraseña actual de la base de datos y asignarla al objeto
+            Client existingClient = clientRepository.findById(client.getClientName()).orElse(null);
+            if (existingClient != null) {
+                client.setClientPassword(existingClient.getClientPassword());
+            }
+        }
         return clientRepository.save(client);
     }
 

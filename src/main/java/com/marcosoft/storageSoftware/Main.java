@@ -12,6 +12,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import lombok.Getter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -92,6 +93,7 @@ public class Main extends Application {
         Scene loadingScene = new Scene(loadingLayout, 400, 300);
         loadingScene.setCursor(Cursor.WAIT);
         stage.setScene(loadingScene);
+        stage.initStyle(StageStyle.TRANSPARENT);
         stage.setResizable(false);
         stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResource("/images/lc_logo.png")).toString()));
         stage.show();
@@ -119,6 +121,7 @@ public class Main extends Application {
     private void loadMainInterface() throws IOException {
         Parent root = springFXMLLoader.load("/views/clientView.fxml");
         scene = new Scene(root);
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles.css")).toExternalForm());
         scene.setCursor(Cursor.DEFAULT);
         primaryStage.setScene(scene);
         primaryStage.centerOnScreen();

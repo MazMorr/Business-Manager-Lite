@@ -5,13 +5,12 @@ import com.marcosoft.storageSoftware.domain.model.Client;
 import com.marcosoft.storageSoftware.domain.model.Currency;
 import com.marcosoft.storageSoftware.infrastructure.security.LicenseValidator;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.CurrencyServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
 import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
@@ -32,6 +31,7 @@ public class SupportViewController {
     // Service and utility dependencies
     private final UserLogged userLogged;
     private final LicenseValidator licenseValidator;
+    private final DisplayAlerts displayAlerts;
     private final SceneSwitcher sceneSwitcher;
     private final CurrencyServiceImpl currencyService;
 
@@ -44,12 +44,13 @@ public class SupportViewController {
      */
     public SupportViewController(
             CurrencyServiceImpl currencyService, SceneSwitcher sceneSwitcher,
-            UserLogged userLogged, LicenseValidator licenseValidator
+            UserLogged userLogged, LicenseValidator licenseValidator, DisplayAlerts displayAlerts
     ) {
         this.userLogged = userLogged;
         this.licenseValidator = licenseValidator;
         this.currencyService = currencyService;
         this.sceneSwitcher = sceneSwitcher;
+        this.displayAlerts = displayAlerts;
     }
 
     // FXML UI components
@@ -167,29 +168,15 @@ public class SupportViewController {
         sceneSwitcher.switchView(event, "/views/balanceView.fxml");
     }
 
-    /**
-     * Navigates to the inventory (sell) view.
-     * @param event the event
-     */
     @FXML
     public void switchToInventory(ActionEvent event) {
         sceneSwitcher.switchView(event, "/views/sellView.fxml");
     }
 
-    /**
-     * Displays license information in an alert dialog.
-     * The message is shown in Spanish.
-     */
     @FXML
-    private void licenseInformation(MouseEvent event) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Asistente de Ayuda");
-        alert.setHeaderText("Información de la licencia");
-        alert.setContentText(
-                "Pasado el tiempo disponible para renovar su licencia, el programa se bloqueará " +
-                        "instantáneamente y no podrá ser usado. Por favor, llame al +53 5550 5961 antes de que eso ocurra" +
-                        " para renovar su licencia y continuar usando el software sin interrupciones."
-        );
-        alert.showAndWait();
+    private void licenseInformation() {
+        displayAlerts.showAlert("Pasado el tiempo disponible para renovar su licencia, el programa se bloqueará " +
+                "instantáneamente y no podrá ser usado. Por favor, llame al +53 5550 5961 antes de que eso ocurra" +
+                " para renovar su licencia y continuar usando la aplicación sin interrupciones.");
     }
 }

@@ -29,12 +29,8 @@ import org.springframework.stereotype.Controller;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
-import static com.marcosoft.storageSoftware.Main.primaryStage;
 import static com.marcosoft.storageSoftware.Main.springFXMLLoader;
 
 /**
@@ -80,60 +76,70 @@ public class ConfigurationViewController {
     private Label lblSell, lblClientName, lblUser, lblProducts, lblCompany, lblDateLicense;
 
     /**
-     * Close session.
+     * Initialize.
      */
+    @FXML
+    public void initialize() {
+        initAllLabels();
+    }
+
     @FXML
     void closeSession() {
         try {
             // Marcar usuario como inactivo
             clientService.updateIsClientActiveByClientName(false, client.getClientName());
 
-            // Cargar la pantalla de login
-            Parent root = springFXMLLoader.load("/views/clientView.fxml");
+            // Cerrar todas las ventanas de la aplicación
+            closeAllWindows();
 
-            // Preparar nueva ventana
-            Stage loginStage = new Stage();
-            loginStage.setScene(new Scene(root));
-            loginStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResource("/images/RTS_logo.png")).toString()));
-            loginStage.setTitle("Iniciar Sesión");
-            loginStage.centerOnScreen();
-            loginStage.setResizable(false);
+            // Cargar la pantalla de login después de cerrar todas las ventanas
+            Platform.runLater(() -> {
+                try {
+                    Parent root = springFXMLLoader.load("/views/clientView.fxml");
 
-            // Mostrar la ventana de login y cerrar la actual
-            Stage currentStage = (Stage) lblUser.getScene().getWindow();
+                    // Preparar nueva ventana
+                    Stage loginStage = new Stage();
+                    loginStage.setScene(new Scene(root));
+                    loginStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResource("/images/RTS_logo.png")).toString()));
+                    loginStage.setTitle("Iniciar Sesión");
+                    loginStage.centerOnScreen();
+                    loginStage.setResizable(false);
 
-            //TODO: hay que cerrar también todas las demás ventanas si están, hay q ver como se puede hacer eso
-            loginStage.show();
-            currentStage.close();
+                    // Mostrar la ventana de login
+                    loginStage.show();
+                } catch (IOException e) {
+                    displayAlerts.showError("Error al cargar la pantalla de inicio de sesión: " + e.getMessage());
+                } catch (Exception e) {
+                    displayAlerts.showError("Error inesperado: " + e.getMessage());
+                }
+            });
 
-        } catch (IOException e) {
-            displayAlerts.showError("Error al cargar la pantalla de inicio de sesión: " + e.getMessage());
         } catch (Exception e) {
-            displayAlerts.showError("Error inesperado: " + e.getMessage());
+            displayAlerts.showError("Error al cerrar sesión: " + e.getMessage());
         }
     }
 
-
+    /**
+     * Cierra todas las ventanas de la aplicación de manera forzada
+     */
     private void closeAllWindows() {
+        // Obtener todas las ventanas y cerrarlas
+        List<Window> windows = new ArrayList<>(Window.getWindows());
+        for (Window window : windows) {
+            if (window instanceof Stage stage) {
+                // Cerrar la ventana de manera forzada
+                stage.close();
+            }
+        }
+
+        // Forzar la finalización de cualquier diálogo o ventana modal
         Platform.runLater(() -> {
-            // Crear una copia de la lista para evitar modificaciones concurrentes
-            List<Window> windows = new ArrayList<>(Window.getWindows());
-            for (Window window : windows) {
-                if (window instanceof Stage stage) {
-                    if (primaryStage != null && !stage.equals(primaryStage) && stage.isShowing()) {
-                        stage.close();
-                    }
+            for (Window window : Window.getWindows()) {
+                if (window instanceof Stage) {
+                    ((Stage) window).close();
                 }
             }
         });
-    }
-
-    /**
-     * Initialize.
-     */
-    @FXML
-    public void initialize() {
-        initAllLabels();
     }
 
     private void initAllLabels() {
@@ -159,7 +165,8 @@ public class ConfigurationViewController {
         }
 
         lblUser.setText("Usuario: " + client.getClientName());
-        lblCompany.setText("Compañía: " + client.getClientCompany());
+        String company = client.getClientCompany() == null || client.getClientCompany().isEmpty() ? "Sin Compañía Asociada" : client.getClientCompany();
+        lblCompany.setText("Compañía: " + company);
         lblProducts.setText("Productos: " + productCounter);
         lblSell.setText("Ventas: " + sellCounter);
         lblDateLicense.setText("Fecha Vencimiento Licencia: "
@@ -199,32 +206,44 @@ public class ConfigurationViewController {
     @FXML
     public void ImportDatabase() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Seleccionar archivo de respaldo");
+        fileChooser.setTitle("Seleccionar archivo de base de datos");
         fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+                new FileChooser.ExtensionFilter("H2 Database Files", "*.mv.db")
+        );
         File file = fileChooser.showOpenDialog(null);
 
         if (file != null) {
             Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
             confirmAlert.setTitle("Confirmar importación");
-            confirmAlert.setHeaderText("¿Está seguro de importar los datos?");
-            confirmAlert.setContentText("Esta acción sobrescribirá los datos actuales");
+            confirmAlert.setHeaderText("¿Está seguro de importar la base de datos?");
+            confirmAlert.setContentText("Esta acción sobrescribirá los datos actuales y deberá reiniciar la aplicación.");
 
             Optional<ButtonType> result = confirmAlert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 try {
+                    databaseManager.importDB(file.getAbsolutePath());
+                    displayAlerts.showAlert("Base de datos importada correctamente. Vuelva a iniciar la aplicación");
 
-                    Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
-                    successAlert.setTitle("Importación exitosa");
-                    successAlert.setHeaderText("Datos importados correctamente");
-                    successAlert.showAndWait();
-
-                    // Actualizar la interfaz después de importar
-                    initAllLabels();
+                    // Reiniciar la aplicación
+                    restartApplication();
                 } catch (Exception e) {
-                    displayAlerts.showError("Error al importar datos: " + e.getMessage());
+                    displayAlerts.showError("Error al importar la base de datos: " + e.getMessage());
                 }
             }
+        }
+    }
+
+    private void restartApplication() {
+        try {
+            // Cerrar la conexión actual
+            DatabaseManager.closeAllConnections();
+
+            // Reiniciar la aplicación
+            Platform.exit();
+            Runtime.getRuntime().exec("java -jar " + System.getProperty("java.class.path"));
+            System.exit(0);
+        } catch (Exception e) {
+            displayAlerts.showError("Error al reiniciar: " + e.getMessage());
         }
     }
 
@@ -236,10 +255,8 @@ public class ConfigurationViewController {
 
         if (selectedDirectory != null) {
             try {
-                String destinationPath = selectedDirectory.getAbsolutePath() +
-                        "\\Database_backup_" +
-                        LocalDate.now() +
-                        ".zip"; // H2 crea un zip por defecto
+                String destinationPath = selectedDirectory.getAbsolutePath()
+                        + "\\Database_backup_" + LocalDate.now() + ".zip";
 
                 databaseManager.exportDB(destinationPath);
                 displayAlerts.showAlert("Base de datos exportada correctamente");
@@ -250,5 +267,10 @@ public class ConfigurationViewController {
         }
     }
 
-
+    @FXML
+    public void displayEstablishCompanyName() throws SceneSwitcher.WindowLoadException {
+        sceneSwitcher.displayWindow(
+                "Establecer Nombre Compañía", "/images/lc_logo.png", "/views/establishCompanyNameView.fxml"
+        );
+    }
 }

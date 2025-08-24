@@ -149,7 +149,7 @@ public class ClientViewController {
      * @return true if the user confirms exit, false otherwise.
      */
     private boolean showExitAlert() {
-        return displayAlerts.showConfirmationAlert("Asegúrese de tener todo en orden antes de cerrar la aplicaciónJason.");
+        return displayAlerts.showConfirmationAlert("Asegúrese de tener todo en orden antes de cerrar la aplicación.");
     }
 
     /**
