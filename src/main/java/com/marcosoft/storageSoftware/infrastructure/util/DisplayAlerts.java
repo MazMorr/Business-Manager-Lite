@@ -9,7 +9,7 @@ import javafx.stage.StageStyle;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-import java.util.Objects;
+import java.net.URL;
 import java.util.Optional;
 
 @Lazy
@@ -18,11 +18,24 @@ public class DisplayAlerts {
 
     private void setAlertIconAndCSS(Alert alert) {
         Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-        stage.getIcons().add(new Image("/images/lc_logo.png"));
-        stage.initStyle(StageStyle.TRANSPARENT);
 
+        // Cargar icono usando URL
+        URL iconUrl = getClass().getResource("/images/lc_logo.png");
+        if (iconUrl != null) {
+            stage.getIcons().add(new Image(iconUrl.toString()));
+        }
+
+        stage.initStyle(StageStyle.TRANSPARENT);
         DialogPane dialogPane = alert.getDialogPane();
-        dialogPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles.css")).toExternalForm());
+
+        // Cargar CSS usando URL - FORMA CORRECTA para JAR
+        URL cssUrl = getClass().getResource("/Styles.css");
+        if (cssUrl != null) {
+            dialogPane.getStylesheets().add(cssUrl.toExternalForm());
+        } else {
+            System.err.println("No se pudo encontrar el archivo CSS en el JAR");
+        }
+
         dialogPane.getStyleClass().add("alert");
     }
 
@@ -37,9 +50,9 @@ public class DisplayAlerts {
     public boolean showConfirmationAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         setAlertIconAndCSS(alert);
-        alert.setHeaderText("Confirmación");
         alert.setHeaderText("¿Está seguro?");
         alert.setContentText(message);
+        alert.getDialogPane().getStyleClass().add("confirmation");
 
         Optional<ButtonType> result = alert.showAndWait();
         return result.isPresent() && result.get() == ButtonType.OK;

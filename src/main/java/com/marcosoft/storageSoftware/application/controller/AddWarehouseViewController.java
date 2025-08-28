@@ -89,7 +89,7 @@ public class AddWarehouseViewController {
                 GeneralRegistry generalRegistry = new GeneralRegistry(
                         null,
                         client,
-                        "Almacenes",
+                        "Almacén",
                         "Adición Almacén",
                         registryMoment
                 );

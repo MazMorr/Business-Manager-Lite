@@ -3,11 +3,9 @@ package com.marcosoft.storageSoftware.application.controller;
 import com.marcosoft.storageSoftware.application.dto.ExpenseWarehouseDataTable;
 import com.marcosoft.storageSoftware.application.dto.UserLogged;
 import com.marcosoft.storageSoftware.application.dto.WarehouseDataTable;
-import com.marcosoft.storageSoftware.domain.model.Client;
-import com.marcosoft.storageSoftware.domain.model.Expense;
-import com.marcosoft.storageSoftware.domain.model.Inventory;
-import com.marcosoft.storageSoftware.domain.model.Warehouse;
+import com.marcosoft.storageSoftware.domain.model.*;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.ExpenseServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.GeneralRegistryServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.InventoryServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.WarehouseServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
@@ -22,6 +20,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -41,6 +40,7 @@ public class WarehouseViewController {
     private final SceneSwitcher sceneSwitcher;
     private final DisplayAlerts displayAlerts;
     private final InventoryServiceImpl inventoryService;
+    private final GeneralRegistryServiceImpl generalRegistryService;
     private final ExpenseServiceImpl expenseService;
 
     /**
@@ -54,7 +54,7 @@ public class WarehouseViewController {
      */
     public WarehouseViewController(
             ExpenseServiceImpl expenseService, DisplayAlerts displayAlerts, WarehouseServiceImpl warehouseService,
-            UserLogged userLogged, SceneSwitcher sceneSwitcher, InventoryServiceImpl inventoryService
+            UserLogged userLogged, SceneSwitcher sceneSwitcher, InventoryServiceImpl inventoryService, GeneralRegistryServiceImpl generalRegistryService
     ) {
         this.expenseService = expenseService;
         this.inventoryService = inventoryService;
@@ -62,6 +62,7 @@ public class WarehouseViewController {
         this.displayAlerts = displayAlerts;
         this.userLogged = userLogged;
         this.warehouseService = warehouseService;
+        this.generalRegistryService = generalRegistryService;
     }
 
     // FXML UI components
@@ -241,20 +242,30 @@ public class WarehouseViewController {
      */
     @FXML
     public void deleteWarehouse() {
-        WarehouseDataTable w = ttvWarehouse.getSelectionModel().getSelectedItem().getValue();
-        Warehouse warehouse = warehouseService.getWarehouseByWarehouseNameAndClient(w.getWarehouseName(), client);
-        if (displayAlerts.showConfirmationAlert("Está seguro de querer eliminar el almacén seleccionado:\n" +
-                w.getWarehouseName() + " junto a todos los productos almacenados en él?")) {
-            List<Inventory> inv = inventoryService.getAllInventoriesByWarehouseAndClient(warehouse, client);
-            for (Inventory i : inv) {
-                inventoryService.deleteInventoryById(i.getId());
+        try{
+            WarehouseDataTable w = ttvWarehouse.getSelectionModel().getSelectedItem().getValue();
+            Warehouse warehouse = warehouseService.getWarehouseByWarehouseNameAndClient(w.getWarehouseName(), client);
+            if (displayAlerts.showConfirmationAlert("Está seguro de querer eliminar el almacén seleccionado: " +
+                    w.getWarehouseName() + " junto a todos los productos almacenados en él?")) {
+                List<Inventory> inv = inventoryService.getAllInventoriesByWarehouseAndClient(warehouse, client);
+                for (Inventory i : inv) {
+                    inventoryService.deleteInventoryById(i.getId());
+                }
+                warehouseService.deleteWarehouseById(warehouse.getId());
+                ttvWarehouse.getSelectionModel().clearSelection();
+                initTreeTable();
+
+                GeneralRegistry generalRegistry = new GeneralRegistry(
+                        null, client, "Almacén", "Eliminación de almacén: " + warehouse.getWarehouseName(), LocalDateTime.now()
+                );
+                generalRegistryService.save(generalRegistry);
+            } else {
+                ttvWarehouse.getSelectionModel().clearSelection();
             }
-            warehouseService.deleteWarehouseById(warehouse.getId());
-            ttvWarehouse.getSelectionModel().clearSelection();
-            initTreeTable();
-        } else {
-            ttvWarehouse.getSelectionModel().clearSelection();
+        }catch (NullPointerException e){
+            displayAlerts.showAlert("Debe seleccionar un almacén de la tabla para poder eliminarlo");
         }
+
     }
 
     /**
@@ -280,7 +291,7 @@ public class WarehouseViewController {
      */
     @FXML
     public void updateWarehouse() throws SceneSwitcher.WindowLoadException {
-        sceneSwitcher.displayWindow("Actualizar Almacén", "/images/lc_logo.png", "/views/updateWarehouseView.fxml");
+        sceneSwitcher.displayWindow("Actualizar Almacén", "/images/lc_logo.png", "/views/renameWarehouseView.fxml");
     }
 
     /**
@@ -289,7 +300,7 @@ public class WarehouseViewController {
      */
     @FXML
     public void changeProductName() throws SceneSwitcher.WindowLoadException {
-        sceneSwitcher.displayWindow("Asignar Inversión a un Almacén", "/images/lc_logo.png", "/views/changeProductNameView.fxml");
+        sceneSwitcher.displayWindow("Asignar Inversión a un Almacén", "/images/lc_logo.png", "/views/renameProductView.fxml");
     }
 
     // ============================

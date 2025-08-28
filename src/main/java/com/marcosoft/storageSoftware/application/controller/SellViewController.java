@@ -84,9 +84,7 @@ public class SellViewController {
     @FXML
     private TreeTableView<SellDataTable> ttvInventory;
     @FXML
-    private TreeTableColumn<SellDataTable, String> ttcWarehouse, ttcProductName;
-    @FXML
-    private TreeTableColumn<SellDataTable, Double> ttcSellPrice;
+    private TreeTableColumn<SellDataTable, String> ttcWarehouse, ttcProductName, ttcSellPrice;
     @FXML
     private TreeTableColumn<SellDataTable, Integer> ttcProductAmount;
 
@@ -277,7 +275,6 @@ public class SellViewController {
         }
     }
 
-
     private void setupTableSelectionListener() {
         ttvInventory.getSelectionModel().selectedItemProperty().addListener((obs, oldSel, newSel) -> {
             if (newSel != null) {
@@ -309,6 +306,7 @@ public class SellViewController {
                 tfAssignPriceCurrency.setText(currency);
                 tfAssignPriceProductPrice.setText(price);
                 tfSellWarehouse.setText(warehouseName); // Solo se llena si es un nodo hijo (almacén)
+                tfSellProductAmount.setText(1 + "");
                 tfSellProductName.setText(productName);
                 tfSellProductPrice.setText(price);
                 tfSellProductCurrency.setText(currency);
@@ -352,7 +350,7 @@ public class SellViewController {
         // Configurar cada columna con su tipo específico
         configureStringColumn(ttcWarehouse, "warehouseName");
         configureStringColumn(ttcProductName, "productName");
-        configureDoubleColumn(ttcSellPrice, "sellPrice"); // Asumo que el campo se llama "sellPrice" y no "formattedPrice"
+        configureStringColumn(ttcSellPrice, "sellPriceAndCurrency"); // Asumo que el campo se llama "sellPrice" y no "formattedPrice"
         configureIntegerColumn(ttcProductAmount, "productAmount");
 
         ttvInventory.setOnMouseClicked(event -> {
@@ -648,12 +646,28 @@ public class SellViewController {
     }
 
     private TreeItem<SellDataTable> createProductNode(Product product, String currency, int warehouseCount, int totalAmount) {
+        String priceString = (product.getSellPrice() != null) ?
+                product.getSellPrice() + " " + currency : "";
+
         return new TreeItem<>(
                 new SellDataTable(
                         product.getProductName(),
-                        product.getSellPrice(),
-                        currency,
+                        priceString,  // Usar string formateado
                         "Almacenes: " + warehouseCount,
+                        totalAmount
+                )
+        );
+    }
+
+    private TreeItem<SellDataTable> createSingleNode(Product product, String currency, Inventory inv, int totalAmount) {
+        String priceString = (product.getSellPrice() != null) ?
+                product.getSellPrice() + " " + currency : "";
+
+        return new TreeItem<>(
+                new SellDataTable(
+                        product.getProductName(),
+                        priceString,  // Usar string formateado
+                        inv.getWarehouse().getWarehouseName(),
                         totalAmount
                 )
         );
@@ -663,22 +677,9 @@ public class SellViewController {
         return new TreeItem<>(
                 new SellDataTable(
                         "",
-                        null,
-                        null,
+                        "",
                         inv.getWarehouse().getWarehouseName(),
                         inv.getAmount()
-                )
-        );
-    }
-
-    private TreeItem<SellDataTable> createSingleNode(Product product, String currency, Inventory inv, int totalAmount) {
-        return new TreeItem<>(
-                new SellDataTable(
-                        product.getProductName(),
-                        product.getSellPrice(),
-                        currency,
-                        inv.getWarehouse().getWarehouseName(),
-                        totalAmount
                 )
         );
     }

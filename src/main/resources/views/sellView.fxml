@@ -358,7 +358,7 @@
                                           <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="53.0">
                                              <children>
                                                 <Label text="Almacén" />
-                                                <MenuButton fx:id="mbSellWarehouse" mnemonicParsing="false" prefWidth="150.0" styleClass="progressBar" textFill="WHITE">
+                                                <MenuButton fx:id="mbSellWarehouse" mnemonicParsing="false" prefWidth="150.0" textFill="WHITE">
                                                    <graphic>
                                                       <TextField fx:id="tfSellWarehouse" prefHeight="34.0" prefWidth="10.0" styleClass="inputForm">
                                                          <tooltip>
@@ -415,7 +415,7 @@
                                           <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="55.0">
                                              <children>
                                                 <Label text="Moneda" />
-                                                <MenuButton fx:id="mbSellCurrency" mnemonicParsing="false" prefWidth="150.0" styleClass="progressBar" textFill="WHITE">
+                                                <MenuButton fx:id="mbSellCurrency" mnemonicParsing="false" prefWidth="150.0" textFill="WHITE">
                                                    <graphic>
                                                       <TextField fx:id="tfSellProductCurrency" alignment="CENTER" disable="true" opacity="0.99" prefHeight="34.0" prefWidth="10.0" promptText="Seleccionar" styleClass="inputForm">
                                                          <tooltip>
@@ -514,7 +514,7 @@
                                           <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="55.0">
                                              <children>
                                                 <Label text="Moneda" />
-                                                <MenuButton fx:id="mbAssignPriceCurrency" mnemonicParsing="false" prefWidth="150.0" styleClass="progressBar" textFill="WHITE">
+                                                <MenuButton fx:id="mbAssignPriceCurrency" mnemonicParsing="false" prefWidth="150.0" textFill="WHITE">
                                                    <graphic>
                                                       <TextField fx:id="tfAssignPriceCurrency" editable="false" prefHeight="34.0" prefWidth="10.0" promptText="Seleccionar" styleClass="inputForm">
                                                          <tooltip>

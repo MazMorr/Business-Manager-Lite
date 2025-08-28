@@ -261,7 +261,7 @@
                         </HBox>
                         <HBox spacing="5.0">
                            <children>
-                              <Button mnemonicParsing="false" onAction="#updateWarehouse" prefWidth="450.0" styleClass="btnStock" text="Actualizar Almacén">
+                              <Button mnemonicParsing="false" onAction="#updateWarehouse" prefWidth="450.0" styleClass="btnStock" text="Renombrar Almacén">
                                  <graphic>
                                     <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
                                        <image>
@@ -313,7 +313,7 @@
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                            </columnResizePolicy>
                         </TableView>
-                        <Button mnemonicParsing="false" onAction="#changeProductName" prefWidth="1000.0" styleClass="btnStock" text="Cambiar Nombre Producto">
+                        <Button mnemonicParsing="false" onAction="#changeProductName" prefWidth="1000.0" styleClass="btnStock" text="Renombrar Producto">
                            <graphic>
                               <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
                                  <image>
@@ -331,7 +331,7 @@
                         </Button>
                         <HBox prefHeight="40.0" prefWidth="460.0" spacing="5.0">
                            <children>
-                              <Button mnemonicParsing="false" onAction="#assignExpense" prefHeight="35.0" prefWidth="450.0" styleClass="btnStock" text="Asignar Inversión">
+                              <Button mnemonicParsing="false" onAction="#assignExpense" prefHeight="35.0" prefWidth="450.0" styleClass="btnStock" text="Asignar Producto">
                                  <graphic>
                                     <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
                                        <image>
@@ -347,7 +347,7 @@
                                     </ImageView>
                                  </graphic>
                               </Button>
-                              <Button mnemonicParsing="false" onAction="#checkExpense" prefWidth="450.0" styleClass="btnStock" text="Revisar Inversión">
+                              <Button mnemonicParsing="false" onAction="#checkExpense" prefWidth="450.0" styleClass="btnStock" text="Revisar Gasto">
                                  <graphic>
                                     <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
                                        <image>

@@ -26,7 +26,7 @@ import java.util.List;
  */
 @Lazy
 @Controller
-public class UpdateWarehouseViewController {
+public class RenameWarehouseViewController {
     private Client client;
 
     // Service and utility dependencies
@@ -45,7 +45,7 @@ public class UpdateWarehouseViewController {
      * @param warehouseViewController the warehouse view controller
      */
     @Lazy
-    public UpdateWarehouseViewController(
+    public RenameWarehouseViewController(
             UserLogged userLogged, DisplayAlerts displayAlerts, WarehouseServiceImpl warehouseService,
             GeneralRegistryServiceImpl generalRegistryService, WarehouseViewController warehouseViewController
     ) {

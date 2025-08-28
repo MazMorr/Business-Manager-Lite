@@ -41,7 +41,7 @@
                   <HBox alignment="CENTER_LEFT" prefHeight="34.0" prefWidth="252.0" spacing="96.0">
                      <children>
                         <Label text="ID" />
-                        <MenuButton fx:id="mbId" mnemonicParsing="false" prefWidth="160.0" styleClass="progressBar" textFill="WHITE">
+                        <MenuButton fx:id="mbId" mnemonicParsing="false" prefWidth="160.0" textFill="WHITE">
                            <padding>
                               <Insets bottom="-5.0" left="-9.0" right="2.0" top="-4.0" />
                            </padding>
@@ -133,7 +133,7 @@
                               <Insets left="32.0" />
                            </HBox.margin>
                         </TextField>
-                        <MenuButton fx:id="mbCurrency" mnemonicParsing="false" prefHeight="33.0" prefWidth="80.0" styleClass="progressBar" textFill="WHITE">
+                        <MenuButton fx:id="mbCurrency" mnemonicParsing="false" prefHeight="33.0" prefWidth="80.0" textFill="WHITE">
                            <graphic>
                               <TextField fx:id="tfProductCurrency" alignment="CENTER" disable="true" opacity="0.99" prefHeight="34.0" prefWidth="10.0" promptText="CUP" styleClass="inputForm">
                                  <tooltip>

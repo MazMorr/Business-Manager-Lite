@@ -26,7 +26,7 @@ import java.util.List;
  */
 @Lazy
 @Controller
-public class ChangeProductNameViewController {
+public class RenameProductViewController {
     private Client client;
 
     // Service and utility dependencies
@@ -45,7 +45,7 @@ public class ChangeProductNameViewController {
      * @param productService the product service
      */
     @Lazy
-    public ChangeProductNameViewController(
+    public RenameProductViewController(
             WarehouseViewController warehouseViewController, GeneralRegistryServiceImpl generalRegistryService,
             DisplayAlerts displayAlerts, UserLogged userLogged, ProductServiceImpl productService
     ) {

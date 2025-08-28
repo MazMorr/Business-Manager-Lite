@@ -288,7 +288,7 @@ public class ExpenseViewController {
             return false;
         }
         if (amount == null || amount <= 0) {
-            displayAlerts.showAlert("La cantidad debe ser un número positivo.");
+            displayAlerts.showAlert("La cantidad debe ser un número positivo y no puede contener coma ni puntos.");
             return false;
         }
         if (currency.isEmpty()) {

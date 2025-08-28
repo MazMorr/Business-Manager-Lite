@@ -11,18 +11,16 @@ import lombok.Setter;
 @EqualsAndHashCode
 public class SellDataTable {
     private String productName;
-    private Double sellPrice;
-    private String currency;
+    private String sellPriceAndCurrency;
     private String warehouseName;
     private Integer productAmount;
     private String style="";
 
     public SellDataTable(
-            String productName, Double sellPrice, String currency, String warehouseName, Integer productAmount
+            String productName, String sellPriceAndCurrency, String warehouseName, Integer productAmount
     ) {
         this.productName = productName;
-        this.sellPrice = sellPrice;
-        this.currency = currency;
+        this.sellPriceAndCurrency = sellPriceAndCurrency;
         this.warehouseName = warehouseName;
         this.productAmount = productAmount;
     }

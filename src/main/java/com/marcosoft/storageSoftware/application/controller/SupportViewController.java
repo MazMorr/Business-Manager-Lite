@@ -14,7 +14,6 @@ import javafx.scene.control.Label;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
-import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -108,7 +107,7 @@ public class SupportViewController {
      * The welcome message is shown in Spanish.
      */
     private void initWelcomeLabels() {
-        lblLicenseDays.setText(LocalDate.now().until(licenseValidator.getRemainingTime()).getDays() + " Días");
+        lblLicenseDays.setText(licenseValidator.getDaysRemaining() + " Días");
         versionLabel.setText("0.9.9");
         lblWelcomeTitle.setText("Bienvenido, " + userLogged.getName());
         lblWelcome.setText(

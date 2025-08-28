@@ -14,13 +14,13 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="200.0" prefWidth="300.0" stylesheets="@../Styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.ChangeProductNameViewController">
+<AnchorPane prefHeight="200.0" prefWidth="300.0" stylesheets="@../Styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.RenameWarehouseViewController">
    <children>
-      <VBox alignment="CENTER" layoutX="78.0" layoutY="77.0" prefHeight="200.0" prefWidth="338.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+      <VBox alignment="CENTER" layoutX="68.0" layoutY="67.0" prefHeight="200.0" prefWidth="338.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="10.0">
          <children>
-            <HBox alignment="CENTER_LEFT" spacing="23.0">
+            <HBox alignment="CENTER_LEFT" spacing="19.0">
                <children>
-                  <Label text="Producto Actual">
+                  <Label text="Nombre Actual">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
@@ -35,7 +35,7 @@
                   </MenuButton>
                </children>
             </HBox>
-            <HBox alignment="CENTER_LEFT" spacing="28.0">
+            <HBox alignment="CENTER_LEFT" spacing="18.0">
                <children>
                   <Label text="Nombre Nuevo">
                      <font>
@@ -45,11 +45,11 @@
                   <TextField fx:id="tfNewName" prefWidth="150.0" />
                </children>
             </HBox>
-            <Button defaultButton="true" mnemonicParsing="false" onAction="#updateProductName" prefHeight="40.0" prefWidth="296.0" text="Actualizar Nombre Producto">
+            <Button defaultButton="true" mnemonicParsing="false" onAction="#updateWarehouseName" prefHeight="40.0" prefWidth="296.0" text="Renombrar Almacén">
                <graphic>
                   <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
                      <image>
-                        <Image url="@../images/rebautizar.png" />
+                        <Image url="@../images/quiz-alt.png" />
                      </image>
                      <effect>
                         <InnerShadow choke="1.0" radius="68.5" width="255.0">

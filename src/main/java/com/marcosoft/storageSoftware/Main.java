@@ -121,7 +121,6 @@ public class Main extends Application {
     private void loadMainInterface() throws IOException {
         Parent root = springFXMLLoader.load("/views/clientView.fxml");
         scene = new Scene(root);
-        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styles.css")).toExternalForm());
         scene.setCursor(Cursor.DEFAULT);
         primaryStage.setScene(scene);
         primaryStage.centerOnScreen();
