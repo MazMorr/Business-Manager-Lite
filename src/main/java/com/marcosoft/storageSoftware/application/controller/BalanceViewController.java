@@ -28,7 +28,11 @@ import java.util.List;
 @Controller
 public class BalanceViewController {
     private Client client;
+    @Setter
+    @Getter
     private LocalDate startDate;
+    @Setter
+    @Getter
     private LocalDate endDate;
     @Setter
     @Getter
@@ -62,9 +66,12 @@ public class BalanceViewController {
     @FXML
     private MenuButton mbDateRange;
 
+    public Label getLabelTimeLapse() {
+        return lblTimeLapse;
+    }
 
     @FXML
-    public void initialize() {
+    private void initialize() {
         initDefaultValues();
         Platform.runLater(() -> {
             initMbDateRange();
@@ -74,6 +81,16 @@ public class BalanceViewController {
 
     private void initMbDateRange() {
         mbDateRange.getItems().clear();
+
+        MenuItem item = new MenuItem("Establecer Fechas");
+        item.setOnAction(e -> {
+            try {
+                sceneSwitcher.displayWindow("Establecer Fechas", "/images/lc_logo.png", "/views/establishBalanceDateView.fxml");
+            } catch (SceneSwitcher.WindowLoadException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        mbDateRange.getItems().add(item);
 
         List<DateRangeOption> dateOptions = List.of(
                 new DateRangeOption("Hoy", Period.ZERO),
@@ -85,10 +102,12 @@ public class BalanceViewController {
         );
 
         dateOptions.forEach(option -> {
-            MenuItem item = new MenuItem(option.getLabel());
+            MenuItem items = new MenuItem(option.getLabel());
             item.setOnAction(e -> setDateRange(option));
-            mbDateRange.getItems().add(item);
+            mbDateRange.getItems().add(items);
         });
+
+
     }
 
     private void setDateRange(DateRangeOption option) {
@@ -160,7 +179,7 @@ public class BalanceViewController {
     private void initNetProfit() {
         double netProfit = totalProfit - totalExpense;
         String currencyName = currency.getCurrencyName();
-        lblNetProfit.setText(netProfit + " " + currencyName );
+        lblNetProfit.setText(netProfit + " " + currencyName);
         if (netProfit < 0) {
             lblNetProfit.setStyle("-fx-text-fill: #e40000");
         } else if (netProfit > 0) {

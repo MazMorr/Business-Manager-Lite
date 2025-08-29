@@ -14,11 +14,11 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="340.0" prefWidth="300.0" stylesheets="@../Styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.CurrencyValuesViewController">
+<AnchorPane prefHeight="300.0" prefWidth="300.0" stylesheets="@../Styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.CurrencyValuesViewController">
    <children>
-      <VBox alignment="CENTER" layoutX="98.0" layoutY="97.0" prefHeight="200.0" prefWidth="338.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="10.0">
+      <VBox alignment="CENTER" layoutX="98.0" layoutY="97.0" prefHeight="200.0" prefWidth="338.0" spacing="10.0" styleClass="filter-background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox alignment="CENTER_LEFT" spacing="40.0">
+            <HBox alignment="CENTER_LEFT" spacing="50.0">
                <children>
                   <Label text="USD en CUP">
                      <font>
@@ -28,7 +28,7 @@
                   <TextField fx:id="tfUSDtoCUP" alignment="CENTER" prefWidth="150.0" />
                </children>
             </HBox>
-            <HBox alignment="CENTER_LEFT" spacing="39.0">
+            <HBox alignment="CENTER_LEFT" spacing="49.0">
                <children>
                   <Label text="MLC en CUP">
                      <font>
@@ -38,7 +38,7 @@
                   <TextField fx:id="tfMLCtoCUP" alignment="CENTER" prefWidth="150.0" />
                </children>
             </HBox>
-            <HBox alignment="CENTER_LEFT" spacing="42.0">
+            <HBox alignment="CENTER_LEFT" spacing="52.0">
                <children>
                   <Label text="EUR en CUP">
                      <font>
@@ -64,7 +64,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <HBox alignment="CENTER_LEFT" spacing="45.0">
+            <HBox alignment="CENTER_LEFT" spacing="55.0">
                <children>
                   <Label text="Balance en:">
                      <font>
@@ -81,22 +81,6 @@
                   </MenuButton>
                </children>
             </HBox>
-            <Button mnemonicParsing="false" onAction="#updateBalance" prefWidth="450.0" text="Actualizar Balance">
-               <graphic>
-                  <ImageView fitHeight="150.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/process.png" />
-                     </image>
-                     <effect>
-                        <InnerShadow choke="1.0" height="255.0" radius="127.0" width="255.0">
-                           <color>
-                              <Color red="1.0" green="1.0" blue="1.0" />
-                           </color>
-                        </InnerShadow>
-                     </effect>
-                  </ImageView>
-               </graphic>
-            </Button>
             <Button mnemonicParsing="false" onAction="#goOut" prefHeight="40.0" prefWidth="294.0" text="Salir">
                <graphic>
                   <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">

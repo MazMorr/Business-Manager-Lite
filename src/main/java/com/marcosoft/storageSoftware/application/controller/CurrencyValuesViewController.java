@@ -62,9 +62,9 @@ public class CurrencyValuesViewController {
     }
 
     private void initTfValues() {
-        String MLC = currencyService.getCurrencyByName("MLC").getCurrencyPriceInCUP()+"";
-        String USD = currencyService.getCurrencyByName("USD").getCurrencyPriceInCUP()+"";
-        String EUR = currencyService.getCurrencyByName("EUR").getCurrencyPriceInCUP()+"";
+        String MLC = currencyService.getCurrencyByName("MLC").getCurrencyPriceInCUP() + "";
+        String USD = currencyService.getCurrencyByName("USD").getCurrencyPriceInCUP() + "";
+        String EUR = currencyService.getCurrencyByName("EUR").getCurrencyPriceInCUP() + "";
         tfCurrency.setText(balanceViewController.getCurrency().getCurrencyName());
         tfMLCtoCUP.setText(MLC);
         tfUSDtoCUP.setText(USD);
@@ -74,10 +74,9 @@ public class CurrencyValuesViewController {
     /**
      * Update currency values.
      *
-     * @param actionEvent the action event
      */
     @FXML
-    public void updateCurrencyValues(ActionEvent actionEvent) {
+    public void updateCurrencyValues() {
         if (!validateAllPrices()) {
             return;
         }
@@ -151,18 +150,15 @@ public class CurrencyValuesViewController {
 
         currencyList.forEach(currency -> {
             MenuItem item = new MenuItem(currency.getCurrencyName());
-            item.setOnAction(e -> tfCurrency.setText(currency.getCurrencyName()));
+            item.setOnAction(e -> {
+                tfCurrency.setText(currency.getCurrencyName());
+                updateBalance();
+            });
             mbCurrency.getItems().add(item);
         });
     }
 
-    /**
-     * Update balance.
-     *
-     * @param actionEvent the action event
-     */
-    @FXML
-    public void updateBalance(ActionEvent actionEvent) {
+    public void updateBalance() {
         if (!validateCurrencySelection()) {
             return;
         }
