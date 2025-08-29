@@ -16,7 +16,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="350.0" prefWidth="450.0" styleClass="index" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.ClientViewController">
+<StackPane prefHeight="350.0" prefWidth="450.0" styleClass="index" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.LoginViewController">
    <children>
       <AnchorPane id="AnchorPane" prefHeight="350.0" prefWidth="450.0" styleClass="background">
           <stylesheets>
@@ -35,7 +35,7 @@
                   <DropShadow />
                </effect>
             </HBox>
-            <VBox layoutX="109.0" layoutY="79.0" prefHeight="257.0" prefWidth="300.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="75.0" AnchorPane.rightAnchor="75.0" AnchorPane.topAnchor="85.0">
+            <VBox layoutX="109.0" layoutY="79.0" prefHeight="257.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="75.0" AnchorPane.rightAnchor="75.0" AnchorPane.topAnchor="85.0">
                <children>
                   <Label styleClass="txtUser" stylesheets="@../Styles.css" text="Usuario:">
                      <font>
@@ -44,7 +44,7 @@
                   </Label>
                   <TextField fx:id="txtFieldName" promptText="Introduzca su nombre de usuario" styleClass="inputForm">
                      <tooltip>
-                        <Tooltip consumeAutoHidingEvents="false" text="Recuerde el nombre de usuario de la cuenta que había creado y rellene el campo">
+                        <Tooltip consumeAutoHidingEvents="false" text="Introduzca su nombre de usuario">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -100,13 +100,6 @@
                      <font>
                         <Font name="System Bold" size="15.0" />
                      </font>
-                     <tooltip>
-                        <Tooltip consumeAutoHidingEvents="false" text="Si no posees una cuenta al tocar este botón puedes empezar a crearla">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Tooltip>
-                     </tooltip>
                      <VBox.margin>
                         <Insets top="5.0" />
                      </VBox.margin>

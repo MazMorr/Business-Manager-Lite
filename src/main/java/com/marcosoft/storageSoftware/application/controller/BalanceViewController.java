@@ -82,16 +82,18 @@ public class BalanceViewController {
     private void initMbDateRange() {
         mbDateRange.getItems().clear();
 
-        MenuItem item = new MenuItem("Establecer Fechas");
-        item.setOnAction(e -> {
+        // Primer ítem (Establecer Fechas)
+        MenuItem customDateItem = new MenuItem("Establecer Fechas");
+        customDateItem.setOnAction(e -> {
             try {
                 sceneSwitcher.displayWindow("Establecer Fechas", "/images/lc_logo.png", "/views/establishBalanceDateView.fxml");
             } catch (SceneSwitcher.WindowLoadException ex) {
                 throw new RuntimeException(ex);
             }
         });
-        mbDateRange.getItems().add(item);
+        mbDateRange.getItems().add(customDateItem);
 
+        // Ítems de rangos predefinidos
         List<DateRangeOption> dateOptions = List.of(
                 new DateRangeOption("Hoy", Period.ZERO),
                 new DateRangeOption("Última Semana", Period.ofWeeks(1)),
@@ -102,18 +104,16 @@ public class BalanceViewController {
         );
 
         dateOptions.forEach(option -> {
-            MenuItem items = new MenuItem(option.getLabel());
-            item.setOnAction(e -> setDateRange(option));
-            mbDateRange.getItems().add(items);
+            MenuItem menuItem = new MenuItem(option.getLabel());
+            menuItem.setOnAction(e -> setDateRange(option));
+            mbDateRange.getItems().add(menuItem);
         });
-
-
     }
 
     private void setDateRange(DateRangeOption option) {
-        lblTimeLapse.setText(option.getLabel());
-        endDate = LocalDate.now();
-        this.startDate = endDate.minus(option.getPeriod());
+        setEndDate(LocalDate.now());
+        setStartDate(endDate.minus(option.getPeriod()));
+        lblTimeLapse.setText(startDate + " / " + endDate);
         refreshBalance();
     }
 
@@ -132,6 +132,7 @@ public class BalanceViewController {
         currency = currencyService.getCurrencyByName("CUP");
         client = userLogged.getClient();
         lblClientName.setText(client.getClientName());
+        lblTimeLapse.setText(startDate + " / " + endDate);
     }
 
     public void refreshBalance() {

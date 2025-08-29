@@ -25,7 +25,7 @@ import java.util.List;
 public class SupportViewController {
     // Reference to the account controller for session management
     private Client client;
-    private ClientViewController accountController;
+    private LoginViewController accountController;
 
     // Service and utility dependencies
     private final UserLogged userLogged;
@@ -75,11 +75,11 @@ public class SupportViewController {
 
     /**
      * Sets the account controller reference for session management.
-     * @param clientViewController the client view controller
+     * @param loginViewController the client view controller
      */
-    public void setAccountController(ClientViewController clientViewController) {
-        this.accountController = clientViewController;
-        System.out.println("Controlador de cuenta configurado: " + clientViewController);
+    public void setAccountController(LoginViewController loginViewController) {
+        this.accountController = loginViewController;
+        System.out.println("Controlador de cuenta configurado: " + loginViewController);
     }
 
     /**

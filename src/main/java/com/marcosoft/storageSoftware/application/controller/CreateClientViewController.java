@@ -206,7 +206,7 @@ public class CreateClientViewController {
      */
     @FXML
     private void goBack(ActionEvent actionEvent) throws SceneSwitcher.ViewLoadException {
-        sceneSwitcher.setRootWithEvent(actionEvent, "/views/clientView.fxml");
+        sceneSwitcher.setRootWithEvent(actionEvent, "/views/loginView.fxml");
     }
 
     /**

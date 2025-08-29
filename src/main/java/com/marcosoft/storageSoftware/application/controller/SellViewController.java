@@ -485,8 +485,8 @@ public class SellViewController {
     private void applyStockWarningStyles(TreeItem<SellDataTable> root) {
         if (root == null || root.getChildren() == null) return;
 
-        final String alertStyle = "-fx-background-color: #ffcccc;";
-        final String warningStyle = "-fx-background-color: #ffff99;";
+        final String alertStyle = "-fx-background-color: #ff9b9b;";
+        final String warningStyle = "-fx-background-color: #ffc445;";
 
         for (TreeItem<SellDataTable> item : root.getChildren()) {
             if (item.getChildren().isEmpty()) {
@@ -587,7 +587,7 @@ public class SellViewController {
     @FXML
     public void displayWarningManager() throws SceneSwitcher.WindowLoadException {
         sceneSwitcher.displayWindow(
-                "Administrador de Alertas", "/images/RTS_logo.png", "/views/warningManagerView.fxml"
+                "Administrador de Alertas", "/images/lc_logo.png", "/views/warningManagerView.fxml"
         );
     }
 

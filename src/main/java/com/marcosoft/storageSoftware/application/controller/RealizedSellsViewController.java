@@ -40,9 +40,10 @@ public class RealizedSellsViewController {
     private final CurrencyServiceImpl currencyService;
 
     public RealizedSellsViewController(
-            SellFieldsValidator sellFieldsValidator, CleanHelper cleanHelper, SellRegistryServiceImpl sellRegistryService, GeneralRegistryServiceImpl generalRegistryService, UserLogged userLogged,
-            DisplayAlerts displayAlerts, InventoryServiceImpl inventoryService, WarehouseServiceImpl warehouseService,
-            ProductServiceImpl productService, ParseDataTypes parseDataTypes, SellViewController sellViewController, CurrencyServiceImpl currencyService
+            SellFieldsValidator sellFieldsValidator, CleanHelper cleanHelper, SellRegistryServiceImpl sellRegistryService,
+            GeneralRegistryServiceImpl generalRegistryService, UserLogged userLogged, DisplayAlerts displayAlerts,
+            InventoryServiceImpl inventoryService, WarehouseServiceImpl warehouseService, ParseDataTypes parseDataTypes,
+            ProductServiceImpl productService, SellViewController sellViewController, CurrencyServiceImpl currencyService
     ) {
         this.sellFieldsValidator = sellFieldsValidator;
         this.cleanHelper = cleanHelper;
@@ -105,7 +106,7 @@ public class RealizedSellsViewController {
             return;
         }
 
-        try{
+        try {
             Long id = parseDataTypes.parseLong(idText);
             if (sellRegistryService.existsByIdAndClient(id, client)) {
                 SellRegistry sellRegistry = sellRegistryService.getByIdAndClient(id, client);
@@ -118,7 +119,7 @@ public class RealizedSellsViewController {
             } else {
                 clearFieldsExceptId();
             }
-        }catch(NumberFormatException e){
+        } catch (NumberFormatException e) {
             clearFieldsExceptId();
         }
 
@@ -334,16 +335,17 @@ public class RealizedSellsViewController {
     private void initMbId() {
         mbId.getItems().clear();
         List<SellRegistry> sellRegistryList = sellRegistryService.getAllSellRegistriesByClient(client);
-        for (SellRegistry sr : sellRegistryList) {
-            MenuItem item = new MenuItem(sr.getId() + "");
+        for (SellRegistry sellRegistry : sellRegistryList) {
+            MenuItem item = new MenuItem(sellRegistry.getId() + "");
             item.setOnAction(e -> {
-                tfId.setText(sr.getId() + "");
-                tfProduct.setText(sr.getProductName());
-                tfProductAmount.setText(sr.getProductAmount() + "");
-                tfProductCurrency.setText(sr.getSellCurrency());
-                tfProductPrice.setText(sr.getSellPrice() + "");
-                dpSellProductDate.setValue(sr.getSellDate());
+                tfId.setText(sellRegistry.getId() + "");
+                tfProduct.setText(sellRegistry.getProductName());
+                tfProductAmount.setText(sellRegistry.getProductAmount() + "");
+                tfProductCurrency.setText(sellRegistry.getSellCurrency());
+                tfProductPrice.setText(sellRegistry.getSellPrice() + "");
+                dpSellProductDate.setValue(sellRegistry.getSellDate());
             });
+            mbId.getItems().add(item);
         }
     }
 

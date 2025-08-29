@@ -14,6 +14,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import lombok.Getter;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
@@ -83,8 +84,11 @@ public class ExpenseViewController {
     private Label lblAddDebugForm, lblClientName;
     @FXML
     private TextField tfAddProductName, tfAddProductAmount, tfId, tfAddExpensePrice, tfAddExpenseCurrency, tfAddExpenseType;
+    @Getter
     @FXML
-    private TextField tfFilterId, tfFilterName, tfMinFilterPrice, tfMaxFilterPrice, tfMaxFilterAmount, tfMinFilterAmount;
+    private TextField tfFilterId;
+    @FXML
+    private TextField tfFilterName, tfMinFilterAmount, tfMaxFilterAmount, tfMaxFilterPrice, tfMinFilterPrice;
     @FXML
     private DatePicker dpAddExpenseDate;
     @FXML

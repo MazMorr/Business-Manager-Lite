@@ -119,7 +119,7 @@ public class Main extends Application {
     }
 
     private void loadMainInterface() throws IOException {
-        Parent root = springFXMLLoader.load("/views/clientView.fxml");
+        Parent root = springFXMLLoader.load("/views/loginView.fxml");
         scene = new Scene(root);
         scene.setCursor(Cursor.DEFAULT);
         primaryStage.setScene(scene);

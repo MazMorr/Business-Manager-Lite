@@ -30,7 +30,7 @@ import static javafx.scene.paint.Color.RED;
  * Handles authentication, navigation, and session management for clients.
  */
 @Controller
-public class ClientViewController {
+public class LoginViewController {
 
     // Dependencies injected via constructor
     private final SpringFXMLLoader springFXMLLoader;
@@ -47,7 +47,7 @@ public class ClientViewController {
      * @param clientService the client service
      * @param springFXMLLoader the spring fxml loader
      */
-    public ClientViewController(
+    public LoginViewController(
             UserLogged userLogged, LicenseValidator licenseValidator, ClientServiceImpl clientService,
             SpringFXMLLoader springFXMLLoader, DisplayAlerts displayAlerts, SceneSwitcher sceneSwitcher
     ) {

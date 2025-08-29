@@ -201,22 +201,18 @@
             </Label>
             <HBox layoutX="137.0" layoutY="133.0" prefHeight="355.0" prefWidth="583.0" spacing="20.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="170.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="100.0">
                <children>
-                  <VBox prefHeight="1000.0" prefWidth="1000.0" spacing="5.0" style="-fx-background-radius: 20;" styleClass="rightIndex">
+                  <VBox alignment="TOP_CENTER" prefHeight="1000.0" prefWidth="1000.0" spacing="5.0" style="-fx-background-radius: 20;" styleClass="rightIndex">
                      <children>
-                        <AnchorPane prefHeight="450.0" prefWidth="450.0">
-                           <children>
-                              <TreeTableView fx:id="ttvWarehouse" layoutX="-11.0" layoutY="-121.0" prefHeight="1000.0" prefWidth="460.0" style="-fx-border-color: #2563eb; -fx-background-radius: 10px; -fx-border-radius: 10px; -fx-padding: 5px 3px 5px 3px;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                <columns>
-                                  <TreeTableColumn fx:id="ttcWarehouseName" prefWidth="115.0" text="Almacen" />
-                                    <TreeTableColumn fx:id="ttcProductName" prefWidth="151.0" text="Producto" />
-                                    <TreeTableColumn fx:id="ttcProductAmount" prefWidth="84.0" text="Cantidad" />
-                                </columns>
-                                 <columnResizePolicy>
-                                    <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                 </columnResizePolicy>
-                              </TreeTableView>
-                           </children>
-                        </AnchorPane>
+                        <TreeTableView fx:id="ttvWarehouse" prefHeight="1000.0" prefWidth="460.0" style="-fx-border-color: #2563eb; -fx-background-radius: 10px; -fx-border-radius: 10px; -fx-padding: 5px 3px 5px 3px;">
+                          <columns>
+                            <TreeTableColumn fx:id="ttcWarehouseName" prefWidth="115.0" sortable="false" text="Almacen" />
+                              <TreeTableColumn fx:id="ttcProductName" prefWidth="151.0" sortable="false" text="Producto" />
+                              <TreeTableColumn fx:id="ttcProductAmount" prefWidth="84.0" sortable="false" text="Cantidad" />
+                          </columns>
+                           <columnResizePolicy>
+                              <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TreeTableView>
                         <HBox prefHeight="35.0" prefWidth="460.0" spacing="5.0">
                            <children>
                               <Button mnemonicParsing="false" onAction="#addWarehouse" prefHeight="35.0" prefWidth="450.0" styleClass="btnStock" text="Agregar Almacén">
@@ -300,14 +296,14 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <VBox prefHeight="1000.0" prefWidth="1000.0" spacing="5.0" style="-fx-background-radius: 20;" styleClass="rightIndex">
+                  <VBox alignment="TOP_CENTER" prefHeight="1000.0" prefWidth="1000.0" spacing="5.0" style="-fx-background-radius: 20;" styleClass="rightIndex">
                      <children>
                         <TableView fx:id="tvExpenses" prefHeight="1000.0" prefWidth="460.0" style="-fx-border-color: #2563eb; -fx-background-radius: 10px; -fx-border-radius: 10px; -fx-padding: 5px 3px 5px 3px;">
                           <columns>
-                            <TableColumn fx:id="tcIdExpense" prefWidth="92.0" text="ID Gasto" />
-                            <TableColumn fx:id="tcProductName" prefWidth="123.0" text="Producto" />
-                              <TableColumn fx:id="tcProductAmount" prefWidth="76.0" text="Cantidad" />
-                              <TableColumn fx:id="tcProductDate" prefWidth="75.0" text="Fecha" />
+                            <TableColumn fx:id="tcIdExpense" prefWidth="92.0" sortable="false" text="ID Gasto" />
+                            <TableColumn fx:id="tcProductName" prefWidth="123.0" sortable="false" text="Producto" />
+                              <TableColumn fx:id="tcProductAmount" prefWidth="76.0" sortable="false" text="Cantidad" />
+                              <TableColumn fx:id="tcProductDate" prefWidth="75.0" sortable="false" text="Fecha" />
                           </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
