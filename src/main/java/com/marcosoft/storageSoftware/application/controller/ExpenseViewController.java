@@ -22,6 +22,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -91,9 +93,7 @@ public class ExpenseViewController {
     @FXML
     private TableView<ExpenseDataTable> tvExpense;
     @FXML
-    private TableColumn<ExpenseDataTable, String> tcExpenseName, tcExpenseType, tcCurrency;
-    @FXML
-    private TableColumn<ExpenseDataTable, Double> tcPrice;
+    private TableColumn<ExpenseDataTable, String> tcExpenseName, tcExpenseType, tcPriceAndCurrency;
     @FXML
     private TableColumn<ExpenseDataTable, Integer> tcAmount;
     @FXML
@@ -125,6 +125,7 @@ public class ExpenseViewController {
         tfMinFilterAmount.textProperty().addListener((obs, oldVal, newVal) -> filterExpenseTable());
         tfMaxFilterAmount.textProperty().addListener((obs, oldVal, newVal) -> filterExpenseTable());
         tfMinFilterPrice.textProperty().addListener((obs, oldVal, newVal) -> filterExpenseTable());
+        tfMaxFilterPrice.textProperty().addListener((obs, oldVal, newVal) -> filterExpenseTable());
         tfAddExpenseCurrency.textProperty().addListener((obs, oldVal, newVal) -> uppercaseCurrencyText());
     }
 
@@ -135,12 +136,14 @@ public class ExpenseViewController {
     private void setupTableSelectionListener() {
         tvExpense.getSelectionModel().selectedItemProperty().addListener((obs, oldSel, newSel) -> {
             if (newSel != null) {
-                tfId.setText(newSel.getId() != null ? String.valueOf(newSel.getId()) : "");
-                tfAddProductName.setText(newSel.getExpenseName());
-                tfAddProductAmount.setText(newSel.getAmount() != null ? String.valueOf(newSel.getAmount()) : "");
-                tfAddExpensePrice.setText(newSel.getPrice() != null ? String.valueOf(newSel.getPrice()) : "");
-                tfAddExpenseCurrency.setText(newSel.getCurrency());
-                dpAddExpenseDate.setValue(newSel.getReceivedDate());
+                Expense expense = expenseService.getExpenseById(newSel.getId());
+                tfId.setText(expense.getExpenseId() != null ? String.valueOf(expense.getExpenseId()) : "");
+                tfAddProductName.setText(expense.getExpenseName());
+                tfAddProductAmount.setText(expense.getAmount() != null ? String.valueOf(expense.getAmount()) : "");
+                tfAddExpensePrice.setText(expense.getExpensePrice() != null ? String.valueOf(expense.getExpensePrice()) : "");
+                tfAddExpenseCurrency.setText(expense.getCurrency().getCurrencyName());
+                tfAddExpenseType.setText(expense.getExpenseType());
+                dpAddExpenseDate.setValue(expense.getReceivedDate());
             }
         });
     }
@@ -168,8 +171,7 @@ public class ExpenseViewController {
                     expense.getExpenseId(),
                     expense.getExpenseName(),
                     expense.getExpenseType(),
-                    expense.getExpensePrice(),
-                    expense.getCurrency().getCurrencyName(),
+                    expense.getExpensePrice() + " " + expense.getCurrency().getCurrencyName(),
                     expense.getAmount(),
                     expense.getReceivedDate()
             ));
@@ -178,8 +180,7 @@ public class ExpenseViewController {
         tcId.setCellValueFactory(new PropertyValueFactory<>("id"));
         tcExpenseName.setCellValueFactory(new PropertyValueFactory<>("expenseName"));
         tcExpenseType.setCellValueFactory(new PropertyValueFactory<>("expenseType"));
-        tcPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
-        tcCurrency.setCellValueFactory(new PropertyValueFactory<>("currency"));
+        tcPriceAndCurrency.setCellValueFactory(new PropertyValueFactory<>("priceAndCurrency"));
         tcAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
         tcDate.setCellValueFactory(new PropertyValueFactory<>("receivedDate"));
 
@@ -377,33 +378,33 @@ public class ExpenseViewController {
         String name = tfFilterName.getText().trim().toLowerCase();
         Integer minAmount = parseDataTypes.parseInt(tfMinFilterAmount.getText());
         Integer maxAmount = parseDataTypes.parseInt(tfMaxFilterAmount.getText());
-        Double minPrice = parseDataTypes.parseDouble(tfMinFilterPrice.getText());
-        Double maxPrice = parseDataTypes.parseDouble(tfMaxFilterPrice.getText());
+        Double minPrice = parsePriceFromString(tfMinFilterPrice.getText());
+        Double maxPrice = parsePriceFromString(tfMaxFilterPrice.getText());
 
-        Predicate<ExpenseDataTable> filter = investment -> {
+        Predicate<ExpenseDataTable> filter = expense -> {
             boolean matches = true;
 
             if (!id.isEmpty())
-                matches &= investment.getId() != null && investment.getId().toString().contains(id);
+                matches &= expense.getId() != null && expense.getId().toString().contains(id);
 
             if (!name.isEmpty())
-                matches &= investment.getExpenseName() != null &&
-                        investment.getExpenseName().toLowerCase().contains(name);
+                matches &= expense.getExpenseName() != null &&
+                        expense.getExpenseName().toLowerCase().contains(name);
 
             if (minAmount != null && minAmount > 0)
-                matches &= investment.getAmount() != null && investment.getAmount() >= minAmount;
+                matches &= expense.getAmount() != null && expense.getAmount() >= minAmount;
 
             if (maxAmount != null && maxAmount > 0)
-                matches &= investment.getAmount() != null && investment.getAmount() <= maxAmount;
+                matches &= expense.getAmount() != null && expense.getAmount() <= maxAmount;
 
             // Filtro para precio mínimo
             if (minPrice != null) {
-                matches &= investment.getPrice() != null && investment.getPrice() >= minPrice;
+                matches &= parsePriceFromString(expense.getPriceAndCurrency()) != null && parsePriceFromString(expense.getPriceAndCurrency()) >= minPrice;
             }
 
             // Filtro para precio máximo
             if (maxPrice != null) {
-                matches &= investment.getPrice() != null && investment.getPrice() <= maxPrice;
+                matches &= parsePriceFromString(expense.getPriceAndCurrency()) != null && parsePriceFromString(expense.getPriceAndCurrency()) <= maxPrice;
             }
             return matches;
         };
@@ -413,6 +414,24 @@ public class ExpenseViewController {
                 .collect(Collectors.toCollection(FXCollections::observableArrayList));
 
         tvExpense.setItems(filteredList);
+    }
+
+    private Double parsePriceFromString(String priceText) {
+        if (priceText == null || priceText.isEmpty()) {
+            return null;
+        }
+
+        // Usar regex para encontrar el primer número (entero o decimal)
+        Matcher matcher = Pattern.compile("\\d+(?:\\.\\d+)?").matcher(priceText.trim());
+        if (matcher.find()) {
+            try {
+                return Double.parseDouble(matcher.group());
+            } catch (NumberFormatException e) {
+                return null;
+            }
+        }
+
+        return null;
     }
 
     private void updateCurrencyMenu() {
@@ -429,21 +448,6 @@ public class ExpenseViewController {
             item.setOnAction(e -> tfAddExpenseCurrency.setText(currency));
             mbCurrency.getItems().add(item);
         }
-    }
-
-    /**
-     * Select inventory.
-     */
-    @FXML
-    public void selectInventory() {
-        ExpenseDataTable selectedInvestment = tvExpense.getSelectionModel().getSelectedItem();
-        tfId.setText(String.valueOf(selectedInvestment.getId()));
-        dpAddExpenseDate.setValue(selectedInvestment.getReceivedDate());
-        tfAddProductName.setText(selectedInvestment.getExpenseName());
-        tfAddExpenseType.setText(selectedInvestment.getExpenseType());
-        tfAddProductAmount.setText(String.valueOf(selectedInvestment.getAmount()));
-        tfAddExpenseCurrency.setText(selectedInvestment.getCurrency());
-        tfAddExpensePrice.setText(String.valueOf(selectedInvestment.getPrice()));
     }
 
     /**

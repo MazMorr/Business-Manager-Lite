@@ -274,7 +274,7 @@ public class WarehouseViewController {
      */
     @FXML
     public void assignExpense() throws SceneSwitcher.WindowLoadException {
-        sceneSwitcher.displayWindow("Asignar Inversión", "/images/lc_logo.png", "/views/assignExpenseView.fxml");
+        sceneSwitcher.displayWindow("Asignar Inversión", "/images/lc_logo.png", "/views/assignProductView.fxml");
     }
 
     /**

@@ -183,14 +183,13 @@
                   </Button>
                </children>
             </VBox>
-            <TableView fx:id="tvExpense" editable="true" layoutX="159.0" layoutY="115.0" onMouseClicked="#selectInventory" prefHeight="445.0" prefWidth="550.0" styleClass="table" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="310.0" AnchorPane.topAnchor="230.0">
+            <TableView fx:id="tvExpense" editable="true" layoutX="159.0" layoutY="115.0" prefHeight="445.0" prefWidth="550.0" styleClass="table" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="310.0" AnchorPane.topAnchor="230.0">
                <columns>
                   <TableColumn fx:id="tcId" prefWidth="41.0" text="ID" />
                   <TableColumn fx:id="tcExpenseName" prefWidth="145.0" sortable="false" text="Nombre Gasto" />
                   <TableColumn fx:id="tcExpenseType" prefWidth="92.0" text="Tipo" />
                   <TableColumn fx:id="tcAmount" prefWidth="75.0" sortable="false" text="Cantidad" />
-                  <TableColumn fx:id="tcPrice" prefWidth="89.0" sortable="false" text="Precio" />
-                  <TableColumn fx:id="tcCurrency" prefWidth="76.0" text="Moneda" />
+                  <TableColumn fx:id="tcPriceAndCurrency" prefWidth="89.0" sortable="false" text="Precio" />
                   <TableColumn fx:id="tcDate" prefWidth="86.0" text="Fecha" />
                </columns>
                <columnResizePolicy>

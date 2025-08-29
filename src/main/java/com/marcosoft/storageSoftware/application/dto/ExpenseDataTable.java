@@ -15,8 +15,7 @@ public class ExpenseDataTable {
     private Long id;
     private String expenseName;
     private String expenseType;
-    private Double price;
-    private String currency;
+    private String priceAndCurrency;
     private Integer amount;
     private LocalDate receivedDate;
 }
