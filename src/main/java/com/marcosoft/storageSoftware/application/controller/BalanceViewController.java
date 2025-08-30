@@ -1,5 +1,15 @@
 package com.marcosoft.storageSoftware.application.controller;
 
+import com.itextpdf.io.font.constants.StandardFonts;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.properties.TextAlignment;
 import com.marcosoft.storageSoftware.application.dto.UserLogged;
 import com.marcosoft.storageSoftware.domain.model.Client;
 import com.marcosoft.storageSoftware.domain.model.Currency;
@@ -14,12 +24,18 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.stage.FileChooser;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
@@ -139,6 +155,7 @@ public class BalanceViewController {
         initProfitLabels();
         initExpenseLabels();
         initNetProfit();
+
     }
 
     private void initExpenseLabels() {
@@ -220,12 +237,163 @@ public class BalanceViewController {
 
     @FXML
     public void exportToExcel() {
-        displayAlerts.showAlert("Próximamente");
+        try {
+            // Crear libro de trabajo y hoja
+            Workbook workbook = new XSSFWorkbook();
+            Sheet sheet = workbook.createSheet("Balance");
+
+            // Crear estilos
+            CellStyle headerStyle = workbook.createCellStyle();
+            Font headerFont = workbook.createFont();
+            headerFont.setBold(true);
+            headerStyle.setFont(headerFont);
+
+            // Datos para exportar
+            String[][] data = {
+                    {"Cliente:", client.getClientName()},
+                    {"Rango de Fechas:", startDate + " - " + endDate},
+                    {""},
+                    {"GANANCIAS", ""},
+                    {"Ganancia por Productos:", lblProductProfit.getText()},
+                    {"Total de Ganancias:", lblTotalProfit.getText()},
+                    {""},
+                    {"GASTOS", ""},
+                    {"Alquiler:", lblRentExpense.getText()},
+                    {"Salarios:", lblSalaryExpense.getText()},
+                    {"Publicidad:", lblPublicityExpense.getText()},
+                    {"Productos:", lblProductExpense.getText()},
+                    {"Servicios:", lblServiceExpense.getText()},
+                    {"Total de Gastos:", lblTotalExpense.getText()},
+                    {""},
+                    {"GANANCIA NETA", lblNetProfit.getText()}
+            };
+
+            // Llenar la hoja con datos
+            int rowNum = 0;
+            for (String[] rowData : data) {
+                Row row = sheet.createRow(rowNum++);
+                int colNum = 0;
+                for (String value : rowData) {
+                    org.apache.poi.ss.usermodel.Cell cell = row.createCell(colNum++);
+                    cell.setCellValue(value);
+
+                    // Aplicar estilo a encabezados
+                    if (value.equals("GANANCIAS") ||
+                            value.equals("GASTOS") ||
+                            value.equals("GANANCIA NETA")) {
+                        cell.setCellStyle(headerStyle);
+                    }
+                }
+            }
+
+            // Autoajustar columnas
+            for (int i = 0; i < 2; i++) {
+                sheet.autoSizeColumn(i);
+            }
+
+            // Guardar archivo
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Guardar reporte");
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Excel Files", "*.xlsx")
+            );
+            File file = fileChooser.showSaveDialog(null);
+
+            if (file != null) {
+                try (FileOutputStream outputStream = new FileOutputStream(file)) {
+                    workbook.write(outputStream);
+                }
+                displayAlerts.showAlert("Reporte exportado correctamente");
+            }
+            workbook.close();
+        } catch (Exception e) {
+            displayAlerts.showError("Error al exportar: " + e.getMessage());
+        }
     }
 
     @FXML
     public void exportToPdf() {
-        displayAlerts.showAlert("Próximamente");
+        try {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Guardar reporte PDF");
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("PDF Files", "*.pdf")
+            );
+            File file = fileChooser.showSaveDialog(null);
+
+            if (file != null) {
+                PdfDocument pdfDoc = new PdfDocument(new PdfWriter(file.getAbsolutePath()));
+                Document document = new Document(pdfDoc);
+                document.setMargins(50, 50, 50, 50);
+
+                createPdfContent(document);
+
+                document.close();
+                displayAlerts.showAlert("Reporte PDF exportado correctamente");
+            }
+        } catch (Exception e) {
+            displayAlerts.showError("Error al exportar PDF: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void createPdfContent(Document document) {
+        try {
+            PdfFont font = PdfFontFactory.createFont(StandardFonts.HELVETICA);
+            PdfFont boldFont = PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD);
+
+            // Título
+            Paragraph title = new Paragraph("REPORTE DE BALANCE")
+                    .setFont(boldFont)
+                    .setFontSize(20)
+                    .setTextAlignment(TextAlignment.CENTER)
+                    .setMarginBottom(20);
+            document.add(title);
+
+            // Información del cliente
+            document.add(new Paragraph("Cliente: " + client.getClientName()).setFont(font));
+            document.add(new Paragraph("Rango de Fechas: " + startDate + " - " + endDate).setFont(font));
+            document.add(new Paragraph("\n"));
+
+            // Tabla de ganancias
+            document.add(new Paragraph("GANANCIAS").setFont(boldFont));
+            Table profitsTable = new Table(2);
+            profitsTable.addCell(new Cell().add(new Paragraph("Ganancia por Productos:").setFont(font)));
+            profitsTable.addCell(new Cell().add(new Paragraph(lblProductProfit.getText()).setFont(font)));
+            profitsTable.addCell(new Cell().add(new Paragraph("Total de Ganancias:").setFont(font)));
+            profitsTable.addCell(new Cell().add(new Paragraph(lblTotalProfit.getText()).setFont(font)));
+            document.add(profitsTable);
+            document.add(new Paragraph("\n"));
+
+            // Tabla de gastos
+            document.add(new Paragraph("GASTOS").setFont(boldFont));
+            Table expensesTable = new Table(2);
+            expensesTable.addCell(new Cell().add(new Paragraph("Alquiler:").setFont(font)));
+            expensesTable.addCell(new Cell().add(new Paragraph(lblRentExpense.getText()).setFont(font)));
+            expensesTable.addCell(new Cell().add(new Paragraph("Salarios:").setFont(font)));
+            expensesTable.addCell(new Cell().add(new Paragraph(lblSalaryExpense.getText()).setFont(font)));
+            expensesTable.addCell(new Cell().add(new Paragraph("Publicidad:").setFont(font)));
+            expensesTable.addCell(new Cell().add(new Paragraph(lblPublicityExpense.getText()).setFont(font)));
+            expensesTable.addCell(new Cell().add(new Paragraph("Productos:").setFont(font)));
+            expensesTable.addCell(new Cell().add(new Paragraph(lblProductExpense.getText()).setFont(font)));
+            expensesTable.addCell(new Cell().add(new Paragraph("Servicios:").setFont(font)));
+            expensesTable.addCell(new Cell().add(new Paragraph(lblServiceExpense.getText()).setFont(font)));
+            expensesTable.addCell(new Cell().add(new Paragraph("Total de Gastos:").setFont(font)));
+            expensesTable.addCell(new Cell().add(new Paragraph(lblTotalExpense.getText()).setFont(font)));
+            document.add(expensesTable);
+            document.add(new Paragraph("\n"));
+
+            // Ganancia neta
+            document.add(new Paragraph("GANANCIA NETA").setFont(boldFont));
+            Table netProfitTable = new Table(2);
+            netProfitTable.addCell(new Cell().add(new Paragraph("Total:").setFont(font)));
+            netProfitTable.addCell(new Cell().add(new Paragraph(lblNetProfit.getText()).setFont(font)));
+            document.add(netProfitTable);
+
+        } catch (IOException e) {
+            displayAlerts.showError("Error al crear el PDF: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @FXML
