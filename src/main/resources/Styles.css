@@ -23,7 +23,7 @@ Negro:               #0f172a
 .text-field{
     -fx-border-color: #7baff0;
     -fx-font-family: 'Segoe UI', sans-serif;
-    -fx-padding: 6 10;
+    -fx-padding: 6 8;
     -fx-font-size: 14;
     -fx-background-color: #fff;
     -fx-text-fill: #0f172a;
