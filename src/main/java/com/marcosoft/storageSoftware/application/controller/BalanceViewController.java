@@ -1,44 +1,34 @@
 package com.marcosoft.storageSoftware.application.controller;
 
-import com.itextpdf.io.font.constants.StandardFonts;
-import com.itextpdf.kernel.font.PdfFont;
-import com.itextpdf.kernel.font.PdfFontFactory;
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.layout.Document;
-import com.itextpdf.layout.element.Cell;
-import com.itextpdf.layout.element.Paragraph;
-import com.itextpdf.layout.element.Table;
-import com.itextpdf.layout.properties.TextAlignment;
 import com.marcosoft.storageSoftware.application.dto.UserLogged;
 import com.marcosoft.storageSoftware.domain.model.Client;
 import com.marcosoft.storageSoftware.domain.model.Currency;
+import com.marcosoft.storageSoftware.domain.model.Expense;
+import com.marcosoft.storageSoftware.domain.model.SellRegistry;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.CurrencyServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.ExpenseServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.SellRegistryServiceImpl;
-import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
-import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
+import com.marcosoft.storageSoftware.infrastructure.util.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
-import javafx.stage.FileChooser;
-import lombok.AllArgsConstructor;
+import javafx.scene.control.SeparatorMenuItem;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.Period;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Lazy
 @Controller
@@ -46,10 +36,10 @@ public class BalanceViewController {
     private Client client;
     @Setter
     @Getter
-    private LocalDate startDate;
+    private static LocalDate startDate;
     @Setter
     @Getter
-    private LocalDate endDate;
+    private static LocalDate endDate;
     @Setter
     @Getter
     private Currency currency;
@@ -58,26 +48,30 @@ public class BalanceViewController {
 
     private final SceneSwitcher sceneSwitcher;
     private final UserLogged userLogged;
-    private final DisplayAlerts displayAlerts;
     private final SellRegistryServiceImpl sellRegistryService;
     private final CurrencyServiceImpl currencyService;
     private final ExpenseServiceImpl expenseService;
+    private final PdfGenerator pdfGenerator;
+    private final ExcelGenerator excelGenerator;
+    private final DisplayAlerts displayAlerts;
 
     public BalanceViewController(
-            DisplayAlerts displayAlerts, UserLogged userLogged, SceneSwitcher sceneSwitcher, ExpenseServiceImpl expenseService,
-            SellRegistryServiceImpl sellRegistryService, CurrencyServiceImpl currencyService
+            UserLogged userLogged, SceneSwitcher sceneSwitcher, ExpenseServiceImpl expenseService,
+            SellRegistryServiceImpl sellRegistryService, CurrencyServiceImpl currencyService, PdfGenerator pdfGenerator, ExcelGenerator excelGenerator, DisplayAlerts displayAlerts
     ) {
         this.sceneSwitcher = sceneSwitcher;
         this.currencyService = currencyService;
         this.expenseService = expenseService;
         this.sellRegistryService = sellRegistryService;
-        this.displayAlerts = displayAlerts;
         this.userLogged = userLogged;
+        this.pdfGenerator = pdfGenerator;
+        this.excelGenerator = excelGenerator;
+        this.displayAlerts = displayAlerts;
     }
 
     @FXML
     private Label lblTimeLapse, lblTotalExpense, lblProductExpense, lblRentExpense, lblTotalProfit, lblServiceExpense,
-            lblProductProfit, lblPublicityExpense, lblSalaryExpense, lblNetProfit, lblClientName;
+            lblProductProfit, lblPublicityExpense, lblSalaryExpense, lblNetUtilityNumber, lblClientName, lblNetUtility;
 
     @FXML
     private MenuButton mbDateRange;
@@ -109,14 +103,28 @@ public class BalanceViewController {
         });
         mbDateRange.getItems().add(customDateItem);
 
-        // Ítems de rangos predefinidos
+        // Separador
+        mbDateRange.getItems().add(new SeparatorMenuItem());
+
+        // Rangos predefinidos
         List<DateRangeOption> dateOptions = List.of(
-                new DateRangeOption("Hoy", Period.ZERO),
-                new DateRangeOption("Última Semana", Period.ofWeeks(1)),
-                new DateRangeOption("Último Mes", Period.ofMonths(1)),
-                new DateRangeOption("Último Trimestre", Period.ofMonths(3)),
-                new DateRangeOption("Último Semestre", Period.ofMonths(6)),
-                new DateRangeOption("Último Año", Period.ofYears(1))
+                new DateRangeOption("Hoy", DateRangeType.DAILY, 0),
+                new DateRangeOption("Ayer", DateRangeType.DAILY, 1),
+
+                new DateRangeOption("Esta Semana (L-D)", DateRangeType.WEEKLY, 0),
+                new DateRangeOption("Semana Anterior", DateRangeType.WEEKLY, 1),
+
+                new DateRangeOption("Mes en Curso", DateRangeType.MONTHLY, 0),
+                new DateRangeOption("Mes Anterior", DateRangeType.MONTHLY, 1),
+
+                new DateRangeOption("Trimestre en Curso", DateRangeType.QUARTERLY, 0),
+                new DateRangeOption("Trimestre Anterior", DateRangeType.QUARTERLY, 1),
+
+                new DateRangeOption("Semestre en Curso", DateRangeType.SEMESTERLY, 0),
+                new DateRangeOption("Semestre Anterior", DateRangeType.SEMESTERLY, 1),
+
+                new DateRangeOption("Año en Curso", DateRangeType.YEARLY, 0),
+                new DateRangeOption("Año Anterior", DateRangeType.YEARLY, 1)
         );
 
         dateOptions.forEach(option -> {
@@ -127,19 +135,81 @@ public class BalanceViewController {
     }
 
     private void setDateRange(DateRangeOption option) {
-        setEndDate(LocalDate.now());
-        setStartDate(endDate.minus(option.getPeriod()));
+        LocalDate[] dateRange = calculateDateRange(option);
+        setStartDate(dateRange[0]);
+        setEndDate(dateRange[1]);
         lblTimeLapse.setText(startDate + " / " + endDate);
         refreshBalance();
     }
 
-    // Clase de apoyo para encapsular la lógica de rangos de fecha
+    private LocalDate[] calculateDateRange(DateRangeOption option) {
+        LocalDate today = LocalDate.now();
+        LocalDate startDate;
+        LocalDate endDate;
+
+        switch (option.getType()) {
+            case DAILY:
+                startDate = today.minusDays(option.getOffset());
+                endDate = startDate;
+                break;
+
+            case WEEKLY:
+                // Calcular lunes de la semana
+                LocalDate baseDate = today.minusWeeks(option.getOffset());
+                startDate = baseDate.with(DayOfWeek.MONDAY);
+                endDate = startDate.plusDays(6);
+                break;
+
+            case MONTHLY:
+                startDate = today.minusMonths(option.getOffset()).withDayOfMonth(1);
+                endDate = startDate.plusMonths(1).minusDays(1);
+                break;
+
+            case QUARTERLY:
+                int currentQuarter = (today.getMonthValue() - 1) / 3;
+                int targetQuarter = (currentQuarter - option.getOffset() + 4) % 4;
+                int startMonth = targetQuarter * 3 + 1;
+                startDate = LocalDate.of(today.getYear(), startMonth, 1).minusMonths(option.getOffset() * 3L);
+                endDate = startDate.plusMonths(3).minusDays(1);
+                break;
+
+            case SEMESTERLY:
+                int currentSemester = (today.getMonthValue() - 1) / 6;
+                int targetSemester = (currentSemester - option.getOffset() + 2) % 2;
+                int semesterStartMonth = targetSemester * 6 + 1;
+                startDate = LocalDate.of(today.getYear(), semesterStartMonth, 1).minusMonths(option.getOffset() * 6L);
+                endDate = startDate.plusMonths(6).minusDays(1);
+                break;
+
+            case YEARLY:
+                startDate = LocalDate.of(today.getYear() - option.getOffset(), 1, 1);
+                endDate = LocalDate.of(today.getYear() - option.getOffset(), 12, 31);
+                break;
+
+            default:
+                startDate = today.minusMonths(1);
+                endDate = today;
+        }
+
+        return new LocalDate[]{startDate, endDate};
+    }
+
+    // Nuevas clases de apoyo
     @Getter
-    @AllArgsConstructor
     private static class DateRangeOption {
         private final String label;
-        private final Period period;
+        private final DateRangeType type;
+        private final int offset;
 
+        public DateRangeOption(String label, DateRangeType type, int offset) {
+            this.label = label;
+            this.type = type;
+            this.offset = offset;
+        }
+    }
+
+    private enum DateRangeType {
+        DAILY, WEEKLY, MONTHLY, QUARTERLY, SEMESTERLY, YEARLY
     }
 
     private void initDefaultValues() {
@@ -197,11 +267,13 @@ public class BalanceViewController {
     private void initNetProfit() {
         double netProfit = totalProfit - totalExpense;
         String currencyName = currency.getCurrencyName();
-        lblNetProfit.setText(netProfit + " " + currencyName);
+        lblNetUtilityNumber.setText(netProfit + " " + currencyName);
         if (netProfit < 0) {
-            lblNetProfit.setStyle("-fx-text-fill: #e40000");
+            lblNetUtilityNumber.setStyle("-fx-text-fill: #e40000");
+            lblNetUtility.setText("Pérdidas");
         } else if (netProfit > 0) {
-            lblNetProfit.setStyle("-fx-text-fill: #00ae03");
+            lblNetUtilityNumber.setStyle("-fx-text-fill: #00ae03");
+            lblNetUtility.setText("Utilidad Neta");
         }
     }
 
@@ -236,165 +308,157 @@ public class BalanceViewController {
     }
 
     @FXML
-    public void exportToExcel() {
-        try {
-            // Crear libro de trabajo y hoja
-            Workbook workbook = new XSSFWorkbook();
-            Sheet sheet = workbook.createSheet("Balance");
+    private void exportToExcel() {
+        // Preparar los datos para las hojas
+        List<String[]> summaryData = getSummaryDataForXls();
+        List<String[]> salesData = getSalesData();
+        List<String[]> expensesData = getExpensesData();
 
-            // Crear estilos
+        // Definir estilos para el resumen
+        ExcelExportRequest request = getExcelExportRequest(summaryData, salesData, expensesData);
+
+        // Llamar al generador
+        excelGenerator.exportToExcel(request);
+    }
+
+    private static ExcelExportRequest getExcelExportRequest(List<String[]> summaryData, List<String[]> salesData, List<String[]> expensesData) {
+        SheetConfig summarySheet = getSheetConfig(summaryData);
+        SheetConfig salesSheet = new SheetConfig("Ventas", salesData, 5, null, null);
+        SheetConfig expensesSheet = new SheetConfig("Gastos", expensesData, 4, null, null);
+
+        List<SheetConfig> sheets = List.of(summarySheet, salesSheet, expensesSheet);
+
+        // Crear el request
+        String fileName = "Reporte_" + startDate + "_a_" + endDate + ".xlsx";
+        return new ExcelExportRequest(sheets, fileName);
+    }
+
+    private static SheetConfig getSheetConfig(List<String[]> summaryData) {
+        SheetConfig.StylesCreator summaryStyles = workbook -> {
+            Map<String, CellStyle> styles = new HashMap<>();
             CellStyle headerStyle = workbook.createCellStyle();
             Font headerFont = workbook.createFont();
             headerFont.setBold(true);
             headerStyle.setFont(headerFont);
+            styles.put("header", headerStyle);
+            return styles;
+        };
 
-            // Datos para exportar
-            String[][] data = {
-                    {"Cliente:", client.getClientName()},
-                    {"Rango de Fechas:", startDate + " - " + endDate},
-                    {""},
-                    {"GANANCIAS", ""},
-                    {"Ganancia por Productos:", lblProductProfit.getText()},
-                    {"Total de Ganancias:", lblTotalProfit.getText()},
-                    {""},
-                    {"GASTOS", ""},
-                    {"Alquiler:", lblRentExpense.getText()},
-                    {"Salarios:", lblSalaryExpense.getText()},
-                    {"Publicidad:", lblPublicityExpense.getText()},
-                    {"Productos:", lblProductExpense.getText()},
-                    {"Servicios:", lblServiceExpense.getText()},
-                    {"Total de Gastos:", lblTotalExpense.getText()},
-                    {""},
-                    {"GANANCIA NETA", lblNetProfit.getText()}
-            };
-
-            // Llenar la hoja con datos
-            int rowNum = 0;
-            for (String[] rowData : data) {
-                Row row = sheet.createRow(rowNum++);
-                int colNum = 0;
-                for (String value : rowData) {
-                    org.apache.poi.ss.usermodel.Cell cell = row.createCell(colNum++);
-                    cell.setCellValue(value);
-
-                    // Aplicar estilo a encabezados
-                    if (value.equals("GANANCIAS") ||
-                            value.equals("GASTOS") ||
-                            value.equals("GANANCIA NETA")) {
-                        cell.setCellStyle(headerStyle);
-                    }
-                }
+        // Usa la nueva interfaz StyleApplier
+        StyleApplier summaryStyleApplier = (cell, rowData, styles) -> {
+            if (rowData.length > 0 &&
+                    (rowData[0].equals("GANANCIAS") ||
+                            rowData[0].equals("GASTOS") ||
+                            rowData[0].equals("GANANCIA NETA"))) {
+                cell.setCellStyle(styles.get("header"));
             }
+        };
 
-            // Autoajustar columnas
-            for (int i = 0; i < 2; i++) {
-                sheet.autoSizeColumn(i);
-            }
+        return new SheetConfig("Resumen", summaryData, 2, summaryStyleApplier, summaryStyles);
+    }
 
-            // Guardar archivo
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Guardar reporte");
-            fileChooser.getExtensionFilters().addAll(
-                    new FileChooser.ExtensionFilter("Excel Files", "*.xlsx")
-            );
-            File file = fileChooser.showSaveDialog(null);
-
-            if (file != null) {
-                try (FileOutputStream outputStream = new FileOutputStream(file)) {
-                    workbook.write(outputStream);
-                }
-                displayAlerts.showAlert("Reporte exportado correctamente");
-            }
-            workbook.close();
-        } catch (Exception e) {
-            displayAlerts.showError("Error al exportar: " + e.getMessage());
+    private List<String[]> getExpensesData() {
+        // Obtener los gastos del servicio
+        List<Expense> expenses = expenseService.getExpensesInDateRange(client, startDate, endDate);
+        List<String[]> expensesData = new ArrayList<>();
+        // Encabezados
+        expensesData.add(new String[]{"Fecha", "Tipo", "Precio", "Monto"});
+        for (Expense expense : expenses) {
+            expensesData.add(new String[]{
+                    expense.getReceivedDate().toString(),
+                    expense.getExpenseType(),
+                    expense.getExpensePrice() + " " + expense.getCurrency().getCurrencyName(),
+                    String.valueOf(expense.getAmount())
+            });
         }
+        return expensesData;
+    }
+
+    private List<String[]> getSalesData() {
+        // Obtener las ventas del servicio
+        List<SellRegistry> sales = sellRegistryService.getSalesInDateRange(client, startDate, endDate);
+        List<String[]> salesData = new ArrayList<>();
+        // Encabezados
+        salesData.add(new String[]{"Fecha", "Producto", "Cantidad", "Precio"});
+        for (SellRegistry sale : sales) {
+            salesData.add(new String[]{
+                    sale.getSellDate().toString(),
+                    sale.getProductName(),
+                    String.valueOf(sale.getProductAmount()),
+                    sale.getSellPrice() + " " + sale.getSellCurrency()
+            });
+        }
+        return salesData;
+    }
+
+    private List<String[]> getSummaryDataForXls() {
+        return List.of(
+                new String[]{"Cliente:", client.getClientName()},
+                new String[]{"Rango de Fechas:", startDate + " - " + endDate},
+                new String[]{"", ""}, // Fila vacía como separador
+                new String[]{"GANANCIAS", ""}, // Encabezado principal
+                new String[]{"Ganancia por Productos:", lblProductProfit.getText()},
+                new String[]{"Total de Ganancias:", lblTotalProfit.getText()},
+                new String[]{"", ""}, // Fila vacía como separador
+                new String[]{"GASTOS", ""}, // Encabezado principal
+                new String[]{"Alquiler:", lblRentExpense.getText()},
+                new String[]{"Salarios:", lblSalaryExpense.getText()},
+                new String[]{"Publicidad:", lblPublicityExpense.getText()},
+                new String[]{"Productos:", lblProductExpense.getText()},
+                new String[]{"Servicios:", lblServiceExpense.getText()},
+                new String[]{"Total de Gastos:", lblTotalExpense.getText()},
+                new String[]{"", ""}, // Fila vacía como separador
+                new String[]{"GANANCIA NETA", lblNetUtilityNumber.getText()} // Encabezado principal
+        );
+    }
+    private List<String[]> getSummaryDataForPDF() {
+        return List.of(
+                new String[]{"GANANCIAS", ""}, // Encabezado principal
+                new String[]{"Ganancia por Productos:", lblProductProfit.getText()},
+                new String[]{"Total de Ganancias:", lblTotalProfit.getText()},
+                new String[]{"GASTOS", ""}, // Encabezado principal
+                new String[]{"Alquiler:", lblRentExpense.getText()},
+                new String[]{"Salarios:", lblSalaryExpense.getText()},
+                new String[]{"Publicidad:", lblPublicityExpense.getText()},
+                new String[]{"Productos:", lblProductExpense.getText()},
+                new String[]{"Servicios:", lblServiceExpense.getText()},
+                new String[]{"Total de Gastos:", lblTotalExpense.getText()},
+                new String[]{"GANANCIA NETA", ""},
+                new String[]{"Ganancia Neta:", lblNetUtilityNumber.getText()}
+        );
     }
 
     @FXML
     public void exportToPdf() {
         try {
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Guardar reporte PDF");
-            fileChooser.getExtensionFilters().addAll(
-                    new FileChooser.ExtensionFilter("PDF Files", "*.pdf")
-            );
-            File file = fileChooser.showSaveDialog(null);
+            // Preparar los datos (los mismos que para Excel)
+            List<String[]> summaryData = getSummaryDataForPDF();
+            PdfExportRequest request = getPdfExportRequest(summaryData);
 
-            if (file != null) {
-                PdfDocument pdfDoc = new PdfDocument(new PdfWriter(file.getAbsolutePath()));
-                Document document = new Document(pdfDoc);
-                document.setMargins(50, 50, 50, 50);
-
-                createPdfContent(document);
-
-                document.close();
-                displayAlerts.showAlert("Reporte PDF exportado correctamente");
-            }
+            // Llamar al generador de PDF
+            pdfGenerator.exportToPdf(request);
         } catch (Exception e) {
-            displayAlerts.showError("Error al exportar PDF: " + e.getMessage());
-            e.printStackTrace();
+            displayAlerts.showError("Error al preparar datos para PDF: " + e.getMessage());
         }
     }
 
-    private void createPdfContent(Document document) {
-        try {
-            PdfFont font = PdfFontFactory.createFont(StandardFonts.HELVETICA);
-            PdfFont boldFont = PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD);
+    private PdfExportRequest getPdfExportRequest(List<String[]> summaryData) {
+        List<String[]> salesData = getSalesData();
+        List<String[]> expensesData = getExpensesData();
 
-            // Título
-            Paragraph title = new Paragraph("REPORTE DE BALANCE")
-                    .setFont(boldFont)
-                    .setFontSize(20)
-                    .setTextAlignment(TextAlignment.CENTER)
-                    .setMarginBottom(20);
-            document.add(title);
-
-            // Información del cliente
-            document.add(new Paragraph("Cliente: " + client.getClientName()).setFont(font));
-            document.add(new Paragraph("Rango de Fechas: " + startDate + " - " + endDate).setFont(font));
-            document.add(new Paragraph("\n"));
-
-            // Tabla de ganancias
-            document.add(new Paragraph("GANANCIAS").setFont(boldFont));
-            Table profitsTable = new Table(2);
-            profitsTable.addCell(new Cell().add(new Paragraph("Ganancia por Productos:").setFont(font)));
-            profitsTable.addCell(new Cell().add(new Paragraph(lblProductProfit.getText()).setFont(font)));
-            profitsTable.addCell(new Cell().add(new Paragraph("Total de Ganancias:").setFont(font)));
-            profitsTable.addCell(new Cell().add(new Paragraph(lblTotalProfit.getText()).setFont(font)));
-            document.add(profitsTable);
-            document.add(new Paragraph("\n"));
-
-            // Tabla de gastos
-            document.add(new Paragraph("GASTOS").setFont(boldFont));
-            Table expensesTable = new Table(2);
-            expensesTable.addCell(new Cell().add(new Paragraph("Alquiler:").setFont(font)));
-            expensesTable.addCell(new Cell().add(new Paragraph(lblRentExpense.getText()).setFont(font)));
-            expensesTable.addCell(new Cell().add(new Paragraph("Salarios:").setFont(font)));
-            expensesTable.addCell(new Cell().add(new Paragraph(lblSalaryExpense.getText()).setFont(font)));
-            expensesTable.addCell(new Cell().add(new Paragraph("Publicidad:").setFont(font)));
-            expensesTable.addCell(new Cell().add(new Paragraph(lblPublicityExpense.getText()).setFont(font)));
-            expensesTable.addCell(new Cell().add(new Paragraph("Productos:").setFont(font)));
-            expensesTable.addCell(new Cell().add(new Paragraph(lblProductExpense.getText()).setFont(font)));
-            expensesTable.addCell(new Cell().add(new Paragraph("Servicios:").setFont(font)));
-            expensesTable.addCell(new Cell().add(new Paragraph(lblServiceExpense.getText()).setFont(font)));
-            expensesTable.addCell(new Cell().add(new Paragraph("Total de Gastos:").setFont(font)));
-            expensesTable.addCell(new Cell().add(new Paragraph(lblTotalExpense.getText()).setFont(font)));
-            document.add(expensesTable);
-            document.add(new Paragraph("\n"));
-
-            // Ganancia neta
-            document.add(new Paragraph("GANANCIA NETA").setFont(boldFont));
-            Table netProfitTable = new Table(2);
-            netProfitTable.addCell(new Cell().add(new Paragraph("Total:").setFont(font)));
-            netProfitTable.addCell(new Cell().add(new Paragraph(lblNetProfit.getText()).setFont(font)));
-            document.add(netProfitTable);
-
-        } catch (IOException e) {
-            displayAlerts.showError("Error al crear el PDF: " + e.getMessage());
-            e.printStackTrace();
-        }
+        // Crear request para PDF
+        String fileName = "Reporte_" + startDate + "_a_" + endDate + ".pdf";
+        return new PdfExportRequest(
+                client.getClientName(),
+                startDate,
+                endDate,
+                summaryData,
+                salesData,
+                expensesData,
+                fileName
+        );
     }
+
 
     @FXML
     public void displayCurrencyValues() throws SceneSwitcher.WindowLoadException {

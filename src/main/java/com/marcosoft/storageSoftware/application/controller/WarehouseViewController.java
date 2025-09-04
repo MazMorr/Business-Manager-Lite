@@ -158,7 +158,6 @@ public class WarehouseViewController {
         inventoriesByWarehouse.forEach((warehouse, inventories) -> {
             // Manejo de amount null en el cálculo del total
             int total = inventories.stream().mapToInt(inv -> inv.getAmount() != null ? inv.getAmount() : 0).sum();
-
             int invCount = inventories.size() - 1;
 
             WarehouseDataTable warehouseNode = new WarehouseDataTable(
@@ -185,7 +184,7 @@ public class WarehouseViewController {
         });
 
         ttvWarehouse.setRoot(root);
-        ttvWarehouse.setShowRoot(false); // Enables placeholder display
+        ttvWarehouse.setShowRoot(false);
     }
 
     @FXML
@@ -236,15 +235,13 @@ public class WarehouseViewController {
 
     @FXML
     public void checkExpense(ActionEvent actionEvent) {
-        try {
-            ExpenseWarehouseDataTable expenseWarehouseDataTable = tvExpenses.getSelectionModel().getSelectedItem();
+        ExpenseWarehouseDataTable expenseWarehouseDataTable = tvExpenses.getSelectionModel().getSelectedItem();
+        if (expenseWarehouseDataTable == null) {
+            displayAlerts.showAlert("Debe seleccionar un gasto para revisarlo");
+        } else {
             switchToExpense(actionEvent);
             expenseViewController.getTfFilterId().setText(expenseWarehouseDataTable.getExpenseId() + "");
-        } catch (NullPointerException e) {
-            displayAlerts.showAlert("Debe seleccionar un gasto para revisarlo");
         }
-
-
     }
 
     @FXML

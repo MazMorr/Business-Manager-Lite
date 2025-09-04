@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @Service
 public class ExpenseServiceImpl implements ExpenseService {
@@ -155,5 +156,14 @@ public class ExpenseServiceImpl implements ExpenseService {
 
         Double rate = currencyRatesCache.get(targetCurrencyName);
         return rate != null ? totalInCUP / rate : totalInCUP;
+    }
+
+    public List<Expense> getExpensesInDateRange(Client client, LocalDate startDate, LocalDate endDate) {
+        return getAllExpensesByClient(client).stream()
+                .filter(ex -> {
+                    LocalDate receivedDate = ex.getReceivedDate();
+                    return !receivedDate.isBefore(startDate) && !receivedDate.isAfter(endDate);
+                })
+                .collect(Collectors.toList());
     }
 }

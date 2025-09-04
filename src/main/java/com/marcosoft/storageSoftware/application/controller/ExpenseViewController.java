@@ -15,7 +15,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import lombok.Getter;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
 import java.time.LocalDate;
@@ -62,7 +61,6 @@ public class ExpenseViewController {
      * @param expenseRegistryService the expense registry service
      * @param sceneSwitcher the scene switcher
      */
-    @Lazy
     public ExpenseViewController(
             ProductServiceImpl productService, GeneralRegistryServiceImpl generalRegistryService, DisplayAlerts displayAlerts,
             ParseDataTypes parseDataTypes, UserLogged userLogged, ExpenseServiceImpl expenseService,

@@ -261,7 +261,7 @@
                                  <graphic>
                                     <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
                                        <image>
-                                          <Image url="@../images/quiz-alt.png" />
+                                          <Image url="@../images/rebautizar.png" />
                                        </image>
                                        <effect>
                                           <InnerShadow choke="1.0">

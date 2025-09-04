@@ -243,7 +243,7 @@ public class RegistryViewController {
                     sellRegistry.getRegistryType(),
                     sellRegistry.getRegistryDate(),
                     sellRegistry.getProductName(),
-                    sellRegistry.getSellPrice() + sellRegistry.getSellCurrency(),
+                    sellRegistry.getSellPrice() + " " + sellRegistry.getSellCurrency(),
                     sellRegistry.getSellDate(),
                     sellRegistry.getWarehouseName(),
                     sellRegistry.getProductAmount()

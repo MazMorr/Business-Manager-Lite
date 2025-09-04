@@ -3,6 +3,7 @@ package com.marcosoft.storageSoftware.application.controller;
 import com.marcosoft.storageSoftware.application.dto.SellDataTable;
 import com.marcosoft.storageSoftware.application.dto.UserLogged;
 import com.marcosoft.storageSoftware.domain.model.*;
+import com.marcosoft.storageSoftware.domain.model.Currency;
 import com.marcosoft.storageSoftware.domain.service.WarehouseService;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.*;
 import com.marcosoft.storageSoftware.infrastructure.util.*;
@@ -20,15 +21,18 @@ import org.springframework.stereotype.Controller;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
 public class SellViewController {
     private Client client;
+    private Map<String, Product> productCache;
+    private Map<String, Warehouse> warehouseCache;
+    // Agregar variable para controlar estado de carga
+    private volatile boolean isTableLoading = false;
 
     // Service and utility dependencies
     private final UserLogged userLogged;
@@ -44,6 +48,8 @@ public class SellViewController {
     private final CleanHelper cleanHelper;
     private final SellFieldsValidator sellFieldsValidator;
     private final SellFilterUtilities sellFilterUtilities;
+    // Agregar variable de instancia
+    private Debouncer filterDebouncer = new Debouncer();
 
     @FXML
     private Label lblWarning, lblAlerts, lblSellDebug, lblAssignPriceDebug;
@@ -94,6 +100,7 @@ public class SellViewController {
     public void initialize() {
         client = userLogged.getClient();
         lblClientName.setText(client.getClientName());
+        precacheData();
 
         Platform.runLater(() -> {
             setupTableColumns();
@@ -107,6 +114,27 @@ public class SellViewController {
             setupOtherTextFieldListeners();
             loadWarningAndAlertLabels();
         });
+    }
+
+    // Método para precargar datos
+    private void precacheData() {
+        try {
+            // Precargar todos los productos
+            List<Product> products = productService.getAllProductsByClient(client);
+            productCache = products.stream()
+                    .collect(Collectors.toMap(Product::getProductName, Function.identity()));
+
+            // Precargar todos los almacenes
+            List<Warehouse> warehouses = warehouseService.getWarehousesByClient(client);
+            warehouseCache = warehouses.stream()
+                    .collect(Collectors.toMap(Warehouse::getWarehouseName, Function.identity()));
+
+            log.info("Precached {} products and {} warehouses",
+                    productCache.size(), warehouseCache.size());
+        } catch (Exception e) {
+            log.error("Error precaching data", e);
+            displayAlerts.showAlert("Error al cargar datos iniciales");
+        }
     }
 
     public void loadWarningAndAlertLabels() {
@@ -274,6 +302,23 @@ public class SellViewController {
             displayAlerts.showAlert("Ha ocurrido un error: " + e.getMessage());
         }
     }
+
+    // Agregar clase interna Debouncer
+    private static class Debouncer {
+        private Timer timer = new Timer(true);
+
+        public void debounce(Runnable task, int delayMillis) {
+            timer.cancel();
+            timer = new Timer(true);
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    Platform.runLater(task);
+                }
+            }, delayMillis);
+        }
+    }
+
 
     private void setupTableSelectionListener() {
         ttvInventory.getSelectionModel().selectedItemProperty().addListener((obs, oldSel, newSel) -> {
@@ -446,6 +491,11 @@ public class SellViewController {
     }
 
     public void loadProductTable() {
+        if (isTableLoading) {
+            return; // Evitar múltiples cargas simultáneas
+        }
+
+        isTableLoading = true;
         try {
             // 1. Get filters
             SellFilterCriteria filters = sellFilterUtilities.getFilterCriteria(
@@ -472,6 +522,7 @@ public class SellViewController {
         } catch (Exception e) {
             handleLoadError(e);
         } finally {
+            isTableLoading = false;
             Platform.runLater(() -> {
                 try {
                     ttvInventory.refresh();
@@ -564,16 +615,15 @@ public class SellViewController {
                 }
             }
 
-            if (productName == null) return null;
-
-            Product product = productService.getByProductNameAndClient(productName, client);
+            // Usar la caché
+            Product product = productCache.get(productName);
             if (product == null) return null;
 
             if (warehouseName == null || warehouseName.trim().isEmpty()) {
-                return null; // No hay warehouse específico
+                return null;
             }
 
-            Warehouse warehouse = warehouseService.getWarehouseByWarehouseNameAndClient(warehouseName, client);
+            Warehouse warehouse = warehouseCache.get(warehouseName);
             if (warehouse == null) return null;
 
             return inventoryService.getByProductAndWarehouseAndClient(product, warehouse, client);
@@ -694,14 +744,26 @@ public class SellViewController {
         e.printStackTrace();
     }
 
+
     private void setupFilterListeners() {
-        // Add listeners to all filter fields
-        tfFilterProductName.textProperty().addListener((obs, oldVal, newVal) -> loadProductTable());
-        tfFilterWarehouseName.textProperty().addListener((obs, oldVal, newVal) -> loadProductTable());
-        tfMinFilterAmount.textProperty().addListener((obs, oldVal, newVal) -> loadProductTable());
-        tfMaxFilterAmount.textProperty().addListener((obs, oldVal, newVal) -> loadProductTable());
-        tfMinFilterPrice.textProperty().addListener((obs, oldVal, newVal) -> loadProductTable());
-        tfMaxFilterPrice.textProperty().addListener((obs, oldVal, newVal) -> loadProductTable());
+        Runnable filterTask = () -> {
+            if (!isTableLoading) {
+                loadProductTable();
+            }
+        };
+
+        tfFilterProductName.textProperty().addListener((obs, oldVal, newVal) ->
+                filterDebouncer.debounce(filterTask, 300));
+        tfFilterWarehouseName.textProperty().addListener((obs, oldVal, newVal) ->
+                filterDebouncer.debounce(filterTask, 300));
+        tfMinFilterAmount.textProperty().addListener((obs, oldVal, newVal) ->
+                filterDebouncer.debounce(filterTask, 300));
+        tfMaxFilterAmount.textProperty().addListener((obs, oldVal, newVal) ->
+                filterDebouncer.debounce(filterTask, 300));
+        tfMinFilterPrice.textProperty().addListener((obs, oldVal, newVal) ->
+                filterDebouncer.debounce(filterTask, 300));
+        tfMaxFilterPrice.textProperty().addListener((obs, oldVal, newVal) ->
+                filterDebouncer.debounce(filterTask, 300));
     }
 
     private void setupMbListeners() {

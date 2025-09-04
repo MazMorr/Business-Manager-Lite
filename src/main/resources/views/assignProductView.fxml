@@ -28,7 +28,7 @@
                   </Label>
                   <MenuButton fx:id="mbExpense" mnemonicParsing="false" prefWidth="150.0">
                      <graphic>
-                        <TextField fx:id="tfInvestment" prefWidth="150.0" />
+                        <TextField fx:id="tfInvestment" prefWidth="150.0" promptText="1er Paso" />
                      </graphic>
                      <padding>
                         <Insets bottom="-4.0" left="-8.0" top="-4.0" />
@@ -43,7 +43,7 @@
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="tfProduct" alignment="CENTER" disable="true" opacity="0.99" prefWidth="150.0" promptText="Solo Vista" />
+                  <TextField fx:id="tfProduct" alignment="CENTER" disable="true" opacity="0.99" prefWidth="150.0" promptText="Campo Informativo" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" spacing="60.0">
@@ -55,7 +55,7 @@
                   </Label>
                   <MenuButton mnemonicParsing="false" prefWidth="150.0">
                      <graphic>
-                        <TextField fx:id="tfAmount" prefWidth="150.0" />
+                        <TextField fx:id="tfAmount" prefWidth="150.0" promptText="2do Paso" />
                      </graphic>
                      <padding>
                         <Insets bottom="-4.0" left="-8.0" top="-4.0" />
@@ -75,7 +75,7 @@
                   </Label>
                   <MenuButton fx:id="mbWarehouse" mnemonicParsing="false" prefWidth="150.0">
                      <graphic>
-                        <TextField fx:id="tfWarehouse" prefWidth="150.0" />
+                        <TextField fx:id="tfWarehouse" prefWidth="150.0" promptText="3er Paso" />
                      </graphic>
                      <padding>
                         <Insets bottom="-4.0" left="-8.0" top="-4.0" />

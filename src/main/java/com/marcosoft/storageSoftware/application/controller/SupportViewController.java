@@ -36,9 +36,10 @@ public class SupportViewController {
 
     /**
      * Constructor for dependency injection.
-     * @param currencyService the currency service
-     * @param sceneSwitcher the scene switcher
-     * @param userLogged the user logged
+     *
+     * @param currencyService  the currency service
+     * @param sceneSwitcher    the scene switcher
+     * @param userLogged       the user logged
      * @param licenseValidator the license validator
      */
     public SupportViewController(
@@ -75,6 +76,7 @@ public class SupportViewController {
 
     /**
      * Sets the account controller reference for session management.
+     *
      * @param loginViewController the client view controller
      */
     public void setAccountController(LoginViewController loginViewController) {
@@ -107,7 +109,11 @@ public class SupportViewController {
      * The welcome message is shown in Spanish.
      */
     private void initWelcomeLabels() {
-        lblLicenseDays.setText(licenseValidator.getDaysRemaining() + " Días");
+        long daysRemaining = licenseValidator.getDaysRemaining();
+        if (daysRemaining <= 10) {
+            lblLicenseDays.setStyle("-fx-text-fill: #ff9b9b;");
+        }
+        lblLicenseDays.setText(daysRemaining + " Días");
         versionLabel.setText("0.9.9");
         lblWelcomeTitle.setText("Bienvenido, " + userLogged.getName());
         lblWelcome.setText(
@@ -151,6 +157,7 @@ public class SupportViewController {
 
     /**
      * Navigates to the warehouse view.
+     *
      * @param event the event
      */
     @FXML
@@ -160,6 +167,7 @@ public class SupportViewController {
 
     /**
      * Navigates to the balance view.
+     *
      * @param event the event
      */
     @FXML

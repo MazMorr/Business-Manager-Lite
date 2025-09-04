@@ -24,7 +24,7 @@ import java.util.List;
  */
 @Lazy
 @Controller
-public class AssignExpenseViewController {
+public class AssignProductViewController {
     private Client client;
 
     // Service and utility dependencies
@@ -52,7 +52,7 @@ public class AssignExpenseViewController {
      * @param warehouseRegistryService the warehouse registry service
      * @param warehouseViewController the warehouse view controller
      */
-    public AssignExpenseViewController(
+    public AssignProductViewController(
             GeneralRegistryServiceImpl generalRegistryService, ParseDataTypes parseDataTypes, DisplayAlerts displayAlerts,
             InventoryServiceImpl inventoryService, UserLogged userLogged, WarehouseServiceImpl warehouseService,
             ExpenseServiceImpl expenseService, ProductServiceImpl productService,
@@ -97,6 +97,8 @@ public class AssignExpenseViewController {
     private void searchProduct() {
         if(expenseService.existsByExpenseId(Long.parseLong(tfInvestment.getText()))){
             tfProduct.setText(expenseService.getExpenseById(Long.parseLong(tfInvestment.getText())).getExpenseName());
+        }else{
+            clearFields();
         }
     }
 
