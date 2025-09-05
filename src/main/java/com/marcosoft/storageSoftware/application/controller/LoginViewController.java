@@ -40,13 +40,6 @@ public class LoginViewController {
     private final DisplayAlerts displayAlerts;
     private final SceneSwitcher sceneSwitcher;
 
-    /**
-     * Constructor for dependency injection.
-     * @param userLogged the user logged
-     * @param licenseValidator the license validator
-     * @param clientService the client service
-     * @param springFXMLLoader the spring fxml loader
-     */
     public LoginViewController(
             UserLogged userLogged, LicenseValidator licenseValidator, ClientServiceImpl clientService,
             SpringFXMLLoader springFXMLLoader, DisplayAlerts displayAlerts, SceneSwitcher sceneSwitcher
@@ -184,6 +177,5 @@ public class LoginViewController {
             }
             clearFields();
         });
-
     }
 }

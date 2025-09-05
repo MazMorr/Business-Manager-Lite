@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
@@ -13,288 +14,232 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="650.0" prefWidth="1024.0" stylesheets="@../Styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.RegistryViewController">
+<AnchorPane prefHeight="650.0" prefWidth="1100.0" stylesheets="@../Styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.RegistryViewController">
    <children>
-      <AnchorPane>
+      <TabPane fx:id="tbpRegistry" layoutX="302.0" layoutY="80.0" prefHeight="496.0" prefWidth="652.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="90.0">
+        <tabs>
+          <Tab fx:id="tabGeneral" text="General">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="tvGeneralRegistry" layoutX="12.0" layoutY="16.0" prefHeight="476.0" prefWidth="817.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0">
+                          <columns>
+                            <TableColumn fx:id="tcGeneralRegistryZone" maxWidth="1810.0" minWidth="30.0" prefWidth="181.0" text="Zona Afectada" />
+                            <TableColumn fx:id="tcGeneralRegistryType" maxWidth="4280.0" minWidth="30.0" prefWidth="428.0" text="Tipo Registro" />
+                              <TableColumn fx:id="tcGeneralRegistryDateTime" maxWidth="1930.0" minWidth="30.0" prefWidth="193.0" text="Fecha Registro" />
+                          </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                        <HBox alignment="CENTER_LEFT" layoutX="21.0" layoutY="14.0" spacing="20.0" AnchorPane.leftAnchor="11.0" AnchorPane.topAnchor="13.0">
+                           <children>
+                              <Label text="Filtrar por Fecha de Registro:">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <DatePicker fx:id="dpGeneralFilter" editable="false" prefWidth="180.0" />
+                           </children>
+                        </HBox>
+                        <Button layoutX="682.0" layoutY="18.0" mnemonicParsing="false" onAction="#cleanDatePickers" style="-fx-background-color: transparent;" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="13.0">
+                           <padding>
+                              <Insets bottom="-1.0" left="-1.0" right="-1.0" top="-1.0" />
+                           </padding>
+                           <graphic>
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/filter.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Button>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab fx:id="tabInvestment" text="Gastos">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="tvExpense" layoutX="237.0" layoutY="95.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0">
+                          <columns>
+                            <TableColumn fx:id="tcExpenseRegistryType" maxWidth="1080.0" minWidth="30.0" prefWidth="108.0" text="Tipo Registro" />
+                              <TableColumn fx:id="tcExpenseRegistryDateTime" maxWidth="1220.0" minWidth="30.0" prefWidth="122.0" text="Fecha Registro" />
+                              <TableColumn fx:id="tcIdExpense" maxWidth="1020.0" minWidth="30.0" prefWidth="102.0" text="Id Gasto" />
+                            <TableColumn fx:id="tcExpenseName" maxWidth="1480.0" minWidth="30.0" prefWidth="148.0" text="Nombre Gasto" />
+                              <TableColumn fx:id="tcExpensePriceCurrency" maxWidth="1290.0" minWidth="30.0" prefWidth="129.0" text="Precio Compra" />
+                          </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                        <HBox alignment="CENTER_LEFT" layoutY="9.0" spacing="20.0" AnchorPane.leftAnchor="11.0" AnchorPane.topAnchor="13.0">
+                           <children>
+                              <Label text="Filtrar por Fecha de Registro:">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <DatePicker fx:id="dpExpenseFilter" editable="false" prefWidth="180.0" />
+                           </children>
+                        </HBox>
+                        <Button layoutX="648.0" layoutY="13.0" mnemonicParsing="false" onAction="#cleanDatePickers" style="-fx-background-color: transparent;" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="13.0">
+                           <graphic>
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/filter.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <padding>
+                              <Insets bottom="-1.0" left="-1.0" right="-1.0" top="-1.0" />
+                           </padding>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Button>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+            <Tab fx:id="tabWarehouse" text="Almacenes">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="tvWarehouse" layoutX="217.0" layoutY="89.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0">
+                          <columns>
+                            <TableColumn fx:id="tcWarehouseRegistryType" maxWidth="750.0" minWidth="30.0" prefWidth="75.0" text="Tipo Registro" />
+                              <TableColumn fx:id="tcWarehouseDateTime" maxWidth="750.0" minWidth="30.0" prefWidth="75.0" text="Fecha Registro" />
+                            <TableColumn fx:id="tcWarehouseName" maxWidth="750.0" minWidth="30.0" prefWidth="75.0" text="Almacén" />
+                              <TableColumn fx:id="tcWarehouseProduct" maxWidth="750.0" minWidth="30.0" prefWidth="75.0" text="Producto" />
+                              <TableColumn fx:id="tcWarehouseAmount" maxWidth="750.0" minWidth="30.0" prefWidth="75.0" text="Cantidad" />
+                          </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                        <HBox alignment="CENTER_LEFT" layoutX="14.0" spacing="20.0" AnchorPane.leftAnchor="11.0" AnchorPane.topAnchor="13.0">
+                           <children>
+                              <Label text="Filtrar por Fecha de Registro:">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <DatePicker fx:id="dpWarehouseFilter" editable="false" prefWidth="180.0" />
+                           </children>
+                        </HBox>
+                        <Button layoutX="844.0" layoutY="18.0" mnemonicParsing="false" onAction="#cleanDatePickers" prefHeight="18.0" prefWidth="21.0" style="-fx-background-color: transparent;" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="13.0">
+                           <graphic>
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/filter.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <padding>
+                              <Insets bottom="-1.0" left="-1.0" right="-1.0" top="-1.0" />
+                           </padding>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Button>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+            <Tab fx:id="tabSell" text="Ventas">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="tvSell" layoutX="284.0" layoutY="120.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0">
+                          <columns>
+                            <TableColumn fx:id="tcSellRegistryType" maxWidth="1370.0" minWidth="30.0" prefWidth="137.0" text="Tipo Registro" />
+                              <TableColumn fx:id="tcSellRegistryDateTime" maxWidth="1250.0" minWidth="30.0" prefWidth="125.0" text="Fecha Registro" />
+                            <TableColumn fx:id="tcSellProductName" maxWidth="1520.0" minWidth="30.0" prefWidth="152.0" text="Nombre Producto" />
+                              <TableColumn fx:id="tcSellPriceCurrency" maxWidth="1180.0" minWidth="30.0" prefWidth="118.0" text="Precio Venta" />
+                              <TableColumn fx:id="tcSellDate" maxWidth="930.0" minWidth="30.0" prefWidth="93.0" text="Fecha Venta" />
+                              <TableColumn fx:id="tcSellWarehouse" maxWidth="910.0" minWidth="30.0" prefWidth="91.0" text="Almacén" />
+                              <TableColumn fx:id="tcSellAmount" maxWidth="830.0" minWidth="30.0" prefWidth="83.0" text="Cantidad" />
+                          </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                        <HBox alignment="CENTER_LEFT" layoutX="14.0" spacing="20.0" AnchorPane.leftAnchor="11.0" AnchorPane.topAnchor="13.0">
+                           <children>
+                              <Label text="Filtrar por Fecha de Registro:">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <DatePicker fx:id="dpSellFilter" editable="false" prefWidth="180.0" />
+                           </children>
+                        </HBox>
+                        <Button layoutX="768.0" layoutY="18.0" mnemonicParsing="false" onAction="#cleanDatePickers" style="-fx-background-color: transparent;" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="13.0">
+                           <graphic>
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/filter.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <padding>
+                              <Insets bottom="-1.0" left="-1.0" right="-1.0" top="-1.0" />
+                           </padding>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Button>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+      <HBox alignment="CENTER" prefHeight="80.0" prefWidth="800.0" spacing="120.0" styleClass="slogan" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox layoutX="125.0" layoutY="510.0" prefHeight="40.0" prefWidth="171.0" AnchorPane.leftAnchor="125.0" />
-            <TabPane fx:id="tbpRegistry" layoutX="302.0" layoutY="80.0" prefHeight="496.0" prefWidth="652.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="90.0">
-              <tabs>
-                <Tab fx:id="tabGeneral" text="General">
-                  <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                           <children>
-                              <TableView fx:id="tvGeneralRegistry" layoutX="12.0" layoutY="16.0" prefHeight="476.0" prefWidth="817.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0">
-                                <columns>
-                                  <TableColumn fx:id="tcGeneralRegistryZone" prefWidth="181.0" text="Zona Afectada" />
-                                  <TableColumn fx:id="tcGeneralRegistryType" prefWidth="428.0" text="Tipo Registro" />
-                                    <TableColumn fx:id="tcGeneralRegistryDateTime" prefWidth="193.0" text="Fecha Registro" />
-                                </columns>
-                                 <columnResizePolicy>
-                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                 </columnResizePolicy>
-                              </TableView>
-                              <HBox alignment="CENTER_LEFT" layoutX="21.0" layoutY="14.0" spacing="20.0" AnchorPane.leftAnchor="11.0" AnchorPane.topAnchor="13.0">
-                                 <children>
-                                    <Label text="Filtrar por Fecha:">
-                                       <font>
-                                          <Font name="System Bold" size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <DatePicker fx:id="dpGeneralFilter" />
-                                 </children>
-                              </HBox>
-                           </children></AnchorPane>
-                  </content>
-                </Tab>
-                <Tab fx:id="tabInvestment" text="Gastos">
-                  <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                           <children>
-                              <TableView fx:id="tvExpense" layoutX="237.0" layoutY="95.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0">
-                                <columns>
-                                  <TableColumn fx:id="tcExpenseRegistryType" prefWidth="108.0" text="Tipo Registro" />
-                                    <TableColumn fx:id="tcExpenseRegistryDateTime" prefWidth="122.0" text="Fecha Registro" />
-                                    <TableColumn fx:id="tcIdExpense" prefWidth="102.0" text="Id Gasto" />
-                                  <TableColumn fx:id="tcExpenseName" prefWidth="148.0" text="Nombre Gasto" />
-                                    <TableColumn fx:id="tcExpensePriceCurrency" prefWidth="129.0" text="Precio Compra" />
-                                </columns>
-                                 <columnResizePolicy>
-                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                 </columnResizePolicy>
-                              </TableView>
-                              <HBox alignment="CENTER_LEFT" layoutY="9.0" spacing="20.0" AnchorPane.leftAnchor="11.0" AnchorPane.topAnchor="13.0">
-                                 <children>
-                                    <Label text="Filtrar por Fecha:">
-                                       <font>
-                                          <Font name="System Bold" size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <DatePicker fx:id="dpExpenseFilter" />
-                                 </children>
-                              </HBox>
-                           </children></AnchorPane>
-                  </content>
-                </Tab>
-                  <Tab fx:id="tabWarehouse" text="Almacenes">
-                    <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                           <children>
-                              <TableView fx:id="tvWarehouse" layoutX="217.0" layoutY="89.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0">
-                                <columns>
-                                  <TableColumn fx:id="tcWarehouseRegistryType" prefWidth="75.0" text="Tipo Registro" />
-                                    <TableColumn fx:id="tcWarehouseDateTime" prefWidth="75.0" text="Fecha Registro" />
-                                  <TableColumn fx:id="tcWarehouseName" prefWidth="75.0" text="Almacén" />
-                                    <TableColumn fx:id="tcWarehouseProduct" prefWidth="75.0" text="Producto" />
-                                    <TableColumn fx:id="tcWarehouseAmount" prefWidth="75.0" text="Cantidad" />
-                                </columns>
-                                 <columnResizePolicy>
-                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                 </columnResizePolicy>
-                              </TableView>
-                              <HBox alignment="CENTER_LEFT" layoutX="14.0" spacing="20.0" AnchorPane.leftAnchor="11.0" AnchorPane.topAnchor="13.0">
-                                 <children>
-                                    <Label text="Filtrar por Fecha:">
-                                       <font>
-                                          <Font name="System Bold" size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <DatePicker fx:id="dpWarehouseFilter" />
-                                 </children>
-                              </HBox>
-                           </children></AnchorPane>
-                    </content>
-                  </Tab>
-                  <Tab fx:id="tabSell" text="Ventas">
-                    <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                           <children>
-                              <TableView fx:id="tvSell" layoutX="284.0" layoutY="120.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0">
-                                <columns>
-                                  <TableColumn fx:id="tcSellRegistryType" prefWidth="137.0" text="Tipo Registro" />
-                                    <TableColumn fx:id="tcSellRegistryDateTime" prefWidth="125.0" text="Fecha Registro" />
-                                  <TableColumn fx:id="tcSellProductName" prefWidth="152.0" text="Nombre Producto" />
-                                    <TableColumn fx:id="tcSellPriceCurrency" prefWidth="118.0" text="Precio Venta" />
-                                    <TableColumn fx:id="tcSellDate" prefWidth="93.0" text="Fecha Venta" />
-                                    <TableColumn fx:id="tcSellWarehouse" prefWidth="91.0" text="Almacén" />
-                                    <TableColumn fx:id="tcSellAmount" prefWidth="83.0" text="Cantidad" />
-                                </columns>
-                                 <columnResizePolicy>
-                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                 </columnResizePolicy>
-                              </TableView>
-                              <HBox alignment="CENTER_LEFT" layoutX="14.0" spacing="20.0" AnchorPane.leftAnchor="11.0" AnchorPane.topAnchor="13.0">
-                                 <children>
-                                    <Label text="Filtrar por Fecha:">
-                                       <font>
-                                          <Font name="System Bold" size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <DatePicker fx:id="dpSellFilter" />
-                                 </children>
-                              </HBox>
-                           </children></AnchorPane>
-                    </content>
-                  </Tab>
-              </tabs>
-            </TabPane>
-            <HBox alignment="CENTER" prefHeight="80.0" prefWidth="800.0" spacing="120.0" styleClass="slogan" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <children>
-                  <Label alignment="CENTER" graphicTextGap="14.0" prefHeight="68.0" prefWidth="421.0" styleClass="title" text="Registros" textFill="#eeeeee">
-                     <font>
-                        <Font name="Constantia Bold" size="60.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
-                     <graphic>
-                        <ImageView fitHeight="150.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/monitoring.png" />
-                           </image>
-                           <effect>
-                              <InnerShadow choke="1.0" radius="68.5" width="255.0">
-                                 <color>
-                                    <Color red="1.0" green="1.0" blue="1.0" />
-                                 </color>
-                              </InnerShadow>
-                           </effect>
-                        </ImageView>
-                     </graphic>
-                  </Label>
-               </children>
-            </HBox>
-            <VBox styleClass="index" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="80.0">
-               <children>
-                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToExpense" styleClass="btnIndex" text="Gastos">
-                     <font>
-                        <Font name="System Bold" size="17.0" />
-                     </font>
-                     <graphic>
-                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
-                           <image>
-                              <Image url="@../images/goods.png" />
-                           </image>
-                           <effect>
-                              <InnerShadow choke="1.0">
-                                 <color>
-                                    <Color red="1.0" green="1.0" blue="1.0" />
-                                 </color>
-                              </InnerShadow>
-                           </effect>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToWarehouse" styleClass="btnIndex" text="Almacenes">
-                     <font>
-                        <Font name="System Bold" size="17.0" />
-                     </font>
-                     <graphic>
-                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
-                           <image>
-                              <Image url="@../images/warehouse.png" />
-                           </image>
-                           <effect>
-                              <InnerShadow choke="1.0">
-                                 <color>
-                                    <Color red="1.0" green="1.0" blue="1.0" />
-                                 </color>
-                              </InnerShadow>
-                           </effect>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToSell" styleClass="btnIndex" text="Ventas">
-                     <font>
-                        <Font name="System Bold" size="17.0" />
-                     </font>
-                     <graphic>
-                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
-                           <image>
-                              <Image url="@../images/purchase.png" />
-                           </image>
-                           <effect>
-                              <InnerShadow choke="1.0">
-                                 <color>
-                                    <Color red="1.0" green="1.0" blue="1.0" />
-                                 </color>
-                              </InnerShadow>
-                           </effect>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Button alignment="CENTER_LEFT" disable="true" graphicTextGap="5.0" mnemonicParsing="false" styleClass="btnIndex" text="Registros">
-                     <font>
-                        <Font name="System Bold" size="17.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                     <graphic>
-                        <ImageView fitHeight="39.0" fitWidth="39.0" pickOnBounds="true">
-                           <image>
-                              <Image url="@../images/monitoring.png" />
-                           </image>
-                           <effect>
-                              <InnerShadow choke="1.0" radius="68.5" width="255.0">
-                                 <color>
-                                    <Color red="1.0" green="1.0" blue="1.0" />
-                                 </color>
-                              </InnerShadow>
-                           </effect>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToBalance" styleClass="btnIndex" text="Balance">
-                     <font>
-                        <Font name="System Bold" size="17.0" />
-                     </font>
-                     <graphic>
-                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
-                           <image>
-                              <Image url="@../images/interest-rate.png" />
-                           </image>
-                           <effect>
-                              <InnerShadow choke="1.0">
-                                 <color>
-                                    <Color red="1.0" green="1.0" blue="1.0" />
-                                 </color>
-                              </InnerShadow>
-                           </effect>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToSupport" styleClass="btnIndex" text="Soporte">
-                     <font>
-                        <Font name="System Bold" size="17.0" />
-                     </font>
-                     <graphic>
-                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
-                           <image>
-                              <Image url="@../images/support.png" />
-                           </image>
-                           <effect>
-                              <InnerShadow choke="1.0" height="255.0" radius="127.0" width="255.0">
-                                 <color>
-                                    <Color red="1.0" green="1.0" blue="1.0" />
-                                 </color>
-                              </InnerShadow>
-                           </effect>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-               </children>
-            </VBox>
-            <Button alignment="CENTER_LEFT" mnemonicParsing="false" onAction="#switchToConfiguration" prefHeight="60.0" styleClass="btnIndex" text="Ajustes" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+            <Label alignment="CENTER" graphicTextGap="14.0" prefHeight="68.0" prefWidth="421.0" styleClass="title" text="Registros" textFill="#eeeeee">
+               <font>
+                  <Font name="Constantia Bold" size="60.0" />
+               </font>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
                <graphic>
-                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="150.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/settings.png" />
+                        <Image url="@../images/monitoring.png" />
+                     </image>
+                     <effect>
+                        <InnerShadow choke="1.0" radius="68.5" width="255.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </InnerShadow>
+                     </effect>
+                  </ImageView>
+               </graphic>
+            </Label>
+         </children>
+      </HBox>
+      <VBox styleClass="index" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="80.0">
+         <children>
+            <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToExpense" styleClass="btnIndex" text="Gastos">
+               <font>
+                  <Font name="System Bold" size="17.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@../images/goods.png" />
                      </image>
                      <effect>
                         <InnerShadow choke="1.0">
@@ -305,23 +250,137 @@
                      </effect>
                   </ImageView>
                </graphic>
-               <font>
-                  <Font size="14.0" />
-               </font>
             </Button>
-            <Label fx:id="txtClientName" contentDisplay="TOP" prefHeight="69.0" prefWidth="172.0" styleClass="clientName" text="Marco A. Romeros" textFill="#eeeeee" wrapText="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="5.0">
+            <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToWarehouse" styleClass="btnIndex" text="Almacenes">
                <font>
-                  <Font name="SansSerif Regular" size="14.0" />
+                  <Font name="System Bold" size="17.0" />
                </font>
                <graphic>
-                  <ImageView fitHeight="47.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
                      <image>
-                        <Image url="@../images/Avatar.png" />
+                        <Image url="@../images/warehouse.png" />
                      </image>
+                     <effect>
+                        <InnerShadow choke="1.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </InnerShadow>
+                     </effect>
                   </ImageView>
                </graphic>
-            </Label>
+            </Button>
+            <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToSell" styleClass="btnIndex" text="Ventas">
+               <font>
+                  <Font name="System Bold" size="17.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@../images/purchase.png" />
+                     </image>
+                     <effect>
+                        <InnerShadow choke="1.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </InnerShadow>
+                     </effect>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button alignment="CENTER_LEFT" disable="true" graphicTextGap="5.0" mnemonicParsing="false" styleClass="btnIndex" text="Registros">
+               <font>
+                  <Font name="System Bold" size="17.0" />
+               </font>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <graphic>
+                  <ImageView fitHeight="39.0" fitWidth="39.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@../images/monitoring.png" />
+                     </image>
+                     <effect>
+                        <InnerShadow choke="1.0" radius="68.5" width="255.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </InnerShadow>
+                     </effect>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToBalance" styleClass="btnIndex" text="Resultado">
+               <font>
+                  <Font name="System Bold" size="17.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@../images/interest-rate.png" />
+                     </image>
+                     <effect>
+                        <InnerShadow choke="1.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </InnerShadow>
+                     </effect>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToSupport" styleClass="btnIndex" text="Soporte">
+               <font>
+                  <Font name="System Bold" size="17.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@../images/support.png" />
+                     </image>
+                     <effect>
+                        <InnerShadow choke="1.0" height="255.0" radius="127.0" width="255.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </InnerShadow>
+                     </effect>
+                  </ImageView>
+               </graphic>
+            </Button>
          </children>
-      </AnchorPane>
+      </VBox>
+      <Button alignment="CENTER_LEFT" mnemonicParsing="false" onAction="#switchToConfiguration" prefHeight="60.0" styleClass="btnIndex" text="Ajustes" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+         <graphic>
+            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/settings.png" />
+               </image>
+               <effect>
+                  <InnerShadow choke="1.0">
+                     <color>
+                        <Color red="1.0" green="1.0" blue="1.0" />
+                     </color>
+                  </InnerShadow>
+               </effect>
+            </ImageView>
+         </graphic>
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Label fx:id="txtClientName" contentDisplay="TOP" prefHeight="69.0" prefWidth="172.0" styleClass="clientName" text="Marco A. Romeros" textFill="#eeeeee" wrapText="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="5.0">
+         <font>
+            <Font name="SansSerif Regular" size="14.0" />
+         </font>
+         <graphic>
+            <ImageView fitHeight="47.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/Avatar.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Label>
    </children>
-</StackPane>
+</AnchorPane>

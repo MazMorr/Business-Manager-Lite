@@ -247,7 +247,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToBalance" styleClass="btnIndex" text="Balance">
+                  <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToBalance" styleClass="btnIndex" text="Resultado">
                      <font>
                         <Font name="System Bold" size="17.0" />
                      </font>
@@ -355,7 +355,7 @@
                                     </Button>
                                     <VBox alignment="TOP_CENTER" layoutX="41.0" layoutY="42.0" prefWidth="260.0" spacing="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                                        <children>
-                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="53.0">
+                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="52.0">
                                              <children>
                                                 <Label text="Almacén" />
                                                 <MenuButton fx:id="mbSellWarehouse" mnemonicParsing="false" prefWidth="150.0" textFill="WHITE">
@@ -379,7 +379,7 @@
                                                 </MenuButton>
                                              </children>
                                           </HBox>
-                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="49.0">
+                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="48.0">
                                              <children>
                                                 <Label text="Producto" />
                                                 <MenuButton fx:id="mbSellProduct" mnemonicParsing="false" onAction="#loadMbSellProduct" prefWidth="150.0">
@@ -392,7 +392,7 @@
                                                 </MenuButton>
                                              </children>
                                           </HBox>
-                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="50.0">
+                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="49.0">
                                              <children>
                                                 <Label text="Cantidad" />
                                                 <TextField fx:id="tfSellProductAmount" prefHeight="25.0" prefWidth="150.0" promptText="0" styleClass="inputForm" />
@@ -410,7 +410,7 @@
                                                       </Tooltip>
                                                    </tooltip>
                                                    <HBox.margin>
-                                                      <Insets left="26.0" />
+                                                      <Insets left="25.0" />
                                                    </HBox.margin>
                                                 </TextField>
                                                 <MenuButton fx:id="mbSellCurrency" mnemonicParsing="false" prefWidth="80.0" textFill="WHITE">
@@ -437,7 +437,7 @@
                                                 </MenuButton>
                                              </children>
                                           </HBox>
-                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="72.0">
+                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="71.0">
                                              <children>
                                                 <Label text="Fecha" />
                                                 <DatePicker fx:id="dpSellProductDate" editable="false" prefWidth="150.0" styleClass="inputForm" />
@@ -492,13 +492,13 @@
                                  <children>
                                     <VBox alignment="TOP_CENTER" layoutX="31.0" layoutY="7.0" prefWidth="260.0" spacing="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                                        <children>
-                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="49.0">
+                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="48.0">
                                              <children>
                                                 <Label text="Producto" />
                                                 <TextField fx:id="tfAssignPriceProductName" prefHeight="25.0" prefWidth="150.0" styleClass="inputForm" />
                                              </children>
                                           </HBox>
-                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="26.0">
+                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="25.0">
                                              <children>
                                                 <Label text="Precio Venta" />
                                                 <TextField fx:id="tfAssignPriceProductPrice" prefHeight="34.0" prefWidth="150.0" promptText="0.00" styleClass="inputForm">
@@ -512,7 +512,7 @@
                                                 </TextField>
                                              </children>
                                           </HBox>
-                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="55.0">
+                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="54.0">
                                              <children>
                                                 <Label text="Moneda" />
                                                 <MenuButton fx:id="mbAssignPriceCurrency" mnemonicParsing="false" prefWidth="150.0" textFill="WHITE">

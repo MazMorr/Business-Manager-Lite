@@ -1,15 +1,7 @@
 package com.marcosoft.storageSoftware.application.controller;
 
-import com.marcosoft.storageSoftware.application.dto.ExpenseRegistryDataTable;
-import com.marcosoft.storageSoftware.application.dto.GeneralRegistryDataTable;
-import com.marcosoft.storageSoftware.application.dto.SellRegistryDataTable;
-import com.marcosoft.storageSoftware.application.dto.UserLogged;
-import com.marcosoft.storageSoftware.application.dto.WarehouseRegistryDataTable;
-import com.marcosoft.storageSoftware.domain.model.Client;
-import com.marcosoft.storageSoftware.domain.model.ExpenseRegistry;
-import com.marcosoft.storageSoftware.domain.model.GeneralRegistry;
-import com.marcosoft.storageSoftware.domain.model.SellRegistry;
-import com.marcosoft.storageSoftware.domain.model.WarehouseRegistry;
+import com.marcosoft.storageSoftware.application.dto.*;
+import com.marcosoft.storageSoftware.domain.model.*;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.ExpenseRegistryServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.GeneralRegistryServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.SellRegistryServiceImpl;
@@ -21,14 +13,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
 import java.time.LocalDate;
@@ -36,7 +22,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-@Lazy
 @Controller
 public class RegistryViewController {
 
@@ -88,7 +73,6 @@ public class RegistryViewController {
     @FXML
     private TableColumn<ExpenseRegistryDataTable, LocalDateTime> tcExpenseRegistryDateTime;
 
-
     //Sell Registry Table
     @FXML
     private TableView<SellRegistryDataTable> tvSell;
@@ -101,7 +85,6 @@ public class RegistryViewController {
     @FXML
     private TableColumn<SellRegistryDataTable, Integer> tcSellAmount;
 
-
     //Warehouse Registry Table
     @FXML
     private TableView<WarehouseRegistryDataTable> tvWarehouse;
@@ -112,9 +95,10 @@ public class RegistryViewController {
     @FXML
     private TableColumn<WarehouseRegistryDataTable, Integer> tcWarehouseAmount;
 
-
     @FXML
     private Label txtClientName;
+    @FXML
+    private DatePicker dpGeneralFilter, dpExpenseFilter, dpWarehouseFilter, dpSellFilter;
     @FXML
     private Tab tabGeneral, tabSell, tabInvestment, tabWarehouse;
     @FXML
@@ -128,11 +112,18 @@ public class RegistryViewController {
         Platform.runLater(() -> {
             // Load initial data for tables
             loadDataForSelectedTab();
-
+            establishFilterListener();
             // Listener para cambios de pestaña
             tbpRegistry.getSelectionModel().selectedItemProperty().addListener(
                     (obs, oldTab, newTab) -> loadDataForSelectedTab());
         });
+    }
+
+    private void establishFilterListener() {
+        dpGeneralFilter.valueProperty().addListener((obs, oldVal, newVal) -> loadDataForSelectedTab());
+        dpExpenseFilter.valueProperty().addListener((obs, oldVal, newVal) -> loadDataForSelectedTab());
+        dpSellFilter.valueProperty().addListener((obs, oldVal, newVal) -> loadDataForSelectedTab());
+        dpWarehouseFilter.valueProperty().addListener((obs, oldVal, newVal) -> loadDataForSelectedTab());
     }
 
     private void loadDataForSelectedTab() {
@@ -151,21 +142,38 @@ public class RegistryViewController {
         }
     }
 
+    @FXML
+    private void cleanDatePickers(){
+        dpExpenseFilter.setValue(null);
+        dpSellFilter.setValue(null);
+        dpWarehouseFilter.setValue(null);
+        dpGeneralFilter.setValue(null);
+    }
+
     private void initGeneralRegistryTableValues() {
         generalRegistryDataTables = FXCollections.observableArrayList();
         List<GeneralRegistry> generalRegistries = generalRegistryService.getAllGeneralRegistriesByClient(client);
 
         // Ordenar por fecha más reciente primero
         generalRegistries.sort((r1, r2) -> r2.getRegistryDateTime().compareTo(r1.getRegistryDateTime()));
-
         generalRegistryDataTables.clear();
 
         for (GeneralRegistry generalRegistry : generalRegistries) {
-            generalRegistryDataTables.add(new GeneralRegistryDataTable(
-                    generalRegistry.getAffectedZone(),
-                    generalRegistry.getRegistryType(),
-                    generalRegistry.getRegistryDateTime()
-            ));
+            if (dpGeneralFilter.getValue() != null) {
+                if (generalRegistry.getRegistryDateTime().toLocalDate().isEqual(dpGeneralFilter.getValue())) {
+                    generalRegistryDataTables.add(new GeneralRegistryDataTable(
+                            generalRegistry.getAffectedZone(),
+                            generalRegistry.getRegistryType(),
+                            generalRegistry.getRegistryDateTime()
+                    ));
+                }
+            } else {
+                generalRegistryDataTables.add(new GeneralRegistryDataTable(
+                        generalRegistry.getAffectedZone(),
+                        generalRegistry.getRegistryType(),
+                        generalRegistry.getRegistryDateTime()
+                ));
+            }
         }
 
         tcGeneralRegistryZone.setCellValueFactory(new PropertyValueFactory<>("affectedZone"));
@@ -198,13 +206,26 @@ public class RegistryViewController {
         warehouseRegistryDataTables.clear();
 
         for (WarehouseRegistry w : warehouseRegistries) {
-            warehouseRegistryDataTables.add(new WarehouseRegistryDataTable(
-                    w.getRegistryType(),
-                    w.getRegistryDateTime(),
-                    w.getWarehouseName(),
-                    w.getProductName(),
-                    w.getAmount()
-            ));
+            LocalDate dpWarehouseValue = dpWarehouseFilter.getValue();
+            if (dpWarehouseValue != null) {
+                if (w.getRegistryDateTime().toLocalDate().isEqual(dpWarehouseValue)) {
+                    warehouseRegistryDataTables.add(new WarehouseRegistryDataTable(
+                            w.getRegistryType(),
+                            w.getRegistryDateTime(),
+                            w.getWarehouseName(),
+                            w.getProductName(),
+                            w.getAmount()
+                    ));
+                }
+            } else {
+                warehouseRegistryDataTables.add(new WarehouseRegistryDataTable(
+                        w.getRegistryType(),
+                        w.getRegistryDateTime(),
+                        w.getWarehouseName(),
+                        w.getProductName(),
+                        w.getAmount()
+                ));
+            }
         }
 
         tcWarehouseRegistryType.setCellValueFactory(new PropertyValueFactory<>("registryType"));
@@ -239,15 +260,30 @@ public class RegistryViewController {
         sellRegistryDataTables.clear();
 
         for (SellRegistry sellRegistry : sellRegistries) {
-            sellRegistryDataTables.add(new SellRegistryDataTable(
-                    sellRegistry.getRegistryType(),
-                    sellRegistry.getRegistryDate(),
-                    sellRegistry.getProductName(),
-                    sellRegistry.getSellPrice() + " " + sellRegistry.getSellCurrency(),
-                    sellRegistry.getSellDate(),
-                    sellRegistry.getWarehouseName(),
-                    sellRegistry.getProductAmount()
-            ));
+            LocalDate dpSellValue = dpSellFilter.getValue();
+            if (dpSellValue != null) {
+                if (sellRegistry.getRegistryDate().toLocalDate().isEqual(dpSellValue)) {
+                    sellRegistryDataTables.add(new SellRegistryDataTable(
+                            sellRegistry.getRegistryType(),
+                            sellRegistry.getRegistryDate(),
+                            sellRegistry.getProductName(),
+                            sellRegistry.getSellPrice() + " " + sellRegistry.getSellCurrency(),
+                            sellRegistry.getSellDate(),
+                            sellRegistry.getWarehouseName(),
+                            sellRegistry.getProductAmount()
+                    ));
+                }
+            } else {
+                sellRegistryDataTables.add(new SellRegistryDataTable(
+                        sellRegistry.getRegistryType(),
+                        sellRegistry.getRegistryDate(),
+                        sellRegistry.getProductName(),
+                        sellRegistry.getSellPrice() + " " + sellRegistry.getSellCurrency(),
+                        sellRegistry.getSellDate(),
+                        sellRegistry.getWarehouseName(),
+                        sellRegistry.getProductAmount()
+                ));
+            }
         }
 
         tcSellRegistryType.setCellValueFactory(new PropertyValueFactory<>("registryType"));
@@ -289,15 +325,28 @@ public class RegistryViewController {
                 String priceCurrency = String.format("%.2f %s",
                         expenseRegistry.getInvestmentPrice(),
                         expenseRegistry.getCurrency());
+                LocalDate dpExpenseValue = dpExpenseFilter.getValue();
 
-                // Agregar a la lista observable
-                expenseRegistryDataTables.add(new ExpenseRegistryDataTable(
-                        expenseRegistry.getRegistryType(),
-                        expenseRegistry.getRegistryDateTime(),
-                        expenseRegistry.getInvestmentId(),
-                        expenseRegistry.getInvestmentName(),
-                        priceCurrency
-                ));
+                if (dpExpenseValue != null) {
+                    if (expenseRegistry.getRegistryDateTime().toLocalDate().isEqual(dpExpenseValue)) {
+                        expenseRegistryDataTables.add(new ExpenseRegistryDataTable(
+                                expenseRegistry.getRegistryType(),
+                                expenseRegistry.getRegistryDateTime(),
+                                expenseRegistry.getInvestmentId(),
+                                expenseRegistry.getInvestmentName(),
+                                priceCurrency
+                        ));
+                    }
+                } else {
+                    expenseRegistryDataTables.add(new ExpenseRegistryDataTable(
+                            expenseRegistry.getRegistryType(),
+                            expenseRegistry.getRegistryDateTime(),
+                            expenseRegistry.getInvestmentId(),
+                            expenseRegistry.getInvestmentName(),
+                            priceCurrency
+                    ));
+                }
+
             }
 
             tcExpenseRegistryType.setCellValueFactory(new PropertyValueFactory<>("registryType"));
@@ -325,7 +374,6 @@ public class RegistryViewController {
             displayAlerts.showError("Ha ocurrido un error: " + e.getMessage());
         }
     }
-
 
     @FXML
     public void switchToConfiguration(ActionEvent actionEvent) {

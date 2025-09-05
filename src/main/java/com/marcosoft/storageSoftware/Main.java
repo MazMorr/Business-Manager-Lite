@@ -3,6 +3,7 @@ package com.marcosoft.storageSoftware;
 import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
 import com.marcosoft.storageSoftware.infrastructure.util.SpringFXMLLoader;
 import javafx.application.Application;
+import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -62,10 +63,12 @@ public class Main extends Application {
     public static Stage primaryStage;
     private static Scene scene;
     private static DisplayAlerts displayAlerts;
+    private static HostServices hostServices;
 
     @Override
     public void start(Stage primaryStage) {
         Main.primaryStage = primaryStage;
+        Main.hostServices = getHostServices();
 
         // 1. Mostrar pantalla de carga INMEDIATAMENTE
         showLoadingScreen(primaryStage);
@@ -125,6 +128,8 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         primaryStage.centerOnScreen();
     }
+
+
 
     private void showErrorAndExit(Exception e) {
         e.printStackTrace();

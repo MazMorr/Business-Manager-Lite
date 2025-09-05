@@ -69,8 +69,6 @@ public class SupportViewController {
         Platform.runLater(() -> {
             initWelcomeLabels();
             initCurrencyDefaultValues();
-
-
         });
     }
 
@@ -93,12 +91,11 @@ public class SupportViewController {
             if (!currencyService.existsByCurrencyName(currencyName)) {
                 Currency currency = new Currency(null, currencyName, 0.0);
                 switch (currencyName) {
-                    case "MLC" -> currency = new Currency(null, currencyName, 200.00);
+                    case "MLC" -> currency = new Currency(null, currencyName, 195.00);
                     case "CUP" -> currency = new Currency(null, currencyName, 1.00);
-                    case "USD" -> currency = new Currency(null, currencyName, 120.00);
-                    case "EUR" -> currency = new Currency(null, currencyName, 160.00);
+                    case "USD" -> currency = new Currency(null, currencyName, 410.00);
+                    case "EUR" -> currency = new Currency(null, currencyName, 460.00);
                 }
-
                 currencyService.save(currency);
             }
         }
@@ -114,8 +111,8 @@ public class SupportViewController {
             lblLicenseDays.setStyle("-fx-text-fill: #ff9b9b;");
         }
         lblLicenseDays.setText(daysRemaining + " Días");
-        versionLabel.setText("0.9.9");
-        lblWelcomeTitle.setText("Bienvenido, " + userLogged.getName());
+        versionLabel.setText("1.0.0");
+        lblWelcomeTitle.setText("Bienvenid@, " + userLogged.getName());
         lblWelcome.setText(
                 """
                         Este sistema ha sido diseñado para brindarle un control eficiente y seguro sobre los recursos de su negocio. \
@@ -165,11 +162,6 @@ public class SupportViewController {
         sceneSwitcher.switchView(event, "/views/warehouseView.fxml");
     }
 
-    /**
-     * Navigates to the balance view.
-     *
-     * @param event the event
-     */
     @FXML
     public void switchToBalance(ActionEvent event) {
         sceneSwitcher.switchView(event, "/views/balanceView.fxml");

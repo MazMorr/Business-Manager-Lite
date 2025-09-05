@@ -11,106 +11,104 @@
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="350.0" prefWidth="450.0" styleClass="index" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.LoginViewController">
+<AnchorPane id="AnchorPane" prefHeight="370.0" prefWidth="450.0" styleClass="background" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.LoginViewController">
+    <stylesheets>
+        <URL value="@../Styles.css" />
+    </stylesheets>
    <children>
-      <AnchorPane id="AnchorPane" prefHeight="350.0" prefWidth="450.0" styleClass="background">
-          <stylesheets>
-              <URL value="@../Styles.css" />
-          </stylesheets>
+      <HBox alignment="CENTER" layoutX="125.0" prefHeight="64.0" prefWidth="323.0" styleClass="slogan" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox alignment="CENTER" layoutX="125.0" prefHeight="64.0" prefWidth="323.0" styleClass="slogan" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <children>
-                  <Label styleClass="title" text="Inicie Sesión">
-                     <font>
-                        <Font name="Constantia Bold Italic" size="40.0" />
-                     </font>
-                  </Label>
-               </children>
-               <effect>
-                  <DropShadow />
-               </effect>
-            </HBox>
-            <VBox layoutX="109.0" layoutY="79.0" prefHeight="257.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="75.0" AnchorPane.rightAnchor="75.0" AnchorPane.topAnchor="85.0">
-               <children>
-                  <Label styleClass="txtUser" stylesheets="@../Styles.css" text="Usuario:">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="txtFieldName" promptText="Introduzca su nombre de usuario" styleClass="inputForm">
-                     <tooltip>
-                        <Tooltip consumeAutoHidingEvents="false" text="Introduzca su nombre de usuario">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Tooltip>
-                     </tooltip></TextField>
-                  <Label styleClass="txtPassword" stylesheets="@../Styles.css" text="Contraseña:">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets top="2.0" />
-                     </VBox.margin>
-                  </Label>
-                  <PasswordField fx:id="txtFieldPassword" promptText="Introduzca su contraseña" styleClass="inputForm">
-                     <tooltip>
-                        <Tooltip consumeAutoHidingEvents="false" text="Introduzca la contraseña correspondiente a su usuario">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Tooltip>
-                     </tooltip></PasswordField>
-                  <Button defaultButton="true" mnemonicParsing="false" onAction="#enterApplication" prefHeight="30.0" prefWidth="300.0" styleClass="btnStock" text="Iniciar Sesión">
-                     <font>
-                        <Font name="SansSerif Regular" size="14.0" />
-                     </font>
-                     <tooltip>
-                        <Tooltip consumeAutoHidingEvents="false" text="Si la cuenta existe y la contraseña le pertence al usuario esablecido en el campo respectivo, podrá entrar en la aplicación">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Tooltip>
-                     </tooltip>
-                     <VBox.margin>
-                        <Insets top="5.0" />
-                     </VBox.margin>
-                  </Button>
-                  <Label fx:id="txtDebugForm" alignment="TOP_CENTER" prefHeight="62.0" prefWidth="300.0" text="Si no posee una cuenta recuerde crearla, ¡Es Gratis!" textAlignment="CENTER" textFill="#ff1300" wrapText="true">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                     <effect>
-                        <DropShadow height="1.0" radius="0.0" width="1.0">
-                           <color>
-                              <Color red="1.0" />
-                           </color>
-                        </DropShadow>
-                     </effect>
-                     <VBox.margin>
-                        <Insets top="5.0" />
-                     </VBox.margin>
-                  </Label>
-                  <Button mnemonicParsing="false" onAction="#switchToCreateClient" prefHeight="30.0" prefWidth="300.0" styleClass="btnStock" text="Crear Cuenta">
-                     <font>
-                        <Font name="System Bold" size="15.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets top="5.0" />
-                     </VBox.margin>
-                  </Button>
-                  <Hyperlink alignment="CENTER" contentDisplay="CENTER" onAction="#switchToCreateClient" prefHeight="23.0" prefWidth="300.0" text="¿No tienes cuenta? ¡Crea una aquí!" visited="true">
-                     <font>
-                        <Font size="14.0" />
-                     </font></Hyperlink>
-               </children>
-            </VBox>
+            <Label styleClass="title" text="Inicie Sesión">
+               <font>
+                  <Font name="Constantia Bold Italic" size="40.0" />
+               </font>
+            </Label>
          </children>
-      </AnchorPane>
+         <effect>
+            <DropShadow />
+         </effect>
+      </HBox>
+      <VBox layoutX="109.0" layoutY="79.0" prefHeight="257.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="75.0" AnchorPane.rightAnchor="75.0" AnchorPane.topAnchor="85.0">
+         <children>
+            <Label styleClass="txtUser" stylesheets="@../Styles.css" text="Usuario:">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <TextField fx:id="txtFieldName" promptText="Introduzca su nombre de usuario" styleClass="inputForm">
+               <tooltip>
+                  <Tooltip consumeAutoHidingEvents="false" text="Introduzca su nombre de usuario">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Tooltip>
+               </tooltip>
+            </TextField>
+            <Label styleClass="txtPassword" stylesheets="@../Styles.css" text="Contraseña:">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="2.0" />
+               </VBox.margin>
+            </Label>
+            <PasswordField fx:id="txtFieldPassword" promptText="Introduzca su contraseña" styleClass="inputForm">
+               <tooltip>
+                  <Tooltip consumeAutoHidingEvents="false" text="Introduzca la contraseña correspondiente a su usuario">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Tooltip>
+               </tooltip>
+            </PasswordField>
+            <Button defaultButton="true" mnemonicParsing="false" onAction="#enterApplication" prefHeight="30.0" prefWidth="300.0" styleClass="btnStock" text="Iniciar Sesión">
+               <font>
+                  <Font name="SansSerif Regular" size="14.0" />
+               </font>
+               <tooltip>
+                  <Tooltip consumeAutoHidingEvents="false" text="Si la cuenta existe y la contraseña le pertence al usuario esablecido en el campo respectivo, podrá entrar en la aplicación">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Tooltip>
+               </tooltip>
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </Button>
+            <Label fx:id="txtDebugForm" alignment="TOP_CENTER" prefHeight="62.0" prefWidth="300.0" text="Si no posee una cuenta recuerde crearla, ¡Es Gratis!" textAlignment="CENTER" textFill="#ff1300" wrapText="true">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <effect>
+                  <DropShadow height="1.0" radius="0.0" width="1.0">
+                     <color>
+                        <Color red="1.0" />
+                     </color>
+                  </DropShadow>
+               </effect>
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </Label>
+            <Button mnemonicParsing="false" onAction="#switchToCreateClient" prefHeight="30.0" prefWidth="300.0" styleClass="btnStock" text="Crear Cuenta">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </Button>
+            <Hyperlink alignment="CENTER" contentDisplay="CENTER" onAction="#switchToCreateClient" prefHeight="23.0" prefWidth="300.0" text="¿No tienes cuenta? ¡Crea una aquí!" visited="true">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Hyperlink>
+         </children>
+      </VBox>
    </children>
-</StackPane>
+</AnchorPane>
