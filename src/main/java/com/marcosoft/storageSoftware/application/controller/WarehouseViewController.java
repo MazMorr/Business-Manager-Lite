@@ -10,7 +10,6 @@ import com.marcosoft.storageSoftware.infrastructure.service.impl.InventoryServic
 import com.marcosoft.storageSoftware.infrastructure.service.impl.WarehouseServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
 import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -82,11 +81,9 @@ public class WarehouseViewController {
     public void initialize() {
         client = userLogged.getClient();
         lblClientName.setText(client.getClientName());
-        Platform.runLater(() -> {
-            initTableValues();
-            initTreeTable();
-            initTableLabels();
-        });
+        initTableValues();
+        initTreeTable();
+        initTableLabels();
     }
 
     public void initTableValues() {

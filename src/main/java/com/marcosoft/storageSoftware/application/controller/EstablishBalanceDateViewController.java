@@ -20,16 +20,16 @@ public class EstablishBalanceDateViewController {
 
     @FXML
     private void initialize(){
-        dpStartDate.setValue(balanceViewController.getStartDate());
-        dpEndDate.setValue(balanceViewController.getEndDate());
+        dpStartDate.setValue(BalanceViewController.getStartDate());
+        dpEndDate.setValue(BalanceViewController.getEndDate());
     }
 
     @FXML
     public void establishDates() {
         LocalDate startDate = dpStartDate.getValue();
         LocalDate endDate = dpEndDate.getValue();
-        balanceViewController.setStartDate(startDate);
-        balanceViewController.setEndDate(endDate);
+        BalanceViewController.setStartDate(startDate);
+        BalanceViewController.setEndDate(endDate);
         balanceViewController.getLabelTimeLapse().setText(startDate + " / " + endDate);
         balanceViewController.refreshBalance();
     }

@@ -13,7 +13,6 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="650.0" prefWidth="1100.0" stylesheets="@../Styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.BalanceViewController">
    <children>
       <HBox alignment="CENTER" prefHeight="80.0" prefWidth="800.0" spacing="120.0" styleClass="slogan" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -260,7 +259,7 @@
                               </VBox>
                               <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="1000.0">
                                  <children>
-                                    <Label fx:id="lblServicesProfit" text="0.00 CUP">
+                                    <Label fx:id="lblServicesProfit" text="\$ 0.00">
                                        <font>
                                           <Font name="System Bold" size="18.0" />
                                        </font>

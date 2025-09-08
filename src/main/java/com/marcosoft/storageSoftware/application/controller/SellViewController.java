@@ -121,19 +121,16 @@ public class SellViewController {
         try {
             // Precargar todos los productos
             List<Product> products = productService.getAllProductsByClient(client);
-            productCache = products.stream()
-                    .collect(Collectors.toMap(Product::getProductName, Function.identity()));
+            productCache = products.stream().collect(Collectors.toMap(Product::getProductName, Function.identity()));
 
             // Precargar todos los almacenes
             List<Warehouse> warehouses = warehouseService.getWarehousesByClient(client);
             warehouseCache = warehouses.stream()
                     .collect(Collectors.toMap(Warehouse::getWarehouseName, Function.identity()));
 
-            log.info("Precached {} products and {} warehouses",
-                    productCache.size(), warehouseCache.size());
+            log.info("Precached {} products and {} warehouses", productCache.size(), warehouseCache.size());
         } catch (Exception e) {
             log.error("Error precaching data", e);
-            displayAlerts.showAlert("Error al cargar datos iniciales");
         }
     }
 
@@ -435,32 +432,6 @@ public class SellViewController {
         });
     }
 
-    private void configureDoubleColumn(TreeTableColumn<SellDataTable, Double> column, String property) {
-        column.setCellValueFactory(new TreeItemPropertyValueFactory<>(property));
-        column.setCellFactory(col -> new TreeTableCell<>() {
-            @Override
-            protected void updateItem(Double item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    setText(String.format("%.2f", item));
-                }
-
-                updateStyle();
-            }
-
-            private void updateStyle() {
-                TreeItem<SellDataTable> treeItem = getTableRow().getTreeItem();
-                if (treeItem != null && treeItem.getValue() != null) {
-                    setStyle(treeItem.getValue().getStyle());
-                } else {
-                    setStyle("");
-                }
-            }
-        });
-        column.setSortable(false);
-    }
 
     // Aplicar el mismo patrón a configureIntegerColumn
     private void configureIntegerColumn(TreeTableColumn<SellDataTable, Integer> column, String property) {
