@@ -33,11 +33,6 @@ import java.util.*;
 
 import static com.marcosoft.storageSoftware.Main.springFXMLLoader;
 
-/**
- * FXML Controller class
- *
- * @author MazMorr
- */
 @Lazy
 @Controller
 public class ConfigurationViewController {
@@ -52,16 +47,11 @@ public class ConfigurationViewController {
     private final SellRegistryServiceImpl sellRegistryService;
     private final DatabaseManager databaseManager;
 
-    /**
-     * Instantiates a new Configuration view controller.
-     *
-     * @param clientService the client service
-     * @param sceneSwitcher the scene switcher
-     */
     public ConfigurationViewController(
             ClientServiceImpl clientService, SceneSwitcher sceneSwitcher, DisplayAlerts displayAlerts,
             UserLogged userLogged, LicenseValidator licenseValidator,
-            InventoryServiceImpl inventoryService, SellRegistryServiceImpl sellRegistryService, DatabaseManager databaseManager) {
+            InventoryServiceImpl inventoryService, SellRegistryServiceImpl sellRegistryService, DatabaseManager databaseManager
+    ) {
         this.displayAlerts = displayAlerts;
         this.userLogged = userLogged;
         this.licenseValidator = licenseValidator;
@@ -75,9 +65,6 @@ public class ConfigurationViewController {
     @FXML
     private Label lblSell, lblClientName, lblUser, lblProducts, lblCompany, lblDateLicense;
 
-    /**
-     * Initialize.
-     */
     @FXML
     public void initialize() {
         initAllLabels();
@@ -95,12 +82,12 @@ public class ConfigurationViewController {
             // Cargar la pantalla de login después de cerrar todas las ventanas
             Platform.runLater(() -> {
                 try {
-                    Parent root = springFXMLLoader.load("/views/clientView.fxml");
+                    Parent root = springFXMLLoader.load("/views/loginView.fxml");
 
                     // Preparar nueva ventana
                     Stage loginStage = new Stage();
                     loginStage.setScene(new Scene(root));
-                    loginStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResource("/images/RTS_logo.png")).toString()));
+                    loginStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResource("/images/lc_logo.png")).toString()));
                     loginStage.setTitle("Iniciar Sesión");
                     loginStage.centerOnScreen();
                     loginStage.setResizable(false);
@@ -119,9 +106,6 @@ public class ConfigurationViewController {
         }
     }
 
-    /**
-     * Cierra todas las ventanas de la aplicación de manera forzada
-     */
     private void closeAllWindows() {
         // Obtener todas las ventanas y cerrarlas
         List<Window> windows = new ArrayList<>(Window.getWindows());

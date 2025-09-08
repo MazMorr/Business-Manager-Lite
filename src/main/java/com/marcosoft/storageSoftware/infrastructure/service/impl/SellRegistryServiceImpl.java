@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SellRegistryServiceImpl implements SellRegistryService {
@@ -79,7 +80,6 @@ public class SellRegistryServiceImpl implements SellRegistryService {
         double totalInCUP = cup + mlc * mlcRate + usd * usdRate + eur * eurRate;
 
         return switch (currency.getCurrencyName()) {
-            case "CUP" -> totalInCUP;
             case "MLC" -> totalInCUP / mlcRate;
             case "USD" -> totalInCUP / usdRate;
             case "EUR" -> totalInCUP / eurRate;
@@ -128,4 +128,12 @@ public class SellRegistryServiceImpl implements SellRegistryService {
         );
     }
 
+    public List<SellRegistry> getSalesInDateRange(Client client, LocalDate startDate, LocalDate endDate) {
+        return getAllSellRegistriesByClient(client).stream()
+                .filter(ex -> {
+                    LocalDate receivedDate = ex.getSellDate();
+                    return !receivedDate.isBefore(startDate) && !receivedDate.isAfter(endDate);
+                })
+                .collect(Collectors.toList());
+    }
 }

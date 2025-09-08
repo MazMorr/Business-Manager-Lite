@@ -14,12 +14,15 @@ import java.security.PublicKey;
 import java.security.Signature;
 import java.security.spec.X509EncodedKeySpec;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 
 @Component
 public class LicenseValidator {
     private static final String PUBLIC_KEY_RESOURCE_PATH = "/public.pem";
     private static final String LICENSE_FILE_PATTERN = "license_%s.lic";
+    @Getter
+    private long daysRemaining;
 
     @Getter
     private LocalDate remainingTime;
@@ -92,7 +95,8 @@ public class LicenseValidator {
             }
 
             // 6. Calcular días restantes y mostrar alertas si es necesario
-            long daysRemaining = LocalDate.now().until(licenseData.getExpirationDate()).getDays();
+            long daysRemaining = ChronoUnit.DAYS.between(LocalDate.now(), licenseData.getExpirationDate());
+            this.daysRemaining = daysRemaining;
             System.out.println("[DEBUG] Días restantes de licencia: " + daysRemaining);
 
             if (daysRemaining <= 0) {

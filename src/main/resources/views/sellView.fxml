@@ -247,7 +247,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToBalance" styleClass="btnIndex" text="Balance">
+                  <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToBalance" styleClass="btnIndex" text="Resultado">
                      <font>
                         <Font name="System Bold" size="17.0" />
                      </font>
@@ -320,10 +320,10 @@
             </Label>
             <TreeTableView fx:id="ttvInventory" layoutX="230.0" layoutY="187.0" prefHeight="304.0" prefWidth="410.0" styleClass="table" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="310.0" AnchorPane.topAnchor="230.0">
               <columns>
-                <TreeTableColumn fx:id="ttcProductName" prefWidth="75.0" text="Producto" />
-                  <TreeTableColumn fx:id="ttcSellPrice" prefWidth="75.0" text="Precio Venta" />
-                <TreeTableColumn fx:id="ttcWarehouse" prefWidth="75.0" text="Almacen" />
-                  <TreeTableColumn fx:id="ttcProductAmount" prefWidth="75.0" text="Cantidad" />
+                <TreeTableColumn fx:id="ttcProductName" prefWidth="75.0" sortable="false" text="Producto" />
+                  <TreeTableColumn fx:id="ttcSellPrice" prefWidth="75.0" sortable="false" text="Precio Venta" />
+                <TreeTableColumn fx:id="ttcWarehouse" prefWidth="75.0" sortable="false" text="Almacen" />
+                  <TreeTableColumn fx:id="ttcProductAmount" prefWidth="75.0" sortable="false" text="Cantidad" />
               </columns>
                <columnResizePolicy>
                   <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -355,10 +355,10 @@
                                     </Button>
                                     <VBox alignment="TOP_CENTER" layoutX="41.0" layoutY="42.0" prefWidth="260.0" spacing="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                                        <children>
-                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="53.0">
+                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="52.0">
                                              <children>
                                                 <Label text="Almacén" />
-                                                <MenuButton fx:id="mbSellWarehouse" mnemonicParsing="false" prefWidth="150.0" styleClass="progressBar" textFill="WHITE">
+                                                <MenuButton fx:id="mbSellWarehouse" mnemonicParsing="false" prefWidth="150.0" textFill="WHITE">
                                                    <graphic>
                                                       <TextField fx:id="tfSellWarehouse" prefHeight="34.0" prefWidth="10.0" styleClass="inputForm">
                                                          <tooltip>
@@ -379,7 +379,7 @@
                                                 </MenuButton>
                                              </children>
                                           </HBox>
-                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="49.0">
+                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="48.0">
                                              <children>
                                                 <Label text="Producto" />
                                                 <MenuButton fx:id="mbSellProduct" mnemonicParsing="false" onAction="#loadMbSellProduct" prefWidth="150.0">
@@ -392,16 +392,16 @@
                                                 </MenuButton>
                                              </children>
                                           </HBox>
-                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="50.0">
+                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="49.0">
                                              <children>
                                                 <Label text="Cantidad" />
                                                 <TextField fx:id="tfSellProductAmount" prefHeight="25.0" prefWidth="150.0" promptText="0" styleClass="inputForm" />
                                              </children>
                                           </HBox>
-                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="26.0">
+                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0">
                                              <children>
                                                 <Label text="Precio Venta" />
-                                                <TextField fx:id="tfSellProductPrice" prefHeight="34.0" prefWidth="150.0" promptText="0.00" styleClass="inputForm">
+                                                <TextField fx:id="tfSellProductPrice" prefHeight="34.0" prefWidth="70.0" promptText="0.00" styleClass="inputForm">
                                                    <tooltip>
                                                       <Tooltip text="Precio al que deseas vender cada unidad del producto  (en la zona de ventas este precio puede ser cambiado)" wrapText="true">
                                                          <font>
@@ -409,15 +409,13 @@
                                                          </font>
                                                       </Tooltip>
                                                    </tooltip>
+                                                   <HBox.margin>
+                                                      <Insets left="25.0" />
+                                                   </HBox.margin>
                                                 </TextField>
-                                             </children>
-                                          </HBox>
-                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="55.0">
-                                             <children>
-                                                <Label text="Moneda" />
-                                                <MenuButton fx:id="mbSellCurrency" mnemonicParsing="false" prefWidth="150.0" styleClass="progressBar" textFill="WHITE">
+                                                <MenuButton fx:id="mbSellCurrency" mnemonicParsing="false" prefWidth="80.0" textFill="WHITE">
                                                    <graphic>
-                                                      <TextField fx:id="tfSellProductCurrency" alignment="CENTER" disable="true" opacity="0.99" prefHeight="34.0" prefWidth="10.0" promptText="Seleccionar" styleClass="inputForm">
+                                                      <TextField fx:id="tfSellProductCurrency" alignment="CENTER" disable="true" opacity="0.99" prefHeight="34.0" prefWidth="10.0" promptText="CUP" styleClass="inputForm">
                                                          <tooltip>
                                                             <Tooltip text="Precio al que deseas vender cada unidad del producto  (en la zona de ventas este precio puede ser cambiado)" wrapText="true">
                                                                <font>
@@ -428,15 +426,18 @@
                                                       </TextField>
                                                    </graphic>
                                                    <padding>
-                                                      <Insets bottom="-6.0" left="-9.0" right="2.0" top="-5.0" />
+                                                      <Insets bottom="-6.0" left="-10.0" right="2.0" top="-5.0" />
                                                    </padding>
                                                    <cursor>
                                                       <Cursor fx:constant="DEFAULT" />
                                                    </cursor>
+                                                   <HBox.margin>
+                                                      <Insets bottom="1.0" />
+                                                   </HBox.margin>
                                                 </MenuButton>
                                              </children>
                                           </HBox>
-                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="72.0">
+                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="71.0">
                                              <children>
                                                 <Label text="Fecha" />
                                                 <DatePicker fx:id="dpSellProductDate" editable="false" prefWidth="150.0" styleClass="inputForm" />
@@ -491,13 +492,13 @@
                                  <children>
                                     <VBox alignment="TOP_CENTER" layoutX="31.0" layoutY="7.0" prefWidth="260.0" spacing="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                                        <children>
-                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="49.0">
+                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="48.0">
                                              <children>
                                                 <Label text="Producto" />
                                                 <TextField fx:id="tfAssignPriceProductName" prefHeight="25.0" prefWidth="150.0" styleClass="inputForm" />
                                              </children>
                                           </HBox>
-                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="26.0">
+                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="25.0">
                                              <children>
                                                 <Label text="Precio Venta" />
                                                 <TextField fx:id="tfAssignPriceProductPrice" prefHeight="34.0" prefWidth="150.0" promptText="0.00" styleClass="inputForm">
@@ -511,10 +512,10 @@
                                                 </TextField>
                                              </children>
                                           </HBox>
-                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="55.0">
+                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="54.0">
                                              <children>
                                                 <Label text="Moneda" />
-                                                <MenuButton fx:id="mbAssignPriceCurrency" mnemonicParsing="false" prefWidth="150.0" styleClass="progressBar" textFill="WHITE">
+                                                <MenuButton fx:id="mbAssignPriceCurrency" mnemonicParsing="false" prefWidth="150.0" textFill="WHITE">
                                                    <graphic>
                                                       <TextField fx:id="tfAssignPriceCurrency" editable="false" prefHeight="34.0" prefWidth="10.0" promptText="Seleccionar" styleClass="inputForm">
                                                          <tooltip>

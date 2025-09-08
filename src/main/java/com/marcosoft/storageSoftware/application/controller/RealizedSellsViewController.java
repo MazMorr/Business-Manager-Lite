@@ -38,11 +38,14 @@ public class RealizedSellsViewController {
     private final ParseDataTypes parseDataTypes;
     private final SellViewController sellViewController;
     private final CurrencyServiceImpl currencyService;
+    @FXML
+    private DatePicker dpFilterDate;
 
     public RealizedSellsViewController(
-            SellFieldsValidator sellFieldsValidator, CleanHelper cleanHelper, SellRegistryServiceImpl sellRegistryService, GeneralRegistryServiceImpl generalRegistryService, UserLogged userLogged,
-            DisplayAlerts displayAlerts, InventoryServiceImpl inventoryService, WarehouseServiceImpl warehouseService,
-            ProductServiceImpl productService, ParseDataTypes parseDataTypes, SellViewController sellViewController, CurrencyServiceImpl currencyService
+            SellFieldsValidator sellFieldsValidator, CleanHelper cleanHelper, SellRegistryServiceImpl sellRegistryService,
+            GeneralRegistryServiceImpl generalRegistryService, UserLogged userLogged, DisplayAlerts displayAlerts,
+            InventoryServiceImpl inventoryService, WarehouseServiceImpl warehouseService, ParseDataTypes parseDataTypes,
+            ProductServiceImpl productService, SellViewController sellViewController, CurrencyServiceImpl currencyService
     ) {
         this.sellFieldsValidator = sellFieldsValidator;
         this.cleanHelper = cleanHelper;
@@ -81,7 +84,7 @@ public class RealizedSellsViewController {
         client = userLogged.getClient();
         Platform.runLater(() -> {
             initTableColumns();
-            setupTfIdListener();
+            setupListeners();
             initMbId();
             initMbCurrency(mbCurrency, tfProductCurrency);
         });
@@ -94,8 +97,9 @@ public class RealizedSellsViewController {
         });
     }
 
-    private void setupTfIdListener() {
+    private void setupListeners() {
         tfId.textProperty().addListener((obs, oldVal, newVal) -> searchSell());
+        dpFilterDate.valueProperty().addListener((obs, oldVal, newVal) -> refreshTableData());
     }
 
     private void searchSell() {
@@ -105,7 +109,7 @@ public class RealizedSellsViewController {
             return;
         }
 
-        try{
+        try {
             Long id = parseDataTypes.parseLong(idText);
             if (sellRegistryService.existsByIdAndClient(id, client)) {
                 SellRegistry sellRegistry = sellRegistryService.getByIdAndClient(id, client);
@@ -118,7 +122,7 @@ public class RealizedSellsViewController {
             } else {
                 clearFieldsExceptId();
             }
-        }catch(NumberFormatException e){
+        } catch (NumberFormatException e) {
             clearFieldsExceptId();
         }
 
@@ -148,19 +152,36 @@ public class RealizedSellsViewController {
         realizedSellsDataTableList.clear();
         List<SellRegistry> sellRegistryList = sellRegistryService.getAllSellRegistriesByClient(client);
 
+
         // Ordenar la lista por fecha (más recientes primero)
         sellRegistryList.sort((s1, s2) -> s2.getSellDate().compareTo(s1.getSellDate()));
 
-        for (SellRegistry sell : sellRegistryList) {
-            realizedSellsDataTableList.add(new RealizedSellsDataTable(
-                    sell.getId(),
-                    sell.getWarehouseName(),
-                    sell.getProductName(),
-                    sell.getProductAmount(),
-                    sell.getSellPrice() + " " + sell.getSellCurrency(),
-                    sell.getSellDate()
-            ));
+        if (dpFilterDate.getValue() != null) {
+            for (SellRegistry sell : sellRegistryList) {
+                if (sell.getSellDate().equals(dpFilterDate.getValue())) {
+                    realizedSellsDataTableList.add(new RealizedSellsDataTable(
+                            sell.getId(),
+                            sell.getWarehouseName(),
+                            sell.getProductName(),
+                            sell.getProductAmount(),
+                            sell.getSellPrice() + " " + sell.getSellCurrency(),
+                            sell.getSellDate()
+                    ));
+                }
+            }
+        } else {
+            for (SellRegistry sell : sellRegistryList) {
+                realizedSellsDataTableList.add(new RealizedSellsDataTable(
+                        sell.getId(),
+                        sell.getWarehouseName(),
+                        sell.getProductName(),
+                        sell.getProductAmount(),
+                        sell.getSellPrice() + " " + sell.getSellCurrency(),
+                        sell.getSellDate()
+                ));
+            }
         }
+
     }
 
     @FXML
@@ -334,16 +355,17 @@ public class RealizedSellsViewController {
     private void initMbId() {
         mbId.getItems().clear();
         List<SellRegistry> sellRegistryList = sellRegistryService.getAllSellRegistriesByClient(client);
-        for (SellRegistry sr : sellRegistryList) {
-            MenuItem item = new MenuItem(sr.getId() + "");
+        for (SellRegistry sellRegistry : sellRegistryList) {
+            MenuItem item = new MenuItem(sellRegistry.getId() + "");
             item.setOnAction(e -> {
-                tfId.setText(sr.getId() + "");
-                tfProduct.setText(sr.getProductName());
-                tfProductAmount.setText(sr.getProductAmount() + "");
-                tfProductCurrency.setText(sr.getSellCurrency());
-                tfProductPrice.setText(sr.getSellPrice() + "");
-                dpSellProductDate.setValue(sr.getSellDate());
+                tfId.setText(sellRegistry.getId() + "");
+                tfProduct.setText(sellRegistry.getProductName());
+                tfProductAmount.setText(sellRegistry.getProductAmount() + "");
+                tfProductCurrency.setText(sellRegistry.getSellCurrency());
+                tfProductPrice.setText(sellRegistry.getSellPrice() + "");
+                dpSellProductDate.setValue(sellRegistry.getSellDate());
             });
+            mbId.getItems().add(item);
         }
     }
 
@@ -356,5 +378,10 @@ public class RealizedSellsViewController {
             item.setOnAction(e -> tf.setText(item.getText()));
             mb.getItems().add(item);
         }
+    }
+
+    @FXML
+    public void cleanFilters() {
+        dpFilterDate.setValue(null);
     }
 }

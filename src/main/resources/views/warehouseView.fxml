@@ -12,167 +12,49 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="650.0" prefWidth="1100.0" stylesheets="@../Styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.WarehouseViewController">
+
+<AnchorPane prefHeight="650.0" prefWidth="1024.0" stylesheets="@../Styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.WarehouseViewController">
    <children>
-      <AnchorPane>
+      <HBox alignment="CENTER" prefHeight="80.0" prefWidth="800.0" spacing="120.0" styleClass="slogan" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox alignment="CENTER" prefHeight="80.0" prefWidth="800.0" spacing="120.0" styleClass="slogan" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <children>
-                  <Label alignment="CENTER" graphicTextGap="14.0" prefHeight="68.0" prefWidth="421.0" styleClass="title" text="Almacenes" textFill="#eeeeee">
-                     <font>
-                        <Font name="Constantia Bold" size="60.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
-                     <graphic>
-                        <ImageView fitHeight="150.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/warehouse.png" />
-                           </image>
-                           <effect>
-                              <InnerShadow choke="1.0" radius="68.5" width="255.0">
-                                 <color>
-                                    <Color red="1.0" green="1.0" blue="1.0" />
-                                 </color>
-                              </InnerShadow>
-                           </effect>
-                        </ImageView>
-                     </graphic>
-                  </Label>
-               </children>
-            </HBox>
-            <VBox styleClass="index" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="80.0">
-               <children>
-                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToExpense" styleClass="btnIndex" text="Gastos">
-                     <font>
-                        <Font name="System Bold" size="17.0" />
-                     </font>
-                     <graphic>
-                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
-                           <image>
-                              <Image url="@../images/goods.png" />
-                           </image>
-                           <effect>
-                              <InnerShadow choke="1.0">
-                                 <color>
-                                    <Color red="1.0" green="1.0" blue="1.0" />
-                                 </color>
-                              </InnerShadow>
-                           </effect>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Button alignment="CENTER_LEFT" disable="true" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" styleClass="btnIndex" text="Almacenes">
-                     <font>
-                        <Font name="System Bold" size="17.0" />
-                     </font>
-                     <graphic>
-                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
-                           <image>
-                              <Image url="@../images/warehouse.png" />
-                           </image>
-                           <effect>
-                              <InnerShadow choke="1.0">
-                                 <color>
-                                    <Color red="1.0" green="1.0" blue="1.0" />
-                                 </color>
-                              </InnerShadow>
-                           </effect>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToSell" styleClass="btnIndex" text="Ventas">
-                     <font>
-                        <Font name="System Bold" size="17.0" />
-                     </font>
-                     <graphic>
-                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
-                           <image>
-                              <Image url="@../images/purchase.png" />
-                           </image>
-                           <effect>
-                              <InnerShadow choke="1.0">
-                                 <color>
-                                    <Color red="1.0" green="1.0" blue="1.0" />
-                                 </color>
-                              </InnerShadow>
-                           </effect>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToRegistry" styleClass="btnIndex" text="Registros">
-                     <font>
-                        <Font name="System Bold" size="17.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                     <graphic>
-                        <ImageView fitHeight="39.0" fitWidth="39.0" pickOnBounds="true">
-                           <image>
-                              <Image url="@../images/monitoring.png" />
-                           </image>
-                           <effect>
-                              <InnerShadow choke="1.0" radius="68.5" width="255.0">
-                                 <color>
-                                    <Color red="1.0" green="1.0" blue="1.0" />
-                                 </color>
-                              </InnerShadow>
-                           </effect>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToBalance" styleClass="btnIndex" text="Balance">
-                     <font>
-                        <Font name="System Bold" size="17.0" />
-                     </font>
-                     <graphic>
-                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
-                           <image>
-                              <Image url="@../images/interest-rate.png" />
-                           </image>
-                           <effect>
-                              <InnerShadow choke="1.0">
-                                 <color>
-                                    <Color red="1.0" green="1.0" blue="1.0" />
-                                 </color>
-                              </InnerShadow>
-                           </effect>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToSupport" styleClass="btnIndex" text="Soporte">
-                     <font>
-                        <Font name="System Bold" size="17.0" />
-                     </font>
-                     <graphic>
-                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
-                           <image>
-                              <Image url="@../images/support.png" />
-                           </image>
-                           <effect>
-                              <InnerShadow choke="1.0" height="255.0" radius="127.0" width="255.0">
-                                 <color>
-                                    <Color red="1.0" green="1.0" blue="1.0" />
-                                 </color>
-                              </InnerShadow>
-                           </effect>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-               </children>
-            </VBox>
-            <Button alignment="CENTER_LEFT" mnemonicParsing="false" onAction="#switchToConfiguration" prefHeight="60.0" styleClass="btnIndex" text="Ajustes" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+            <Label alignment="CENTER" graphicTextGap="14.0" prefHeight="68.0" prefWidth="421.0" styleClass="title" text="Almacenes" textFill="#eeeeee">
+               <font>
+                  <Font name="Constantia Bold" size="60.0" />
+               </font>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
                <graphic>
-                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="150.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/settings.png" />
+                        <Image url="@../images/warehouse.png" />
+                     </image>
+                     <effect>
+                        <InnerShadow choke="1.0" radius="68.5" width="255.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </InnerShadow>
+                     </effect>
+                  </ImageView>
+               </graphic>
+            </Label>
+         </children>
+      </HBox>
+      <VBox styleClass="index" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="80.0">
+         <children>
+            <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToExpense" styleClass="btnIndex" text="Gastos">
+               <font>
+                  <Font name="System Bold" size="17.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@../images/goods.png" />
                      </image>
                      <effect>
                         <InnerShadow choke="1.0">
@@ -183,141 +65,271 @@
                      </effect>
                   </ImageView>
                </graphic>
-               <font>
-                  <Font size="14.0" />
-               </font>
             </Button>
-            <Label fx:id="lblClientName" contentDisplay="TOP" prefHeight="69.0" prefWidth="172.0" styleClass="clientName" text="Marco A. Romeros" textFill="#eeeeee" wrapText="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="5.0">
+            <Button alignment="CENTER_LEFT" disable="true" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" styleClass="btnIndex" text="Almacenes">
                <font>
-                  <Font name="SansSerif Regular" size="14.0" />
+                  <Font name="System Bold" size="17.0" />
                </font>
                <graphic>
-                  <ImageView fitHeight="47.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
                      <image>
-                        <Image url="@../images/Avatar.png" />
+                        <Image url="@../images/warehouse.png" />
                      </image>
+                     <effect>
+                        <InnerShadow choke="1.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </InnerShadow>
+                     </effect>
                   </ImageView>
                </graphic>
-            </Label>
-            <HBox layoutX="137.0" layoutY="133.0" prefHeight="355.0" prefWidth="583.0" spacing="20.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="170.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="100.0">
+            </Button>
+            <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToSell" styleClass="btnIndex" text="Ventas">
+               <font>
+                  <Font name="System Bold" size="17.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@../images/purchase.png" />
+                     </image>
+                     <effect>
+                        <InnerShadow choke="1.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </InnerShadow>
+                     </effect>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToRegistry" styleClass="btnIndex" text="Registros">
+               <font>
+                  <Font name="System Bold" size="17.0" />
+               </font>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <graphic>
+                  <ImageView fitHeight="39.0" fitWidth="39.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@../images/monitoring.png" />
+                     </image>
+                     <effect>
+                        <InnerShadow choke="1.0" radius="68.5" width="255.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </InnerShadow>
+                     </effect>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToBalance" styleClass="btnIndex" text="Resultado">
+               <font>
+                  <Font name="System Bold" size="17.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@../images/interest-rate.png" />
+                     </image>
+                     <effect>
+                        <InnerShadow choke="1.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </InnerShadow>
+                     </effect>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToSupport" styleClass="btnIndex" text="Soporte">
+               <font>
+                  <Font name="System Bold" size="17.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@../images/support.png" />
+                     </image>
+                     <effect>
+                        <InnerShadow choke="1.0" height="255.0" radius="127.0" width="255.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </InnerShadow>
+                     </effect>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </VBox>
+      <Button alignment="CENTER_LEFT" mnemonicParsing="false" onAction="#switchToConfiguration" prefHeight="60.0" styleClass="btnIndex" text="Ajustes" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+         <graphic>
+            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/settings.png" />
+               </image>
+               <effect>
+                  <InnerShadow choke="1.0">
+                     <color>
+                        <Color red="1.0" green="1.0" blue="1.0" />
+                     </color>
+                  </InnerShadow>
+               </effect>
+            </ImageView>
+         </graphic>
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Label fx:id="lblClientName" contentDisplay="TOP" prefHeight="69.0" prefWidth="172.0" styleClass="clientName" text="Marco A. Romeros" textFill="#eeeeee" wrapText="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="5.0">
+         <font>
+            <Font name="SansSerif Regular" size="14.0" />
+         </font>
+         <graphic>
+            <ImageView fitHeight="47.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/Avatar.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Label>
+      <HBox layoutX="137.0" layoutY="133.0" prefHeight="355.0" prefWidth="583.0" spacing="20.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="170.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="100.0">
+         <children>
+            <VBox alignment="TOP_CENTER" prefHeight="1000.0" prefWidth="1000.0" spacing="5.0" style="-fx-background-radius: 20;" styleClass="rightIndex">
                <children>
-                  <VBox prefHeight="1000.0" prefWidth="1000.0" spacing="5.0" style="-fx-background-radius: 20;" styleClass="rightIndex">
+                  <TreeTableView fx:id="ttvWarehouse" prefHeight="1000.0" prefWidth="460.0" style="-fx-border-color: #2563eb; -fx-background-radius: 10px; -fx-border-radius: 10px; -fx-padding: 5px 3px 5px 3px;">
+                    <columns>
+                      <TreeTableColumn fx:id="ttcWarehouseName" prefWidth="115.0" sortable="false" text="Almacen" />
+                        <TreeTableColumn fx:id="ttcProductName" prefWidth="151.0" sortable="false" text="Producto" />
+                        <TreeTableColumn fx:id="ttcProductAmount" prefWidth="84.0" sortable="false" text="Cantidad" />
+                    </columns>
+                     <columnResizePolicy>
+                        <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TreeTableView>
+                  <HBox prefHeight="35.0" prefWidth="460.0" spacing="5.0">
                      <children>
-                        <AnchorPane prefHeight="450.0" prefWidth="450.0">
-                           <children>
-                              <TreeTableView fx:id="ttvWarehouse" layoutX="-11.0" layoutY="-121.0" prefHeight="1000.0" prefWidth="460.0" style="-fx-border-color: #2563eb; -fx-background-radius: 10px; -fx-border-radius: 10px; -fx-padding: 5px 3px 5px 3px;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                <columns>
-                                  <TreeTableColumn fx:id="ttcWarehouseName" prefWidth="115.0" text="Almacen" />
-                                    <TreeTableColumn fx:id="ttcProductName" prefWidth="151.0" text="Producto" />
-                                    <TreeTableColumn fx:id="ttcProductAmount" prefWidth="84.0" text="Cantidad" />
-                                </columns>
-                                 <columnResizePolicy>
-                                    <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                 </columnResizePolicy>
-                              </TreeTableView>
-                           </children>
-                        </AnchorPane>
-                        <HBox prefHeight="35.0" prefWidth="460.0" spacing="5.0">
-                           <children>
-                              <Button mnemonicParsing="false" onAction="#addWarehouse" prefHeight="35.0" prefWidth="450.0" styleClass="btnStock" text="Agregar Almacén">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                                 <graphic>
-                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
-                                       <image>
-                                          <Image url="@../images/add.png" />
-                                       </image>
-                                       <effect>
-                                          <InnerShadow choke="1.0">
-                                             <color>
-                                                <Color red="1.0" green="1.0" blue="1.0" />
-                                             </color>
-                                          </InnerShadow>
-                                       </effect>
-                                    </ImageView>
-                                 </graphic>
-                              </Button>
-                              <Button mnemonicParsing="false" onAction="#reassignProduct" prefHeight="35.0" prefWidth="450.0" styleClass="btnStock" text="Reasignar Producto">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                                 <graphic>
-                                    <ImageView fitHeight="30.0" fitWidth="35.0" pickOnBounds="true">
-                                       <image>
-                                          <Image url="@../images/renombrar-archivo.png" />
-                                       </image>
-                                       <effect>
-                                          <InnerShadow choke="1.0">
-                                             <color>
-                                                <Color red="1.0" green="1.0" blue="1.0" />
-                                             </color>
-                                          </InnerShadow>
-                                       </effect>
-                                    </ImageView>
-                                 </graphic>
-                              </Button>
-                           </children>
-                        </HBox>
-                        <HBox spacing="5.0">
-                           <children>
-                              <Button mnemonicParsing="false" onAction="#updateWarehouse" prefWidth="450.0" styleClass="btnStock" text="Actualizar Almacén">
-                                 <graphic>
-                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
-                                       <image>
-                                          <Image url="@../images/quiz-alt.png" />
-                                       </image>
-                                       <effect>
-                                          <InnerShadow choke="1.0">
-                                             <color>
-                                                <Color red="1.0" green="1.0" blue="1.0" />
-                                             </color>
-                                          </InnerShadow>
-                                       </effect>
-                                    </ImageView>
-                                 </graphic>
-                              </Button>
-                              <Button mnemonicParsing="false" onAction="#deleteWarehouse" prefHeight="35.0" prefWidth="450.0" style="-fx-background-color: linear-gradient(to bottom, #eb5050, #ec3030);" styleClass="btnStock" text="Eliminar Almacén">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                                 <graphic>
-                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
-                                       <image>
-                                          <Image url="@../images/trash.png" />
-                                       </image>
-                                       <effect>
-                                          <InnerShadow choke="1.0">
-                                             <color>
-                                                <Color red="1.0" green="1.0" blue="1.0" />
-                                             </color>
-                                          </InnerShadow>
-                                       </effect>
-                                    </ImageView>
-                                 </graphic>
-                              </Button>
-                           </children>
-                        </HBox>
+                        <Button mnemonicParsing="false" onAction="#addWarehouse" prefHeight="35.0" prefWidth="450.0" styleClass="btnStock" text="Agregar Almacén">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
+                                 <image>
+                                    <Image url="@../images/add.png" />
+                                 </image>
+                                 <effect>
+                                    <InnerShadow choke="1.0">
+                                       <color>
+                                          <Color red="1.0" green="1.0" blue="1.0" />
+                                       </color>
+                                    </InnerShadow>
+                                 </effect>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button mnemonicParsing="false" onAction="#reassignProduct" prefHeight="35.0" prefWidth="450.0" styleClass="btnStock" text="Reasignar Producto">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fitHeight="30.0" fitWidth="35.0" pickOnBounds="true">
+                                 <image>
+                                    <Image url="@../images/renombrar-archivo.png" />
+                                 </image>
+                                 <effect>
+                                    <InnerShadow choke="1.0">
+                                       <color>
+                                          <Color red="1.0" green="1.0" blue="1.0" />
+                                       </color>
+                                    </InnerShadow>
+                                 </effect>
+                              </ImageView>
+                           </graphic>
+                        </Button>
                      </children>
-                  </VBox>
-                  <VBox prefHeight="1000.0" prefWidth="1000.0" spacing="5.0" style="-fx-background-radius: 20;" styleClass="rightIndex">
+                  </HBox>
+                  <HBox spacing="5.0">
                      <children>
-                        <TableView fx:id="tvExpenses" prefHeight="1000.0" prefWidth="460.0" style="-fx-border-color: #2563eb; -fx-background-radius: 10px; -fx-border-radius: 10px; -fx-padding: 5px 3px 5px 3px;">
-                          <columns>
-                            <TableColumn fx:id="tcIdExpense" prefWidth="92.0" text="ID Gasto" />
-                            <TableColumn fx:id="tcProductName" prefWidth="123.0" text="Producto" />
-                              <TableColumn fx:id="tcProductAmount" prefWidth="76.0" text="Cantidad" />
-                              <TableColumn fx:id="tcProductDate" prefWidth="75.0" text="Fecha" />
-                          </columns>
-                           <columnResizePolicy>
-                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                           </columnResizePolicy>
-                        </TableView>
-                        <Button mnemonicParsing="false" onAction="#changeProductName" prefWidth="1000.0" styleClass="btnStock" text="Cambiar Nombre Producto">
+                        <Button mnemonicParsing="false" onAction="#updateWarehouse" prefWidth="450.0" styleClass="btnStock" text="Renombrar Almacén">
                            <graphic>
                               <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
                                  <image>
                                     <Image url="@../images/rebautizar.png" />
+                                 </image>
+                                 <effect>
+                                    <InnerShadow choke="1.0">
+                                       <color>
+                                          <Color red="1.0" green="1.0" blue="1.0" />
+                                       </color>
+                                    </InnerShadow>
+                                 </effect>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button mnemonicParsing="false" onAction="#deleteWarehouse" prefHeight="35.0" prefWidth="450.0" style="-fx-background-color: linear-gradient(to bottom, #eb5050, #ec3030);" styleClass="btnStock" text="Eliminar Almacén">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
+                                 <image>
+                                    <Image url="@../images/trash.png" />
+                                 </image>
+                                 <effect>
+                                    <InnerShadow choke="1.0">
+                                       <color>
+                                          <Color red="1.0" green="1.0" blue="1.0" />
+                                       </color>
+                                    </InnerShadow>
+                                 </effect>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox alignment="TOP_CENTER" prefHeight="1000.0" prefWidth="1000.0" spacing="5.0" style="-fx-background-radius: 20;" styleClass="rightIndex">
+               <children>
+                  <TableView fx:id="tvExpenses" prefHeight="1000.0" prefWidth="460.0" style="-fx-border-color: #2563eb; -fx-background-radius: 10px; -fx-border-radius: 10px; -fx-padding: 5px 3px 5px 3px;">
+                    <columns>
+                      <TableColumn fx:id="tcIdExpense" prefWidth="92.0" sortable="false" text="ID Gasto" />
+                      <TableColumn fx:id="tcProductName" prefWidth="123.0" sortable="false" text="Producto" />
+                        <TableColumn fx:id="tcProductAmount" prefWidth="76.0" sortable="false" text="Cantidad" />
+                        <TableColumn fx:id="tcProductDate" prefWidth="75.0" sortable="false" text="Fecha" />
+                    </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+                  <Button mnemonicParsing="false" onAction="#changeProductName" prefWidth="1000.0" styleClass="btnStock" text="Renombrar Producto">
+                     <graphic>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
+                           <image>
+                              <Image url="@../images/rebautizar.png" />
+                           </image>
+                           <effect>
+                              <InnerShadow choke="1.0" radius="68.5" width="255.0">
+                                 <color>
+                                    <Color red="1.0" green="1.0" blue="1.0" />
+                                 </color>
+                              </InnerShadow>
+                           </effect>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <HBox prefHeight="40.0" prefWidth="460.0" spacing="5.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#assignExpense" prefHeight="35.0" prefWidth="450.0" styleClass="btnStock" text="Asignar Producto">
+                           <graphic>
+                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
+                                 <image>
+                                    <Image url="@../images/enter.png" />
                                  </image>
                                  <effect>
                                     <InnerShadow choke="1.0" radius="68.5" width="255.0">
@@ -329,47 +341,27 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <HBox prefHeight="40.0" prefWidth="460.0" spacing="5.0">
-                           <children>
-                              <Button mnemonicParsing="false" onAction="#assignExpense" prefHeight="35.0" prefWidth="450.0" styleClass="btnStock" text="Asignar Inversión">
-                                 <graphic>
-                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
-                                       <image>
-                                          <Image url="@../images/enter.png" />
-                                       </image>
-                                       <effect>
-                                          <InnerShadow choke="1.0" radius="68.5" width="255.0">
-                                             <color>
-                                                <Color red="1.0" green="1.0" blue="1.0" />
-                                             </color>
-                                          </InnerShadow>
-                                       </effect>
-                                    </ImageView>
-                                 </graphic>
-                              </Button>
-                              <Button mnemonicParsing="false" onAction="#checkExpense" prefWidth="450.0" styleClass="btnStock" text="Revisar Inversión">
-                                 <graphic>
-                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
-                                       <image>
-                                          <Image url="@../images/memo-circle-check.png" />
-                                       </image>
-                                       <effect>
-                                          <InnerShadow choke="1.0" radius="68.5" width="255.0">
-                                             <color>
-                                                <Color red="1.0" green="1.0" blue="1.0" />
-                                             </color>
-                                          </InnerShadow>
-                                       </effect>
-                                    </ImageView>
-                                 </graphic>
-                              </Button>
-                           </children>
-                        </HBox>
+                        <Button mnemonicParsing="false" onAction="#checkExpense" prefWidth="450.0" styleClass="btnStock" text="Revisar Gasto">
+                           <graphic>
+                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
+                                 <image>
+                                    <Image url="@../images/memo-circle-check.png" />
+                                 </image>
+                                 <effect>
+                                    <InnerShadow choke="1.0" radius="68.5" width="255.0">
+                                       <color>
+                                          <Color red="1.0" green="1.0" blue="1.0" />
+                                       </color>
+                                    </InnerShadow>
+                                 </effect>
+                              </ImageView>
+                           </graphic>
+                        </Button>
                      </children>
-                  </VBox>
+                  </HBox>
                </children>
-            </HBox>
+            </VBox>
          </children>
-      </AnchorPane>
+      </HBox>
    </children>
-</StackPane>
+</AnchorPane>

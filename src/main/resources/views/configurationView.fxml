@@ -8,130 +8,279 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="650.0" prefHeight="650.0" prefWidth="1100.0" stylesheets="@../Styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.ConfigurationViewController">
+
+<AnchorPane prefHeight="650.0" prefWidth="1100.0" stylesheets="@../Styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.ConfigurationViewController">
    <children>
-      <AnchorPane prefWidth="330.0">
+      <HBox alignment="CENTER" prefHeight="80.0" prefWidth="800.0" spacing="120.0" styleClass="slogan" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox alignment="CENTER" prefHeight="80.0" prefWidth="800.0" spacing="120.0" styleClass="slogan" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <Label alignment="CENTER" graphicTextGap="14.0" prefHeight="68.0" prefWidth="421.0" styleClass="title" text="Ajustes" textFill="#eeeeee">
+               <font>
+                  <Font name="Constantia Bold" size="60.0" />
+               </font>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+               <graphic>
+                  <ImageView fitHeight="150.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/settings.png" />
+                     </image>
+                     <effect>
+                        <InnerShadow choke="1.0" radius="68.5" width="255.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </InnerShadow>
+                     </effect>
+                  </ImageView>
+               </graphic>
+            </Label>
+         </children>
+      </HBox>
+      <VBox styleClass="index" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="80.0">
+         <children>
+            <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToExpense" styleClass="btnIndex" text="Gastos">
+               <font>
+                  <Font name="System Bold" size="17.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@../images/goods.png" />
+                     </image>
+                     <effect>
+                        <InnerShadow choke="1.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </InnerShadow>
+                     </effect>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToWarehouse" styleClass="btnIndex" text="Almacenes">
+               <font>
+                  <Font name="System Bold" size="17.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@../images/warehouse.png" />
+                     </image>
+                     <effect>
+                        <InnerShadow choke="1.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </InnerShadow>
+                     </effect>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToSell" styleClass="btnIndex" text="Ventas">
+               <font>
+                  <Font name="System Bold" size="17.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@../images/purchase.png" />
+                     </image>
+                     <effect>
+                        <InnerShadow choke="1.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </InnerShadow>
+                     </effect>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToRegistry" styleClass="btnIndex" text="Registros">
+               <font>
+                  <Font name="System Bold" size="17.0" />
+               </font>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <graphic>
+                  <ImageView fitHeight="39.0" fitWidth="39.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@../images/monitoring.png" />
+                     </image>
+                     <effect>
+                        <InnerShadow choke="1.0" radius="68.5" width="255.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </InnerShadow>
+                     </effect>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToBalance" styleClass="btnIndex" text="Resultado">
+               <font>
+                  <Font name="System Bold" size="17.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@../images/interest-rate.png" />
+                     </image>
+                     <effect>
+                        <InnerShadow choke="1.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </InnerShadow>
+                     </effect>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToSupport" styleClass="btnIndex" text="Soporte">
+               <font>
+                  <Font name="System Bold" size="17.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@../images/support.png" />
+                     </image>
+                     <effect>
+                        <InnerShadow choke="1.0" height="255.0" radius="127.0" width="255.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </InnerShadow>
+                     </effect>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </VBox>
+      <Button alignment="CENTER_LEFT" disable="true" mnemonicParsing="false" prefHeight="60.0" styleClass="btnIndex" text="Ajustes" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+         <graphic>
+            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/settings.png" />
+               </image>
+               <effect>
+                  <InnerShadow choke="1.0">
+                     <color>
+                        <Color red="1.0" green="1.0" blue="1.0" />
+                     </color>
+                  </InnerShadow>
+               </effect>
+            </ImageView>
+         </graphic>
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Label fx:id="lblClientName" contentDisplay="TOP" prefHeight="69.0" prefWidth="172.0" styleClass="clientName" text="Marco A. Romeros" textFill="#eeeeee" wrapText="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="5.0">
+         <font>
+            <Font name="SansSerif Regular" size="14.0" />
+         </font>
+         <graphic>
+            <ImageView fitHeight="47.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/Avatar.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Label>
+      <HBox layoutX="142.0" layoutY="124.0" prefHeight="323.0" prefWidth="545.0" spacing="50.0" styleClass="crudOperations" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="230.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="140.0">
+         <children>
+            <VBox alignment="CENTER_LEFT" prefHeight="400.0" prefWidth="1000.0" spacing="5.0">
                <children>
-                  <Label alignment="CENTER" graphicTextGap="14.0" prefHeight="68.0" prefWidth="421.0" styleClass="title" text="Ajustes" textFill="#eeeeee">
-                     <font>
-                        <Font name="Constantia Bold" size="60.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
-                     <graphic>
-                        <ImageView fitHeight="150.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fitHeight="199.0" fitWidth="198.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/settings.png" />
+                              <Image url="@../images/admin-alt.png" />
                            </image>
-                           <effect>
-                              <InnerShadow choke="1.0" radius="68.5" width="255.0">
-                                 <color>
-                                    <Color red="1.0" green="1.0" blue="1.0" />
-                                 </color>
-                              </InnerShadow>
-                           </effect>
+                        </ImageView>
+                     </children>
+                  </HBox>
+                  <Label fx:id="lblUser" text="Usuario:">
+                     <graphic>
+                        <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/Avatar.png" />
+                           </image>
                         </ImageView>
                      </graphic>
-                  </Label>
-               </children>
-            </HBox>
-            <VBox styleClass="index" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="80.0">
-               <children>
-                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToExpense" styleClass="btnIndex" text="Gastos">
                      <font>
-                        <Font name="System Bold" size="17.0" />
-                     </font>
-                     <graphic>
-                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
-                           <image>
-                              <Image url="@../images/goods.png" />
-                           </image>
-                           <effect>
-                              <InnerShadow choke="1.0">
-                                 <color>
-                                    <Color red="1.0" green="1.0" blue="1.0" />
-                                 </color>
-                              </InnerShadow>
-                           </effect>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToWarehouse" styleClass="btnIndex" text="Almacenes">
-                     <font>
-                        <Font name="System Bold" size="17.0" />
-                     </font>
-                     <graphic>
-                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
-                           <image>
-                              <Image url="@../images/warehouse.png" />
-                           </image>
-                           <effect>
-                              <InnerShadow choke="1.0">
-                                 <color>
-                                    <Color red="1.0" green="1.0" blue="1.0" />
-                                 </color>
-                              </InnerShadow>
-                           </effect>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToSell" styleClass="btnIndex" text="Ventas">
-                     <font>
-                        <Font name="System Bold" size="17.0" />
-                     </font>
-                     <graphic>
-                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
-                           <image>
-                              <Image url="@../images/purchase.png" />
-                           </image>
-                           <effect>
-                              <InnerShadow choke="1.0">
-                                 <color>
-                                    <Color red="1.0" green="1.0" blue="1.0" />
-                                 </color>
-                              </InnerShadow>
-                           </effect>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToRegistry" styleClass="btnIndex" text="Registros">
-                     <font>
-                        <Font name="System Bold" size="17.0" />
+                        <Font name="System Bold" size="16.0" />
                      </font>
                      <VBox.margin>
-                        <Insets />
+                        <Insets top="10.0" />
                      </VBox.margin>
+                  </Label>
+                  <Label fx:id="lblCompany" text="Compañía: ">
                      <graphic>
-                        <ImageView fitHeight="39.0" fitWidth="39.0" pickOnBounds="true">
+                        <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/monitoring.png" />
+                              <Image url="@../images/company.png" />
                            </image>
-                           <effect>
-                              <InnerShadow choke="1.0" radius="68.5" width="255.0">
-                                 <color>
-                                    <Color red="1.0" green="1.0" blue="1.0" />
-                                 </color>
-                              </InnerShadow>
-                           </effect>
                         </ImageView>
                      </graphic>
-                  </Button>
-                  <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToBalance" styleClass="btnIndex" text="Balance">
                      <font>
-                        <Font name="System Bold" size="17.0" />
+                        <Font name="System Bold" size="16.0" />
                      </font>
+                  </Label>
+                  <Label fx:id="lblDateLicense" text="Fecha Vencimiento Licencia:">
                      <graphic>
-                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
+                        <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/interest-rate.png" />
+                              <Image url="@../images/memo-circle-check.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblProducts" text="Productos:">
+                     <graphic>
+                        <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/lista-de-la-compra.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblSell" text="Ventas:">
+                     <graphic>
+                        <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/growth-chart-invest.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets left="20.0" right="20.0" />
+               </padding>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="400.0" prefWidth="1000.0" spacing="20.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#displayEstablishCompanyName" prefHeight="40.0" prefWidth="280.0" styleClass="btnStock" text="Establecer Nombre Compañía">
+                     <graphic>
+                        <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/rebautizar.png" />
                            </image>
                            <effect>
                               <InnerShadow choke="1.0">
@@ -143,14 +292,11 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToSupport" styleClass="btnIndex" text="Soporte">
-                     <font>
-                        <Font name="System Bold" size="17.0" />
-                     </font>
+                  <Button mnemonicParsing="false" onAction="#ImportDatabase" prefHeight="40.0" prefWidth="280.0" styleClass="btnStock" text="Importar Base de Datos">
                      <graphic>
-                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
+                        <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/support.png" />
+                              <Image url="@../images/importar.png" />
                            </image>
                            <effect>
                               <InnerShadow choke="1.0" height="255.0" radius="127.0" width="255.0">
@@ -162,187 +308,41 @@
                         </ImageView>
                      </graphic>
                   </Button>
+                  <Button mnemonicParsing="false" onAction="#exportDatabase" prefHeight="40.0" prefWidth="280.0" styleClass="btnStock" text="Exportar Base de Datos">
+                     <graphic>
+                        <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/exportar-archivo%20(1).png" />
+                           </image>
+                           <effect>
+                              <InnerShadow choke="1.0" radius="68.5" width="255.0">
+                                 <color>
+                                    <Color red="1.0" green="1.0" blue="1.0" />
+                                 </color>
+                              </InnerShadow>
+                           </effect>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#closeSession" prefHeight="40.0" prefWidth="280.0" styleClass="btnStock" text="Cerrar Sesión" textFill="#eeeeee">
+                     <graphic>
+                        <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/user-logout.png" />
+                           </image>
+                           <effect>
+                              <InnerShadow choke="1.0" radius="68.5" width="255.0">
+                                 <color>
+                                    <Color red="1.0" green="1.0" blue="1.0" />
+                                 </color>
+                              </InnerShadow>
+                           </effect>
+                        </ImageView>
+                     </graphic>
+                  </Button>
                </children>
             </VBox>
-            <Button alignment="CENTER_LEFT" disable="true" mnemonicParsing="false" prefHeight="60.0" styleClass="btnIndex" text="Ajustes" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
-               <graphic>
-                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/settings.png" />
-                     </image>
-                     <effect>
-                        <InnerShadow choke="1.0">
-                           <color>
-                              <Color red="1.0" green="1.0" blue="1.0" />
-                           </color>
-                        </InnerShadow>
-                     </effect>
-                  </ImageView>
-               </graphic>
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Button>
-            <Label fx:id="lblClientName" contentDisplay="TOP" prefHeight="69.0" prefWidth="172.0" styleClass="clientName" text="Marco A. Romeros" textFill="#eeeeee" wrapText="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="5.0">
-               <font>
-                  <Font name="SansSerif Regular" size="14.0" />
-               </font>
-               <graphic>
-                  <ImageView fitHeight="47.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/Avatar.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Label>
-            <HBox layoutX="142.0" layoutY="124.0" prefHeight="323.0" prefWidth="545.0" spacing="50.0" styleClass="crudOperations" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="230.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="140.0">
-               <children>
-                  <VBox alignment="CENTER_LEFT" prefHeight="400.0" prefWidth="1000.0" spacing="5.0">
-                     <children>
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                           <children>
-                              <ImageView fitHeight="199.0" fitWidth="198.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/admin-alt.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                        </HBox>
-                        <Label fx:id="lblUser" text="Usuario:">
-                           <graphic>
-                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/Avatar.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                           <font>
-                              <Font name="System Bold" size="16.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets top="10.0" />
-                           </VBox.margin>
-                        </Label>
-                        <Label fx:id="lblCompany" text="Compañía: ">
-                           <graphic>
-                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/company.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                           <font>
-                              <Font name="System Bold" size="16.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="lblDateLicense" text="Fecha Vencimiento Licencia:">
-                           <graphic>
-                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/memo-circle-check.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                           <font>
-                              <Font name="System Bold" size="16.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="lblProducts" text="Productos:">
-                           <graphic>
-                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/lista-de-la-compra.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                           <font>
-                              <Font name="System Bold" size="16.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="lblSell" text="Ventas:">
-                           <graphic>
-                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/growth-chart-invest.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                           <font>
-                              <Font name="System Bold" size="16.0" />
-                           </font>
-                        </Label>
-                     </children>
-                     <padding>
-                        <Insets left="20.0" right="20.0" />
-                     </padding>
-                  </VBox>
-                  <VBox alignment="CENTER" prefHeight="400.0" prefWidth="1000.0" spacing="20.0">
-                     <children>
-                        <Button mnemonicParsing="false" onAction="#displayEstablishCompanyName" prefHeight="40.0" prefWidth="280.0" styleClass="btnStock" text="Establecer Nombre Compañía">
-                           <graphic>
-                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/rebautizar.png" />
-                                 </image>
-                                 <effect>
-                                    <InnerShadow choke="1.0">
-                                       <color>
-                                          <Color red="1.0" green="1.0" blue="1.0" />
-                                       </color>
-                                    </InnerShadow>
-                                 </effect>
-                              </ImageView>
-                           </graphic></Button>
-                        <Button mnemonicParsing="false" onAction="#ImportDatabase" prefHeight="40.0" prefWidth="280.0" styleClass="btnStock" text="Importar Base de Datos">
-                           <graphic>
-                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/importar.png" />
-                                 </image>
-                                 <effect>
-                                    <InnerShadow choke="1.0" height="255.0" radius="127.0" width="255.0">
-                                       <color>
-                                          <Color red="1.0" green="1.0" blue="1.0" />
-                                       </color>
-                                    </InnerShadow>
-                                 </effect>
-                              </ImageView>
-                           </graphic></Button>
-                        <Button mnemonicParsing="false" onAction="#exportDatabase" prefHeight="40.0" prefWidth="280.0" styleClass="btnStock" text="Exportar Base de Datos">
-                           <graphic>
-                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/exportar-archivo%20(1).png" />
-                                 </image>
-                                 <effect>
-                                    <InnerShadow choke="1.0" radius="68.5" width="255.0">
-                                       <color>
-                                          <Color red="1.0" green="1.0" blue="1.0" />
-                                       </color>
-                                    </InnerShadow>
-                                 </effect>
-                              </ImageView>
-                           </graphic></Button>
-                        <Button mnemonicParsing="false" onAction="#closeSession" prefHeight="40.0" prefWidth="280.0" styleClass="btnStock" text="Cerrar Sesión" textFill="#eeeeee">
-                           <graphic>
-                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/user-logout.png" />
-                                 </image>
-                                 <effect>
-                                    <InnerShadow choke="1.0" radius="68.5" width="255.0">
-                                       <color>
-                                          <Color red="1.0" green="1.0" blue="1.0" />
-                                       </color>
-                                    </InnerShadow>
-                                 </effect>
-                              </ImageView>
-                           </graphic></Button>
-                     </children>
-                  </VBox>
-               </children>
-            </HBox>
          </children>
-      </AnchorPane>
+      </HBox>
    </children>
-</StackPane>
+</AnchorPane>

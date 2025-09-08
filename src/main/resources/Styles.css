@@ -23,7 +23,7 @@ Negro:               #0f172a
 .text-field{
     -fx-border-color: #7baff0;
     -fx-font-family: 'Segoe UI', sans-serif;
-    -fx-padding: 6 10;
+    -fx-padding: 6 8;
     -fx-font-size: 14;
     -fx-background-color: #fff;
     -fx-text-fill: #0f172a;
@@ -335,6 +335,7 @@ Negro:               #0f172a
 .alert{
     -fx-background-color: #f3f4f6;
     -fx-font-size: 13;
+    -fx-wrap-text: true;
     -fx-border-color: #2563eb;
     -fx-border-width: 1;
     -fx-background-radius: 10;
@@ -349,4 +350,9 @@ Negro:               #0f172a
 }
 .alert .header-panel .label{
     -fx-text-fill: #ffffff;
+}
+/* ESTILO ESPECÍFICO PARA ALERTAS DE CONFIRMACIÓN */
+.alert.confirmation .content.label {
+    -fx-min-height: 70px; /* Altura mínima para 3+ líneas */
+    -fx-pref-height: -1; /* Permite crecimiento automático */
 }

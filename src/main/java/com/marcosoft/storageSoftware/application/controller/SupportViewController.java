@@ -14,7 +14,6 @@ import javafx.scene.control.Label;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
-import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -26,7 +25,7 @@ import java.util.List;
 public class SupportViewController {
     // Reference to the account controller for session management
     private Client client;
-    private ClientViewController accountController;
+    private LoginViewController accountController;
 
     // Service and utility dependencies
     private final UserLogged userLogged;
@@ -37,9 +36,10 @@ public class SupportViewController {
 
     /**
      * Constructor for dependency injection.
-     * @param currencyService the currency service
-     * @param sceneSwitcher the scene switcher
-     * @param userLogged the user logged
+     *
+     * @param currencyService  the currency service
+     * @param sceneSwitcher    the scene switcher
+     * @param userLogged       the user logged
      * @param licenseValidator the license validator
      */
     public SupportViewController(
@@ -69,18 +69,17 @@ public class SupportViewController {
         Platform.runLater(() -> {
             initWelcomeLabels();
             initCurrencyDefaultValues();
-
-
         });
     }
 
     /**
      * Sets the account controller reference for session management.
-     * @param clientViewController the client view controller
+     *
+     * @param loginViewController the client view controller
      */
-    public void setAccountController(ClientViewController clientViewController) {
-        this.accountController = clientViewController;
-        System.out.println("Controlador de cuenta configurado: " + clientViewController);
+    public void setAccountController(LoginViewController loginViewController) {
+        this.accountController = loginViewController;
+        System.out.println("Controlador de cuenta configurado: " + loginViewController);
     }
 
     /**
@@ -92,12 +91,11 @@ public class SupportViewController {
             if (!currencyService.existsByCurrencyName(currencyName)) {
                 Currency currency = new Currency(null, currencyName, 0.0);
                 switch (currencyName) {
-                    case "MLC" -> currency = new Currency(null, currencyName, 200.00);
+                    case "MLC" -> currency = new Currency(null, currencyName, 195.00);
                     case "CUP" -> currency = new Currency(null, currencyName, 1.00);
-                    case "USD" -> currency = new Currency(null, currencyName, 120.00);
-                    case "EUR" -> currency = new Currency(null, currencyName, 160.00);
+                    case "USD" -> currency = new Currency(null, currencyName, 410.00);
+                    case "EUR" -> currency = new Currency(null, currencyName, 460.00);
                 }
-
                 currencyService.save(currency);
             }
         }
@@ -108,9 +106,13 @@ public class SupportViewController {
      * The welcome message is shown in Spanish.
      */
     private void initWelcomeLabels() {
-        lblLicenseDays.setText(LocalDate.now().until(licenseValidator.getRemainingTime()).getDays() + " Días");
-        versionLabel.setText("0.9.9");
-        lblWelcomeTitle.setText("Bienvenido, " + userLogged.getName());
+        long daysRemaining = licenseValidator.getDaysRemaining();
+        if (daysRemaining <= 10) {
+            lblLicenseDays.setStyle("-fx-text-fill: #ff9b9b;");
+        }
+        lblLicenseDays.setText(daysRemaining + " Días");
+        versionLabel.setText("1.0.0");
+        lblWelcomeTitle.setText("Bienvenid@, " + userLogged.getName());
         lblWelcome.setText(
                 """
                         Este sistema ha sido diseñado para brindarle un control eficiente y seguro sobre los recursos de su negocio. \
@@ -152,6 +154,7 @@ public class SupportViewController {
 
     /**
      * Navigates to the warehouse view.
+     *
      * @param event the event
      */
     @FXML
@@ -159,10 +162,6 @@ public class SupportViewController {
         sceneSwitcher.switchView(event, "/views/warehouseView.fxml");
     }
 
-    /**
-     * Navigates to the balance view.
-     * @param event the event
-     */
     @FXML
     public void switchToBalance(ActionEvent event) {
         sceneSwitcher.switchView(event, "/views/balanceView.fxml");

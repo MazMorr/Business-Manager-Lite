@@ -58,7 +58,7 @@ public class SellFieldsValidator {
             }
             return true;
         } catch (NumberFormatException e) {
-            displayAlerts.showAlert("La cantidad debe ser un número válido");
+            displayAlerts.showAlert("La cantidad no puede contener comas ni nada parecido");
             return false;
         }
     }

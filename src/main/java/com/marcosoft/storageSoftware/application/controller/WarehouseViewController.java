@@ -3,16 +3,13 @@ package com.marcosoft.storageSoftware.application.controller;
 import com.marcosoft.storageSoftware.application.dto.ExpenseWarehouseDataTable;
 import com.marcosoft.storageSoftware.application.dto.UserLogged;
 import com.marcosoft.storageSoftware.application.dto.WarehouseDataTable;
-import com.marcosoft.storageSoftware.domain.model.Client;
-import com.marcosoft.storageSoftware.domain.model.Expense;
-import com.marcosoft.storageSoftware.domain.model.Inventory;
-import com.marcosoft.storageSoftware.domain.model.Warehouse;
+import com.marcosoft.storageSoftware.domain.model.*;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.ExpenseServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.GeneralRegistryServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.InventoryServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.WarehouseServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
 import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -22,14 +19,11 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-/**
- * Controller for the warehouse view.
- * Handles logic for displaying, managing, and navigating warehouses and their inventories.
- */
 @Lazy
 @Controller
 public class WarehouseViewController {
@@ -41,20 +35,14 @@ public class WarehouseViewController {
     private final SceneSwitcher sceneSwitcher;
     private final DisplayAlerts displayAlerts;
     private final InventoryServiceImpl inventoryService;
+    private final GeneralRegistryServiceImpl generalRegistryService;
     private final ExpenseServiceImpl expenseService;
+    private final ExpenseViewController expenseViewController;
 
-    /**
-     * Constructor for dependency injection.
-     * @param expenseService the investment service
-     * @param displayAlerts the display alerts
-     * @param warehouseService the warehouse service
-     * @param userLogged the user logged
-     * @param sceneSwitcher the scene switcher
-     * @param inventoryService the inventory service
-     */
     public WarehouseViewController(
             ExpenseServiceImpl expenseService, DisplayAlerts displayAlerts, WarehouseServiceImpl warehouseService,
-            UserLogged userLogged, SceneSwitcher sceneSwitcher, InventoryServiceImpl inventoryService
+            UserLogged userLogged, SceneSwitcher sceneSwitcher, InventoryServiceImpl inventoryService,
+            GeneralRegistryServiceImpl generalRegistryService, ExpenseViewController expenseViewController
     ) {
         this.expenseService = expenseService;
         this.inventoryService = inventoryService;
@@ -62,6 +50,8 @@ public class WarehouseViewController {
         this.displayAlerts = displayAlerts;
         this.userLogged = userLogged;
         this.warehouseService = warehouseService;
+        this.generalRegistryService = generalRegistryService;
+        this.expenseViewController = expenseViewController;
     }
 
     // FXML UI components
@@ -87,32 +77,21 @@ public class WarehouseViewController {
     @FXML
     private Label lblClientName;
 
-    /**
-     * Initializes the controller after its root element has been completely processed.
-     * Sets up table labels and loads warehouse data.
-     */
     @FXML
     public void initialize() {
         client = userLogged.getClient();
         lblClientName.setText(client.getClientName());
-        Platform.runLater(() -> {
-            initTableValues();
-            initTreeTable();
-            initTableLabels();
-        });
+        initTableValues();
+        initTreeTable();
+        initTableLabels();
     }
 
-    /**
-     * Loads investment data into the investments table.
-     * Populates the tvExpenses TableView with unassigned investments for the current client.
-     */
     public void initTableValues() {
         // Clear previous data
         tvExpenses.getItems().clear();
 
         // Get all expenses for the client with amount > 0 (not fully assigned)
-        List<Expense> expenses = expenseService.getAllProductExpensesGreaterThanZeroByClient(client)
-                .stream().toList();
+        List<Expense> expenses = expenseService.getAllProductExpensesGreaterThanZeroByClient(client).stream().toList();
 
         // Map expenses to ExpenseWarehouseDataTable
         List<ExpenseWarehouseDataTable> investmentData = expenses.stream()
@@ -134,9 +113,6 @@ public class WarehouseViewController {
         tvExpenses.getItems().addAll(investmentData);
     }
 
-    /**
-     * Sets up placeholder labels for the warehouse and investment tables.
-     */
     private void initTableLabels() {
         // Placeholder for TreeTableView (ttvWarehouse)
         ttvWarehouse.setPlaceholder(new Label("""
@@ -162,10 +138,6 @@ public class WarehouseViewController {
         tvExpenses.getPlaceholder().setStyle(commonStyle);
     }
 
-    /**
-     * Loads warehouse and inventory data into the tree table.
-     * Groups inventories by warehouse and displays products as children.
-     */
     public void initTreeTable() {
         // Column configuration
         ttcWarehouseName.setCellValueFactory(new TreeItemPropertyValueFactory<>("warehouseName"));
@@ -182,10 +154,7 @@ public class WarehouseViewController {
 
         inventoriesByWarehouse.forEach((warehouse, inventories) -> {
             // Manejo de amount null en el cálculo del total
-            int total = inventories.stream()
-                    .mapToInt(inv -> inv.getAmount() != null ? inv.getAmount() : 0)
-                    .sum();
-
+            int total = inventories.stream().mapToInt(inv -> inv.getAmount() != null ? inv.getAmount() : 0).sum();
             int invCount = inventories.size() - 1;
 
             WarehouseDataTable warehouseNode = new WarehouseDataTable(
@@ -197,7 +166,6 @@ public class WarehouseViewController {
             TreeItem<WarehouseDataTable> warehouseItem = new TreeItem<>(warehouseNode);
 
             // Children (products)
-
             inventories.forEach(inv -> {
                 if (!(inv.getProduct() == null || inv.getAmount() == null)) {
                     WarehouseDataTable productNode = new WarehouseDataTable(
@@ -213,138 +181,105 @@ public class WarehouseViewController {
         });
 
         ttvWarehouse.setRoot(root);
-        ttvWarehouse.setShowRoot(false); // Enables placeholder display
+        ttvWarehouse.setShowRoot(false);
     }
 
-    /**
-     * Opens the reassign product view in a new window.
-     * @throws SceneSwitcher.WindowLoadException the window load exception
-     */
     @FXML
     public void reassignProduct() throws SceneSwitcher.WindowLoadException {
-        sceneSwitcher.displayWindow("Sistema de cuentas", "/images/RTS_logo.png", "/views/reassignProductView.fxml");
+        sceneSwitcher.displayWindow("Sistema de cuentas", "/images/lc_logo.png", "/views/reassignProductView.fxml");
     }
 
-    /**
-     * Opens the add warehouse view in a new window.
-     * @throws SceneSwitcher.WindowLoadException the window load exception
-     */
     @FXML
     public void addWarehouse() throws SceneSwitcher.WindowLoadException {
-        sceneSwitcher.displayWindow("Añadir Almacén", "/images/RTS_logo.png", "/views/addWarehouseView.fxml");
+        sceneSwitcher.displayWindow("Añadir Almacén", "/images/lc_logo.png", "/views/addWarehouseView.fxml");
     }
 
 
-    /**
-     * Deletes the selected warehouse and all its products after confirmation.
-     * Shows confirmation alert in Spanish.
-     */
     @FXML
     public void deleteWarehouse() {
-        WarehouseDataTable w = ttvWarehouse.getSelectionModel().getSelectedItem().getValue();
-        Warehouse warehouse = warehouseService.getWarehouseByWarehouseNameAndClient(w.getWarehouseName(), client);
-        if (displayAlerts.showConfirmationAlert("Está seguro de querer eliminar el almacén seleccionado:\n" +
-                w.getWarehouseName() + " junto a todos los productos almacenados en él?")) {
-            List<Inventory> inv = inventoryService.getAllInventoriesByWarehouseAndClient(warehouse, client);
-            for (Inventory i : inv) {
-                inventoryService.deleteInventoryById(i.getId());
+        try {
+            WarehouseDataTable warehouseDataTable = ttvWarehouse.getSelectionModel().getSelectedItem().getValue();
+            Warehouse warehouse = warehouseService.getWarehouseByWarehouseNameAndClient(warehouseDataTable.getWarehouseName(), client);
+            if (displayAlerts.showConfirmationAlert("Está seguro de querer eliminar el almacén seleccionado: " +
+                    warehouseDataTable.getWarehouseName() + " junto a todos los productos almacenados en él?")) {
+                List<Inventory> inventories = inventoryService.getAllInventoriesByWarehouseAndClient(warehouse, client);
+                for (Inventory inv : inventories) {
+                    inventoryService.deleteInventoryById(inv.getId());
+                }
+                warehouseService.deleteWarehouseById(warehouse.getId());
+                ttvWarehouse.getSelectionModel().clearSelection();
+                initTreeTable();
+
+                GeneralRegistry generalRegistry = new GeneralRegistry(
+                        null, client, "Almacén",
+                        "Eliminación de almacén: " + warehouse.getWarehouseName()
+                        , LocalDateTime.now()
+                );
+                generalRegistryService.save(generalRegistry);
+            } else {
+                ttvWarehouse.getSelectionModel().clearSelection();
             }
-            warehouseService.deleteWarehouseById(warehouse.getId());
-            ttvWarehouse.getSelectionModel().clearSelection();
-            initTreeTable();
+        } catch (NullPointerException e) {
+            displayAlerts.showAlert("Debe seleccionar un almacén de la tabla para poder eliminarlo");
+        }
+
+    }
+
+    @FXML
+    public void assignExpense() throws SceneSwitcher.WindowLoadException {
+        sceneSwitcher.displayWindow("Asignar Inversión", "/images/lc_logo.png", "/views/assignProductView.fxml");
+    }
+
+    @FXML
+    public void checkExpense(ActionEvent actionEvent) {
+        ExpenseWarehouseDataTable expenseWarehouseDataTable = tvExpenses.getSelectionModel().getSelectedItem();
+        if (expenseWarehouseDataTable == null) {
+            displayAlerts.showAlert("Debe seleccionar un gasto para revisarlo");
         } else {
-            ttvWarehouse.getSelectionModel().clearSelection();
+            switchToExpense(actionEvent);
+            expenseViewController.getTfFilterId().setText(expenseWarehouseDataTable.getExpenseId() + "");
         }
     }
 
-    /**
-     * Opens the assign investment view in a new window.
-     * @throws SceneSwitcher.WindowLoadException the window load exception
-     */
-    @FXML
-    public void assignExpense() throws SceneSwitcher.WindowLoadException {
-        sceneSwitcher.displayWindow("Asignar Inversión", "/images/lc_logo.png", "/views/assignExpenseView.fxml");
-    }
-
-    /**
-     * Shows a placeholder alert for checking investments (feature coming soon).
-     */
-    @FXML
-    public void checkExpense() {
-        displayAlerts.showAlert("Próximamente");
-    }
-
-    /**
-     * Opens the update warehouse view in a new window.
-     * @throws SceneSwitcher.WindowLoadException the window load exception
-     */
     @FXML
     public void updateWarehouse() throws SceneSwitcher.WindowLoadException {
-        sceneSwitcher.displayWindow("Actualizar Almacén", "/images/lc_logo.png", "/views/updateWarehouseView.fxml");
+        sceneSwitcher.displayWindow("Actualizar Almacén", "/images/lc_logo.png", "/views/renameWarehouseView.fxml");
     }
 
-    /**
-     * Opens the change product name view in a new window.
-     * @throws SceneSwitcher.WindowLoadException the window load exception
-     */
     @FXML
     public void changeProductName() throws SceneSwitcher.WindowLoadException {
-        sceneSwitcher.displayWindow("Asignar Inversión a un Almacén", "/images/lc_logo.png", "/views/changeProductNameView.fxml");
+        sceneSwitcher.displayWindow("Asignar Inversión a un Almacén", "/images/lc_logo.png", "/views/renameProductView.fxml");
     }
 
     // ============================
     // MÉTODOS DE NAVEGACIÓN
     // ============================
 
-    /**
-     * Navigates to the configuration view.
-     * @param actionEvent the action event
-     */
     @FXML
     public void switchToConfiguration(ActionEvent actionEvent) {
         sceneSwitcher.switchView(actionEvent, "/views/configurationView.fxml");
     }
 
-    /**
-     * Navigates to the support view.
-     * @param actionEvent the action event
-     */
     @FXML
     public void switchToSupport(ActionEvent actionEvent) {
         sceneSwitcher.switchView(actionEvent, "/views/supportView.fxml");
     }
 
-    /**
-     * Navigates to the registry view.
-     * @param actionEvent the action event
-     */
     @FXML
     public void switchToRegistry(ActionEvent actionEvent) {
         sceneSwitcher.switchView(actionEvent, "/views/registryView.fxml");
     }
 
-    /**
-     * Navigates to the balance view.
-     * @param actionEvent the action event
-     */
     @FXML
     public void switchToBalance(ActionEvent actionEvent) {
         sceneSwitcher.switchView(actionEvent, "/views/balanceView.fxml");
     }
 
-    /**
-     * Navigates to the investment view.
-     * @param actionEvent the action event
-     */
     @FXML
     public void switchToExpense(ActionEvent actionEvent) {
         sceneSwitcher.switchView(actionEvent, "/views/expenseView.fxml");
     }
 
-    /**
-     * Navigates to the sell view.
-     * @param actionEvent the action event
-     */
     @FXML
     public void switchToSell(ActionEvent actionEvent) {
         sceneSwitcher.switchView(actionEvent, "/views/sellView.fxml");

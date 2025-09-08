@@ -20,7 +20,9 @@ public interface ExpenseRepository extends CrudRepository<Expense, Long> {
 
     List<Expense> findByClientAndLeftAmountGreaterThanAndExpenseType(Client client, Integer leftAmount, String investmentType);
 
-    List<Expense> findAllExpensesByClient(Client client);
-
     List<Expense> findAllExpensesByClientAndExpenseType(Client client, String expenseType);
+
+    List<Expense> findAllExpensesByClientOrderByReceivedDateDesc(Client client);
+
+
 }
