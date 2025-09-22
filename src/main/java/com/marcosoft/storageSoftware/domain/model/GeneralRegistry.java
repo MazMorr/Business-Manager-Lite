@@ -13,13 +13,18 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "GeneralRegistry", indexes = {
+        @Index(name = "idx_genreg_client_datetime", columnList = "client_id, registry_date_time"),
+        @Index(name = "idx_genreg_client_zone", columnList = "client_id, zone")
+})
 public class GeneralRegistry {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "client_id")
     private Client client;
 
     @Column(name = "zone")
@@ -28,6 +33,6 @@ public class GeneralRegistry {
     @Column(name = "registry_type")
     private String registryType;
 
-    @Column(name = "registrydate_time")
+    @Column(name = "registry_date_time")
     private LocalDateTime registryDateTime;
 }

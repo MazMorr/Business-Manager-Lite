@@ -12,8 +12,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane prefHeight="650.0" prefWidth="1100.0" stylesheets="@../Styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.ConfigurationViewController">
+<AnchorPane prefHeight="650.0" prefWidth="1100.0" stylesheets="@../Styles.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.ConfigurationViewController">
    <children>
       <HBox alignment="CENTER" prefHeight="80.0" prefWidth="800.0" spacing="120.0" styleClass="slogan" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -44,6 +43,25 @@
       <VBox styleClass="index" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="80.0">
          <children>
             <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToExpense" styleClass="btnIndex" text="Gastos">
+               <font>
+                  <Font name="System Bold" size="17.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="39.0" fitWidth="39.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@../images/monitoring.png" />
+                     </image>
+                     <effect>
+                        <InnerShadow choke="1.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </InnerShadow>
+                     </effect>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToBuy" styleClass="btnIndex" text="Compras">
                <font>
                   <Font name="System Bold" size="17.0" />
                </font>
@@ -100,28 +118,6 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToRegistry" styleClass="btnIndex" text="Registros">
-               <font>
-                  <Font name="System Bold" size="17.0" />
-               </font>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-               <graphic>
-                  <ImageView fitHeight="39.0" fitWidth="39.0" pickOnBounds="true">
-                     <image>
-                        <Image url="@../images/monitoring.png" />
-                     </image>
-                     <effect>
-                        <InnerShadow choke="1.0" radius="68.5" width="255.0">
-                           <color>
-                              <Color red="1.0" green="1.0" blue="1.0" />
-                           </color>
-                        </InnerShadow>
-                     </effect>
-                  </ImageView>
-               </graphic>
-            </Button>
             <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToBalance" styleClass="btnIndex" text="Resultado">
                <font>
                   <Font name="System Bold" size="17.0" />
@@ -141,6 +137,10 @@
                   </ImageView>
                </graphic>
             </Button>
+         </children>
+      </VBox>
+      <VBox layoutX="-4.0" layoutY="593.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+         <children>
             <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToSupport" styleClass="btnIndex" text="Soporte">
                <font>
                   <Font name="System Bold" size="17.0" />
@@ -160,27 +160,52 @@
                   </ImageView>
                </graphic>
             </Button>
+            <Button alignment="CENTER_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#switchToRegistry" styleClass="btnIndex" text="Registros">
+               <font>
+                  <Font name="System Bold" size="17.0" />
+               </font>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <graphic>
+                  <ImageView fitHeight="39.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/lista-de-la-compra.png" />
+                     </image>
+                     <effect>
+                        <InnerShadow choke="1.0" radius="68.5" width="255.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </InnerShadow>
+                     </effect>
+                  </ImageView>
+               </graphic>
+               <padding>
+                  <Insets left="16.0" />
+               </padding>
+            </Button>
+            <Button alignment="CENTER_LEFT" disable="true" mnemonicParsing="false" prefHeight="60.0" styleClass="btnIndex" text="Ajustes">
+               <graphic>
+                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/settings.png" />
+                     </image>
+                     <effect>
+                        <InnerShadow choke="1.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </InnerShadow>
+                     </effect>
+                  </ImageView>
+               </graphic>
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
          </children>
       </VBox>
-      <Button alignment="CENTER_LEFT" disable="true" mnemonicParsing="false" prefHeight="60.0" styleClass="btnIndex" text="Ajustes" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
-         <graphic>
-            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/settings.png" />
-               </image>
-               <effect>
-                  <InnerShadow choke="1.0">
-                     <color>
-                        <Color red="1.0" green="1.0" blue="1.0" />
-                     </color>
-                  </InnerShadow>
-               </effect>
-            </ImageView>
-         </graphic>
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
       <Label fx:id="lblClientName" contentDisplay="TOP" prefHeight="69.0" prefWidth="172.0" styleClass="clientName" text="Marco A. Romeros" textFill="#eeeeee" wrapText="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="5.0">
          <font>
             <Font name="SansSerif Regular" size="14.0" />
@@ -201,7 +226,7 @@
                      <children>
                         <ImageView fitHeight="199.0" fitWidth="198.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/admin-alt.png" />
+                              <Image url="@../images/usuario.png" />
                            </image>
                         </ImageView>
                      </children>
@@ -340,6 +365,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
+                  <Button mnemonicParsing="false" onAction="#ImportDatabase" prefHeight="40.0" prefWidth="280.0" styleClass="btnStock" text="Script de Migración Gastos" />
                </children>
             </VBox>
          </children>

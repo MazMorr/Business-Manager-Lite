@@ -20,11 +20,10 @@ public interface ExpenseService {
 
     boolean existsByExpenseId(Long investmentId);
 
-    Expense getByClientAndExpenseNameAndExpensePriceAndCurrencyAndAmountAndReceivedDateAndExpenseType(Client client, String expenseName, Double expensePrice, Currency currency, Integer amount, LocalDate receivedDate, String expenseType);
+    List<Expense> getExpenseListByExpenseNameAndExpensePriceAndCurrencyAndAmountAndReceivedDateAndExpenseTypeAndClientOrderByExpenseIdAsc(
+            String expenseName, Double expensePrice, Currency currency, Integer amount, LocalDate receivedDate, String expenseType, Client client);
 
     List<Expense> getAllExpensesByClientAndAmountGreaterThanZeroAndInvestmentType(Client client, String expenseType);
 
     List<Expense> getAllProductExpensesGreaterThanZeroByClient(Client client);
-
-    List<Expense> getAllExpensesByLeftAmountGreaterThanAndClient(Integer leftAmount, Client client);
 }

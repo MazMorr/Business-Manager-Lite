@@ -13,14 +13,20 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "Warehouse_Registry")
+@Table(name = "Warehouse_Registry", indexes = {
+        @Index(name = "idx_warehousereg_client", columnList = "client_id"),
+        @Index(name = "idx_warehousereg_datetime", columnList = "date"),
+        @Index(name = "idx_warehousereg_warehouse", columnList = "warehouse_name"),
+        @Index(name = "idx_warehousereg_product", columnList = "product_name")
+})
 public class WarehouseRegistry {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "client_id")
     private Client client;
 
     @Column(name = "registry_type")

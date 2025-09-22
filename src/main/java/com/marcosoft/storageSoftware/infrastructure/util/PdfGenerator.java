@@ -59,7 +59,7 @@ public class PdfGenerator {
             PdfFont boldFont = PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD);
 
             // Título
-            Paragraph title = new Paragraph("REPORTE DE BALANCE")
+            Paragraph title = new Paragraph("REPORTE DEL ESTADO DE RESULTADO")
                     .setFont(boldFont)
                     .setFontSize(20)
                     .setTextAlignment(TextAlignment.CENTER)
@@ -77,7 +77,7 @@ public class PdfGenerator {
             document.add(new Paragraph("\n"));
 
             // Ventas
-            document.add(new Paragraph("DETALLES DE VENTAS").setFont(boldFont).setFontSize(16));
+            document.add(new Paragraph("DETALLES DE INGRESOS").setFont(boldFont).setFontSize(16));
             addDataTable(document, request.getSalesData(), font, boldFont);
             document.add(new Paragraph("\n"));
 
@@ -96,8 +96,8 @@ public class PdfGenerator {
         table.setWidth(UnitValue.createPercentValue(100));
 
         for (String[] row : data) {
-            // Para filas que son encabezados principales (GANANCIAS, GASTOS, GANANCIA NETA)
-            if (row[0].equals("GANANCIAS") || row[0].equals("GASTOS") || row[0].equals("GANANCIA NETA")) {
+            // Para filas que son encabezados principales (INGRESOS, GASTOS, RESULTADO)
+            if (row[0].equals("INGRESOS") || row[0].equals("GASTOS") || row[0].equals("RESULTADO")) {
                 Cell headerCell = new Cell(1, 2) // Esta celda abarcará 1 fila y 2 columnas
                         .add(new Paragraph(row[0]))
                         .setFont(boldFont)

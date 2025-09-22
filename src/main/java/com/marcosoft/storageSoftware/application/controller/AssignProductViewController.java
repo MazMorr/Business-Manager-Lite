@@ -1,6 +1,6 @@
 package com.marcosoft.storageSoftware.application.controller;
 
-import com.marcosoft.storageSoftware.application.dto.UserLogged;
+import com.marcosoft.storageSoftware.infrastructure.util.UserLogged;
 import com.marcosoft.storageSoftware.domain.model.*;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.*;
 import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
@@ -41,16 +41,17 @@ public class AssignProductViewController {
 
     /**
      * Constructor for dependency injection.
-     * @param generalRegistryService the general registry service
-     * @param parseDataTypes the parse data types
-     * @param displayAlerts the display alerts
-     * @param inventoryService the inventory service
-     * @param userLogged the user logged
-     * @param warehouseService the warehouse service
-     * @param expenseService the investment service
-     * @param productService the product service
+     *
+     * @param generalRegistryService   the general registry service
+     * @param parseDataTypes           the parse data types
+     * @param displayAlerts            the display alerts
+     * @param inventoryService         the inventory service
+     * @param userLogged               the user logged
+     * @param warehouseService         the warehouse service
+     * @param expenseService           the investment service
+     * @param productService           the product service
      * @param warehouseRegistryService the warehouse registry service
-     * @param warehouseViewController the warehouse view controller
+     * @param warehouseViewController  the warehouse view controller
      */
     public AssignProductViewController(
             GeneralRegistryServiceImpl generalRegistryService, ParseDataTypes parseDataTypes, DisplayAlerts displayAlerts,
@@ -95,9 +96,9 @@ public class AssignProductViewController {
     }
 
     private void searchProduct() {
-        if(expenseService.existsByExpenseId(Long.parseLong(tfInvestment.getText()))){
+        if (expenseService.existsByExpenseId(Long.parseLong(tfInvestment.getText()))) {
             tfProduct.setText(expenseService.getExpenseById(Long.parseLong(tfInvestment.getText())).getExpenseName());
-        }else{
+        } else {
             clearFields();
         }
     }
@@ -115,14 +116,19 @@ public class AssignProductViewController {
         } else if (expenseService.getExpenseById(parseDataTypes.parseLong(tfInvestment.getText())).getAmount() == 0) {
             displayAlerts.showAlert("Este gasto ha sido completamente asignado, debe seleccionar otra o reasignar los productos de esta");
         } else {
-            tfAmount.setText(String.valueOf(expenseService.getExpenseById(
+            //aquí hay que usar el buyService
+            /*
+             tfAmount.setText(String.valueOf(expenseService.getExpenseById(
                     Long.parseLong(tfInvestment.getText())).getLeftAmount())
             );
+             */
+
         }
     }
 
     /**
      * Closes the assign investment window.
+     *
      * @param actionEvent the action event
      */
     @FXML
@@ -134,6 +140,7 @@ public class AssignProductViewController {
     /**
      * Handles the assignment of a product from an investment to a warehouse.
      * Validates fields, updates inventory and investment, and shows alerts in Spanish.
+     *
      * @param actionEvent the action event
      */
     @FXML
@@ -169,10 +176,10 @@ public class AssignProductViewController {
                 );
 
                 Inventory inventory;
-                if(inventoryService.existsByProductAndWarehouseAndClient(product,warehouse,client)){
+                if (inventoryService.existsByProductAndWarehouseAndClient(product, warehouse, client)) {
                     inventory = inventoryService.getByProductAndWarehouseAndClient(product, warehouse, client);
                     inventory.setAmount(inventory.getAmount() + amountToAssign);
-                }else{
+                } else {
                     inventory = new Inventory(
                             null,
                             product,
@@ -186,8 +193,12 @@ public class AssignProductViewController {
 
                 inventoryService.save(inventory);
 
-                int actualInvestmentAmount = expense.getLeftAmount() - amountToAssign;
-                expense.setLeftAmount(actualInvestmentAmount);
+                //Nuevamente, aquí hay que usar el buyService
+                /*
+                    int actualInvestmentAmount = expense.getLeftAmount() - amountToAssign;
+                    expense.setLeftAmount(actualInvestmentAmount);
+                 */
+
                 expenseService.save(expense);
 
 
@@ -204,7 +215,6 @@ public class AssignProductViewController {
 
                 warehouseViewController.initTreeTable();
                 warehouseViewController.initTableValues();
-                displayAlerts.showAlert("Producto asignado exitosamente");
                 clearFields();
             }
         } catch (NumberFormatException e) {

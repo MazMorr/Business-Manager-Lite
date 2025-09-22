@@ -15,107 +15,97 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="300.0" prefWidth="300.0" stylesheets="@../Styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.AssignProductViewController">
-   <children>
-      <VBox alignment="CENTER" layoutX="88.0" layoutY="87.0" prefHeight="200.0" prefWidth="338.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="10.0">
-         <children>
-            <HBox alignment="CENTER_LEFT" spacing="63.0">
-               <children>
-                  <Label text="ID Gasto">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                  </Label>
-                  <MenuButton fx:id="mbExpense" mnemonicParsing="false" prefWidth="150.0">
-                     <graphic>
-                        <TextField fx:id="tfInvestment" prefWidth="150.0" promptText="1er Paso" />
-                     </graphic>
-                     <padding>
-                        <Insets bottom="-4.0" left="-8.0" top="-4.0" />
-                     </padding>
-                  </MenuButton>
-               </children>
-            </HBox>
-            <HBox alignment="CENTER_LEFT" spacing="59.0">
-               <children>
-                  <Label text="Producto">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="tfProduct" alignment="CENTER" disable="true" opacity="0.99" prefWidth="150.0" promptText="Campo Informativo" />
-               </children>
-            </HBox>
-            <HBox alignment="CENTER_LEFT" spacing="60.0">
-               <children>
-                  <Label text="Cantidad">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                  </Label>
-                  <MenuButton mnemonicParsing="false" prefWidth="150.0">
-                     <graphic>
-                        <TextField fx:id="tfAmount" prefWidth="150.0" promptText="2do Paso" />
-                     </graphic>
-                     <padding>
-                        <Insets bottom="-4.0" left="-8.0" top="-4.0" />
-                     </padding>
-                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#assignAllProductAmount" text="Todos" />
-                     </items>
-                  </MenuButton>
-               </children>
-            </HBox>
-            <HBox alignment="CENTER_LEFT" spacing="63.0">
-               <children>
-                  <Label text="Almacén">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                  </Label>
-                  <MenuButton fx:id="mbWarehouse" mnemonicParsing="false" prefWidth="150.0">
-                     <graphic>
-                        <TextField fx:id="tfWarehouse" prefWidth="150.0" promptText="3er Paso" />
-                     </graphic>
-                     <padding>
-                        <Insets bottom="-4.0" left="-8.0" top="-4.0" />
-                     </padding>
-                  </MenuButton>
-               </children>
-            </HBox>
-            <Button defaultButton="true" mnemonicParsing="false" onAction="#assignProduct" prefHeight="40.0" prefWidth="296.0" text="Asignar Producto">
-               <graphic>
-                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
-                     <image>
-                        <Image url="@../images/enter.png" />
-                     </image>
-                     <effect>
+<AnchorPane prefHeight="300.0" prefWidth="300.0" stylesheets="@../Styles.css" xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.marcosoft.storageSoftware.application.controller.AssignProductViewController">
+    <VBox alignment="CENTER" layoutX="88.0" layoutY="87.0" prefHeight="200.0" prefWidth="338.0" spacing="10.0"
+          AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0"
+          AnchorPane.topAnchor="10.0">
+        <HBox alignment="CENTER_LEFT" spacing="63.0">
+            <Label text="ID Gasto">
+                <font>
+                    <Font name="System Bold" size="14.0"/>
+                </font>
+            </Label>
+            <MenuButton fx:id="mbExpense" mnemonicParsing="false" prefWidth="150.0">
+                <graphic>
+                    <TextField fx:id="tfInvestment" prefWidth="150.0" promptText="1er Paso"/>
+                </graphic>
+                <padding>
+                    <Insets bottom="-4.0" left="-8.0" top="-4.0"/>
+                </padding>
+            </MenuButton>
+        </HBox>
+        <HBox alignment="CENTER_LEFT" spacing="59.0">
+            <Label text="Producto">
+                <font>
+                    <Font name="System Bold" size="14.0"/>
+                </font>
+            </Label>
+            <TextField fx:id="tfProduct" alignment="CENTER" disable="true" opacity="0.99" prefWidth="150.0"
+                       promptText="Campo Informativo"/>
+        </HBox>
+        <HBox alignment="CENTER_LEFT" spacing="60.0">
+            <Label text="Cantidad">
+                <font>
+                    <Font name="System Bold" size="14.0"/>
+                </font>
+            </Label>
+            <MenuButton mnemonicParsing="false" prefWidth="150.0">
+                <graphic>
+                    <TextField fx:id="tfAmount" prefWidth="150.0" promptText="2do Paso"/>
+                </graphic>
+                <padding>
+                    <Insets bottom="-4.0" left="-8.0" top="-4.0"/>
+                </padding>
+                <items>
+                    <MenuItem mnemonicParsing="false" onAction="#assignAllProductAmount" text="Todos"/>
+                </items>
+            </MenuButton>
+        </HBox>
+        <HBox alignment="CENTER_LEFT" spacing="63.0">
+            <Label text="Almacén">
+                <font>
+                    <Font name="System Bold" size="14.0"/>
+                </font>
+            </Label>
+            <MenuButton fx:id="mbWarehouse" mnemonicParsing="false" prefWidth="150.0">
+                <graphic>
+                    <TextField fx:id="tfWarehouse" prefWidth="150.0" promptText="3er Paso"/>
+                </graphic>
+                <padding>
+                    <Insets bottom="-4.0" left="-8.0" top="-4.0"/>
+                </padding>
+            </MenuButton>
+        </HBox>
+        <Button defaultButton="true" mnemonicParsing="false" onAction="#assignProduct" prefHeight="40.0"
+                prefWidth="296.0" text="Asignar Producto">
+            <graphic>
+                <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
+                    <effect>
                         <InnerShadow choke="1.0" radius="68.5" width="255.0">
-                           <color>
-                              <Color red="1.0" green="1.0" blue="1.0" />
-                           </color>
+                            <color>
+                                <Color red="1.0" green="1.0" blue="1.0"/>
+                            </color>
                         </InnerShadow>
-                     </effect>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <Button mnemonicParsing="false" onAction="#goOut" prefHeight="40.0" prefWidth="294.0" text="Salir">
-               <graphic>
-                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
-                     <image>
-                        <Image url="@../images/leave.png" />
-                     </image>
-                     <effect>
+                    </effect>
+                    <Image url="@../images/enter.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button mnemonicParsing="false" onAction="#goOut" prefHeight="40.0" prefWidth="294.0" text="Salir">
+            <graphic>
+                <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
+                    <effect>
                         <InnerShadow choke="1.0" radius="68.5" width="255.0">
-                           <color>
-                              <Color red="1.0" green="1.0" blue="1.0" />
-                           </color>
+                            <color>
+                                <Color red="1.0" green="1.0" blue="1.0"/>
+                            </color>
                         </InnerShadow>
-                     </effect>
-                  </ImageView>
-               </graphic>
-            </Button>
-         </children>
-      </VBox>
-   </children>
+                    </effect>
+                    <Image url="@../images/leave.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+    </VBox>
 </AnchorPane>

@@ -11,6 +11,10 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "Warehouse", indexes = {
+        @Index(name = "idx_warehouse_client", columnList = "client_id"),
+        @Index(name = "idx_warehouse_name", columnList = "warehouse_name")
+})
 public class Warehouse {
 
     @Id
@@ -20,6 +24,7 @@ public class Warehouse {
     @Column(name="warehouse_name")
     private String warehouseName;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "client_id")
     private Client client;
 }

@@ -20,14 +20,8 @@ public class Configuration {
     @OneToOne
     private Client client;
 
-    @Column(name="window_mode", unique = true)
-    private Boolean windowMode;
-
-    @Column(name="dark_mode", unique = true)
-    private Boolean darkMode;
-
-    @Column(name="language", unique = true)
-    private String language;
+    @Column(name="logo_business_path", unique = true)
+    private String logoBusinessPath;
 
     @Column(name= "enabled_database_backup", unique = true)
     private Boolean enabledDatabaseBackup;

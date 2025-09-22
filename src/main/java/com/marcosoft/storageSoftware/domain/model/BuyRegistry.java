@@ -9,32 +9,33 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "Expense_Registry", indexes = {
-        @Index(name = "idx_expensereg_datetime", columnList = "date"),
+@Getter
+@Setter
+@Table(name = "Buy_Registry", indexes = {
+        @Index(name = "idx_buyreg_datetime", columnList = "date"),
+        @Index(name = "idx_buyreg_buy", columnList = "buy_id"),
 })
-public class ExpenseRegistry {
+public class BuyRegistry {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "expense_id", nullable = false)
-    private Long expenseId;
+    @Column(name = "buy_id", nullable = false)
+    private Long buyId;
 
-    @Column(name = "expense_name", nullable = false)
-    private String expenseName;
+    @Column(name = "buy_name", nullable = false)
+    private String buyName;
 
-    @Column(name = "expense_price", nullable = false)
-    private Double expensePrice;
+    @Column(name = "transaction_price", nullable = false)
+    private Double buyPrice;
 
     @Column(name = "currency_name")
     private String currency;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
-    @JoinColumn(name = "client_id")
+    @ManyToOne
+    @JoinColumn(name = "client_id") // This maps the foreign key column
     private Client client;
 
     @Column(name= "registry_type")

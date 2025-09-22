@@ -14,102 +14,93 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="330.0" prefWidth="300.0" stylesheets="@../Styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.WarningManagerViewController">
-   <children>
-      <VBox alignment="CENTER" layoutX="98.0" layoutY="97.0" prefHeight="200.0" prefWidth="338.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
-         <children>
-            <HBox alignment="CENTER_LEFT" spacing="69.0">
-               <children>
-                  <Label text="Producto">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                  </Label>
-                  <MenuButton fx:id="mbProduct" mnemonicParsing="false" prefWidth="150.0">
-                     <graphic>
-                        <TextField fx:id="tfProduct" alignment="CENTER" prefWidth="150.0" promptText="1. Seleccionar" />
-                     </graphic>
-                     <padding>
-                        <Insets bottom="-4.0" left="-8.0" top="-4.0" />
-                     </padding>
-                  </MenuButton>
-               </children>
-            </HBox>
-            <HBox alignment="CENTER_LEFT" spacing="73.0">
-               <children>
-                  <Label text="Almacén">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                  </Label>
-                  <MenuButton fx:id="mbWarehouse" mnemonicParsing="false" prefWidth="150.0">
-                     <graphic>
-                        <TextField fx:id="tfWarehouse" alignment="CENTER" disable="true" opacity="0.99" prefWidth="150.0" promptText="2. Seleccionar" />
-                     </graphic>
-                     <padding>
-                        <Insets bottom="-4.0" left="-8.0" top="-4.0" />
-                     </padding>
-                  </MenuButton>
-               </children>
-            </HBox>
-            <Label text="Cantidades">
-               <font>
-                  <Font name="System Bold" size="16.0" />
-               </font>
+<AnchorPane prefHeight="330.0" prefWidth="300.0" stylesheets="@../Styles.css" xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.marcosoft.storageSoftware.application.controller.WarningManagerViewController">
+    <VBox alignment="CENTER" layoutX="98.0" layoutY="97.0" prefHeight="200.0" prefWidth="338.0" spacing="10.0"
+          AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0"
+          AnchorPane.topAnchor="10.0">
+        <HBox alignment="CENTER_LEFT" spacing="69.0">
+            <Label text="Producto">
+                <font>
+                    <Font name="System Bold" size="14.0"/>
+                </font>
             </Label>
-            <HBox alignment="CENTER_LEFT" spacing="17.0">
-               <children>
-                  <Label text="Para Advertencia">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="tfWarning" alignment="CENTER" prefWidth="150.0" promptText="0" />
-               </children>
-            </HBox>
-            <HBox alignment="CENTER_LEFT" spacing="56.0">
-               <children>
-                  <Label text="Para Alerta">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="tfAlert" alignment="CENTER" prefWidth="150.0" promptText="0" />
-               </children>
-            </HBox>
-            <Button defaultButton="true" mnemonicParsing="false" onAction="#assignAlerts" prefHeight="40.0" prefWidth="296.0" text="Asignar Alertas">
-               <graphic>
-                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
-                     <image>
-                        <Image url="@../images/campana.png" />
-                     </image>
-                     <effect>
+            <MenuButton fx:id="mbProduct" mnemonicParsing="false" prefWidth="150.0">
+                <graphic>
+                    <TextField fx:id="tfProduct" alignment="CENTER" prefWidth="150.0"
+                               promptText="1. Seleccionar"/>
+                </graphic>
+                <padding>
+                    <Insets bottom="-4.0" left="-8.0" top="-4.0"/>
+                </padding>
+            </MenuButton>
+        </HBox>
+        <HBox alignment="CENTER_LEFT" spacing="73.0">
+            <Label text="Almacén">
+                <font>
+                    <Font name="System Bold" size="14.0"/>
+                </font>
+            </Label>
+            <MenuButton fx:id="mbWarehouse" mnemonicParsing="false" prefWidth="150.0">
+                <graphic>
+                    <TextField fx:id="tfWarehouse" alignment="CENTER" disable="true" opacity="0.99"
+                               prefWidth="150.0" promptText="2. Seleccionar"/>
+                </graphic>
+                <padding>
+                    <Insets bottom="-4.0" left="-8.0" top="-4.0"/>
+                </padding>
+            </MenuButton>
+        </HBox>
+        <Label text="Cantidades">
+            <font>
+                <Font name="System Bold" size="16.0"/>
+            </font>
+        </Label>
+        <HBox alignment="CENTER_LEFT" spacing="17.0">
+            <Label text="Para Advertencia">
+                <font>
+                    <Font name="System Bold" size="14.0"/>
+                </font>
+            </Label>
+            <TextField fx:id="tfWarning" alignment="CENTER" prefWidth="150.0" promptText="0"/>
+        </HBox>
+        <HBox alignment="CENTER_LEFT" spacing="56.0">
+            <Label text="Para Alerta">
+                <font>
+                    <Font name="System Bold" size="14.0"/>
+                </font>
+            </Label>
+            <TextField fx:id="tfAlert" alignment="CENTER" prefWidth="150.0" promptText="0"/>
+        </HBox>
+        <Button defaultButton="true" mnemonicParsing="false" onAction="#assignAlerts" prefHeight="40.0"
+                prefWidth="296.0" text="Asignar Alertas">
+            <graphic>
+                <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
+                    <effect>
                         <InnerShadow choke="1.0" radius="68.5" width="255.0">
-                           <color>
-                              <Color red="1.0" green="1.0" blue="1.0" />
-                           </color>
+                            <color>
+                                <Color red="1.0" green="1.0" blue="1.0"/>
+                            </color>
                         </InnerShadow>
-                     </effect>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <Button mnemonicParsing="false" onAction="#goOut" prefHeight="40.0" prefWidth="294.0" text="Salir">
-               <graphic>
-                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
-                     <image>
-                        <Image url="@../images/leave.png" />
-                     </image>
-                     <effect>
+                    </effect>
+                    <Image url="@../images/campana.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button mnemonicParsing="false" onAction="#goOut" prefHeight="40.0" prefWidth="294.0" text="Salir">
+            <graphic>
+                <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
+                    <effect>
                         <InnerShadow choke="1.0" radius="68.5" width="255.0">
-                           <color>
-                              <Color red="1.0" green="1.0" blue="1.0" />
-                           </color>
+                            <color>
+                                <Color red="1.0" green="1.0" blue="1.0"/>
+                            </color>
                         </InnerShadow>
-                     </effect>
-                  </ImageView>
-               </graphic>
-            </Button>
-         </children>
-      </VBox>
-   </children>
+                    </effect>
+                    <Image url="@../images/leave.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+    </VBox>
 </AnchorPane>

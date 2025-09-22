@@ -1,6 +1,6 @@
 package com.marcosoft.storageSoftware.application.controller;
 
-import com.marcosoft.storageSoftware.application.dto.UserLogged;
+import com.marcosoft.storageSoftware.infrastructure.util.UserLogged;
 import com.marcosoft.storageSoftware.domain.model.Client;
 import com.marcosoft.storageSoftware.infrastructure.security.LicenseValidator;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceImpl;
@@ -89,8 +89,6 @@ public class LoginViewController {
                 return;
             }
 
-            // Mark client as active in the database
-            clientService.updateIsClientActiveByClientName(true, username);
             userLogged.setName(username);
 
             // Load the support view
@@ -111,7 +109,6 @@ public class LoginViewController {
             // Handle window close event
             stage.setOnCloseRequest(e -> {
                 if (showExitAlert()) {
-                    clientService.updateIsClientActiveByClientName(false, username);
                     stage.close();
                 } else {
                     e.consume();
@@ -169,13 +166,6 @@ public class LoginViewController {
      */
     @FXML
     public void initialize() {
-        Platform.runLater(() -> {
-            // Close any previous active client session
-            if (clientService.existsByIsClientActive(true)) {
-                clientService.updateIsClientActiveByClientName(false,
-                        clientService.getByIsClientActive(true).getClientName());
-            }
-            clearFields();
-        });
+        Platform.runLater(this::clearFields);
     }
 }

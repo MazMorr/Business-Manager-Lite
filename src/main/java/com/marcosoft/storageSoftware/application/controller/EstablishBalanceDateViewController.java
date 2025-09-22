@@ -19,7 +19,7 @@ public class EstablishBalanceDateViewController {
     private DatePicker dpStartDate, dpEndDate;
 
     @FXML
-    private void initialize(){
+    private void initialize() {
         dpStartDate.setValue(BalanceViewController.getStartDate());
         dpEndDate.setValue(BalanceViewController.getEndDate());
     }

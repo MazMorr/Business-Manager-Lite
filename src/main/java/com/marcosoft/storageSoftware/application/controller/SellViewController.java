@@ -1,7 +1,8 @@
 package com.marcosoft.storageSoftware.application.controller;
 
 import com.marcosoft.storageSoftware.application.dto.SellDataTable;
-import com.marcosoft.storageSoftware.application.dto.UserLogged;
+import com.marcosoft.storageSoftware.application.dto.SellFilterCriteria;
+import com.marcosoft.storageSoftware.infrastructure.util.UserLogged;
 import com.marcosoft.storageSoftware.domain.model.*;
 import com.marcosoft.storageSoftware.domain.model.Currency;
 import com.marcosoft.storageSoftware.domain.service.WarehouseService;
@@ -79,8 +80,10 @@ public class SellViewController {
     // FXML UI components
     @FXML
     private TextField tfSellProductCurrency, tfMinFilterAmount, tfMaxFilterAmount, tfAssignPriceProductPrice,
-            tfSellProductAmount, tfFilterProductName, tfSellProductPrice, tfMinFilterPrice, tfSellProductName,
-            tfMaxFilterPrice, tfFilterWarehouseName, tfAssignPriceCurrency, tfAssignPriceProductName, tfSellWarehouse;
+            tfSellProductAmount, tfFilterProductName, tfSellProductPrice, tfMinFilterPrice,
+            tfMaxFilterPrice, tfFilterWarehouseName, tfAssignPriceCurrency, tfAssignPriceProductName;
+    @FXML
+    protected TextField tfSellProductName, tfSellWarehouse;
     @FXML
     private MenuButton mbAssignPriceCurrency, mbSellCurrency, mbSellWarehouse, mbSellProduct;
     @FXML
@@ -88,7 +91,7 @@ public class SellViewController {
     @FXML
     private DatePicker dpSellProductDate;
     @FXML
-    private TreeTableView<SellDataTable> ttvInventory;
+    protected TreeTableView<SellDataTable> ttvInventory;
     @FXML
     private TreeTableColumn<SellDataTable, String> ttcWarehouse, ttcProductName, ttcSellPrice;
     @FXML
@@ -101,10 +104,10 @@ public class SellViewController {
         client = userLogged.getClient();
         lblClientName.setText(client.getClientName());
         precacheData();
+        setupTableColumns();
+        loadProductTable();
 
         Platform.runLater(() -> {
-            setupTableColumns();
-            loadProductTable();
             setupFilterListeners();
             setupMbListeners();
             initDatePicker();
@@ -357,35 +360,39 @@ public class SellViewController {
         });
     }
 
-
     @FXML
     private void switchToConfiguration(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/configurationView.fxml");
+        sceneSwitcher.switchToConfiguration(actionEvent);
     }
 
     @FXML
     private void switchToSupport(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/supportView.fxml");
+        sceneSwitcher.switchToSupport(actionEvent);
     }
 
     @FXML
     private void switchToRegistry(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/registryView.fxml");
+        sceneSwitcher.switchToRegistry(actionEvent);
     }
 
     @FXML
     private void switchToWarehouse(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/warehouseView.fxml");
+        sceneSwitcher.switchToWarehouse(actionEvent);
     }
 
     @FXML
     private void switchToExpense(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/expenseView.fxml");
+        sceneSwitcher.switchToExpense(actionEvent);
     }
 
     @FXML
     private void switchToBalance(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/balanceView.fxml");
+        sceneSwitcher.switchToBalance(actionEvent);
+    }
+
+    @FXML
+    public void switchToBuy(ActionEvent actionEvent) {
+        sceneSwitcher.switchToBuy(actionEvent);
     }
 
     private void setupTableColumns() {

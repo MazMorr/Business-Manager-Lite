@@ -1,4 +1,4 @@
-package com.marcosoft.storageSoftware.application.dto;
+package com.marcosoft.storageSoftware.infrastructure.util;
 
 import com.marcosoft.storageSoftware.domain.model.Client;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceImpl;

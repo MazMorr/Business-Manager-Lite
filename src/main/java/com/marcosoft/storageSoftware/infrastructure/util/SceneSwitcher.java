@@ -197,12 +197,59 @@ public class SceneSwitcher {
     }
 
     public static class WindowLoadException extends Exception {
-        public WindowLoadException(String message) {
-            super(message);
-        }
-
         public WindowLoadException(String message, Throwable cause) {
             super(message, cause);
         }
+    }
+
+
+    /**
+     * Switch to configuration.
+     */
+    public void switchToConfiguration(ActionEvent actionEvent) {
+        switchView(actionEvent, "/views/configurationView.fxml");
+    }
+
+    public void switchToBuy(ActionEvent actionEvent) {
+        switchView(actionEvent, "/views/buyView.fxml");
+    }
+
+    /**
+     * Switch to support.
+     */
+    public void switchToSupport(ActionEvent actionEvent) {
+        switchView(actionEvent, "/views/supportView.fxml");
+    }
+
+    /**
+     * Switch to registry.
+     */
+    public void switchToRegistry(ActionEvent actionEvent) {
+        switchView(actionEvent, "/views/logsView.fxml");
+    }
+
+    /**
+     * Switch to warehouse.
+     */
+    public void switchToWarehouse(ActionEvent actionEvent) {
+        switchView(actionEvent, "/views/warehouseView.fxml");
+    }
+
+    /**
+     * Switch to balance.
+     */
+    public void switchToBalance(ActionEvent actionEvent) {
+        switchView(actionEvent, "/views/balanceView.fxml");
+    }
+
+    /**
+     * Switch to sell.
+     */
+    public void switchToSell(ActionEvent actionEvent) {
+        switchView(actionEvent, "/views/sellView.fxml");
+    }
+
+    public void switchToExpense(ActionEvent actionEvent) {
+        switchView(actionEvent, "/views/expenseView.fxml");
     }
 }

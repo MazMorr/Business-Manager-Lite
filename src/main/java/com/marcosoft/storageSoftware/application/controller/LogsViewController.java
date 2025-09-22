@@ -8,6 +8,7 @@ import com.marcosoft.storageSoftware.infrastructure.service.impl.SellRegistrySer
 import com.marcosoft.storageSoftware.infrastructure.service.impl.WarehouseRegistryServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
 import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
+import com.marcosoft.storageSoftware.infrastructure.util.UserLogged;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,7 +24,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
-public class RegistryViewController {
+public class LogsViewController {
 
     ObservableList<GeneralRegistryDataTable> generalRegistryDataTables;
     ObservableList<ExpenseRegistryDataTable> expenseRegistryDataTables;
@@ -41,7 +42,7 @@ public class RegistryViewController {
     private final ExpenseRegistryServiceImpl expenseRegistryService;
     private final DisplayAlerts displayAlerts;
 
-    public RegistryViewController(
+    public LogsViewController(
             ExpenseRegistryServiceImpl expenseRegistryService, SellRegistryServiceImpl sellRegistryService,
             GeneralRegistryServiceImpl generalRegistryService, WarehouseRegistryServiceImpl warehouseRegistryService,
             UserLogged userLogged, SceneSwitcher sceneSwitcher, DisplayAlerts displayAlerts
@@ -143,7 +144,7 @@ public class RegistryViewController {
     }
 
     @FXML
-    private void cleanDatePickers(){
+    private void cleanDatePickers() {
         dpExpenseFilter.setValue(null);
         dpSellFilter.setValue(null);
         dpWarehouseFilter.setValue(null);
@@ -323,7 +324,7 @@ public class RegistryViewController {
             for (ExpenseRegistry expenseRegistry : investmentRegistries) {
                 // Formatear el precio y moneda
                 String priceCurrency = String.format("%.2f %s",
-                        expenseRegistry.getInvestmentPrice(),
+                        expenseRegistry.getExpensePrice(),
                         expenseRegistry.getCurrency());
                 LocalDate dpExpenseValue = dpExpenseFilter.getValue();
 
@@ -332,8 +333,8 @@ public class RegistryViewController {
                         expenseRegistryDataTables.add(new ExpenseRegistryDataTable(
                                 expenseRegistry.getRegistryType(),
                                 expenseRegistry.getRegistryDateTime(),
-                                expenseRegistry.getInvestmentId(),
-                                expenseRegistry.getInvestmentName(),
+                                expenseRegistry.getExpenseId(),
+                                expenseRegistry.getExpenseName(),
                                 priceCurrency
                         ));
                     }
@@ -341,8 +342,8 @@ public class RegistryViewController {
                     expenseRegistryDataTables.add(new ExpenseRegistryDataTable(
                             expenseRegistry.getRegistryType(),
                             expenseRegistry.getRegistryDateTime(),
-                            expenseRegistry.getInvestmentId(),
-                            expenseRegistry.getInvestmentName(),
+                            expenseRegistry.getExpenseId(),
+                            expenseRegistry.getExpenseName(),
                             priceCurrency
                     ));
                 }
@@ -376,32 +377,37 @@ public class RegistryViewController {
     }
 
     @FXML
-    public void switchToConfiguration(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/configurationView.fxml");
+    private void switchToConfiguration(ActionEvent actionEvent) {
+        sceneSwitcher.switchToConfiguration(actionEvent);
     }
 
     @FXML
-    public void switchToSupport(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/supportView.fxml");
+    private void switchToSupport(ActionEvent actionEvent) {
+        sceneSwitcher.switchToSupport(actionEvent);
     }
 
     @FXML
-    public void switchToExpense(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/expenseView.fxml");
+    private void switchToExpense(ActionEvent actionEvent) {
+        sceneSwitcher.switchToExpense(actionEvent);
     }
 
     @FXML
-    public void switchToWarehouse(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/warehouseView.fxml");
+    private void switchToWarehouse(ActionEvent actionEvent) {
+        sceneSwitcher.switchToWarehouse(actionEvent);
     }
 
     @FXML
-    public void switchToBalance(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/balanceView.fxml");
+    private void switchToBalance(ActionEvent actionEvent) {
+        sceneSwitcher.switchToBalance(actionEvent);
     }
 
     @FXML
-    public void switchToSell(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/sellView.fxml");
+    public void switchToBuy(ActionEvent actionEvent) {
+        sceneSwitcher.switchToBuy(actionEvent);
+    }
+
+    @FXML
+    private void switchToSell(ActionEvent actionEvent) {
+        sceneSwitcher.switchToSell(actionEvent);
     }
 }

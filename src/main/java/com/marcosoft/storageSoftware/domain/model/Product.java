@@ -14,7 +14,10 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "Product")
+@Table(name = "Product", indexes = {
+        @Index(name = "idx_product_client", columnList = "client_id"),
+        @Index(name = "idx_product_name", columnList = "product_name")
+})
 public class Product {
 
     @Id
@@ -27,7 +30,8 @@ public class Product {
     @Column(name = "sell_price")
     private Double sellPrice;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "client_id")
     private Client client;
 
     @ManyToOne

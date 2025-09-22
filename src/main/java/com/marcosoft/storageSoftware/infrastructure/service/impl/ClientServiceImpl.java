@@ -75,17 +75,6 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Client getByIsClientActive(Boolean isActive) {
-        return clientRepository.findByIsClientActive(isActive);
-    }
-
-    @Override
-    public void updateIsClientActiveByClientName(Boolean isActive, String name) {
-        clientRepository.updateIsClientActiveByClientName(isActive, name);
-    }
-
-
-    @Override
     public Client authenticate(String clientName, String clientPassword) {
         if (clientName == null || clientPassword == null || clientName.isBlank() || clientPassword.isBlank()) {
             displayAlerts.showError("Nombre de cliente o contraseña no pueden estar vacíos");
@@ -117,10 +106,5 @@ public class ClientServiceImpl implements ClientService {
         client.setLastDateTime(now);
 
         return client;
-    }
-
-    @Override
-    public boolean existsByIsClientActive(Boolean isClientActive) {
-        return clientRepository.existsByIsClientActive(isClientActive);
     }
 }

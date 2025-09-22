@@ -2,7 +2,7 @@ package com.marcosoft.storageSoftware.infrastructure.util;
 
 import com.marcosoft.storageSoftware.domain.model.Inventory;
 import com.marcosoft.storageSoftware.domain.model.Product;
-import com.marcosoft.storageSoftware.domain.model.SellFilterCriteria;
+import com.marcosoft.storageSoftware.application.dto.SellFilterCriteria;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 

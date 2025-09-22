@@ -1,6 +1,6 @@
 package com.marcosoft.storageSoftware.application.controller;
 
-import com.marcosoft.storageSoftware.application.dto.UserLogged;
+import com.marcosoft.storageSoftware.infrastructure.util.UserLogged;
 import com.marcosoft.storageSoftware.domain.model.Client;
 import com.marcosoft.storageSoftware.domain.model.Currency;
 import com.marcosoft.storageSoftware.domain.model.Expense;
@@ -54,6 +54,7 @@ public class BalanceViewController {
     private final PdfGenerator pdfGenerator;
     private final ExcelGenerator excelGenerator;
     private final DisplayAlerts displayAlerts;
+
 
     public BalanceViewController(
             UserLogged userLogged, SceneSwitcher sceneSwitcher, ExpenseServiceImpl expenseService,
@@ -194,6 +195,7 @@ public class BalanceViewController {
         return new LocalDate[]{startDate, endDate};
     }
 
+
     // Nuevas clases de apoyo
     @Getter
     private static class DateRangeOption {
@@ -278,33 +280,38 @@ public class BalanceViewController {
     }
 
     @FXML
-    public void switchToWarehouse(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/warehouseView.fxml");
+    private void switchToWarehouse(ActionEvent actionEvent) {
+        sceneSwitcher.switchToWarehouse(actionEvent);
     }
 
     @FXML
-    public void switchToSell(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/sellView.fxml");
+    private void switchToSell(ActionEvent actionEvent) {
+        sceneSwitcher.switchToSell(actionEvent);
     }
 
     @FXML
-    public void switchToConfiguration(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/configurationView.fxml");
+    private void switchToConfiguration(ActionEvent actionEvent) {
+        sceneSwitcher.switchToConfiguration(actionEvent);
     }
 
     @FXML
-    public void switchToExpense(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/expenseView.fxml");
+    private void switchToExpense(ActionEvent actionEvent) {
+        sceneSwitcher.switchToExpense(actionEvent);
     }
 
     @FXML
-    public void switchToSupport(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/supportView.fxml");
+    private void switchToSupport(ActionEvent actionEvent) {
+        sceneSwitcher.switchToSupport(actionEvent);
     }
 
     @FXML
-    public void switchToRegistry(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/registryView.fxml");
+    private void switchToRegistry(ActionEvent actionEvent) {
+        sceneSwitcher.switchToRegistry(actionEvent);
+    }
+
+    @FXML
+    public void switchToBuy(ActionEvent actionEvent) {
+        sceneSwitcher.switchToBuy(actionEvent);
     }
 
     @FXML
@@ -347,9 +354,9 @@ public class BalanceViewController {
         // Usa la nueva interfaz StyleApplier
         StyleApplier summaryStyleApplier = (cell, rowData, styles) -> {
             if (rowData.length > 0 &&
-                    (rowData[0].equals("GANANCIAS") ||
+                    (rowData[0].equals("INGRESOS") ||
                             rowData[0].equals("GASTOS") ||
-                            rowData[0].equals("GANANCIA NETA"))) {
+                            rowData[0].equals("RESULTADOS"))) {
                 cell.setCellStyle(styles.get("header"));
             }
         };
@@ -396,9 +403,9 @@ public class BalanceViewController {
                 new String[]{"Cliente:", client.getClientName()},
                 new String[]{"Rango de Fechas:", startDate + " - " + endDate},
                 new String[]{"", ""}, // Fila vacía como separador
-                new String[]{"GANANCIAS", ""}, // Encabezado principal
-                new String[]{"Ganancia por Productos:", lblProductProfit.getText()},
-                new String[]{"Total de Ganancias:", lblTotalProfit.getText()},
+                new String[]{"INGRESOS", ""}, // Encabezado principal
+                new String[]{"Ingresos por Productos:", lblProductProfit.getText()},
+                new String[]{"Total de Ingresos:", lblTotalProfit.getText()},
                 new String[]{"", ""}, // Fila vacía como separador
                 new String[]{"GASTOS", ""}, // Encabezado principal
                 new String[]{"Alquiler:", lblRentExpense.getText()},
@@ -408,14 +415,15 @@ public class BalanceViewController {
                 new String[]{"Servicios:", lblServiceExpense.getText()},
                 new String[]{"Total de Gastos:", lblTotalExpense.getText()},
                 new String[]{"", ""}, // Fila vacía como separador
-                new String[]{"GANANCIA NETA", lblNetUtilityNumber.getText()} // Encabezado principal
+                new String[]{"RESULTADO", lblNetUtilityNumber.getText()} // Encabezado principal
         );
     }
+
     private List<String[]> getSummaryDataForPDF() {
         return List.of(
-                new String[]{"GANANCIAS", ""}, // Encabezado principal
-                new String[]{"Ganancia por Productos:", lblProductProfit.getText()},
-                new String[]{"Total de Ganancias:", lblTotalProfit.getText()},
+                new String[]{"INGRESOS", ""}, // Encabezado principal
+                new String[]{"Ingresos por Productos:", lblProductProfit.getText()},
+                new String[]{"Total de Ingresos:", lblTotalProfit.getText()},
                 new String[]{"GASTOS", ""}, // Encabezado principal
                 new String[]{"Alquiler:", lblRentExpense.getText()},
                 new String[]{"Salarios:", lblSalaryExpense.getText()},
@@ -423,8 +431,8 @@ public class BalanceViewController {
                 new String[]{"Productos:", lblProductExpense.getText()},
                 new String[]{"Servicios:", lblServiceExpense.getText()},
                 new String[]{"Total de Gastos:", lblTotalExpense.getText()},
-                new String[]{"GANANCIA NETA", ""},
-                new String[]{"Ganancia Neta:", lblNetUtilityNumber.getText()}
+                new String[]{"RESULTADO", ""},
+                new String[]{"Resultado:", lblNetUtilityNumber.getText()}
         );
     }
 

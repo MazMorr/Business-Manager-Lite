@@ -14,90 +14,80 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="300.0" prefWidth="300.0" stylesheets="@../Styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.CurrencyValuesViewController">
-   <children>
-      <VBox alignment="CENTER" layoutX="98.0" layoutY="97.0" prefHeight="200.0" prefWidth="338.0" spacing="10.0" styleClass="filter-background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <HBox alignment="CENTER_LEFT" spacing="50.0">
-               <children>
-                  <Label text="USD en CUP">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="tfUSDtoCUP" alignment="CENTER" prefWidth="150.0" />
-               </children>
-            </HBox>
-            <HBox alignment="CENTER_LEFT" spacing="49.0">
-               <children>
-                  <Label text="MLC en CUP">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="tfMLCtoCUP" alignment="CENTER" prefWidth="150.0" />
-               </children>
-            </HBox>
-            <HBox alignment="CENTER_LEFT" spacing="52.0">
-               <children>
-                  <Label text="EUR en CUP">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="tfEURtoCUP" alignment="CENTER" prefWidth="150.0" />
-               </children>
-            </HBox>
-            <Button defaultButton="true" mnemonicParsing="false" onAction="#updateCurrencyValues" prefHeight="40.0" prefWidth="296.0" text="Actualizar Valores">
-               <graphic>
-                  <ImageView fitHeight="30.0" fitWidth="35.0" pickOnBounds="true">
-                     <image>
-                        <Image url="@../images/moneda-de-dinero.png" />
-                     </image>
-                     <effect>
+<AnchorPane prefHeight="300.0" prefWidth="300.0" stylesheets="@../Styles.css" xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.marcosoft.storageSoftware.application.controller.CurrencyValuesViewController">
+    <VBox alignment="CENTER" layoutX="98.0" layoutY="97.0" prefHeight="200.0" prefWidth="338.0" spacing="10.0"
+          styleClass="filter-background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+          AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <HBox alignment="CENTER_LEFT" spacing="50.0">
+            <Label text="USD en CUP">
+                <font>
+                    <Font name="System Bold" size="14.0"/>
+                </font>
+            </Label>
+            <TextField fx:id="tfUSDtoCUP" alignment="CENTER" prefWidth="150.0"/>
+        </HBox>
+        <HBox alignment="CENTER_LEFT" spacing="49.0">
+            <Label text="MLC en CUP">
+                <font>
+                    <Font name="System Bold" size="14.0"/>
+                </font>
+            </Label>
+            <TextField fx:id="tfMLCtoCUP" alignment="CENTER" prefWidth="150.0"/>
+        </HBox>
+        <HBox alignment="CENTER_LEFT" spacing="52.0">
+            <Label text="EUR en CUP">
+                <font>
+                    <Font name="System Bold" size="14.0"/>
+                </font>
+            </Label>
+            <TextField fx:id="tfEURtoCUP" alignment="CENTER" prefWidth="150.0"/>
+        </HBox>
+        <Button defaultButton="true" mnemonicParsing="false" onAction="#updateCurrencyValues" prefHeight="40.0"
+                prefWidth="296.0" text="Actualizar Valores">
+            <graphic>
+                <ImageView fitHeight="30.0" fitWidth="35.0" pickOnBounds="true">
+                    <effect>
                         <InnerShadow choke="1.0" radius="68.5" width="255.0">
-                           <color>
-                              <Color red="1.0" green="1.0" blue="1.0" />
-                           </color>
+                            <color>
+                                <Color red="1.0" green="1.0" blue="1.0"/>
+                            </color>
                         </InnerShadow>
-                     </effect>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <HBox alignment="CENTER_LEFT" spacing="55.0">
-               <children>
-                  <Label text="Balance en:">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                  </Label>
-                  <MenuButton fx:id="mbCurrency" mnemonicParsing="false" prefWidth="150.0">
-                     <graphic>
-                        <TextField fx:id="tfCurrency" alignment="CENTER" disable="true" opacity="0.99" prefWidth="150.0" />
-                     </graphic>
-                     <padding>
-                        <Insets bottom="-4.0" left="-8.0" top="-4.0" />
-                     </padding>
-                  </MenuButton>
-               </children>
-            </HBox>
-            <Button mnemonicParsing="false" onAction="#goOut" prefHeight="40.0" prefWidth="294.0" text="Salir">
-               <graphic>
-                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
-                     <image>
-                        <Image url="@../images/leave.png" />
-                     </image>
-                     <effect>
+                    </effect>
+                    <Image url="@../images/moneda-de-dinero.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+        <HBox alignment="CENTER_LEFT" spacing="55.0">
+            <Label text="Balance en:">
+                <font>
+                    <Font name="System Bold" size="14.0"/>
+                </font>
+            </Label>
+            <MenuButton fx:id="mbCurrency" mnemonicParsing="false" prefWidth="150.0">
+                <graphic>
+                    <TextField fx:id="tfCurrency" alignment="CENTER" disable="true" opacity="0.99"
+                               prefWidth="150.0"/>
+                </graphic>
+                <padding>
+                    <Insets bottom="-4.0" left="-8.0" top="-4.0"/>
+                </padding>
+            </MenuButton>
+        </HBox>
+        <Button mnemonicParsing="false" onAction="#goOut" prefHeight="40.0" prefWidth="294.0" text="Salir">
+            <graphic>
+                <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
+                    <effect>
                         <InnerShadow choke="1.0" radius="68.5" width="255.0">
-                           <color>
-                              <Color red="1.0" green="1.0" blue="1.0" />
-                           </color>
+                            <color>
+                                <Color red="1.0" green="1.0" blue="1.0"/>
+                            </color>
                         </InnerShadow>
-                     </effect>
-                  </ImageView>
-               </graphic>
-            </Button>
-         </children>
-      </VBox>
-   </children>
+                    </effect>
+                    <Image url="@../images/leave.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+    </VBox>
 </AnchorPane>

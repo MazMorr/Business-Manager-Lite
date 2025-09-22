@@ -18,11 +18,6 @@ public interface ClientService {
 
     Client authenticate(String clientName, String clientPassword);
 
-    Client getByIsClientActive(Boolean isActive);
-
-    void updateIsClientActiveByClientName(Boolean isActive, String name);
-
     boolean verifyCredentials(String clientName, String rawPassword);
 
-    boolean existsByIsClientActive(Boolean isClientActive);
 }

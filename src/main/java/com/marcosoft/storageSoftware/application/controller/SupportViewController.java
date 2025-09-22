@@ -1,6 +1,6 @@
 package com.marcosoft.storageSoftware.application.controller;
 
-import com.marcosoft.storageSoftware.application.dto.UserLogged;
+import com.marcosoft.storageSoftware.infrastructure.util.UserLogged;
 import com.marcosoft.storageSoftware.domain.model.Client;
 import com.marcosoft.storageSoftware.domain.model.Currency;
 import com.marcosoft.storageSoftware.infrastructure.security.LicenseValidator;
@@ -12,6 +12,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
@@ -33,24 +34,18 @@ public class SupportViewController {
     private final DisplayAlerts displayAlerts;
     private final SceneSwitcher sceneSwitcher;
     private final CurrencyServiceImpl currencyService;
+    private final Environment env;
 
-    /**
-     * Constructor for dependency injection.
-     *
-     * @param currencyService  the currency service
-     * @param sceneSwitcher    the scene switcher
-     * @param userLogged       the user logged
-     * @param licenseValidator the license validator
-     */
     public SupportViewController(
             CurrencyServiceImpl currencyService, SceneSwitcher sceneSwitcher,
-            UserLogged userLogged, LicenseValidator licenseValidator, DisplayAlerts displayAlerts
+            UserLogged userLogged, LicenseValidator licenseValidator, DisplayAlerts displayAlerts, Environment env
     ) {
         this.userLogged = userLogged;
         this.licenseValidator = licenseValidator;
         this.currencyService = currencyService;
         this.sceneSwitcher = sceneSwitcher;
         this.displayAlerts = displayAlerts;
+        this.env = env;
     }
 
     // FXML UI components
@@ -65,11 +60,9 @@ public class SupportViewController {
     private void initialize() {
         client = userLogged.getClient();
         lblClientName.setText(client.getClientName());
-
-        Platform.runLater(() -> {
-            initWelcomeLabels();
-            initCurrencyDefaultValues();
-        });
+        initWelcomeLabels();
+        
+        Platform.runLater(this::initCurrencyDefaultValues);
     }
 
     /**
@@ -111,7 +104,7 @@ public class SupportViewController {
             lblLicenseDays.setStyle("-fx-text-fill: #ff9b9b;");
         }
         lblLicenseDays.setText(daysRemaining + " Días");
-        versionLabel.setText("1.0.0");
+        versionLabel.setText(env.getProperty("app.version"));
         lblWelcomeTitle.setText("Bienvenid@, " + userLogged.getName());
         lblWelcome.setText(
                 """
@@ -128,48 +121,39 @@ public class SupportViewController {
         );
     }
 
-    /**
-     * Navigates to the registry view.
-     */
     @FXML
     private void switchToRegistry(ActionEvent event) {
-        sceneSwitcher.switchView(event, "/views/registryView.fxml");
+        sceneSwitcher.switchToRegistry(event);
     }
 
-    /**
-     * Navigates to the investment view.
-     */
     @FXML
     private void switchToExpense(ActionEvent event) {
-        sceneSwitcher.switchView(event, "/views/expenseView.fxml");
+        sceneSwitcher.switchToExpense(event);
     }
 
-    /**
-     * Navigates to the configuration view.
-     */
     @FXML
     private void switchToConfiguration(ActionEvent event) {
-        sceneSwitcher.switchView(event, "/views/configurationView.fxml");
+        sceneSwitcher.switchToConfiguration(event);
     }
 
-    /**
-     * Navigates to the warehouse view.
-     *
-     * @param event the event
-     */
     @FXML
     public void switchToWarehouse(ActionEvent event) {
-        sceneSwitcher.switchView(event, "/views/warehouseView.fxml");
+        sceneSwitcher.switchToWarehouse(event);
     }
 
     @FXML
     public void switchToBalance(ActionEvent event) {
-        sceneSwitcher.switchView(event, "/views/balanceView.fxml");
+        sceneSwitcher.switchToBalance(event);
     }
 
     @FXML
-    public void switchToInventory(ActionEvent event) {
-        sceneSwitcher.switchView(event, "/views/sellView.fxml");
+    public void switchToSell(ActionEvent event) {
+        sceneSwitcher.switchToSell(event);
+    }
+
+    @FXML
+    public void switchToBuy(ActionEvent actionEvent) {
+        sceneSwitcher.switchToBuy(actionEvent);
     }
 
     @FXML

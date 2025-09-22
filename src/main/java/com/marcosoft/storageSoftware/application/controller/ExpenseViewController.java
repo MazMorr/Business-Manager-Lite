@@ -1,12 +1,9 @@
 package com.marcosoft.storageSoftware.application.controller;
 
 import com.marcosoft.storageSoftware.application.dto.ExpenseDataTable;
-import com.marcosoft.storageSoftware.application.dto.UserLogged;
 import com.marcosoft.storageSoftware.domain.model.*;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.*;
-import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
-import com.marcosoft.storageSoftware.infrastructure.util.ParseDataTypes;
-import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
+import com.marcosoft.storageSoftware.infrastructure.util.*;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,8 +19,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -47,24 +42,13 @@ public class ExpenseViewController {
     private final DisplayAlerts displayAlerts;
     private final GeneralRegistryServiceImpl generalRegistryService;
     private final ProductServiceImpl productService;
+    private final BuyAndExpenseSharedMethods buyAndExpenseSharedMethods;
+    private final CleanHelper cleanHelper;
 
-    /**
-     * Instantiates a new Expense view controller.
-     *
-     * @param productService the product service
-     * @param generalRegistryService the general registry service
-     * @param displayAlerts the display alerts
-     * @param parseDataTypes the parse data types
-     * @param userLogged the user logged
-     * @param expenseService the expense service
-     * @param currencyService the currency service
-     * @param expenseRegistryService the expense registry service
-     * @param sceneSwitcher the scene switcher
-     */
     public ExpenseViewController(
             ProductServiceImpl productService, GeneralRegistryServiceImpl generalRegistryService, DisplayAlerts displayAlerts,
             ParseDataTypes parseDataTypes, UserLogged userLogged, ExpenseServiceImpl expenseService,
-            CurrencyServiceImpl currencyService, ExpenseRegistryServiceImpl expenseRegistryService, SceneSwitcher sceneSwitcher
+            CurrencyServiceImpl currencyService, ExpenseRegistryServiceImpl expenseRegistryService, SceneSwitcher sceneSwitcher, BuyAndExpenseSharedMethods buyAndExpenseSharedMethods, CleanHelper cleanHelper
     ) {
         this.currencyService = currencyService;
         this.productService = productService;
@@ -75,13 +59,15 @@ public class ExpenseViewController {
         this.expenseRegistryService = expenseRegistryService;
         this.userLogged = userLogged;
         this.parseDataTypes = parseDataTypes;
+        this.buyAndExpenseSharedMethods = buyAndExpenseSharedMethods;
+        this.cleanHelper = cleanHelper;
     }
 
     // FXML UI components
     @FXML
     private Label lblAddDebugForm, lblClientName;
     @FXML
-    private TextField tfAddProductName, tfAddProductAmount, tfId, tfAddExpensePrice, tfAddExpenseCurrency, tfAddExpenseType;
+    private TextField tfAddProductName, tfId, tfAddExpensePrice, tfAddExpenseCurrency, tfAddExpenseType;
     @Getter
     @FXML
     private TextField tfFilterId;
@@ -109,9 +95,12 @@ public class ExpenseViewController {
     @FXML
     public void initialize() {
         registryZone = "Gastos";
-        lblClientName.setText(userLogged.getName());
         client = userLogged.getClient();
+        lblClientName.setText(client.getClientName());
+        initializeTableColumns();
+        initializeTableValues();
         Platform.runLater(() -> {
+            initializeTableColumns();
             initializeTableValues();
             setupTextFieldListeners();
             setupTableSelectionListener();
@@ -120,6 +109,7 @@ public class ExpenseViewController {
             initMbExpenseTypeItemsOnAction();
         });
     }
+
 
     private void setupTextFieldListeners() {
         tfFilterId.textProperty().addListener((obs, oldVal, newVal) -> filterExpenseTable());
@@ -138,10 +128,14 @@ public class ExpenseViewController {
     private void setupTableSelectionListener() {
         tvExpense.getSelectionModel().selectedItemProperty().addListener((obs, oldSel, newSel) -> {
             if (newSel != null) {
+                if (newSel.getExpenseType().equals("Materias Primas y Materiales")) {
+                    displayAlerts.showAlert("Para modificar un producto de tipo *Materias Primas y Materiales* " +
+                            "debe dirigirse a la ventana de VENTAS y corregir las ventas realizadas");
+                    return;
+                }
                 Expense expense = expenseService.getExpenseById(newSel.getId());
                 tfId.setText(expense.getExpenseId() != null ? String.valueOf(expense.getExpenseId()) : "");
                 tfAddProductName.setText(expense.getExpenseName());
-                tfAddProductAmount.setText(expense.getAmount() != null ? String.valueOf(expense.getAmount()) : "");
                 tfAddExpensePrice.setText(expense.getExpensePrice() != null ? String.valueOf(expense.getExpensePrice()) : "");
                 tfAddExpenseCurrency.setText(expense.getCurrency().getCurrencyName());
                 tfAddExpenseType.setText(expense.getExpenseType());
@@ -160,9 +154,16 @@ public class ExpenseViewController {
         }
     }
 
-    /**
-     * Initialize table values.
-     */
+    private void initializeTableColumns() {
+        tcId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        tcExpenseName.setCellValueFactory(new PropertyValueFactory<>("expenseName"));
+        tcExpenseType.setCellValueFactory(new PropertyValueFactory<>("expenseType"));
+        tcPriceAndCurrency.setCellValueFactory(new PropertyValueFactory<>("priceAndCurrency"));
+        tcAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
+        tcDate.setCellValueFactory(new PropertyValueFactory<>("receivedDate"));
+
+    }
+
     public void initializeTableValues() {
         expenseList = FXCollections.observableArrayList();
         List<Expense> investmentsDB = expenseService.getAllExpensesByClient(client);
@@ -179,13 +180,6 @@ public class ExpenseViewController {
             ));
         }
 
-        tcId.setCellValueFactory(new PropertyValueFactory<>("id"));
-        tcExpenseName.setCellValueFactory(new PropertyValueFactory<>("expenseName"));
-        tcExpenseType.setCellValueFactory(new PropertyValueFactory<>("expenseType"));
-        tcPriceAndCurrency.setCellValueFactory(new PropertyValueFactory<>("priceAndCurrency"));
-        tcAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
-        tcDate.setCellValueFactory(new PropertyValueFactory<>("receivedDate"));
-
         tvExpense.setItems(expenseList);
         filterExpenseTable();
     }
@@ -199,15 +193,14 @@ public class ExpenseViewController {
             return;
         }
 
-        Long investmentId = parseDataTypes.parseLong(tfId.getText());
-        String investmentName = tfAddProductName.getText();
+        Long expenseId = parseDataTypes.parseLong(tfId.getText());
+        String expenseName = tfAddProductName.getText();
         Double price = parseDataTypes.parseDouble(tfAddExpensePrice.getText());
-        Integer amount = parseDataTypes.parseInt(tfAddProductAmount.getText());
         LocalDate receivedDate = dpAddExpenseDate.getValue();
         String currency = tfAddExpenseCurrency.getText();
-        String investmentType = tfAddExpenseType.getText();
+        String expenseType = tfAddExpenseType.getText();
         String registryType;
-        if (!expenseService.existsByExpenseId(investmentId)) {
+        if (!expenseService.existsByExpenseId(expenseId)) {
             registryType = "Adición";
         } else {
             registryType = "Actualización";
@@ -215,40 +208,28 @@ public class ExpenseViewController {
 
         //Add the expense to DB
         Expense expense = new Expense(
-                investmentId,
-                investmentName,
+                expenseId,
+                expenseName,
                 price,
                 currencyService.getCurrencyByName(currency),
-                amount,
-                amount,
+                null,
                 receivedDate,
-                investmentType,
+                expenseType,
                 client
         );
         expenseService.save(expense);
         initializeTableValues();
 
-        Expense inv = expenseService
-                .getByClientAndExpenseNameAndExpensePriceAndCurrencyAndAmountAndReceivedDateAndExpenseType(
-                        client, investmentName, price, currencyService.getCurrencyByName(currency), amount, receivedDate, investmentType
-                );
-
-        if (investmentType.equals("Producto") && !productService.existsByProductNameAndClient(investmentName, client)) {
-            Product product = new Product(
-                    null,
-                    investmentName,
-                    null,
-                    client,
-                    null
-            );
-            productService.save(product);
-        }
+        Expense expenseDBValue =
+                expenseService.getExpenseListByExpenseNameAndExpensePriceAndCurrencyAndAmountAndReceivedDateAndExpenseTypeAndClientOrderByExpenseIdAsc(
+                        expenseName, price, currencyService.getCurrencyByName(currency), null, receivedDate, expenseType, client
+                ).getLast();
 
         //Add the expense registry to DB
         ExpenseRegistry expenseRegistry = new ExpenseRegistry(
                 null,
-                inv.getExpenseId(),
-                investmentName,
+                expenseDBValue.getExpenseId(),
+                expenseName,
                 price,
                 currency,
                 client,
@@ -268,12 +249,10 @@ public class ExpenseViewController {
         generalRegistryService.save(generalRegistry);
 
         cleanForm();
-        updateCurrencyMenu();
     }
 
     private boolean validateAllFields() {
         if (tfAddProductName.getText().isEmpty() ||
-                tfAddProductAmount.getText().isEmpty() ||
                 tfAddExpenseType.getText().isEmpty() ||
                 tfAddExpensePrice.getText().isEmpty() ||
                 dpAddExpenseDate.getValue() == null) {
@@ -282,16 +261,11 @@ public class ExpenseViewController {
         }
 
         Double price = parseDataTypes.parseDouble(tfAddExpensePrice.getText());
-        Integer amount = parseDataTypes.parseInt(tfAddProductAmount.getText());
         String currency = tfAddExpenseCurrency.getText();
 
         // Additional validations
         if (price == null || price <= 0) {
             displayAlerts.showAlert("El precio debe ser un número positivo.");
-            return false;
-        }
-        if (amount == null || amount <= 0) {
-            displayAlerts.showAlert("La cantidad debe ser un número positivo y no puede contener coma ni puntos.");
             return false;
         }
         if (currency.isEmpty()) {
@@ -352,13 +326,11 @@ public class ExpenseViewController {
      */
     @FXML
     public void cleanForm() {
-        tfId.clear();
-        tfAddExpenseType.clear();
-        tfAddProductName.clear();
-        tfAddProductAmount.clear();
-        tfAddExpensePrice.clear();
+        List<TextField> textFieldList = List.of
+                (tfId, tfAddExpenseType, tfAddProductName, tfAddExpensePrice, tfAddExpenseCurrency);
+        cleanHelper.cleanTextFields(textFieldList);
+
         dpAddExpenseDate.setValue(LocalDate.now());
-        tfAddExpenseCurrency.clear();
     }
 
     /**
@@ -366,13 +338,10 @@ public class ExpenseViewController {
      */
     @FXML
     public void cleanFilters() {
-        tfFilterId.clear();
-        tfFilterName.clear();
-        tfMinFilterAmount.clear();
-        tfMaxFilterAmount.clear();
-        tfAddExpenseCurrency.clear();
-        tfMinFilterPrice.clear();
-        tfMaxFilterPrice.clear();
+        List<TextField> textFieldList = List.of(
+                tfFilterId, tfFilterName, tfMinFilterAmount, tfMaxFilterAmount, tfAddExpenseCurrency, tfMinFilterPrice,
+                tfMaxFilterPrice);
+        cleanHelper.cleanTextFields(textFieldList);
     }
 
     private void filterExpenseTable() {
@@ -380,8 +349,8 @@ public class ExpenseViewController {
         String name = tfFilterName.getText().trim().toLowerCase();
         Integer minAmount = parseDataTypes.parseInt(tfMinFilterAmount.getText());
         Integer maxAmount = parseDataTypes.parseInt(tfMaxFilterAmount.getText());
-        Double minPrice = parsePriceFromString(tfMinFilterPrice.getText());
-        Double maxPrice = parsePriceFromString(tfMaxFilterPrice.getText());
+        Double minPrice = buyAndExpenseSharedMethods.parsePriceFromString(tfMinFilterPrice.getText());
+        Double maxPrice = buyAndExpenseSharedMethods.parsePriceFromString(tfMaxFilterPrice.getText());
 
         Predicate<ExpenseDataTable> filter = expense -> {
             boolean matches = true;
@@ -401,12 +370,14 @@ public class ExpenseViewController {
 
             // Filtro para precio mínimo
             if (minPrice != null) {
-                matches &= parsePriceFromString(expense.getPriceAndCurrency()) != null && parsePriceFromString(expense.getPriceAndCurrency()) >= minPrice;
+                matches &= buyAndExpenseSharedMethods.parsePriceFromString(expense.getPriceAndCurrency()) != null &&
+                        buyAndExpenseSharedMethods.parsePriceFromString(expense.getPriceAndCurrency()) >= minPrice;
             }
 
             // Filtro para precio máximo
             if (maxPrice != null) {
-                matches &= parsePriceFromString(expense.getPriceAndCurrency()) != null && parsePriceFromString(expense.getPriceAndCurrency()) <= maxPrice;
+                matches &= buyAndExpenseSharedMethods.parsePriceFromString(expense.getPriceAndCurrency()) != null &&
+                        buyAndExpenseSharedMethods.parsePriceFromString(expense.getPriceAndCurrency()) <= maxPrice;
             }
             return matches;
         };
@@ -418,23 +389,6 @@ public class ExpenseViewController {
         tvExpense.setItems(filteredList);
     }
 
-    private Double parsePriceFromString(String priceText) {
-        if (priceText == null || priceText.isEmpty()) {
-            return null;
-        }
-
-        // Usar regex para encontrar el primer número (entero o decimal)
-        Matcher matcher = Pattern.compile("\\d+(?:\\.\\d+)?").matcher(priceText.trim());
-        if (matcher.find()) {
-            try {
-                return Double.parseDouble(matcher.group());
-            } catch (NumberFormatException e) {
-                return null;
-            }
-        }
-
-        return null;
-    }
 
     private void updateCurrencyMenu() {
         mbCurrency.getItems().clear();
@@ -452,64 +406,39 @@ public class ExpenseViewController {
         }
     }
 
-    /**
-     * Switch to configuration.
-     *
-     * @param actionEvent the action event
-     */
     @FXML
-    public void switchToConfiguration(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/configurationView.fxml");
+    private void switchToConfiguration(ActionEvent actionEvent) {
+        sceneSwitcher.switchToConfiguration(actionEvent);
     }
 
-    /**
-     * Switch to support.
-     *
-     * @param actionEvent the action event
-     */
     @FXML
-    public void switchToSupport(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/supportView.fxml");
+    public void switchToBuy(ActionEvent actionEvent) {
+        sceneSwitcher.switchToBuy(actionEvent);
     }
 
-    /**
-     * Switch to registry.
-     *
-     * @param actionEvent the action event
-     */
     @FXML
-    public void switchToRegistry(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/registryView.fxml");
+    private void switchToSupport(ActionEvent actionEvent) {
+        sceneSwitcher.switchToSupport(actionEvent);
     }
 
-    /**
-     * Switch to warehouse.
-     *
-     * @param actionEvent the action event
-     */
     @FXML
-    public void switchToWarehouse(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/warehouseView.fxml");
+    private void switchToRegistry(ActionEvent actionEvent) {
+        sceneSwitcher.switchToRegistry(actionEvent);
     }
 
-    /**
-     * Switch to balance.
-     *
-     * @param actionEvent the action event
-     */
     @FXML
-    public void switchToBalance(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/balanceView.fxml");
+    private void switchToWarehouse(ActionEvent actionEvent) {
+        sceneSwitcher.switchToWarehouse(actionEvent);
     }
 
-    /**
-     * Switch to sell.
-     *
-     * @param actionEvent the action event
-     */
     @FXML
-    public void switchToSell(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/sellView.fxml");
+    private void switchToBalance(ActionEvent actionEvent) {
+        sceneSwitcher.switchToBalance(actionEvent);
+    }
+
+    @FXML
+    private void switchToSell(ActionEvent actionEvent) {
+        sceneSwitcher.switchToSell(actionEvent);
     }
 
     private void initDpDefaultValue() {

@@ -1,14 +1,13 @@
 package com.marcosoft.storageSoftware;
 
-import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
 import com.marcosoft.storageSoftware.infrastructure.util.SpringFXMLLoader;
 import javafx.application.Application;
-import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -61,20 +60,57 @@ public class Main extends Application {
     private static ConfigurableApplicationContext context;
     public static SpringFXMLLoader springFXMLLoader;
     public static Stage primaryStage;
-    private static Scene scene;
-    private static DisplayAlerts displayAlerts;
-    private static HostServices hostServices;
 
     @Override
     public void start(Stage primaryStage) {
-        Main.primaryStage = primaryStage;
-        Main.hostServices = getHostServices();
+        try {
+            Main.primaryStage = primaryStage;
+            showLoadingScreen(primaryStage);
+            startSpringApplicationAsync();
+        } catch (Exception e) {
+            handleStartupError(e);
+        }
+    }
 
-        // 1. Mostrar pantalla de carga INMEDIATAMENTE
-        showLoadingScreen(primaryStage);
+    private void startSpringApplicationAsync() {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.submit(() -> {
+            try {
+                context = SpringApplication.run(Main.class);
+                springFXMLLoader = context.getBean(SpringFXMLLoader.class);
 
-        // 2. Iniciar Spring Boot en segundo plano
-        startSpringApplicationAsync();
+                Platform.runLater(() -> {
+                    try {
+                        loadMainInterface();
+                    } catch (Exception e) {
+                        handleStartupError(e);
+                    }
+                });
+
+            } catch (Exception e) {
+                // Manejar errores de Spring/BD en el hilo secundario
+                Platform.runLater(() -> handleSpringStartupError(e));
+            }
+        });
+        executor.shutdown();
+    }
+
+    private void handleStartupError(Exception e) {
+        e.printStackTrace();
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText("Ha ocurrido un error al iniciar la aplicación: ");
+        alert.setContentText(e.getMessage());
+        alert.showAndWait();
+        Platform.exit();
+    }
+
+    private void handleSpringStartupError(Exception e) {
+        e.printStackTrace();
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText("Ha ocurrido un error, seguramente haya abierto dos veces la aplicación");
+        alert.setContentText(e.getMessage());
+        alert.showAndWait();
+        Platform.exit();
     }
 
     private void showLoadingScreen(Stage stage) {
@@ -102,39 +138,12 @@ public class Main extends Application {
         stage.show();
     }
 
-    private void startSpringApplicationAsync() {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.submit(() -> {
-            // Iniciar Spring Boot
-            context = SpringApplication.run(Main.class);
-            springFXMLLoader = context.getBean(SpringFXMLLoader.class);
-
-            // Cuando Spring esté listo, cargar la interfaz principal
-            Platform.runLater(() -> {
-                try {
-                    loadMainInterface();
-                } catch (Exception e) {
-                    showErrorAndExit(e);
-                }
-            });
-        });
-        executor.shutdown();
-    }
-
     private void loadMainInterface() throws IOException {
         Parent root = springFXMLLoader.load("/views/loginView.fxml");
-        scene = new Scene(root);
+        Scene scene = new Scene(root);
         scene.setCursor(Cursor.DEFAULT);
         primaryStage.setScene(scene);
         primaryStage.centerOnScreen();
-    }
-
-
-
-    private void showErrorAndExit(Exception e) {
-        e.printStackTrace();
-        displayAlerts.showError("Error al cargar la aplicación");
-        Platform.exit();
     }
 
     @Override

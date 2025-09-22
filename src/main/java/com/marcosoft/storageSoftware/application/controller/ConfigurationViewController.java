@@ -1,6 +1,6 @@
 package com.marcosoft.storageSoftware.application.controller;
 
-import com.marcosoft.storageSoftware.application.dto.UserLogged;
+import com.marcosoft.storageSoftware.infrastructure.util.UserLogged;
 import com.marcosoft.storageSoftware.domain.model.Client;
 import com.marcosoft.storageSoftware.domain.model.Inventory;
 import com.marcosoft.storageSoftware.infrastructure.config.DatabaseManager;
@@ -29,7 +29,12 @@ import org.springframework.stereotype.Controller;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 import static com.marcosoft.storageSoftware.Main.springFXMLLoader;
 
@@ -73,9 +78,6 @@ public class ConfigurationViewController {
     @FXML
     void closeSession() {
         try {
-            // Marcar usuario como inactivo
-            clientService.updateIsClientActiveByClientName(false, client.getClientName());
-
             // Cerrar todas las ventanas de la aplicación
             closeAllWindows();
 
@@ -158,33 +160,38 @@ public class ConfigurationViewController {
     }
 
     @FXML
-    public void switchToSupport(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/supportView.fxml");
+    private void switchToSupport(ActionEvent actionEvent) {
+        sceneSwitcher.switchToSupport(actionEvent);
     }
 
     @FXML
-    public void switchToWarehouse(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/warehouseView.fxml");
+    private void switchToWarehouse(ActionEvent actionEvent) {
+        sceneSwitcher.switchToWarehouse(actionEvent);
     }
 
     @FXML
-    public void switchToRegistry(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/registryView.fxml");
+    private void switchToRegistry(ActionEvent actionEvent) {
+        sceneSwitcher.switchToRegistry(actionEvent);
     }
 
     @FXML
-    public void switchToBalance(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/balanceView.fxml");
+    private void switchToBalance(ActionEvent actionEvent) {
+        sceneSwitcher.switchToBalance(actionEvent);
     }
 
     @FXML
-    public void switchToExpense(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/expenseView.fxml");
+    private void switchToExpense(ActionEvent actionEvent) {
+        sceneSwitcher.switchToExpense(actionEvent);
     }
 
     @FXML
-    public void switchToSell(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/sellView.fxml");
+    private void switchToSell(ActionEvent actionEvent) {
+        sceneSwitcher.switchToSell(actionEvent);
+    }
+
+    @FXML
+    public void switchToBuy(ActionEvent actionEvent) {
+        sceneSwitcher.switchToBuy(actionEvent);
     }
 
     @FXML
@@ -239,8 +246,10 @@ public class ConfigurationViewController {
 
         if (selectedDirectory != null) {
             try {
+                // Usar timestamp para hacer el nombre único
+                String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));
                 String destinationPath = selectedDirectory.getAbsolutePath()
-                        + "\\Database_backup_" + LocalDate.now() + ".zip";
+                        + File.separator + "Database_backup_" + timestamp + ".zip";
 
                 databaseManager.exportDB(destinationPath);
                 displayAlerts.showAlert("Base de datos exportada correctamente");

@@ -75,8 +75,10 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     @Override
-    public Expense getByClientAndExpenseNameAndExpensePriceAndCurrencyAndAmountAndReceivedDateAndExpenseType(Client client, String expenseName, Double expensePrice, Currency currency, Integer amount, LocalDate receivedDate, String expenseType) {
-        return expenseRepository.findByClientAndExpenseNameAndExpensePriceAndCurrencyAndAmountAndReceivedDateAndExpenseType(client, expenseName, expensePrice, currency, amount, receivedDate, expenseType);
+    public List<Expense> getExpenseListByExpenseNameAndExpensePriceAndCurrencyAndAmountAndReceivedDateAndExpenseTypeAndClientOrderByExpenseIdAsc(
+            String expenseName, Double expensePrice, Currency currency, Integer amount, LocalDate receivedDate, String expenseType, Client client) {
+        return expenseRepository.findListByExpenseNameAndExpensePriceAndCurrencyAndAmountAndReceivedDateAndExpenseTypeAndClientOrderByExpenseIdAsc(
+                expenseName, expensePrice, currency, amount, receivedDate, expenseType, client);
     }
 
     @Override
@@ -86,16 +88,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     @Override
     public List<Expense> getAllProductExpensesGreaterThanZeroByClient(Client client) {
-        return expenseRepository.findByClientAndLeftAmountGreaterThanAndExpenseType(client, 0, "Producto");
-    }
-
-    @Override
-    public List<Expense> getAllExpensesByLeftAmountGreaterThanAndClient(Integer leftAmount, Client client) {
-        return expenseRepository.findByLeftAmountGreaterThanAndClient(leftAmount, client);
-    }
-
-    public List<Expense> getNonZeroExpensesByClient(Client client) {
-        return expenseRepository.findByLeftAmountGreaterThanAndClient(0, client);
+        return List.of();
     }
 
     public Double getTotalRentExpense(Client client, LocalDate initDate, LocalDate endDate, Currency currency) {

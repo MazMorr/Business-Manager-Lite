@@ -17,644 +17,666 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="650.0" prefWidth="1100.0" stylesheets="@../Styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.SellViewController">
-   <children>
-      <AnchorPane prefHeight="400.0" prefWidth="600.0">
-         <children>
-            <AnchorPane prefHeight="130.0" prefWidth="630.0" styleClass="filter-background" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="310.0" AnchorPane.topAnchor="90.0">
-               <children>
-                  <VBox layoutY="29.0" prefHeight="200.0" prefWidth="290.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <children>
-                        <HBox alignment="TOP_RIGHT" prefWidth="200.0">
-                           <children>
-                              <Button mnemonicParsing="false" onAction="#cleanFilters" prefHeight="32.0" prefWidth="21.0" style="-fx-background-color: transparent;">
-                                 <graphic>
-                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../images/filter.png" />
-                                       </image>
-                                       <effect>
-                                          <InnerShadow choke="1.0" height="63.75" radius="30.825" width="61.55" />
-                                       </effect>
-                                    </ImageView>
-                                 </graphic>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </Button>
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER_RIGHT" prefWidth="200.0">
-                           <children>
-                              <Label text="Almacen" />
-                              <TextField fx:id="tfFilterWarehouseName" prefHeight="25.0" prefWidth="172.0" styleClass="inputForm">
-                                 <HBox.margin>
-                                    <Insets left="30.0" />
-                                 </HBox.margin>
-                              </TextField>
-                           </children>
-                           <VBox.margin>
-                              <Insets top="2.0" />
-                           </VBox.margin>
-                        </HBox>
-                        <HBox alignment="CENTER_RIGHT" prefWidth="200.0">
-                           <children>
-                              <Label text="Precio" />
-                              <Label style="-fx-font-weight: 500;" text="min">
-                                 <HBox.margin>
-                                    <Insets left="20.0" />
-                                 </HBox.margin>
-                              </Label>
-                              <TextField fx:id="tfMinFilterPrice" prefWidth="70.0" promptText="0.00" styleClass="inputForm">
-                                 <HBox.margin>
-                                    <Insets left="2.0" />
-                                 </HBox.margin></TextField>
-                              <Label style="-fx-font-weight: 500;" text="max">
-                                 <HBox.margin>
-                                    <Insets left="6.0" />
-                                 </HBox.margin>
-                              </Label>
-                              <TextField fx:id="tfMaxFilterPrice" prefWidth="70.0" promptText="0.00" styleClass="inputForm">
-                                 <HBox.margin>
-                                    <Insets left="2.0" />
-                                 </HBox.margin></TextField>
-                           </children>
-                           <VBox.margin>
-                              <Insets top="4.0" />
-                           </VBox.margin>
-                        </HBox>
-                     </children>
-                  </VBox>
-                  <VBox layoutX="29.0" layoutY="29.0" prefHeight="107.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <children>
-                        <Label prefHeight="40.0" prefWidth="82.0" text="Filtrado:">
-                           <font>
-                              <Font name="SansSerif Bold" size="14.0" />
-                           </font>
-                        </Label>
-                        <HBox alignment="CENTER_LEFT" prefWidth="200.0">
-                           <children>
-                              <Label text="Producto" />
-                              <TextField fx:id="tfFilterProductName" prefWidth="172.0" styleClass="inputForm">
-                                 <HBox.margin>
-                                    <Insets left="42.0" />
-                                 </HBox.margin>
-                              </TextField>
-                           </children>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" prefWidth="200.0">
-                           <children>
-                              <Label text="Cantidad" />
-                              <Label style="-fx-font-weight: 500;" text="min">
-                                 <HBox.margin>
-                                    <Insets left="20.0" />
-                                 </HBox.margin>
-                              </Label>
-                              <TextField fx:id="tfMinFilterAmount" prefWidth="70.0" promptText="0" styleClass="inputForm">
-                                 <HBox.margin>
-                                    <Insets left="2.0" />
-                                 </HBox.margin></TextField>
-                              <Label style="-fx-font-weight: 500;" text="max">
-                                 <HBox.margin>
-                                    <Insets left="6.0" />
-                                 </HBox.margin>
-                              </Label>
-                              <TextField fx:id="tfMaxFilterAmount" prefWidth="70.0" promptText="0" styleClass="inputForm">
-                                 <HBox.margin>
-                                    <Insets left="2.0" />
-                                 </HBox.margin></TextField>
-                           </children>
-                           <VBox.margin>
-                              <Insets top="4.0" />
-                           </VBox.margin>
-                        </HBox>
-                     </children>
-                  </VBox>
-               </children>
-            </AnchorPane>
-            <HBox alignment="CENTER" prefHeight="80.0" prefWidth="800.0" spacing="120.0" styleClass="slogan" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <children>
-                  <Label alignment="CENTER" graphicTextGap="14.0" prefHeight="68.0" prefWidth="421.0" styleClass="title" text="Ventas" textFill="#eeeeee">
-                     <font>
-                        <Font name="Constantia Bold" size="60.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
-                     <graphic>
-                        <ImageView fitHeight="150.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
-                           <effect>
-                              <InnerShadow choke="1.0" radius="68.5" width="255.0">
-                                 <color>
-                                    <Color red="1.0" green="1.0" blue="1.0" />
-                                 </color>
-                              </InnerShadow>
-                           </effect>
-                           <image>
-                              <Image url="@../images/purchase.png" />
-                           </image>
+
+<AnchorPane prefHeight="650.0" prefWidth="1100.0" stylesheets="@../Styles.css" xmlns="http://javafx.com/javafx/24.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.marcosoft.storageSoftware.application.controller.SellViewController">
+    <AnchorPane prefHeight="130.0" prefWidth="630.0" styleClass="filter-background" AnchorPane.leftAnchor="160.0"
+                AnchorPane.rightAnchor="310.0" AnchorPane.topAnchor="90.0">
+        <VBox layoutY="29.0" prefHeight="200.0" prefWidth="290.0" AnchorPane.bottomAnchor="0.0"
+              AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <HBox alignment="TOP_RIGHT" prefWidth="200.0">
+                <Button mnemonicParsing="false" onAction="#cleanFilters" prefHeight="32.0" prefWidth="21.0"
+                        style="-fx-background-color: transparent;">
+                    <graphic>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true"
+                                   preserveRatio="true">
+                            <effect>
+                                <InnerShadow choke="1.0" height="63.75" radius="30.825" width="61.55"/>
+                            </effect>
+                            <Image url="@../images/filter.png"/>
                         </ImageView>
-                     </graphic>
-                  </Label>
-               </children>
+                    </graphic>
+                    <cursor>
+                        <Cursor fx:constant="HAND"/>
+                    </cursor>
+                </Button>
             </HBox>
-            <VBox styleClass="index" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="80.0">
-               <children>
-                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToExpense" styleClass="btnIndex" text="Gastos">
-                     <font>
-                        <Font name="System Bold" size="17.0" />
-                     </font>
-                     <graphic>
-                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
-                           <image>
-                              <Image url="@../images/goods.png" />
-                           </image>
-                           <effect>
-                              <InnerShadow choke="1.0">
-                                 <color>
-                                    <Color red="1.0" green="1.0" blue="1.0" />
-                                 </color>
-                              </InnerShadow>
-                           </effect>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToWarehouse" styleClass="btnIndex" text="Almacenes">
-                     <font>
-                        <Font name="System Bold" size="17.0" />
-                     </font>
-                     <graphic>
-                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
-                           <image>
-                              <Image url="@../images/warehouse.png" />
-                           </image>
-                           <effect>
-                              <InnerShadow choke="1.0">
-                                 <color>
-                                    <Color red="1.0" green="1.0" blue="1.0" />
-                                 </color>
-                              </InnerShadow>
-                           </effect>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Button alignment="CENTER_LEFT" disable="true" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" styleClass="btnIndex" text="Ventas">
-                     <font>
-                        <Font name="System Bold" size="17.0" />
-                     </font>
-                     <graphic>
-                        <ImageView fitHeight="37.0" fitWidth="40.0" pickOnBounds="true">
-                           <image>
-                              <Image url="@../images/purchase.png" />
-                           </image>
-                           <effect>
-                              <InnerShadow choke="1.0">
-                                 <color>
-                                    <Color red="1.0" green="1.0" blue="1.0" />
-                                 </color>
-                              </InnerShadow>
-                           </effect>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToRegistry" styleClass="btnIndex" text="Registros">
-                     <font>
-                        <Font name="System Bold" size="17.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                     <graphic>
-                        <ImageView fitHeight="40.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/monitoring.png" />
-                           </image>
-                           <effect>
-                              <InnerShadow choke="1.0">
-                                 <color>
-                                    <Color red="1.0" green="1.0" blue="1.0" />
-                                 </color>
-                              </InnerShadow>
-                           </effect>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToBalance" styleClass="btnIndex" text="Resultado">
-                     <font>
-                        <Font name="System Bold" size="17.0" />
-                     </font>
-                     <graphic>
-                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
-                           <image>
-                              <Image url="@../images/interest-rate.png" />
-                           </image>
-                           <effect>
-                              <InnerShadow choke="1.0">
-                                 <color>
-                                    <Color red="1.0" green="1.0" blue="1.0" />
-                                 </color>
-                              </InnerShadow>
-                           </effect>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToSupport" styleClass="btnIndex" text="Soporte">
-                     <font>
-                        <Font name="System Bold" size="17.0" />
-                     </font>
-                     <graphic>
-                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
-                           <image>
-                              <Image url="@../images/support.png" />
-                           </image>
-                           <effect>
-                              <InnerShadow choke="1.0" height="255.0" radius="127.0" width="255.0">
-                                 <color>
-                                    <Color red="1.0" green="1.0" blue="1.0" />
-                                 </color>
-                              </InnerShadow>
-                           </effect>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-               </children>
-            </VBox>
-            <Button alignment="CENTER_LEFT" mnemonicParsing="false" onAction="#switchToConfiguration" prefHeight="60.0" styleClass="btnIndex" text="Ajustes" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
-               <graphic>
-                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/settings.png" />
-                     </image>
-                     <effect>
-                        <InnerShadow choke="1.0">
-                           <color>
-                              <Color red="1.0" green="1.0" blue="1.0" />
-                           </color>
-                        </InnerShadow>
-                     </effect>
-                  </ImageView>
-               </graphic>
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Button>
-            <Label fx:id="lblClientName" contentDisplay="TOP" prefHeight="69.0" prefWidth="172.0" styleClass="clientName" text="Marco A. Romeros" textFill="#eeeeee" wrapText="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="5.0">
-               <font>
-                  <Font name="SansSerif Regular" size="14.0" />
-               </font>
-               <graphic>
-                  <ImageView fitHeight="47.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/Avatar.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
+            <HBox alignment="CENTER_RIGHT" prefWidth="200.0">
+                <VBox.margin>
+                    <Insets top="2.0"/>
+                </VBox.margin>
+                <Label text="Almacen"/>
+                <TextField fx:id="tfFilterWarehouseName" prefHeight="25.0" prefWidth="172.0"
+                           styleClass="inputForm">
+                    <HBox.margin>
+                        <Insets left="30.0"/>
+                    </HBox.margin>
+                </TextField>
+            </HBox>
+            <HBox alignment="CENTER_RIGHT" prefWidth="200.0">
+                <VBox.margin>
+                    <Insets top="4.0"/>
+                </VBox.margin>
+                <Label text="Precio"/>
+                <Label style="-fx-font-weight: 500;" text="min">
+                    <HBox.margin>
+                        <Insets left="20.0"/>
+                    </HBox.margin>
+                </Label>
+                <TextField fx:id="tfMinFilterPrice" prefWidth="70.0" promptText="0.00"
+                           styleClass="inputForm">
+                    <HBox.margin>
+                        <Insets left="2.0"/>
+                    </HBox.margin>
+                </TextField>
+                <Label style="-fx-font-weight: 500;" text="max">
+                    <HBox.margin>
+                        <Insets left="6.0"/>
+                    </HBox.margin>
+                </Label>
+                <TextField fx:id="tfMaxFilterPrice" prefWidth="70.0" promptText="0.00"
+                           styleClass="inputForm">
+                    <HBox.margin>
+                        <Insets left="2.0"/>
+                    </HBox.margin>
+                </TextField>
+            </HBox>
+        </VBox>
+        <VBox layoutX="29.0" layoutY="29.0" prefHeight="107.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0"
+              AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <Label prefHeight="40.0" prefWidth="82.0" text="Filtrado:">
+                <font>
+                    <Font name="SansSerif Bold" size="14.0"/>
+                </font>
             </Label>
-            <TreeTableView fx:id="ttvInventory" layoutX="230.0" layoutY="187.0" prefHeight="304.0" prefWidth="410.0" styleClass="table" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="310.0" AnchorPane.topAnchor="230.0">
-              <columns>
-                <TreeTableColumn fx:id="ttcProductName" prefWidth="75.0" sortable="false" text="Producto" />
-                  <TreeTableColumn fx:id="ttcSellPrice" prefWidth="75.0" sortable="false" text="Precio Venta" />
-                <TreeTableColumn fx:id="ttcWarehouse" prefWidth="75.0" sortable="false" text="Almacen" />
-                  <TreeTableColumn fx:id="ttcProductAmount" prefWidth="75.0" sortable="false" text="Cantidad" />
-              </columns>
-               <columnResizePolicy>
-                  <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-               </columnResizePolicy>
-            </TreeTableView>
-            <AnchorPane prefHeight="200.0" prefWidth="300.0" styleClass="rightIndex" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="80.0">
-               <children>
-                  <TabPane layoutX="-83.0" layoutY="-192.0" maxHeight="570.0" prefHeight="570.0" prefWidth="300.0" styleClass="crudOperations" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="140.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="10.0">
-                     <tabs>
-                        <Tab text="Vender">
-                          <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                 <children>
-                                    <Button layoutX="109.0" layoutY="345.0" mnemonicParsing="false" onAction="#cleanForm" styleClass="btnStock" text="Vaciar Campos" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
-                                       <graphic>
-                                          <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
-                                             <image>
-                                                <Image url="@../images/refresh.png" />
-                                             </image>
-                                             <effect>
-                                                <InnerShadow choke="1.0" radius="68.5" width="255.0">
-                                                   <color>
-                                                      <Color red="1.0" green="1.0" blue="1.0" />
-                                                   </color>
-                                                </InnerShadow>
-                                             </effect>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                    <VBox alignment="TOP_CENTER" layoutX="41.0" layoutY="42.0" prefWidth="260.0" spacing="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
-                                       <children>
-                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="52.0">
-                                             <children>
-                                                <Label text="Almacén" />
-                                                <MenuButton fx:id="mbSellWarehouse" mnemonicParsing="false" prefWidth="150.0" textFill="WHITE">
-                                                   <graphic>
-                                                      <TextField fx:id="tfSellWarehouse" prefHeight="34.0" prefWidth="10.0" styleClass="inputForm">
-                                                         <tooltip>
-                                                            <Tooltip text="Precio al que deseas vender cada unidad del producto  (en la zona de ventas este precio puede ser cambiado)" wrapText="true">
-                                                               <font>
-                                                                  <Font size="14.0" />
-                                                               </font>
-                                                            </Tooltip>
-                                                         </tooltip>
-                                                      </TextField>
-                                                   </graphic>
-                                                   <padding>
-                                                      <Insets bottom="-6.0" left="-9.0" right="2.0" top="-5.0" />
-                                                   </padding>
-                                                   <cursor>
-                                                      <Cursor fx:constant="DEFAULT" />
-                                                   </cursor>
-                                                </MenuButton>
-                                             </children>
-                                          </HBox>
-                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="48.0">
-                                             <children>
-                                                <Label text="Producto" />
-                                                <MenuButton fx:id="mbSellProduct" mnemonicParsing="false" onAction="#loadMbSellProduct" prefWidth="150.0">
-                                                   <padding>
-                                                      <Insets bottom="-6.0" left="-9.0" right="2.0" top="-5.0" />
-                                                   </padding>
-                                                   <graphic>
-                                                      <TextField fx:id="tfSellProductName" prefHeight="25.0" prefWidth="150.0" styleClass="inputForm" />
-                                                   </graphic>
-                                                </MenuButton>
-                                             </children>
-                                          </HBox>
-                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="49.0">
-                                             <children>
-                                                <Label text="Cantidad" />
-                                                <TextField fx:id="tfSellProductAmount" prefHeight="25.0" prefWidth="150.0" promptText="0" styleClass="inputForm" />
-                                             </children>
-                                          </HBox>
-                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0">
-                                             <children>
-                                                <Label text="Precio Venta" />
-                                                <TextField fx:id="tfSellProductPrice" prefHeight="34.0" prefWidth="70.0" promptText="0.00" styleClass="inputForm">
-                                                   <tooltip>
-                                                      <Tooltip text="Precio al que deseas vender cada unidad del producto  (en la zona de ventas este precio puede ser cambiado)" wrapText="true">
-                                                         <font>
-                                                            <Font size="14.0" />
-                                                         </font>
-                                                      </Tooltip>
-                                                   </tooltip>
-                                                   <HBox.margin>
-                                                      <Insets left="25.0" />
-                                                   </HBox.margin>
-                                                </TextField>
-                                                <MenuButton fx:id="mbSellCurrency" mnemonicParsing="false" prefWidth="80.0" textFill="WHITE">
-                                                   <graphic>
-                                                      <TextField fx:id="tfSellProductCurrency" alignment="CENTER" disable="true" opacity="0.99" prefHeight="34.0" prefWidth="10.0" promptText="CUP" styleClass="inputForm">
-                                                         <tooltip>
-                                                            <Tooltip text="Precio al que deseas vender cada unidad del producto  (en la zona de ventas este precio puede ser cambiado)" wrapText="true">
-                                                               <font>
-                                                                  <Font size="14.0" />
-                                                               </font>
-                                                            </Tooltip>
-                                                         </tooltip>
-                                                      </TextField>
-                                                   </graphic>
-                                                   <padding>
-                                                      <Insets bottom="-6.0" left="-10.0" right="2.0" top="-5.0" />
-                                                   </padding>
-                                                   <cursor>
-                                                      <Cursor fx:constant="DEFAULT" />
-                                                   </cursor>
-                                                   <HBox.margin>
-                                                      <Insets bottom="1.0" />
-                                                   </HBox.margin>
-                                                </MenuButton>
-                                             </children>
-                                          </HBox>
-                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="71.0">
-                                             <children>
-                                                <Label text="Fecha" />
-                                                <DatePicker fx:id="dpSellProductDate" editable="false" prefWidth="150.0" styleClass="inputForm" />
-                                             </children>
-                                          </HBox>
-                                          <Button mnemonicParsing="false" onAction="#sellProduct" prefHeight="33.0" prefWidth="331.0" styleClass="btnStock" text="Vender Producto">
-                                             <tooltip>
-                                                <Tooltip consumeAutoHidingEvents="false" text="Si el nombre y la categoria coinciden con algún producto ya registrado, este se actualizará y en caso diferente se agregará al registro" wrapText="true">
-                                                   <font>
-                                                      <Font size="14.0" />
-                                                   </font>
-                                                </Tooltip>
-                                             </tooltip>
-                                             <graphic>
-                                                <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../images/purchase.png" />
-                                                   </image>
-                                                   <effect>
-                                                      <InnerShadow choke="1.0">
-                                                         <color>
-                                                            <Color red="1.0" green="1.0" blue="1.0" />
-                                                         </color>
-                                                      </InnerShadow>
-                                                   </effect>
-                                                </ImageView>
-                                             </graphic>
-                                             <VBox.margin>
-                                                <Insets top="5.0" />
-                                             </VBox.margin>
-                                          </Button>
-                                          <Label fx:id="lblSellDebug" alignment="TOP_LEFT" prefHeight="50.0" prefWidth="260.0" text="El precio de venta es el de toda la venta, NO PRECIOS INDIVIDUALES" textAlignment="CENTER" wrapText="true">
-                                             <padding>
-                                                <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-                                             </padding>
-                                             <VBox.margin>
-                                                <Insets />
-                                             </VBox.margin>
-                                             <font>
-                                                <Font name="System Bold" size="13.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </AnchorPane>
-                          </content>
-                        </Tab>
-                        <Tab text="Asignar Precio">
-                           <content>
-                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="406.0" prefWidth="233.0">
-                                 <children>
-                                    <VBox alignment="TOP_CENTER" layoutX="31.0" layoutY="7.0" prefWidth="260.0" spacing="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
-                                       <children>
-                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="48.0">
-                                             <children>
-                                                <Label text="Producto" />
-                                                <TextField fx:id="tfAssignPriceProductName" prefHeight="25.0" prefWidth="150.0" styleClass="inputForm" />
-                                             </children>
-                                          </HBox>
-                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="25.0">
-                                             <children>
-                                                <Label text="Precio Venta" />
-                                                <TextField fx:id="tfAssignPriceProductPrice" prefHeight="34.0" prefWidth="150.0" promptText="0.00" styleClass="inputForm">
-                                                   <tooltip>
-                                                      <Tooltip text="Precio al que deseas vender cada unidad del producto  (en la zona de ventas este precio puede ser cambiado)" wrapText="true">
-                                                         <font>
-                                                            <Font size="14.0" />
-                                                         </font>
-                                                      </Tooltip>
-                                                   </tooltip>
-                                                </TextField>
-                                             </children>
-                                          </HBox>
-                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="54.0">
-                                             <children>
-                                                <Label text="Moneda" />
-                                                <MenuButton fx:id="mbAssignPriceCurrency" mnemonicParsing="false" prefWidth="150.0" textFill="WHITE">
-                                                   <graphic>
-                                                      <TextField fx:id="tfAssignPriceCurrency" editable="false" prefHeight="34.0" prefWidth="10.0" promptText="Seleccionar" styleClass="inputForm">
-                                                         <tooltip>
-                                                            <Tooltip text="Precio al que deseas vender cada unidad del producto  (en la zona de ventas este precio puede ser cambiado)" wrapText="true">
-                                                               <font>
-                                                                  <Font size="14.0" />
-                                                               </font>
-                                                            </Tooltip>
-                                                         </tooltip>
-                                                      </TextField>
-                                                   </graphic>
-                                                   <padding>
-                                                      <Insets bottom="-6.0" left="-9.0" right="2.0" top="-5.0" />
-                                                   </padding>
-                                                   <cursor>
-                                                      <Cursor fx:constant="DEFAULT" />
-                                                   </cursor>
-                                                </MenuButton>
-                                             </children>
-                                          </HBox>
-                                          <Button mnemonicParsing="false" onAction="#assignProductPrice" prefHeight="33.0" prefWidth="331.0" styleClass="btnStock" text="Asignar Precio Venta">
-                                             <tooltip>
-                                                <Tooltip consumeAutoHidingEvents="false" text="Si el nombre y la categoria coinciden con algún producto ya registrado, este se actualizará y en caso diferente se agregará al registro" wrapText="true">
-                                                   <font>
-                                                      <Font size="14.0" />
-                                                   </font>
-                                                </Tooltip>
-                                             </tooltip>
-                                             <graphic>
-                                                <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../images/sale.png" />
-                                                   </image>
-                                                   <effect>
-                                                      <InnerShadow choke="1.0">
-                                                         <color>
-                                                            <Color red="1.0" green="1.0" blue="1.0" />
-                                                         </color>
-                                                      </InnerShadow>
-                                                   </effect>
-                                                </ImageView>
-                                             </graphic>
-                                             <VBox.margin>
-                                                <Insets top="5.0" />
-                                             </VBox.margin>
-                                          </Button>
-                                          <Label fx:id="lblAssignPriceDebug" alignment="TOP_LEFT" prefHeight="118.0" prefWidth="260.0" text="Si pincha un elemento en la tabla este se insertará en los campos del formulario" textAlignment="CENTER" wrapText="true">
-                                             <padding>
-                                                <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-                                             </padding>
-                                             <VBox.margin>
-                                                <Insets />
-                                             </VBox.margin>
-                                             <font>
-                                                <Font name="System Bold" size="13.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </VBox>
-                                    <Button layoutX="62.0" layoutY="457.0" mnemonicParsing="false" onAction="#cleanForm" prefHeight="30.0" prefWidth="275.0" styleClass="btnStock" text="Vaciar Campos" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
-                                       <graphic>
-                                          <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../images/refresh.png" />
-                                             </image>
-                                             <effect>
-                                                <InnerShadow choke="1.0">
-                                                   <color>
-                                                      <Color red="1.0" green="1.0" blue="1.0" />
-                                                   </color>
-                                                </InnerShadow>
-                                             </effect>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                 </children>
-                              </AnchorPane>
-                           </content>
-                           <tooltip>
-                              <Tooltip text="MIra papo esto es para comprar" />
-                           </tooltip>
-                        </Tab>
-                     </tabs>
-                  </TabPane>
-                  <AnchorPane layoutX="5.0" layoutY="488.0" prefHeight="120.0" prefWidth="300.0" styleClass="alerts" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
-                     <children>
-                        <Button layoutX="65.0" layoutY="63.0" mnemonicParsing="false" onAction="#displayWarningManager" styleClass="btnStock" text="Alertas de Productos" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
-                           <graphic>
-                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/campana.png" />
-                                 </image>
-                                 <effect>
+            <HBox alignment="CENTER_LEFT" prefWidth="200.0">
+                <VBox.margin>
+                    <Insets/>
+                </VBox.margin>
+                <Label text="Producto"/>
+                <TextField fx:id="tfFilterProductName" prefWidth="172.0" styleClass="inputForm">
+                    <HBox.margin>
+                        <Insets left="42.0"/>
+                    </HBox.margin>
+                </TextField>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefWidth="200.0">
+                <VBox.margin>
+                    <Insets top="4.0"/>
+                </VBox.margin>
+                <Label text="Cantidad"/>
+                <Label style="-fx-font-weight: 500;" text="min">
+                    <HBox.margin>
+                        <Insets left="20.0"/>
+                    </HBox.margin>
+                </Label>
+                <TextField fx:id="tfMinFilterAmount" prefWidth="70.0" promptText="0" styleClass="inputForm">
+                    <HBox.margin>
+                        <Insets left="2.0"/>
+                    </HBox.margin>
+                </TextField>
+                <Label style="-fx-font-weight: 500;" text="max">
+                    <HBox.margin>
+                        <Insets left="6.0"/>
+                    </HBox.margin>
+                </Label>
+                <TextField fx:id="tfMaxFilterAmount" prefWidth="70.0" promptText="0" styleClass="inputForm">
+                    <HBox.margin>
+                        <Insets left="2.0"/>
+                    </HBox.margin>
+                </TextField>
+            </HBox>
+        </VBox>
+    </AnchorPane>
+    <HBox alignment="CENTER" prefHeight="80.0" prefWidth="800.0" spacing="120.0" styleClass="slogan"
+          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <Label alignment="CENTER" graphicTextGap="14.0" prefHeight="68.0" prefWidth="421.0" styleClass="title"
+               text="Ventas" textFill="#eeeeee">
+            <font>
+                <Font name="Constantia Bold" size="60.0"/>
+            </font>
+            <HBox.margin>
+                <Insets/>
+            </HBox.margin>
+            <graphic>
+                <ImageView fitHeight="150.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                    <effect>
+                        <InnerShadow choke="1.0" radius="68.5" width="255.0">
+                            <color>
+                                <Color red="1.0" green="1.0" blue="1.0"/>
+                            </color>
+                        </InnerShadow>
+                    </effect>
+                    <Image url="@../images/purchase.png"/>
+                </ImageView>
+            </graphic>
+        </Label>
+    </HBox>
+    <VBox styleClass="index" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="80.0">
+        <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false"
+                onAction="#switchToExpense" styleClass="btnIndex" text="Gastos">
+            <font>
+                <Font name="System Bold" size="17.0"/>
+            </font>
+            <graphic>
+                <ImageView fitHeight="39.0" fitWidth="39.0" pickOnBounds="true">
+                    <effect>
+                        <InnerShadow choke="1.0">
+                            <color>
+                                <Color red="1.0" green="1.0" blue="1.0"/>
+                            </color>
+                        </InnerShadow>
+                    </effect>
+                    <Image url="@../images/monitoring.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false"
+                onAction="#switchToBuy" styleClass="btnIndex" text="Compras">
+            <font>
+                <Font name="System Bold" size="17.0"/>
+            </font>
+            <graphic>
+                <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
+                    <effect>
+                        <InnerShadow choke="1.0">
+                            <color>
+                                <Color red="1.0" green="1.0" blue="1.0"/>
+                            </color>
+                        </InnerShadow>
+                    </effect>
+                    <Image url="@../images/goods.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button alignment="CENTER_LEFT" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false"
+                onAction="#switchToWarehouse" styleClass="btnIndex" text="Almacenes">
+            <font>
+                <Font name="System Bold" size="17.0"/>
+            </font>
+            <graphic>
+                <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
+                    <effect>
+                        <InnerShadow choke="1.0">
+                            <color>
+                                <Color red="1.0" green="1.0" blue="1.0"/>
+                            </color>
+                        </InnerShadow>
+                    </effect>
+                    <Image url="@../images/warehouse.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button alignment="CENTER_LEFT" disable="true" ellipsisString="" graphicTextGap="5.0"
+                mnemonicParsing="false" styleClass="btnIndex" text="Ventas">
+            <font>
+                <Font name="System Bold" size="17.0"/>
+            </font>
+            <graphic>
+                <ImageView fitHeight="37.0" fitWidth="40.0" pickOnBounds="true">
+                    <effect>
+                        <InnerShadow choke="1.0">
+                            <color>
+                                <Color red="1.0" green="1.0" blue="1.0"/>
+                            </color>
+                        </InnerShadow>
+                    </effect>
+                    <Image url="@../images/purchase.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToBalance"
+                styleClass="btnIndex" text="Resultado">
+            <font>
+                <Font name="System Bold" size="17.0"/>
+            </font>
+            <graphic>
+                <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
+                    <effect>
+                        <InnerShadow choke="1.0">
+                            <color>
+                                <Color red="1.0" green="1.0" blue="1.0"/>
+                            </color>
+                        </InnerShadow>
+                    </effect>
+                    <Image url="@../images/interest-rate.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+    </VBox>
+    <VBox layoutX="-4.0" layoutY="593.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+        <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToSupport"
+                styleClass="btnIndex" text="Soporte">
+            <font>
+                <Font name="System Bold" size="17.0"/>
+            </font>
+            <graphic>
+                <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
+                    <effect>
+                        <InnerShadow choke="1.0" height="255.0" radius="127.0" width="255.0">
+                            <color>
+                                <Color red="1.0" green="1.0" blue="1.0"/>
+                            </color>
+                        </InnerShadow>
+                    </effect>
+                    <Image url="@../images/support.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button alignment="CENTER_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onAction="#switchToRegistry"
+                styleClass="btnIndex" text="Registros">
+            <font>
+                <Font name="System Bold" size="17.0"/>
+            </font>
+            <VBox.margin>
+                <Insets/>
+            </VBox.margin>
+            <graphic>
+                <ImageView fitHeight="40.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
+                    <effect>
+                        <InnerShadow choke="1.0">
+                            <color>
+                                <Color red="1.0" green="1.0" blue="1.0"/>
+                            </color>
+                        </InnerShadow>
+                    </effect>
+                    <Image url="@../images/lista-de-la-compra.png"/>
+                </ImageView>
+            </graphic>
+            <padding>
+                <Insets left="16.0"/>
+            </padding>
+        </Button>
+        <Button alignment="CENTER_LEFT" mnemonicParsing="false" onAction="#switchToConfiguration" prefHeight="60.0"
+                styleClass="btnIndex" text="Ajustes">
+            <graphic>
+                <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../images/settings.png"/>
+                    </image>
+                    <effect>
+                        <InnerShadow choke="1.0">
+                            <color>
+                                <Color red="1.0" green="1.0" blue="1.0"/>
+                            </color>
+                        </InnerShadow>
+                    </effect>
+                </ImageView>
+            </graphic>
+            <font>
+                <Font size="14.0"/>
+            </font>
+        </Button>
+    </VBox>
+    <Label fx:id="lblClientName" contentDisplay="TOP" prefHeight="69.0" prefWidth="172.0" styleClass="clientName"
+           text="Marco A. Romeros" textFill="#eeeeee" wrapText="true" AnchorPane.leftAnchor="20.0"
+           AnchorPane.topAnchor="5.0">
+        <font>
+          <Font name="SansSerif Regular" size="14.0"/>
+        </font>
+        <graphic>
+            <ImageView fitHeight="47.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
+                <Image url="@../images/Avatar.png"/>
+            </ImageView>
+        </graphic>
+    </Label>
+    <TreeTableView fx:id="ttvInventory" layoutX="230.0" layoutY="187.0" prefHeight="304.0" prefWidth="410.0"
+                   styleClass="table" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="160.0"
+                   AnchorPane.rightAnchor="310.0" AnchorPane.topAnchor="230.0">
+      <columns>
+          <TreeTableColumn fx:id="ttcProductName" prefWidth="75.0" sortable="false" text="Producto"/>
+          <TreeTableColumn fx:id="ttcSellPrice" prefWidth="75.0" sortable="false" text="Precio Venta"/>
+          <TreeTableColumn fx:id="ttcWarehouse" prefWidth="75.0" sortable="false" text="Almacen"/>
+          <TreeTableColumn fx:id="ttcProductAmount" prefWidth="75.0" sortable="false" text="Cantidad"/>
+      </columns>
+        <columnResizePolicy>
+          <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+        </columnResizePolicy>
+    </TreeTableView>
+    <AnchorPane prefHeight="200.0" prefWidth="300.0" styleClass="rightIndex" AnchorPane.bottomAnchor="0.0"
+                AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="80.0">
+        <TabPane layoutX="-83.0" layoutY="-192.0" maxHeight="570.0" prefHeight="570.0" prefWidth="300.0"
+                 styleClass="crudOperations" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="140.0"
+                 AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="10.0">
+            <Tab text="Vender">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                    <Button layoutX="109.0" layoutY="345.0" mnemonicParsing="false"
+                            onAction="#cleanForm" styleClass="btnStock" text="Vaciar Campos"
+                            AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0"
+                            AnchorPane.rightAnchor="5.0">
+                        <graphic>
+                            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
+                                <effect>
                                     <InnerShadow choke="1.0" radius="68.5" width="255.0">
-                                       <color>
-                                          <Color red="1.0" green="1.0" blue="1.0" />
-                                       </color>
+                                        <color>
+                                            <Color red="1.0" green="1.0" blue="1.0"/>
+                                        </color>
                                     </InnerShadow>
-                                 </effect>
-                              </ImageView>
-                           </graphic></Button>
-                        <Label fx:id="lblWarning" layoutX="30.0" layoutY="14.0" text="Advertencias" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="5.0">
-                           <graphic>
-                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/alert%20(2).png" />
-                                 </image>
-                                 <effect>
-                                    <InnerShadow choke="1.0" radius="68.5" width="255.0">
-                                       <color>
-                                          <Color red="1.0" green="0.6666666865348816" />
-                                       </color>
-                                    </InnerShadow>
-                                 </effect>
-                              </ImageView>
-                           </graphic>
+                                </effect>
+                                <Image url="@../images/refresh.png"/>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                    <VBox alignment="TOP_CENTER" layoutX="41.0" layoutY="42.0" prefWidth="260.0"
+                          spacing="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0"
+                          AnchorPane.topAnchor="5.0">
+                        <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="51.0">
+                            <Label text="Almacén"/>
+                            <MenuButton fx:id="mbSellWarehouse" mnemonicParsing="false"
+                                        prefWidth="150.0" textFill="WHITE">
+                                <graphic>
+                                    <TextField fx:id="tfSellWarehouse" prefHeight="34.0"
+                                               prefWidth="10.0" styleClass="inputForm">
+                                        <tooltip>
+                                            <Tooltip
+                                                    text="Precio al que deseas vender cada unidad del producto  (en la zona de ventas este precio puede ser cambiado)"
+                                                    wrapText="true">
+                                                <font>
+                                                    <Font size="14.0"/>
+                                                </font>
+                                            </Tooltip>
+                                        </tooltip>
+                                    </TextField>
+                                </graphic>
+                                <padding>
+                                    <Insets bottom="-6.0" left="-9.0" right="2.0" top="-5.0"/>
+                                </padding>
+                                <cursor>
+                                    <Cursor fx:constant="DEFAULT"/>
+                                </cursor>
+                            </MenuButton>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="47.0">
+                            <Label text="Producto"/>
+                            <MenuButton fx:id="mbSellProduct" mnemonicParsing="false"
+                                        onAction="#loadMbSellProduct" prefWidth="150.0">
+                                <padding>
+                                    <Insets bottom="-6.0" left="-9.0" right="2.0" top="-5.0"/>
+                                </padding>
+                                <graphic>
+                                    <TextField fx:id="tfSellProductName" prefHeight="25.0"
+                                               prefWidth="150.0" styleClass="inputForm"/>
+                                </graphic>
+                            </MenuButton>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="48.0">
+                            <Label text="Cantidad"/>
+                            <TextField fx:id="tfSellProductAmount" prefHeight="25.0"
+                                       prefWidth="150.0" promptText="0" styleClass="inputForm"/>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" prefWidth="200.0">
+                            <Label text="Precio Venta"/>
+                            <TextField fx:id="tfSellProductPrice" prefHeight="34.0"
+                                       prefWidth="70.0" promptText="0.00"
+                                       styleClass="inputForm">
+                                <tooltip>
+                                    <Tooltip
+                                            text="Precio al que deseas vender cada unidad del producto  (en la zona de ventas este precio puede ser cambiado)"
+                                            wrapText="true">
+                                        <font>
+                                            <Font size="14.0"/>
+                                        </font>
+                                    </Tooltip>
+                                </tooltip>
+                                <HBox.margin>
+                                    <Insets left="24.0"/>
+                                </HBox.margin>
+                            </TextField>
+                            <MenuButton fx:id="mbSellCurrency" mnemonicParsing="false"
+                                        prefWidth="80.0" textFill="WHITE">
+                                <graphic>
+                                    <TextField fx:id="tfSellProductCurrency" alignment="CENTER"
+                                               disable="true" opacity="0.99" prefHeight="34.0"
+                                               prefWidth="10.0" promptText="CUP"
+                                               styleClass="inputForm">
+                                        <tooltip>
+                                            <Tooltip
+                                                    text="Precio al que deseas vender cada unidad del producto  (en la zona de ventas este precio puede ser cambiado)"
+                                                    wrapText="true">
+                                                <font>
+                                                    <Font size="14.0"/>
+                                                </font>
+                                            </Tooltip>
+                                        </tooltip>
+                                    </TextField>
+                                </graphic>
+                                <padding>
+                                    <Insets bottom="-6.0" left="-10.0" right="2.0" top="-5.0"/>
+                                </padding>
+                                <cursor>
+                                    <Cursor fx:constant="DEFAULT"/>
+                                </cursor>
+                                <HBox.margin>
+                                    <Insets bottom="1.0"/>
+                                </HBox.margin>
+                            </MenuButton>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="70.0">
+                            <Label text="Fecha"/>
+                            <DatePicker fx:id="dpSellProductDate" editable="false"
+                                        prefWidth="150.0" styleClass="inputForm"/>
+                        </HBox>
+                        <Button mnemonicParsing="false" onAction="#sellProduct" prefHeight="33.0"
+                                prefWidth="331.0" styleClass="btnStock" text="Vender Producto">
+                            <tooltip>
+                                <Tooltip consumeAutoHidingEvents="false"
+                                         text="Si el nombre y la categoria coinciden con algún producto ya registrado, este se actualizará y en caso diferente se agregará al registro"
+                                         wrapText="true">
+                                    <font>
+                                        <Font size="14.0"/>
+                                    </font>
+                                </Tooltip>
+                            </tooltip>
+                            <graphic>
+                                <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true"
+                                           preserveRatio="true">
+                                    <effect>
+                                        <InnerShadow choke="1.0">
+                                            <color>
+                                                <Color red="1.0" green="1.0" blue="1.0"/>
+                                            </color>
+                                        </InnerShadow>
+                                    </effect>
+                                    <Image url="@../images/purchase.png"/>
+                                </ImageView>
+                            </graphic>
+                            <VBox.margin>
+                                <Insets top="5.0"/>
+                            </VBox.margin>
+                        </Button>
+                        <Label fx:id="lblSellDebug" alignment="TOP_LEFT" prefHeight="50.0"
+                               prefWidth="260.0"
+                               text="El precio de venta es el de toda la venta, NO PRECIOS INDIVIDUALES"
+                               textAlignment="CENTER" wrapText="true">
+                            <padding>
+                                <Insets bottom="2.0" left="2.0" right="2.0" top="2.0"/>
+                            </padding>
+                            <VBox.margin>
+                                <Insets/>
+                            </VBox.margin>
+                            <font>
+                                <Font name="System Bold" size="13.0"/>
+                            </font>
                         </Label>
-                        <Label fx:id="lblAlerts" layoutX="30.0" layoutY="50.0" text="Alertas" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="40.0">
-                           <graphic>
-                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/Alert.png" />
-                                 </image>
-                                 <effect>
-                                    <InnerShadow choke="1.0" radius="68.5" width="255.0">
-                                       <color>
-                                          <Color red="1.0" />
-                                       </color>
-                                    </InnerShadow>
-                                 </effect>
-                              </ImageView>
-                           </graphic>
+                    </VBox>
+                </AnchorPane>
+            </Tab>
+            <Tab text="Asignar Precio">
+                <tooltip>
+                    <Tooltip text="MIra papo esto es para comprar"/>
+                </tooltip>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="406.0" prefWidth="233.0">
+                    <VBox alignment="TOP_CENTER" layoutX="31.0" layoutY="7.0" prefWidth="260.0"
+                          spacing="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0"
+                          AnchorPane.topAnchor="5.0">
+                        <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="48.0">
+                            <Label text="Producto"/>
+                            <TextField fx:id="tfAssignPriceProductName" prefHeight="25.0"
+                                       prefWidth="150.0" styleClass="inputForm"/>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="25.0">
+                            <Label text="Precio Venta"/>
+                            <TextField fx:id="tfAssignPriceProductPrice" prefHeight="34.0"
+                                       prefWidth="150.0" promptText="0.00"
+                                       styleClass="inputForm">
+                                <tooltip>
+                                    <Tooltip
+                                            text="Precio al que deseas vender cada unidad del producto  (en la zona de ventas este precio puede ser cambiado)"
+                                            wrapText="true">
+                                        <font>
+                                            <Font size="14.0"/>
+                                        </font>
+                                    </Tooltip>
+                                </tooltip>
+                            </TextField>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" prefWidth="200.0" spacing="54.0">
+                            <Label text="Moneda"/>
+                            <MenuButton fx:id="mbAssignPriceCurrency" mnemonicParsing="false"
+                                        prefWidth="150.0" textFill="WHITE">
+                                <graphic>
+                                    <TextField fx:id="tfAssignPriceCurrency" editable="false"
+                                               prefHeight="34.0" prefWidth="10.0"
+                                               promptText="Seleccionar" styleClass="inputForm">
+                                        <tooltip>
+                                            <Tooltip
+                                                    text="Precio al que deseas vender cada unidad del producto  (en la zona de ventas este precio puede ser cambiado)"
+                                                    wrapText="true">
+                                                <font>
+                                                    <Font size="14.0"/>
+                                                </font>
+                                            </Tooltip>
+                                        </tooltip>
+                                    </TextField>
+                                </graphic>
+                                <padding>
+                                    <Insets bottom="-6.0" left="-9.0" right="2.0" top="-5.0"/>
+                                </padding>
+                                <cursor>
+                                    <Cursor fx:constant="DEFAULT"/>
+                                </cursor>
+                            </MenuButton>
+                        </HBox>
+                        <Button mnemonicParsing="false" onAction="#assignProductPrice"
+                                prefHeight="33.0" prefWidth="331.0" styleClass="btnStock"
+                                text="Asignar Precio Venta">
+                            <tooltip>
+                                <Tooltip consumeAutoHidingEvents="false"
+                                         text="Si el nombre y la categoria coinciden con algún producto ya registrado, este se actualizará y en caso diferente se agregará al registro"
+                                         wrapText="true">
+                                    <font>
+                                        <Font size="14.0"/>
+                                    </font>
+                                </Tooltip>
+                            </tooltip>
+                            <graphic>
+                                <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true"
+                                           preserveRatio="true">
+                                    <effect>
+                                        <InnerShadow choke="1.0">
+                                            <color>
+                                                <Color red="1.0" green="1.0" blue="1.0"/>
+                                            </color>
+                                        </InnerShadow>
+                                    </effect>
+                                    <Image url="@../images/sale.png"/>
+                                </ImageView>
+                            </graphic>
+                            <VBox.margin>
+                                <Insets top="5.0"/>
+                            </VBox.margin>
+                        </Button>
+                        <Label fx:id="lblAssignPriceDebug" alignment="TOP_LEFT" prefHeight="118.0"
+                               prefWidth="260.0"
+                               text="Si pincha un elemento en la tabla este se insertará en los campos del formulario"
+                               textAlignment="CENTER" wrapText="true">
+                            <padding>
+                                <Insets bottom="2.0" left="2.0" right="2.0" top="2.0"/>
+                            </padding>
+                            <VBox.margin>
+                                <Insets/>
+                            </VBox.margin>
+                            <font>
+                                <Font name="System Bold" size="13.0"/>
+                            </font>
                         </Label>
-                     </children>
-                  </AnchorPane>
-               </children>
-            </AnchorPane>
-            <Button layoutX="754.0" layoutY="77.0" mnemonicParsing="false" onAction="#displayLastSells" text="Ventas Realizadas" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="25.0" />
-         </children>
-      </AnchorPane>
-   </children>
-</StackPane>
+                    </VBox>
+                    <Button layoutX="62.0" layoutY="457.0" mnemonicParsing="false" onAction="#cleanForm"
+                            prefHeight="30.0" prefWidth="275.0" styleClass="btnStock"
+                            text="Vaciar Campos" AnchorPane.bottomAnchor="5.0"
+                            AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                        <graphic>
+                            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true"
+                                       preserveRatio="true">
+                                <effect>
+                                    <InnerShadow choke="1.0">
+                                        <color>
+                                            <Color red="1.0" green="1.0" blue="1.0"/>
+                                        </color>
+                                    </InnerShadow>
+                                </effect>
+                                <Image url="@../images/refresh.png"/>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                </AnchorPane>
+            </Tab>
+        </TabPane>
+        <AnchorPane layoutX="5.0" layoutY="488.0" prefHeight="120.0" prefWidth="300.0" styleClass="alerts"
+                    AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+            <Button layoutX="65.0" layoutY="63.0" mnemonicParsing="false" onAction="#displayWarningManager"
+                    styleClass="btnStock" text="Alertas de Productos" AnchorPane.bottomAnchor="5.0"
+                    AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+                <graphic>
+                    <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                        <effect>
+                            <InnerShadow choke="1.0" radius="68.5" width="255.0">
+                                <color>
+                                    <Color red="1.0" green="1.0" blue="1.0"/>
+                                </color>
+                            </InnerShadow>
+                        </effect>
+                        <Image url="@../images/campana.png"/>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Label fx:id="lblWarning" layoutX="30.0" layoutY="14.0" text="Advertencias"
+                   AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="5.0">
+                <graphic>
+                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                        <effect>
+                            <InnerShadow choke="1.0" radius="68.5" width="255.0">
+                                <color>
+                                    <Color red="1.0" green="0.6666666865348816"/>
+                                </color>
+                            </InnerShadow>
+                        </effect>
+                        <Image url="@../images/alert (2).png"/>
+                    </ImageView>
+                </graphic>
+            </Label>
+            <Label fx:id="lblAlerts" layoutX="30.0" layoutY="50.0" text="Alertas" AnchorPane.leftAnchor="20.0"
+                   AnchorPane.topAnchor="40.0">
+                <graphic>
+                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                        <effect>
+                            <InnerShadow choke="1.0" radius="68.5" width="255.0">
+                                <color>
+                                    <Color red="1.0"/>
+                                </color>
+                            </InnerShadow>
+                        </effect>
+                        <Image url="@../images/Alert.png"/>
+                    </ImageView>
+                </graphic>
+            </Label>
+        </AnchorPane>
+    </AnchorPane>
+    <Button layoutX="754.0" layoutY="77.0" mnemonicParsing="false" onAction="#displayLastSells" text="Ventas Realizadas"
+            AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="25.0"/>
+</AnchorPane>

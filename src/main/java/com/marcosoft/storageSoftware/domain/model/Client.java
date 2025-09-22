@@ -10,7 +10,9 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "Clients")
+@Table(name = "Clients", indexes = {
+        @Index(name = "idx_clients_last_datetime", columnList = "last_date_time"),
+})
 public class Client {
 
     @Id
@@ -22,9 +24,6 @@ public class Client {
 
     @Column(name="client_company")
     private String clientCompany;
-
-    @Column(name="is_client_active", nullable = false)
-    private Boolean isClientActive;
 
     @Column(name = "last_date_time")
     private LocalDateTime lastDateTime;

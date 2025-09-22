@@ -13,7 +13,11 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "Expense")
+@Table(name = "Expense", indexes = {
+        @Index(name = "idx_expense_client", columnList = "client_id"),
+        @Index(name = "idx_expense_received_date", columnList = "received_date"),
+        @Index(name = "idx_expense_type", columnList = "expense_type"),
+})
 public class Expense {
 
     @Id
@@ -29,11 +33,8 @@ public class Expense {
     @ManyToOne
     private Currency currency;
 
-    @Column(name = "amount", nullable = false)
+    @Column(name = "amount")
     private Integer amount;
-
-    @Column(name = "is_assigned")
-    private Integer leftAmount;
 
     @Column(name = "received_date", nullable = false)
     private LocalDate receivedDate;
@@ -41,6 +42,7 @@ public class Expense {
     @Column(name="expense_type")
     private String expenseType;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "client_id")
     private Client client;
 }

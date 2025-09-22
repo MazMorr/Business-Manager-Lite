@@ -1,7 +1,7 @@
 package com.marcosoft.storageSoftware.application.controller;
 
 import com.marcosoft.storageSoftware.application.dto.ExpenseWarehouseDataTable;
-import com.marcosoft.storageSoftware.application.dto.UserLogged;
+import com.marcosoft.storageSoftware.infrastructure.util.UserLogged;
 import com.marcosoft.storageSoftware.application.dto.WarehouseDataTable;
 import com.marcosoft.storageSoftware.domain.model.*;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.ExpenseServiceImpl;
@@ -94,7 +94,9 @@ public class WarehouseViewController {
         List<Expense> expenses = expenseService.getAllProductExpensesGreaterThanZeroByClient(client).stream().toList();
 
         // Map expenses to ExpenseWarehouseDataTable
-        List<ExpenseWarehouseDataTable> investmentData = expenses.stream()
+        //Aquí hay que usar el buyService otra ve
+        /*
+                List<ExpenseWarehouseDataTable> investmentData = expenses.stream()
                 .map(inv -> new ExpenseWarehouseDataTable(
                         inv.getExpenseId(),
                         inv.getExpenseName(),
@@ -102,6 +104,8 @@ public class WarehouseViewController {
                         inv.getReceivedDate()
                 ))
                 .toList();
+         */
+
 
         // Set up columns if not already set (optional, for safety)
         tcIdExpense.setCellValueFactory(new PropertyValueFactory<>("expenseId"));
@@ -110,7 +114,8 @@ public class WarehouseViewController {
         tcProductDate.setCellValueFactory(new PropertyValueFactory<>("expenseDate"));
 
         // Add data to the table
-        tvExpenses.getItems().addAll(investmentData);
+        // Descomentar cuando se resuelva lo de arriba
+        // tvExpenses.getItems().addAll(investmentData);
     }
 
     private void initTableLabels() {
@@ -256,32 +261,37 @@ public class WarehouseViewController {
     // ============================
 
     @FXML
-    public void switchToConfiguration(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/configurationView.fxml");
+    private void switchToConfiguration(ActionEvent actionEvent) {
+        sceneSwitcher.switchToConfiguration(actionEvent);
     }
 
     @FXML
-    public void switchToSupport(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/supportView.fxml");
+    private void switchToSupport(ActionEvent actionEvent) {
+        sceneSwitcher.switchToSupport(actionEvent);
     }
 
     @FXML
-    public void switchToRegistry(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/registryView.fxml");
+    private void switchToRegistry(ActionEvent actionEvent) {
+        sceneSwitcher.switchToRegistry(actionEvent);
     }
 
     @FXML
-    public void switchToBalance(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/balanceView.fxml");
+    private void switchToBalance(ActionEvent actionEvent) {
+        sceneSwitcher.switchToBalance(actionEvent);
     }
 
     @FXML
-    public void switchToExpense(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/expenseView.fxml");
+    private void switchToExpense(ActionEvent actionEvent) {
+        sceneSwitcher.switchToExpense(actionEvent);
     }
 
     @FXML
-    public void switchToSell(ActionEvent actionEvent) {
-        sceneSwitcher.switchView(actionEvent, "/views/sellView.fxml");
+    private void switchToSell(ActionEvent actionEvent) {
+        sceneSwitcher.switchToSell(actionEvent);
+    }
+
+    @FXML
+    public void switchToBuy(ActionEvent actionEvent) {
+        sceneSwitcher.switchToBuy(actionEvent);
     }
 }

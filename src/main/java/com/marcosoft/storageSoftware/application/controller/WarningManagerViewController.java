@@ -1,6 +1,6 @@
 package com.marcosoft.storageSoftware.application.controller;
 
-import com.marcosoft.storageSoftware.application.dto.UserLogged;
+import com.marcosoft.storageSoftware.infrastructure.util.UserLogged;
 import com.marcosoft.storageSoftware.domain.model.Client;
 import com.marcosoft.storageSoftware.domain.model.Inventory;
 import com.marcosoft.storageSoftware.domain.model.Product;
@@ -40,11 +40,11 @@ public class WarningManagerViewController {
     /**
      * Instantiates a new Warning manager view controller.
      *
-     * @param inventoryService the inventory service
-     * @param userLogged the user logged
-     * @param warehouseService the warehouse service
-     * @param displayAlerts the display alerts
-     * @param productService the product service
+     * @param inventoryService   the inventory service
+     * @param userLogged         the user logged
+     * @param warehouseService   the warehouse service
+     * @param displayAlerts      the display alerts
+     * @param productService     the product service
      * @param sellViewController the sell view controller
      */
     public WarningManagerViewController(
@@ -70,9 +70,18 @@ public class WarningManagerViewController {
     private void initialize() {
         client = userLogged.getClient();
         Platform.runLater(() -> {
-            initMbProducts();
             initTfProductListener();
+            initValuesInTextFields();
+            initMbProducts();
+            loadWarningAndAlerts();
         });
+    }
+
+    private void initValuesInTextFields() {
+        if (!sellViewController.ttvInventory.getSelectionModel().isEmpty()) {
+            tfProduct.setText(sellViewController.tfSellProductName.getText());
+            tfWarehouse.setText(sellViewController.tfSellWarehouse.getText());
+        }
     }
 
     private void initTfProductListener() {

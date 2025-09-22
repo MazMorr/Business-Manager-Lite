@@ -1,4 +1,4 @@
-package com.marcosoft.storageSoftware.domain.model;
+package com.marcosoft.storageSoftware.application.dto;
 
 public record SellFilterCriteria
         (String productNameFilter,

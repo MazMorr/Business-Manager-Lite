@@ -12,7 +12,6 @@ import java.util.Map;
 
 @Component
 public class ExcelGenerator {
-
     private final DisplayAlerts displayAlerts;
 
     public ExcelGenerator(DisplayAlerts displayAlerts) {

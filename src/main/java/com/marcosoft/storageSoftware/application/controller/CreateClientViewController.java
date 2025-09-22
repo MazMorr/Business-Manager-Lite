@@ -85,7 +85,6 @@ public class CreateClientViewController {
                 txtFieldUserName.getText(),
                 password,
                 txtFieldCompany.getText(),
-                false,
                 null
         );
         clientService.save(client);
