@@ -24,13 +24,13 @@
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                 <TableView fx:id="tvGeneralRegistry" layoutX="12.0" layoutY="16.0" prefHeight="476.0" prefWidth="817.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0">
                     <columns>
-                        <TableColumn fx:id="tcGeneralRegistryZone" maxWidth="1810.0" minWidth="30.0" prefWidth="181.0" text="Zona Afectada" />
-                        <TableColumn fx:id="tcGeneralRegistryType" maxWidth="4280.0" minWidth="30.0" prefWidth="428.0" text="Tipo Registro" />
-                        <TableColumn fx:id="tcGeneralRegistryDateTime" maxWidth="1930.0" minWidth="30.0" prefWidth="193.0" text="Fecha Registro" />
+                        <TableColumn fx:id="tcGeneralRegistryZone" maxWidth="1810.0" minWidth="30.0" prefWidth="244.0" text="Zona Afectada" />
+                        <TableColumn fx:id="tcGeneralRegistryType" maxWidth="4280.0" minWidth="30.0" prefWidth="392.0" text="Tipo Registro" />
+                        <TableColumn fx:id="tcGeneralRegistryDateTime" maxWidth="1930.0" minWidth="30.0" prefWidth="251.0" text="Fecha Registro" />
                     </columns>
-                    <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                    </columnResizePolicy>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
                 </TableView>
                 <HBox alignment="CENTER_LEFT" layoutX="21.0" layoutY="14.0" spacing="20.0" AnchorPane.leftAnchor="11.0" AnchorPane.topAnchor="13.0">
                     <Label text="Filtrar por Fecha de Registro:">
@@ -92,16 +92,17 @@
                 </Button>
             </AnchorPane>
         </Tab>
-        <Tab text="Compras">
+        <Tab fx:id="tabBuy" text="Compras">
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                <TableView layoutX="255.0" layoutY="134.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0">
+                <TableView fx:id="tvBuy" layoutX="255.0" layoutY="134.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0">
                     <columns>
-                        <TableColumn fx:id="tcBuyRegistryType" prefWidth="75.0" text="Tipo Registro" />
-                        <TableColumn fx:id="tcBuyRegistryDateTime" prefWidth="75.0" text="Fecha Registro" />
-                  <TableColumn fx:id="tcIdBuy" prefWidth="75.0" text="Id Compra" />
-                  <TableColumn fx:id="tcBuyName" prefWidth="75.0" text="Nombre Compra" />
-                  <TableColumn fx:id="tcBuyUnitaryPrice" prefWidth="75.0" text="Precio U. Compra" />
-                  <TableColumn fx:id="tcBuyTotalPrice" prefWidth="75.0" text="Precio T. Compra" />
+                        <TableColumn fx:id="tcBuyRegistryType" prefWidth="122.0" text="Tipo Registro" />
+                        <TableColumn fx:id="tcBuyRegistryDateTime" prefWidth="119.0" text="Fecha Registro" />
+                  <TableColumn fx:id="tcIdBuy" text="Id Compra" />
+                  <TableColumn fx:id="tcBuyName" prefWidth="136.0" text="Descripción" />
+                  <TableColumn fx:id="tcBuyAmount" prefWidth="91.0" text="Cantidad" />
+                  <TableColumn fx:id="tcBuyUnitaryPrice" prefWidth="164.0" text="Precio U. Compra" />
+                  <TableColumn fx:id="tcBuyTotalPrice" prefWidth="178.0" text="Precio T. Compra" />
                     </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -168,11 +169,11 @@
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                 <TableView fx:id="tvSell" layoutX="284.0" layoutY="120.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0">
                     <columns>
-                        <TableColumn fx:id="tcSellRegistryType" maxWidth="1370.0" minWidth="30.0" prefWidth="137.0" text="Tipo Registro" />
-                        <TableColumn fx:id="tcSellRegistryDateTime" maxWidth="1250.0" minWidth="30.0" prefWidth="125.0" text="Fecha Registro" />
-                        <TableColumn fx:id="tcSellProductName" maxWidth="1520.0" minWidth="30.0" prefWidth="152.0" text="Nombre Producto" />
-                        <TableColumn fx:id="tcSellPriceCurrency" maxWidth="1180.0" minWidth="30.0" prefWidth="118.0" text="Precio Venta" />
-                        <TableColumn fx:id="tcSellDate" maxWidth="930.0" minWidth="30.0" prefWidth="93.0" text="Fecha Venta" />
+                        <TableColumn fx:id="tcSellRegistryType" maxWidth="1370.0" minWidth="30.0" prefWidth="127.0" text="Tipo Registro" />
+                        <TableColumn fx:id="tcSellRegistryDateTime" maxWidth="1250.0" minWidth="30.0" prefWidth="122.0" text="Fecha Registro" />
+                        <TableColumn fx:id="tcSellProductName" maxWidth="1520.0" minWidth="30.0" prefWidth="148.0" text="Nombre Producto" />
+                        <TableColumn fx:id="tcSellPriceCurrency" maxWidth="1180.0" minWidth="30.0" prefWidth="109.0" text="Precio Venta" />
+                        <TableColumn fx:id="tcSellDate" maxWidth="930.0" minWidth="30.0" prefWidth="100.0" text="Fecha Venta" />
                         <TableColumn fx:id="tcSellWarehouse" maxWidth="910.0" minWidth="30.0" prefWidth="91.0" text="Almacén" />
                         <TableColumn fx:id="tcSellAmount" maxWidth="830.0" minWidth="30.0" prefWidth="83.0" text="Cantidad" />
                     </columns>

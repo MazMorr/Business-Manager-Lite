@@ -19,4 +19,5 @@ public interface BuyRepository extends CrudRepository<Buy, Long> {
             String buyName, Double buyUnitaryPrice, Double buyTotalPrice, Currency currency, Integer amount,
             Integer leftAmount, LocalDate receivedDate, String buyType, Client client);
 
+    List<Buy> findByBuyNameAndClient(String buyName, Client client);
 }

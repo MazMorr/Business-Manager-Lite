@@ -56,4 +56,8 @@ public class BuyServiceImpl implements BuyService {
         return buyRepository.findListByBuyNameAndBuyUnitaryPriceAndBuyTotalPriceAndCurrencyAndAmountAndLeftAmountAndReceivedDateAndBuyTypeAndClientOrderByBuyIdAsc(
                 buyName, buyUnitaryPrice, buyTotalPrice, currency, amount, leftAmount, receivedDate, buyType, client);
     }
+
+    public List<Buy> getBuysByBuyNameAndClient(String buyName, Client client){
+        return buyRepository.findByBuyNameAndClient(buyName, client);
+    }
 }

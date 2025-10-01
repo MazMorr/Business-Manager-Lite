@@ -13,4 +13,5 @@ public class WarehouseDataTable {
     private String warehouseName;
     private String productName;
     private Integer productAmount;
+    private String valueInCUP;
 }

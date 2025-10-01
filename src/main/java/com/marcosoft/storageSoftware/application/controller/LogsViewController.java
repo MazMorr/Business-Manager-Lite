@@ -2,10 +2,7 @@ package com.marcosoft.storageSoftware.application.controller;
 
 import com.marcosoft.storageSoftware.application.dto.*;
 import com.marcosoft.storageSoftware.domain.model.*;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.ExpenseRegistryServiceImpl;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.GeneralRegistryServiceImpl;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.SellRegistryServiceImpl;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.WarehouseRegistryServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.*;
 import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
 import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
 import com.marcosoft.storageSoftware.infrastructure.util.UserLogged;
@@ -27,9 +24,11 @@ import java.util.List;
 public class LogsViewController {
 
     ObservableList<GeneralRegistryDataTable> generalRegistryDataTables;
+    ObservableList<BuyRegistryDataTable> buyRegistryDataTables;
     ObservableList<ExpenseRegistryDataTable> expenseRegistryDataTables;
     ObservableList<SellRegistryDataTable> sellRegistryDataTables;
     ObservableList<WarehouseRegistryDataTable> warehouseRegistryDataTables;
+
 
     private Client client;
     private DateTimeFormatter formatter;
@@ -40,14 +39,18 @@ public class LogsViewController {
     private final GeneralRegistryServiceImpl generalRegistryService;
     private final WarehouseRegistryServiceImpl warehouseRegistryService;
     private final ExpenseRegistryServiceImpl expenseRegistryService;
+    private final BuyRegistryServiceImpl buyRegistryService;
     private final DisplayAlerts displayAlerts;
+    @FXML
+    private Tab tabBuy;
 
     public LogsViewController(
             ExpenseRegistryServiceImpl expenseRegistryService, SellRegistryServiceImpl sellRegistryService,
             GeneralRegistryServiceImpl generalRegistryService, WarehouseRegistryServiceImpl warehouseRegistryService,
-            UserLogged userLogged, SceneSwitcher sceneSwitcher, DisplayAlerts displayAlerts
+            UserLogged userLogged, SceneSwitcher sceneSwitcher, BuyRegistryServiceImpl buyRegistryService, DisplayAlerts displayAlerts
     ) {
         this.userLogged = userLogged;
+        this.buyRegistryService = buyRegistryService;
         this.displayAlerts = displayAlerts;
         this.expenseRegistryService = expenseRegistryService;
         this.sellRegistryService = sellRegistryService;
@@ -74,17 +77,32 @@ public class LogsViewController {
     @FXML
     private TableColumn<ExpenseRegistryDataTable, LocalDateTime> tcExpenseRegistryDateTime;
 
+    // Buy Registry Table
+    @FXML
+    private TableView<BuyRegistryDataTable> tvBuy;
+    @FXML
+    private TableColumn<BuyRegistryDataTable, Long> tcIdBuy;
+    @FXML
+    private TableColumn<BuyRegistryDataTable, String> tcBuyRegistryType, tcBuyName, tcBuyTotalPrice, tcBuyUnitaryPrice;
+    @FXML
+    private TableColumn<BuyRegistryDataTable, LocalDateTime> tcBuyRegistryDateTime;
+    @FXML
+    private TableColumn<BuyRegistryDataTable, Integer> tcBuyAmount;
+
+
     //Sell Registry Table
     @FXML
     private TableView<SellRegistryDataTable> tvSell;
     @FXML
-    private TableColumn<SellRegistryDataTable, String> tcSellProductName, tcSellRegistryType, tcSellPriceCurrency, tcSellWarehouse;
+    private TableColumn<SellRegistryDataTable, String>
+            tcSellProductName, tcSellRegistryType, tcSellPriceCurrency, tcSellWarehouse;
     @FXML
     private TableColumn<SellRegistryDataTable, LocalDate> tcSellDate;
     @FXML
     private TableColumn<SellRegistryDataTable, LocalDateTime> tcSellRegistryDateTime;
     @FXML
     private TableColumn<SellRegistryDataTable, Integer> tcSellAmount;
+
 
     //Warehouse Registry Table
     @FXML
@@ -96,6 +114,8 @@ public class LogsViewController {
     @FXML
     private TableColumn<WarehouseRegistryDataTable, Integer> tcWarehouseAmount;
 
+    @FXML
+    private DatePicker dpBuyFilter;
     @FXML
     private Label txtClientName;
     @FXML
@@ -140,6 +160,8 @@ public class LogsViewController {
             initSellRegistryTableValues();
         } else if (selectedTab.equals(tabWarehouse)) {
             initWarehouseRegistryTableValues();
+        } else if (selectedTab.equals(tabBuy)) {
+            initBuyRegistryTableValues();
         }
     }
 
@@ -195,6 +217,66 @@ public class LogsViewController {
         });
 
         tvGeneralRegistry.setItems(generalRegistryDataTables);
+    }
+
+    private void initBuyRegistryTableValues() {
+        buyRegistryDataTables = FXCollections.observableArrayList();
+        List<BuyRegistry> buyRegistries = buyRegistryService.getAllBuyRegistriesByClient(client);
+
+        // Ordenar por fecha más reciente primero
+        buyRegistries.sort((r1, r2) -> r2.getRegistryDateTime().compareTo(r1.getRegistryDateTime()));
+
+        buyRegistryDataTables.clear();
+
+        for (BuyRegistry buy : buyRegistries) {
+            LocalDate dpBuyValue = dpBuyFilter.getValue();
+            if (dpBuyValue != null) {
+                if (buy.getRegistryDateTime().toLocalDate().isEqual(dpBuyValue)) {
+                    buyRegistryDataTables.add(new BuyRegistryDataTable(
+                            buy.getRegistryType(),
+                            buy.getRegistryDateTime(),
+                            buy.getBuyId(),
+                            buy.getBuyName(),
+                            buy.getBuyUnitaryPrice() + buy.getCurrency(),
+                            buy.getBuyTotalPrice() + buy.getCurrency(),
+                            buy.getAmount()
+                    ));
+                }
+            } else {
+                buyRegistryDataTables.add(new BuyRegistryDataTable(
+                        buy.getRegistryType(),
+                        buy.getRegistryDateTime(),
+                        buy.getBuyId(),
+                        buy.getBuyName(),
+                        buy.getBuyUnitaryPrice() + buy.getCurrency(),
+                        buy.getBuyTotalPrice() + buy.getCurrency(),
+                        buy.getAmount()
+                ));
+            }
+        }
+
+        tcBuyRegistryType.setCellValueFactory(new PropertyValueFactory<>("registryType"));
+        tcBuyRegistryDateTime.setCellValueFactory(new PropertyValueFactory<>("registryDate"));
+        tcIdBuy.setCellValueFactory(new PropertyValueFactory<>("id"));
+        tcBuyName.setCellValueFactory(new PropertyValueFactory<>("buyName"));
+        tcBuyUnitaryPrice.setCellValueFactory(new PropertyValueFactory<>("unitaryPriceAndCurrency"));
+        tcBuyTotalPrice.setCellValueFactory(new PropertyValueFactory<>("totalPriceAndCurrency"));
+        tcBuyAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
+
+        // Formatear LocalDateTime
+        tcBuyRegistryDateTime.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(LocalDateTime item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.format(formatter));
+                }
+            }
+        });
+
+        tvBuy.setItems(buyRegistryDataTables);
     }
 
     private void initWarehouseRegistryTableValues() {

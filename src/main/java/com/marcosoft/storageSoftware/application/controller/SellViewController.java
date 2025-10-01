@@ -2,7 +2,6 @@ package com.marcosoft.storageSoftware.application.controller;
 
 import com.marcosoft.storageSoftware.application.dto.SellDataTable;
 import com.marcosoft.storageSoftware.application.dto.SellFilterCriteria;
-import com.marcosoft.storageSoftware.infrastructure.util.UserLogged;
 import com.marcosoft.storageSoftware.domain.model.*;
 import com.marcosoft.storageSoftware.domain.model.Currency;
 import com.marcosoft.storageSoftware.domain.service.WarehouseService;
@@ -47,10 +46,12 @@ public class SellViewController {
     private final SellRegistryServiceImpl sellRegistryService;
     private final GeneralRegistryServiceImpl generalRegistryService;
     private final CleanHelper cleanHelper;
+    private final ExpenseServiceImpl expenseService;
+    private final ExpenseRegistryServiceImpl expenseRegistryService;
     private final SellFieldsValidator sellFieldsValidator;
     private final SellFilterUtilities sellFilterUtilities;
     // Agregar variable de instancia
-    private Debouncer filterDebouncer = new Debouncer();
+    private final Debouncer filterDebouncer = new Debouncer();
 
     @FXML
     private Label lblWarning, lblAlerts, lblSellDebug, lblAssignPriceDebug;
@@ -60,9 +61,12 @@ public class SellViewController {
             UserLogged userLogged, ParseDataTypes parseDataTypes, SceneSwitcher sceneSwitcher,
             InventoryServiceImpl inventoryService, ProductServiceImpl productService, WarehouseService warehouseService,
             SellRegistryServiceImpl sellRegistryService, GeneralRegistryServiceImpl generalRegistryService,
-            CleanHelper cleanHelper, SellFilterUtilities sellFilterUtilities
+            CleanHelper cleanHelper, ExpenseServiceImpl expenseService, ExpenseRegistryServiceImpl expenseRegistryService,
+            SellFilterUtilities sellFilterUtilities
     ) {
         this.inventoryService = inventoryService;
+        this.expenseService = expenseService;
+        this.expenseRegistryService = expenseRegistryService;
         this.sellFilterUtilities = sellFilterUtilities;
         this.sellFieldsValidator = sellFieldsValidator;
         this.generalRegistryService = generalRegistryService;
@@ -93,7 +97,7 @@ public class SellViewController {
     @FXML
     protected TreeTableView<SellDataTable> ttvInventory;
     @FXML
-    private TreeTableColumn<SellDataTable, String> ttcWarehouse, ttcProductName, ttcSellPrice;
+    private TreeTableColumn<SellDataTable, String> ttcWarehouse, ttcProductName, ttcSellPrice, ttcBuyPrice;
     @FXML
     private TreeTableColumn<SellDataTable, Integer> ttcProductAmount;
 
@@ -110,7 +114,7 @@ public class SellViewController {
         Platform.runLater(() -> {
             setupFilterListeners();
             setupMbListeners();
-            initDatePicker();
+            cleanForm();
             initMbWarehouse();
             initAllMbCurrency();
             setupTableSelectionListener();
@@ -130,10 +134,31 @@ public class SellViewController {
             List<Warehouse> warehouses = warehouseService.getWarehousesByClient(client);
             warehouseCache = warehouses.stream()
                     .collect(Collectors.toMap(Warehouse::getWarehouseName, Function.identity()));
-
-            log.info("Precached {} products and {} warehouses", productCache.size(), warehouseCache.size());
         } catch (Exception e) {
             log.error("Error precaching data", e);
+        }
+    }
+
+    private Double convertToCUP(Double amount, String currency) {
+        if (amount == null) return 0.0;
+
+        // Si ya es CUP o está vacío, no hay conversión
+        if ("CUP".equalsIgnoreCase(currency) || currency == null || currency.trim().isEmpty()) {
+            return amount;
+        }
+
+        try {
+            Currency currencyEntity = currencyService.getCurrencyByName(currency);
+            if (currencyEntity != null && currencyEntity.getCurrencyPriceInCUP() != null) {
+                return amount * currencyEntity.getCurrencyPriceInCUP();
+            }
+
+            log.warn("No se encontró tasa de cambio para: " + currency);
+            return amount;
+
+        } catch (Exception e) {
+            log.error("Error convirtiendo a CUP: " + amount + " " + currency, e);
+            return amount;
         }
     }
 
@@ -195,7 +220,6 @@ public class SellViewController {
                 tfMaxFilterPrice
         );
         cleanHelper.cleanTextFields(textFields);
-
         loadProductTable();
     }
 
@@ -210,7 +234,6 @@ public class SellViewController {
         lblSellDebug.setText("El precio de venta es el de toda la venta, NO PRECIOS INDIVIDUALES");
     }
 
-
     @FXML
     public void sellProduct() {
         if (!sellFieldsValidator.validateAllSellFields(
@@ -221,22 +244,34 @@ public class SellViewController {
         }
 
         try {
-            // 1. Obtener datos básicos
             String warehouseName = tfSellWarehouse.getText();
             String productName = tfSellProductName.getText();
             int productAmount = parseDataTypes.parseInt(tfSellProductAmount.getText());
 
-            // 2. Obtener entidades y validar stock
             Inventory inventory = inventoryService.getAndValidateInventory(warehouseName, productName, productAmount, client);
+            Product product = productService.getByProductNameAndClient(productName, client);
 
-            // 3. Procesar venta
+            // Calcular el costo de compra ponderado en CUP
+            Double weightedCostPerUnit = calculateWeightedAverageCostInCUP(product, client);
+            if (weightedCostPerUnit <= 0) {
+                log.warn("Costo ponderado no válido para producto: {}", productName);
+                weightedCostPerUnit = 0.0;
+            }
+
+            Double totalCost = weightedCostPerUnit * productAmount;
+
+            // Registrar la venta
             sellRegistryService.processSale(
                     inventory, productAmount, productName, tfSellProductPrice.getText(), tfSellProductCurrency.getText(),
                     dpSellProductDate.getValue(), tfSellWarehouse.getText(), client
             );
 
-            // 4. Actualizar UI
-            updateUIAfterSale(inventory);
+            // Registrar el gasto automáticamente (costo de la mercancía vendida)
+            if (totalCost > 0) {
+                registerCostAsExpense(productName, totalCost, productAmount, dpSellProductDate.getValue());
+            }
+
+            updateUIAfterSale(inventory, weightedCostPerUnit, totalCost);
 
         } catch (DataIntegrityViolationException e) {
             displayAlerts.showAlert("Error de integridad de datos. Posiblemente el producto ya fue modificado.");
@@ -247,23 +282,110 @@ public class SellViewController {
         }
     }
 
-    private void updateUIAfterSale(Inventory inventory) {
+    private void registerCostAsExpense(String productName, Double totalCost, Integer amount, LocalDate expenseDate) {
+        try {
+            // Crear el gasto para Materias Primas y Materiales
+            Expense expense = new Expense();
+            expense.setExpenseName(productName);
+            expense.setExpenseType("Materias Primas y Materiales");
+            expense.setExpensePrice(totalCost);
+            expense.setCurrency(currencyService.getCurrencyByName("CUP")); // Siempre en CUP
+            expense.setReceivedDate(expenseDate != null ? expenseDate : LocalDate.now());
+            expense.setAmount(amount);
+            expense.setClient(client);
+
+            // Guardar el gasto
+            expenseService.save(expense);
+
+            // Registrar en el ExpenseRegistry
+            ExpenseRegistry expenseRegistry = new ExpenseRegistry(
+                    null,
+                    expense.getExpenseId(),
+                    expense.getExpenseName(),
+                    expense.getExpensePrice(),
+                    expense.getCurrency().getCurrencyName(),
+                    client,
+                    "Automático por Venta",
+                    LocalDateTime.now()
+            );
+            expenseRegistryService.save(expenseRegistry);
+
+            // Registrar en GeneralRegistry
+            GeneralRegistry generalRegistry = new GeneralRegistry(
+                    null,
+                    client,
+                    "Ventas",
+                    "Gasto Automático por Venta",
+                    LocalDateTime.now()
+            );
+            generalRegistryService.save(generalRegistry);
+
+            log.info("Gasto automático registrado por venta: {} - ${} CUP", productName, totalCost);
+
+        } catch (Exception e) {
+            log.error("Error registrando gasto automático por venta: " + productName, e);
+            // No mostrar alerta al usuario para no interrumpir el flujo de venta
+        }
+    }
+
+    private Double calculateWeightedAverageCostInCUP(Product product, Client client) {
+        try {
+            List<Inventory> productInventories = inventoryService.getAllInventoriesByProductAndClient(product, client);
+
+            if (productInventories == null || productInventories.isEmpty()) {
+                return 0.0;
+            }
+
+            double totalCostInCUP = 0.0;
+            int totalAmount = 0;
+
+            for (Inventory inventory : productInventories) {
+                if (inventory.getUnitPrice() != null && inventory.getAmount() > 0) {
+                    double costInCUP = convertToCUP(inventory.getUnitPrice(), inventory.getCurrency());
+                    totalCostInCUP += costInCUP * inventory.getAmount();
+                    totalAmount += inventory.getAmount();
+                }
+            }
+
+            return totalAmount > 0 ? totalCostInCUP / totalAmount : 0.0;
+        } catch (Exception e) {
+            log.error("Error calculando costo ponderado en CUP para producto: " + product.getProductName(), e);
+            return 0.0;
+        }
+    }
+
+    private void updateUIAfterSale(Inventory inventory, Double weightedCostPerUnit, Double totalCost) {
         loadProductTable();
         loadWarningAndAlertLabels();
-        cleanForm();
 
         int remainingStock = inventory.getAmount();
         String message = "";
         String color = "black";
 
-        if (remainingStock > 0) {
-            message = "Venta registrada. Stock restante: " + remainingStock;
-            color = "#16a34a"; // green
-        } else if (remainingStock == 0) {
-            message = "Venta registrada. Producto AGOTADO";
-            color = "#dc2626"; // red
+        Double sellPrice = parseDataTypes.parseDouble(tfSellProductPrice.getText());
+        int soldAmount = parseDataTypes.parseInt(tfSellProductAmount.getText());
+
+        // Calcular ganancia considerando el costo ponderado
+        double profit = sellPrice - totalCost;
+        Double profitMargin = sellPrice > 0 ? (profit / sellPrice) * 100 : 0;
+
+        message = String.format("Venta registrada. Ganancia: %.2f %s (%.1f%%). Costo: %.2f CUP. Stock restante: %d",
+                profit, tfSellProductCurrency.getText(), profitMargin, totalCost, remainingStock);
+
+        if (profit > 0) {
+            color = "#16a34a"; // verde para ganancia
+        } else if (profit < 0) {
+            color = "#dc2626"; // rojo para pérdida
+        } else {
+            color = "#ca8a04"; // amarillo para punto de equilibrio
         }
 
+        if (remainingStock == 0) {
+            message += " - Producto AGOTADO";
+            color = "#dc2626"; // rojo para agotado
+        }
+
+        cleanForm();
         lblSellDebug.setText(message);
         lblSellDebug.setStyle("-fx-text-fill:" + color + "; -fx-font-weight: bold;");
     }
@@ -295,27 +417,10 @@ public class SellViewController {
             );
             generalRegistryService.save(generalRegistry);
 
-            displayAlerts.showAlert("El precio del producto ha sido guardado satisfactoriamente");
             cleanForm();
             loadProductTable();
         } catch (Exception e) {
             displayAlerts.showAlert("Ha ocurrido un error: " + e.getMessage());
-        }
-    }
-
-    // Agregar clase interna Debouncer
-    private static class Debouncer {
-        private Timer timer = new Timer(true);
-
-        public void debounce(Runnable task, int delayMillis) {
-            timer.cancel();
-            timer = new Timer(true);
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    Platform.runLater(task);
-                }
-            }, delayMillis);
         }
     }
 
@@ -360,46 +465,13 @@ public class SellViewController {
         });
     }
 
-    @FXML
-    private void switchToConfiguration(ActionEvent actionEvent) {
-        sceneSwitcher.switchToConfiguration(actionEvent);
-    }
-
-    @FXML
-    private void switchToSupport(ActionEvent actionEvent) {
-        sceneSwitcher.switchToSupport(actionEvent);
-    }
-
-    @FXML
-    private void switchToRegistry(ActionEvent actionEvent) {
-        sceneSwitcher.switchToRegistry(actionEvent);
-    }
-
-    @FXML
-    private void switchToWarehouse(ActionEvent actionEvent) {
-        sceneSwitcher.switchToWarehouse(actionEvent);
-    }
-
-    @FXML
-    private void switchToExpense(ActionEvent actionEvent) {
-        sceneSwitcher.switchToExpense(actionEvent);
-    }
-
-    @FXML
-    private void switchToBalance(ActionEvent actionEvent) {
-        sceneSwitcher.switchToBalance(actionEvent);
-    }
-
-    @FXML
-    public void switchToBuy(ActionEvent actionEvent) {
-        sceneSwitcher.switchToBuy(actionEvent);
-    }
 
     private void setupTableColumns() {
         // Configurar cada columna con su tipo específico
         configureStringColumn(ttcWarehouse, "warehouseName");
         configureStringColumn(ttcProductName, "productName");
-        configureStringColumn(ttcSellPrice, "sellPriceAndCurrency"); // Asumo que el campo se llama "sellPrice" y no "formattedPrice"
+        configureStringColumn(ttcSellPrice, "sellPriceAndCurrency");
+        configureStringColumn(ttcBuyPrice, "buyPriceAndCurrency");// Asumo que el campo se llama "sellPrice" y no "formattedPrice"
         configureIntegerColumn(ttcProductAmount, "productAmount");
 
         ttvInventory.setOnMouseClicked(event -> {
@@ -627,14 +699,14 @@ public class SellViewController {
         }
     }
 
-
     private TreeItem<SellDataTable> processInventories(List<Inventory> inventories, SellFilterCriteria filters) {
         originalItems.clear();
         TreeItem<SellDataTable> root = new TreeItem<>(new SellDataTable());
 
+        // Primero agrupar por producto
         Map<Product, List<Inventory>> inventoriesByProduct = sellFilterUtilities.groupAndFilterInventories(inventories, filters);
 
-        // Ordenar productos alfabéticamente por nombre
+        // Ordenar productos alfabéticamente
         List<Product> sortedProducts = inventoriesByProduct.keySet().stream()
                 .sorted(Comparator.comparing(Product::getProductName)).toList();
 
@@ -643,71 +715,165 @@ public class SellViewController {
             List<Inventory> filteredInvList = sellFilterUtilities.filterByWarehouseAndAmount(invList, filters);
 
             if (!filteredInvList.isEmpty()) {
-                // Crear una copia mutable de la lista para poder ordenarla
-                List<Inventory> mutableList = new ArrayList<>(filteredInvList);
+                // Consolidar inventarios por almacén (nuevo)
+                Map<Warehouse, InventorySummary> consolidatedByWarehouse = consolidateInventoriesByWarehouse(filteredInvList);
 
-                // Ordenar inventarios alfabéticamente por nombre de almacén
-                mutableList.sort(Comparator.comparing(inv ->
-                        inv.getWarehouse().getWarehouseName().toLowerCase()));
+                // Convertir el mapa consolidado de vuelta a lista para procesar
+                List<Inventory> consolidatedInventories = createConsolidatedInventoryList(consolidatedByWarehouse);
 
-                addToTree(root, product, mutableList);
+                // Calcular el precio de compra promedio PONDERADO para el producto
+                String averageBuyPrice = calculateWeightedAverageCostDisplay(product);
+
+                addToTree(root, product, consolidatedInventories, averageBuyPrice);
             }
         }
 
         return root;
     }
 
-    private void addToTree(TreeItem<SellDataTable> root, Product product, List<Inventory> filteredInvList) {
+    private String calculateWeightedAverageCostDisplay(Product product) {
+        try {
+            Double weightedCost = calculateWeightedAverageCostInCUP(product, client);
+            return weightedCost > 0 ? String.format("%.2f CUP", weightedCost) : "";
+        } catch (Exception e) {
+            log.error("Error calculando precio promedio para display", e);
+            return "";
+        }
+    }
+
+    private void addToTree(TreeItem<SellDataTable> root, Product product, List<Inventory> filteredInvList, String averageBuyPrice) {
         String currency = product.getCurrency() != null ? product.getCurrency().getCurrencyName() : "";
         int totalAmount = filteredInvList.stream().mapToInt(Inventory::getAmount).sum();
 
         if (filteredInvList.size() > 1) {
-            TreeItem<SellDataTable> productItem = createProductNode(product, currency, filteredInvList.size(), totalAmount);
-            filteredInvList.forEach(inv -> productItem.getChildren().add(createWarehouseNode(inv)));
+            TreeItem<SellDataTable> productItem = createProductNode(
+                    product, currency, filteredInvList.size(), totalAmount, averageBuyPrice);
+
+            for (Inventory inv : filteredInvList) {
+                // Usar CUP para los nodos hijos también
+                String specificBuyPrice = formatBuyPrice(inv);
+                productItem.getChildren().add(createWarehouseNode(inv, specificBuyPrice));
+            }
+
             root.getChildren().add(productItem);
             originalItems.add(productItem);
         } else {
-            TreeItem<SellDataTable> singleNode = createSingleNode(product, currency, filteredInvList.getFirst(), totalAmount);
+            // Para nodo único, usar CUP
+            String specificBuyPrice = formatBuyPrice(filteredInvList.getFirst());
+            TreeItem<SellDataTable> singleNode = createSingleNode(
+                    product, currency, filteredInvList.getFirst(), totalAmount, specificBuyPrice);
             root.getChildren().add(singleNode);
             originalItems.add(singleNode);
         }
     }
 
-    private TreeItem<SellDataTable> createProductNode(Product product, String currency, int warehouseCount, int totalAmount) {
+    private String formatBuyPrice(Inventory inventory) {
+        if (inventory == null || inventory.getUnitPrice() == null || inventory.getUnitPrice() <= 0) {
+            return "";
+        }
+
+        // Si ya está en CUP (caso de nodos consolidados), mostrar directamente
+        if ("CUP".equalsIgnoreCase(inventory.getCurrency())) {
+            return String.format("%.2f CUP", inventory.getUnitPrice());
+        }
+
+        // Para registros individuales no consolidados, convertir a CUP
+        double priceInCUP = convertToCUP(inventory.getUnitPrice(), inventory.getCurrency());
+        return String.format("%.2f CUP", priceInCUP);
+    }
+
+    private TreeItem<SellDataTable> createProductNode(
+            Product product, String currency, int warehouseCount, int totalAmount, String buyPriceAndCurrency
+    ) {
         String priceString = (product.getSellPrice() != null) ?
-                product.getSellPrice() + " " + currency : "";
+                String.format("%.2f %s", product.getSellPrice(), currency) : "";
 
         return new TreeItem<>(
                 new SellDataTable(
                         product.getProductName(),
-                        priceString,  // Usar string formateado
+                        priceString,
                         "Almacenes: " + warehouseCount,
-                        totalAmount
+                        totalAmount,
+                        buyPriceAndCurrency  // Precio promedio de compra
                 )
         );
     }
 
-    private TreeItem<SellDataTable> createSingleNode(Product product, String currency, Inventory inv, int totalAmount) {
+    private TreeItem<SellDataTable> createSingleNode(Product product, String currency, Inventory inv, int totalAmount, String buyPriceAndCurrency) {
         String priceString = (product.getSellPrice() != null) ?
-                product.getSellPrice() + " " + currency : "";
+                String.format("%.2f %s", product.getSellPrice(), currency) : "";
 
         return new TreeItem<>(
                 new SellDataTable(
                         product.getProductName(),
-                        priceString,  // Usar string formateado
+                        priceString,
                         inv.getWarehouse().getWarehouseName(),
-                        totalAmount
+                        totalAmount,
+                        buyPriceAndCurrency  // Precio específico de compra
                 )
         );
     }
 
-    private TreeItem<SellDataTable> createWarehouseNode(Inventory inv) {
+    // Agregar estas clases y métodos dentro de SellViewController
+
+    private static class InventorySummary {
+        double totalValueInCUP = 0.0;
+        int totalAmount = 0;
+
+        double getAveragePriceInCUP() {
+            return totalAmount > 0 ? totalValueInCUP / totalAmount : 0.0;
+        }
+    }
+
+    private Map<Warehouse, InventorySummary> consolidateInventoriesByWarehouse(List<Inventory> inventories) {
+        Map<Warehouse, InventorySummary> consolidated = new HashMap<>();
+
+        for (Inventory inv : inventories) {
+            if (inv == null || inv.getWarehouse() == null) continue;
+
+            Warehouse warehouse = inv.getWarehouse();
+            InventorySummary summary = consolidated.getOrDefault(warehouse, new InventorySummary());
+
+            if (inv.getUnitPrice() != null && inv.getAmount() != null && inv.getAmount() > 0) {
+                double priceInCUP = convertToCUP(inv.getUnitPrice(), inv.getCurrency());
+                summary.totalValueInCUP += priceInCUP * inv.getAmount();
+                summary.totalAmount += inv.getAmount();
+            }
+
+            consolidated.put(warehouse, summary);
+        }
+
+        return consolidated;
+    }
+
+    private List<Inventory> createConsolidatedInventoryList(Map<Warehouse, InventorySummary> consolidated) {
+        List<Inventory> result = new ArrayList<>();
+
+        for (Map.Entry<Warehouse, InventorySummary> entry : consolidated.entrySet()) {
+            Warehouse warehouse = entry.getKey();
+            InventorySummary summary = entry.getValue();
+
+            if (summary.totalAmount > 0) {
+                Inventory consolidatedInv = new Inventory();
+                consolidatedInv.setWarehouse(warehouse);
+                consolidatedInv.setAmount(summary.totalAmount);
+                consolidatedInv.setUnitPrice(summary.getAveragePriceInCUP());
+                consolidatedInv.setCurrency("CUP");
+                result.add(consolidatedInv);
+            }
+        }
+
+        return result;
+    }
+
+    private TreeItem<SellDataTable> createWarehouseNode(Inventory inv, String buyPriceAndCurrency) {
         return new TreeItem<>(
                 new SellDataTable(
                         "",
                         "",
                         inv.getWarehouse().getWarehouseName(),
-                        inv.getAmount()
+                        inv.getAmount(),
+                        buyPriceAndCurrency  // Precio específico de compra para este almacén
                 )
         );
     }
@@ -796,10 +962,6 @@ public class SellViewController {
         }
     }
 
-    private void initDatePicker() {
-        dpSellProductDate.setValue(LocalDate.now());
-    }
-
     private void initMbWarehouse() {
         mbSellWarehouse.getItems().clear();
         List<Warehouse> warehouses = warehouseService.getWarehousesByClient(client);
@@ -857,5 +1019,40 @@ public class SellViewController {
         sceneSwitcher.displayWindow(
                 "Ventas Realizadas", "/images/lc_logo.png", "/views/realizedSells.fxml"
         );
+    }
+
+    @FXML
+    private void switchToConfiguration(ActionEvent actionEvent) {
+        sceneSwitcher.switchToConfiguration(actionEvent);
+    }
+
+    @FXML
+    private void switchToSupport(ActionEvent actionEvent) {
+        sceneSwitcher.switchToSupport(actionEvent);
+    }
+
+    @FXML
+    private void switchToRegistry(ActionEvent actionEvent) {
+        sceneSwitcher.switchToRegistry(actionEvent);
+    }
+
+    @FXML
+    private void switchToWarehouse(ActionEvent actionEvent) {
+        sceneSwitcher.switchToWarehouse(actionEvent);
+    }
+
+    @FXML
+    private void switchToExpense(ActionEvent actionEvent) {
+        sceneSwitcher.switchToExpense(actionEvent);
+    }
+
+    @FXML
+    private void switchToBalance(ActionEvent actionEvent) {
+        sceneSwitcher.switchToBalance(actionEvent);
+    }
+
+    @FXML
+    public void switchToBuy(ActionEvent actionEvent) {
+        sceneSwitcher.switchToBuy(actionEvent);
     }
 }

@@ -12,9 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "Inventory", indexes = {
-        @Index(name = "idx_inventory_client_product", columnList = "client_id, product_id"), // Common access pattern
-        @Index(name = "idx_inventory_client_warehouse", columnList = "client_id, warehouse_id"),
-        @Index(name = "idx_inventory_amount", columnList = "amount") // For low-stock alerts
+        @Index(name = "idx_inventory_amount", columnList = "amount")
 })
 public class Inventory {
     @Id
@@ -34,6 +32,15 @@ public class Inventory {
 
     @Column(name = "amount")
     private Integer amount;
+
+    @Column(name = "unit_price") // NUEVO CAMPO - precio unitario al momento de la compra
+    private Double unitPrice;
+
+    @Column(name = "currency") // NUEVO CAMPO - moneda del precio
+    private String currency;
+
+    @Column(name = "buy_id") // NUEVO CAMPO - referencia a la compra original
+    private Long buyId;
 
     @Column(name="amount_alert")
     private Integer amountAlert;

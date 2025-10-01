@@ -2,6 +2,7 @@ package com.marcosoft.storageSoftware.application.controller;
 
 import com.marcosoft.storageSoftware.domain.model.Client;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
 import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -22,16 +23,14 @@ public class CreateClientViewController {
 
     private final ClientServiceImpl clientService;
     private final SceneSwitcher sceneSwitcher;
+    private final DisplayAlerts displayAlerts;
 
-
-    /**
-     * Constructor for dependency injection.
-     * @param clientService the client service
-     */
-    @Lazy
-    public CreateClientViewController(SceneSwitcher sceneSwitcher, ClientServiceImpl clientService) {
+    public CreateClientViewController(
+            SceneSwitcher sceneSwitcher, ClientServiceImpl clientService, DisplayAlerts displayAlerts
+    ) {
         this.clientService = clientService;
         this.sceneSwitcher = sceneSwitcher;
+        this.displayAlerts = displayAlerts;
     }
 
     // FXML UI components
@@ -47,7 +46,7 @@ public class CreateClientViewController {
     private Label txtDebugForm;
 
     // State variables for validation
-    private boolean userNameIsSet = false, passwordIsSet = false, confirmedPasswordIsSet = false, companyIsSet = false;
+    private boolean userNameIsSet = false, passwordIsSet = false, confirmedPasswordIsSet = false;
 
     /**
      * Initializes the controller after its root element has been completely processed.
@@ -89,8 +88,14 @@ public class CreateClientViewController {
         );
         clientService.save(client);
 
-        Alert alert = getAlert(txtFieldCompany, txtFieldUserName);
-        alert.showAndWait();
+        if (txtFieldCompany.getText() != null && !txtFieldCompany.getText().isEmpty()) {
+            displayAlerts.showConfirmationAlert("Usted ha creado la cuenta con nombre " + txtFieldUserName.getText() +
+                    " perteneciente a la compañía " + txtFieldCompany.getText() +
+                    ".\n¡Por favor no olvide su contraseña!");
+        } else {
+            displayAlerts.showConfirmationAlert("Usted ha creado la cuenta con nombre " + txtFieldUserName.getText()
+                    + ".\n¡Por favor no olvide su contraseña!");
+        }
         try {
             goBack(actionEvent);
         } catch (SceneSwitcher.ViewLoadException e) {
@@ -98,24 +103,6 @@ public class CreateClientViewController {
         }
     }
 
-    /**
-     * Creates and returns an alert with account creation information.
-     * The alert message is shown in Spanish.
-     */
-    private static Alert getAlert(TextField txtFieldCompany, TextField txtFieldUserName) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Cuenta creada");
-        alert.setHeaderText("Información de creación de la cuenta");
-        if (txtFieldCompany.getText() != null && !txtFieldCompany.getText().isEmpty()) {
-            alert.setContentText("Usted ha creado la cuenta con nombre " + txtFieldUserName.getText() +
-                    " perteneciente a la compañía " + txtFieldCompany.getText() +
-                    ".\n¡Por favor no olvide su contraseña!");
-        } else {
-            alert.setContentText("Usted ha creado la cuenta con nombre " + txtFieldUserName.getText()
-                    + ".\n¡Por favor no olvide su contraseña!");
-        }
-        return alert;
-    }
 
     /**
      * Validates the username field as the user types.
@@ -176,17 +163,6 @@ public class CreateClientViewController {
         confirmedPasswordIsSet = confirmValid;
         txtDebugForm.setTextFill(color);
         txtDebugForm.setText(message);
-    }
-
-    /**
-     * Validates the company field as the user types.
-     * Updates the progress bar.
-     */
-    @FXML
-    public void txtFieldTypingCompany() {
-        // You can add company validation here if needed
-        companyIsSet = txtFieldCompany.getText() != null && !txtFieldCompany.getText().isEmpty();
-        updateProgress();
     }
 
     /**

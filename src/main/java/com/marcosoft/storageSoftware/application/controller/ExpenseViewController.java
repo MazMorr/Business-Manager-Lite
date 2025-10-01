@@ -99,13 +99,14 @@ public class ExpenseViewController {
         lblClientName.setText(client.getClientName());
         initializeTableColumns();
         initializeTableValues();
+
         Platform.runLater(() -> {
             initializeTableColumns();
             initializeTableValues();
             setupTextFieldListeners();
             setupTableSelectionListener();
             updateCurrencyMenu();
-            initDpDefaultValue();
+            cleanForm();
             initMbExpenseTypeItemsOnAction();
         });
     }
@@ -200,7 +201,8 @@ public class ExpenseViewController {
         String currency = tfAddExpenseCurrency.getText();
         String expenseType = tfAddExpenseType.getText();
         String registryType;
-        if (!expenseService.existsByExpenseId(expenseId)) {
+
+        if (expenseId == null || !expenseService.existsByExpenseId(expenseId)) {
             registryType = "Adición";
         } else {
             registryType = "Actualización";
@@ -329,7 +331,7 @@ public class ExpenseViewController {
         List<TextField> textFieldList = List.of
                 (tfId, tfAddExpenseType, tfAddProductName, tfAddExpensePrice, tfAddExpenseCurrency);
         cleanHelper.cleanTextFields(textFieldList);
-
+        tfAddExpenseCurrency.setText("CUP");
         dpAddExpenseDate.setValue(LocalDate.now());
     }
 
@@ -389,7 +391,6 @@ public class ExpenseViewController {
         tvExpense.setItems(filteredList);
     }
 
-
     private void updateCurrencyMenu() {
         mbCurrency.getItems().clear();
         List<Currency> currencyList = currencyService.getAllCurrencies();
@@ -441,7 +442,5 @@ public class ExpenseViewController {
         sceneSwitcher.switchToSell(actionEvent);
     }
 
-    private void initDpDefaultValue() {
-        dpAddExpenseDate.setValue(LocalDate.now());
-    }
+
 }

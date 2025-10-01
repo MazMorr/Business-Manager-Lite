@@ -26,7 +26,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     private final ExpenseRepository expenseRepository;
     private final CurrencyRepository currencyRepository;
-    private Map<String, Double> currencyRatesCache = new ConcurrentHashMap<>();
+    private final Map<String, Double> currencyRatesCache = new ConcurrentHashMap<>();
 
     public ExpenseServiceImpl(CurrencyRepository currencyRepository, ExpenseRepository expenseRepository) {
         this.expenseRepository = expenseRepository;
@@ -86,29 +86,24 @@ public class ExpenseServiceImpl implements ExpenseService {
         return expenseRepository.findAllExpensesByClientAndAmountGreaterThanAndExpenseType(client, 0, investmentType);
     }
 
-    @Override
-    public List<Expense> getAllProductExpensesGreaterThanZeroByClient(Client client) {
-        return List.of();
+    public Double getTotalFuelsAndLubricantsExpense(Client client, LocalDate initDate, LocalDate endDate, Currency currency) {
+        return calculateExpense(client, initDate, endDate, currency, "Combustibles y Lubricantes");
     }
 
-    public Double getTotalRentExpense(Client client, LocalDate initDate, LocalDate endDate, Currency currency) {
-        return calculateExpense(client, initDate, endDate, currency, "Renta");
+    public Double getTotalStaffExpense(Client client, LocalDate initDate, LocalDate endDate, Currency currency) {
+        return calculateExpense(client, initDate, endDate, currency, "Gastos de Personal");
     }
 
-    public Double getTotalSalaryExpense(Client client, LocalDate initDate, LocalDate endDate, Currency currency) {
-        return calculateExpense(client, initDate, endDate, currency, "Salario");
+    public Double getTotalEnergyExpense(Client client, LocalDate initDate, LocalDate endDate, Currency currency) {
+        return calculateExpense(client, initDate, endDate, currency, "Energía");
     }
 
-    public Double getTotalPublicityExpense(Client client, LocalDate initDate, LocalDate endDate, Currency currency) {
-        return calculateExpense(client, initDate, endDate, currency, "Publicidad");
+    public Double getTotalRawMaterialsAndSuppliesExpense(Client client, LocalDate initDate, LocalDate endDate, Currency currency) {
+        return calculateExpense(client, initDate, endDate, currency, "Materias Primas y Materiales");
     }
 
-    public Double getTotalProductExpense(Client client, LocalDate initDate, LocalDate endDate, Currency currency) {
-        return calculateExpense(client, initDate, endDate, currency, "Producto");
-    }
-
-    public Double getTotalServiceExpense(Client client, LocalDate initDate, LocalDate endDate, Currency currency) {
-        return calculateExpense(client, initDate, endDate, currency, "Servicio");
+    public Double getTotalOtherMonetaryExpense(Client client, LocalDate initDate, LocalDate endDate, Currency currency) {
+        return calculateExpense(client, initDate, endDate, currency, "Otros Gastos Monetarios");
     }
 
     private Double calculateExpense(

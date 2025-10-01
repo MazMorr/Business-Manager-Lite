@@ -1,15 +1,12 @@
 package com.marcosoft.storageSoftware.application.controller;
 
 import com.marcosoft.storageSoftware.application.dto.ExpenseWarehouseDataTable;
-import com.marcosoft.storageSoftware.infrastructure.util.UserLogged;
 import com.marcosoft.storageSoftware.application.dto.WarehouseDataTable;
 import com.marcosoft.storageSoftware.domain.model.*;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.ExpenseServiceImpl;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.GeneralRegistryServiceImpl;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.InventoryServiceImpl;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.WarehouseServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.*;
 import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
 import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
+import com.marcosoft.storageSoftware.infrastructure.util.UserLogged;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -20,6 +17,7 @@ import org.springframework.stereotype.Controller;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -36,15 +34,15 @@ public class WarehouseViewController {
     private final DisplayAlerts displayAlerts;
     private final InventoryServiceImpl inventoryService;
     private final GeneralRegistryServiceImpl generalRegistryService;
-    private final ExpenseServiceImpl expenseService;
     private final ExpenseViewController expenseViewController;
+    private final BuyServiceImpl buyService;
+    private final CurrencyServiceImpl currencyService;
 
     public WarehouseViewController(
-            ExpenseServiceImpl expenseService, DisplayAlerts displayAlerts, WarehouseServiceImpl warehouseService,
+            DisplayAlerts displayAlerts, WarehouseServiceImpl warehouseService, BuyServiceImpl buyService,
             UserLogged userLogged, SceneSwitcher sceneSwitcher, InventoryServiceImpl inventoryService,
-            GeneralRegistryServiceImpl generalRegistryService, ExpenseViewController expenseViewController
+            GeneralRegistryServiceImpl generalRegistryService, ExpenseViewController expenseViewController, CurrencyServiceImpl currencyService
     ) {
-        this.expenseService = expenseService;
         this.inventoryService = inventoryService;
         this.sceneSwitcher = sceneSwitcher;
         this.displayAlerts = displayAlerts;
@@ -52,6 +50,8 @@ public class WarehouseViewController {
         this.warehouseService = warehouseService;
         this.generalRegistryService = generalRegistryService;
         this.expenseViewController = expenseViewController;
+        this.buyService = buyService;
+        this.currencyService = currencyService;
     }
 
     // FXML UI components
@@ -59,8 +59,10 @@ public class WarehouseViewController {
     private TableView<ExpenseWarehouseDataTable> tvExpenses;
     @FXML
     private TreeTableView<WarehouseDataTable> ttvWarehouse;
+
+
     @FXML
-    private TreeTableColumn<WarehouseDataTable, String> ttcWarehouseName, ttcProductName;
+    private TreeTableColumn<WarehouseDataTable, String> ttcValue, ttcWarehouseName, ttcProductName;
     @FXML
     private TreeTableColumn<WarehouseDataTable, Integer> ttcProductAmount;
 
@@ -90,46 +92,43 @@ public class WarehouseViewController {
         // Clear previous data
         tvExpenses.getItems().clear();
 
-        // Get all expenses for the client with amount > 0 (not fully assigned)
-        List<Expense> expenses = expenseService.getAllProductExpensesGreaterThanZeroByClient(client).stream().toList();
+        // Obtener todas las compras de tipo "Materias Primas y Materiales" con leftAmount > 0
+        List<Buy> buys = buyService.getAllBuysGreaterThanZeroByClient(client).stream()
+                .filter(buy -> "Materias Primas y Materiales".equals(buy.getBuyType()))
+                .toList();
 
-        // Map expenses to ExpenseWarehouseDataTable
-        //Aquí hay que usar el buyService otra ve
-        /*
-                List<ExpenseWarehouseDataTable> investmentData = expenses.stream()
-                .map(inv -> new ExpenseWarehouseDataTable(
-                        inv.getExpenseId(),
-                        inv.getExpenseName(),
-                        inv.getLeftAmount(),
-                        inv.getReceivedDate()
+        // Mapear las compras a ExpenseWarehouseDataTable
+        List<ExpenseWarehouseDataTable> buyData = buys.stream()
+                .map(buy -> new ExpenseWarehouseDataTable(
+                        buy.getBuyId(),
+                        buy.getBuyName(),
+                        buy.getLeftAmount(),
+                        buy.getReceivedDate()
                 ))
                 .toList();
-         */
 
-
-        // Set up columns if not already set (optional, for safety)
+        // Configurar columnas
         tcIdExpense.setCellValueFactory(new PropertyValueFactory<>("expenseId"));
         tcProductName.setCellValueFactory(new PropertyValueFactory<>("expenseName"));
         tcProductAmount.setCellValueFactory(new PropertyValueFactory<>("productAmount"));
         tcProductDate.setCellValueFactory(new PropertyValueFactory<>("expenseDate"));
 
-        // Add data to the table
-        // Descomentar cuando se resuelva lo de arriba
-        // tvExpenses.getItems().addAll(investmentData);
+        // Agregar datos a la tabla
+        tvExpenses.getItems().addAll(buyData);
     }
 
     private void initTableLabels() {
-        // Placeholder for TreeTableView (ttvWarehouse)
+        // Placeholder para TreeTableView (ttvWarehouse)
         ttvWarehouse.setPlaceholder(new Label("""
                 📦 ¡Vaya! No hay almacenes registrados
-                Añade tu primer almacén con el botón\s
+                Añade tu primer almacén con el botón\s\s
                 '(+) Agregar Almacén'"""));
 
-        // Placeholder for TableView (tvExpenses)
+        // Placeholder actualizado para TableView (tvExpenses)
         tvExpenses.setPlaceholder(new Label("""
-                💼 Aquí aparecerán tus gastos
-                Cuando registres GASTOS de tipo PRODUCTO
-                y estos no hayan sido asignados, se mostrarán aquí"""));
+                💼 Aquí aparecerán tus compras de Materias Primas
+                Cuando hagas COMPRAS y no hayan sido asignadas,
+                Se mostrarán aquí para su asignación"""));
 
         // Common style for both placeholders
         String commonStyle = "-fx-font-family: 'Segoe UI'; " +
@@ -148,8 +147,16 @@ public class WarehouseViewController {
         ttcWarehouseName.setCellValueFactory(new TreeItemPropertyValueFactory<>("warehouseName"));
         ttcProductName.setCellValueFactory(new TreeItemPropertyValueFactory<>("productName"));
         ttcProductAmount.setCellValueFactory(new TreeItemPropertyValueFactory<>("productAmount"));
+        ttcValue.setCellValueFactory(new TreeItemPropertyValueFactory<>("valueInCUP"));
 
         List<Inventory> inventory = inventoryService.getAllInventoriesByClient(client);
+
+        // Obtener todas las compras de Materias Primas y Materiales
+        List<Buy> materialBuys = buyService.getAllBuysByClient(client).stream()
+                .filter(buy -> "Materias Primas y Materiales".equals(buy.getBuyType())).toList();
+
+        // CORRECIÓN: Calcular precio promedio ponderado por producto
+        Map<String, Double> productAvgPricesInCUP = calculateWeightedAveragePrices(materialBuys);
 
         // Group inventories by warehouse
         Map<Warehouse, List<Inventory>> inventoriesByWarehouse = inventory.stream()
@@ -158,25 +165,44 @@ public class WarehouseViewController {
         TreeItem<WarehouseDataTable> root = new TreeItem<>();
 
         inventoriesByWarehouse.forEach((warehouse, inventories) -> {
-            // Manejo de amount null en el cálculo del total
-            int total = inventories.stream().mapToInt(inv -> inv.getAmount() != null ? inv.getAmount() : 0).sum();
+            // Calcular el valor total del almacén EN CUP
+            double totalWarehouseValue = 0.0;
+
+            for (Inventory inv : inventories) {
+                if (inv.getProduct() != null && inv.getAmount() != null) {
+                    Double avgPriceInCUP = productAvgPricesInCUP.get(inv.getProduct().getProductName());
+                    if (avgPriceInCUP != null) {
+                        totalWarehouseValue += avgPriceInCUP * inv.getAmount();
+                    }
+                }
+            }
+
+            int totalAmount = inventories.stream()
+                    .mapToInt(inv -> inv.getAmount() != null ? inv.getAmount() : 0)
+                    .sum();
             int invCount = inventories.size() - 1;
 
             WarehouseDataTable warehouseNode = new WarehouseDataTable(
                     warehouse.getWarehouseName(),
                     "Productos: " + invCount,
-                    total
+                    totalAmount,
+                    String.format("%.2f CUP", totalWarehouseValue) // Valor en CUP
             );
 
             TreeItem<WarehouseDataTable> warehouseItem = new TreeItem<>(warehouseNode);
 
-            // Children (products)
+            // Children (products) - con valor individual EN CUP
             inventories.forEach(inv -> {
                 if (!(inv.getProduct() == null || inv.getAmount() == null)) {
+                    Double avgPriceInCUP = productAvgPricesInCUP.get(inv.getProduct().getProductName());
+                    String productValue = (avgPriceInCUP != null) ?
+                            String.format("%.2f CUP", avgPriceInCUP * inv.getAmount()) : "N/A";
+
                     WarehouseDataTable productNode = new WarehouseDataTable(
                             "",
                             inv.getProduct().getProductName(),
-                            inv.getAmount()
+                            inv.getAmount(),
+                            productValue // Valor individual en CUP
                     );
                     warehouseItem.getChildren().add(new TreeItem<>(productNode));
                 }
@@ -187,6 +213,62 @@ public class WarehouseViewController {
 
         ttvWarehouse.setRoot(root);
         ttvWarehouse.setShowRoot(false);
+    }
+
+    // Nuevo método para calcular precios promedio ponderados en CUP
+    private Map<String, Double> calculateWeightedAveragePrices(List<Buy> buys) {
+        Map<String, ProductSummary> productSummaries = new HashMap<>();
+
+        for (Buy buy : buys) {
+            ProductSummary summary = productSummaries.getOrDefault(buy.getBuyName(), new ProductSummary());
+
+            double priceInCUP = convertToCUP(buy.getBuyUnitaryPrice(),
+                    buy.getCurrency().getCurrencyName());
+
+            summary.totalValue += priceInCUP * buy.getAmount();
+            summary.totalAmount += buy.getAmount();
+            productSummaries.put(buy.getBuyName(), summary);
+        }
+
+        Map<String, Double> result = new HashMap<>();
+        for (Map.Entry<String, ProductSummary> entry : productSummaries.entrySet()) {
+            ProductSummary summary = entry.getValue();
+            if (summary.totalAmount > 0) {
+                result.put(entry.getKey(), summary.totalValue / summary.totalAmount);
+            }
+        }
+
+        return result;
+    }
+
+    @FXML
+    public void productionInProgress(ActionEvent actionEvent) {
+        displayAlerts.showAlert("Aún en desarrollo");
+    }
+
+    // Clase auxiliar para el cálculo de promedios
+    private static class ProductSummary {
+        double totalValue = 0.0;
+        int totalAmount = 0;
+    }
+
+    // Método de conversión a CUP (similar al de SellViewController)
+    private Double convertToCUP(Double amount, String currency) {
+        if (amount == null) return 0.0;
+        if ("CUP".equalsIgnoreCase(currency) || currency == null || currency.trim().isEmpty()) {
+            return amount;
+        }
+
+        try {
+            // Necesitas inyectar CurrencyService en WarehouseViewController
+            Currency currencyEntity = currencyService.getCurrencyByName(currency);
+            if (currencyEntity != null && currencyEntity.getCurrencyPriceInCUP() != null) {
+                return amount * currencyEntity.getCurrencyPriceInCUP();
+            }
+            return amount;
+        } catch (Exception e) {
+            return amount;
+        }
     }
 
     @FXML
@@ -255,10 +337,6 @@ public class WarehouseViewController {
     public void changeProductName() throws SceneSwitcher.WindowLoadException {
         sceneSwitcher.displayWindow("Asignar Inversión a un Almacén", "/images/lc_logo.png", "/views/renameProductView.fxml");
     }
-
-    // ============================
-    // MÉTODOS DE NAVEGACIÓN
-    // ============================
 
     @FXML
     private void switchToConfiguration(ActionEvent actionEvent) {

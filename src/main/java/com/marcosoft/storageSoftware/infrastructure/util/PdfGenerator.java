@@ -138,8 +138,8 @@ public class PdfGenerator {
             return;
         }
 
-        // Crear tabla con el número correcto de columnas
-        Table table = new Table(data.getFirst().length);
+        int numColumns = data.getFirst().length;
+        Table table = new Table(numColumns);
         table.setWidth(UnitValue.createPercentValue(100));
 
         // Encabezados
@@ -155,13 +155,26 @@ public class PdfGenerator {
 
         // Datos
         for (int i = 1; i < data.size(); i++) {
-            for (String value : data.get(i)) {
-                table.addCell(
-                        new Cell()
-                                .add(new Paragraph(value != null ? value : ""))
-                                .setFont(font)
-                                .setTextAlignment(TextAlignment.LEFT)
-                );
+            String[] row = data.get(i);
+
+            // Verificar si es la fila de TOTAL
+            boolean isTotalRow = row.length >= 2 && "TOTAL".equals(row[2]);
+
+            for (String s : row) {
+                Cell cell = new Cell().add(new Paragraph(s != null ? s : ""));
+
+                if (isTotalRow) {
+                    // Estilo para fila de total
+                    cell.setFont(boldFont)
+                            .setBackgroundColor(new DeviceRgb(220, 220, 220))
+                            .setTextAlignment(TextAlignment.RIGHT);
+                } else {
+                    // Datos normales
+                    cell.setFont(font)
+                            .setTextAlignment(TextAlignment.LEFT);
+                }
+
+                table.addCell(cell);
             }
         }
 

@@ -17,4 +17,8 @@ public interface InventoryRepository extends CrudRepository<Inventory, Long> {
     Inventory findByProductAndWarehouseAndClient(Product product, Warehouse warehouse, Client client);
 
     boolean existsByProductAndWarehouseAndClient(Product product, Warehouse warehouse, Client client);
+
+    List<Inventory> findByProductAndClient(Product product, Client client);
+
+    List<Inventory> findByBuyId(Long buyId);
 }

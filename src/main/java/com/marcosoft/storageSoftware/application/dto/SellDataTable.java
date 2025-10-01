@@ -14,14 +14,17 @@ public class SellDataTable {
     private String sellPriceAndCurrency;
     private String warehouseName;
     private Integer productAmount;
-    private String style="";
+    private String buyPriceAndCurrency;
+    private String style = "";
 
     public SellDataTable(
-            String productName, String sellPriceAndCurrency, String warehouseName, Integer productAmount
+            String productName, String sellPriceAndCurrency, String warehouseName, Integer productAmount,
+            String buyPriceAndCurrency
     ) {
         this.productName = productName;
         this.sellPriceAndCurrency = sellPriceAndCurrency;
         this.warehouseName = warehouseName;
         this.productAmount = productAmount;
+        this.buyPriceAndCurrency = buyPriceAndCurrency;
     }
 }

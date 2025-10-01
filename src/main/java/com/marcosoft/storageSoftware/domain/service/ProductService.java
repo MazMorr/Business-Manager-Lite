@@ -10,6 +10,8 @@ public interface ProductService {
 
     List<Product> getAllProducts();
 
+    void deleteById(Long id);
+
     Product getByProductNameAndClient(String productName, Client client);
 
     Product getByProductName(String name);

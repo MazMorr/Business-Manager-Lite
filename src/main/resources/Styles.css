@@ -43,13 +43,16 @@ Negro:               #0f172a
   -fx-background-color: #60a5fa;
 }
 
+.check-box{
+    -fx-font-size: 13px;
+}
+
 .menu-button {
   -fx-background-color: linear-gradient(to bottom, #60a5fa, #2563eb);
   -fx-text-fill: #ffffff;
   transition: 500ms;
 }
 
-.menu-button .arrow,
 .menu-button .arrow {
   -fx-background-color: #ffffff;
 }
@@ -374,4 +377,49 @@ tree-table-view .filler {
 .alert.confirmation .content.label {
   -fx-min-height: 70px; /* Altura mínima para 3+ líneas */
   -fx-pref-height: -1; /* Permite crecimiento automático */
+}
+
+/* ========================= */
+/* TITLED PANE (ACORDEÓN)    */
+/* ========================= */
+.titled-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: #2563eb;
+    -fx-border-width: 1.5;
+    -fx-effect: dropshadow(gaussian, rgba(37, 99, 235, 0.1), 6, 0, 0, 2);
+    -fx-expanded-duration: 1000ms;
+    -fx-collapsed-duration: 1000ms;
+}
+
+.titled-pane > .title {
+    -fx-background-color: linear-gradient(to bottom, #60a5fa, #2563eb);
+    -fx-border-radius: 8 8 0 0;
+    -fx-padding: 4 6;
+}
+
+.titled-pane > .title > .text {
+    -fx-fill: #ffffff;
+    -fx-font-weight: 700;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 14;
+}
+
+.titled-pane > .title:hover {
+    -fx-background-color: linear-gradient(to bottom, #7bb4fa, #3b75ec);
+    -fx-cursor: hand;
+}
+
+.titled-pane > .title > .arrow-button .arrow {
+    -fx-background-color: #ffffff;
+    -fx-shape: "M 0 0 L 4 4 L 0 8 Z";
+    -fx-scale-shape: false;
+    -fx-padding: 4px;
+    -fx-effect: null;
+}
+
+.titled-pane > .content {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #cbd5e1;
+    -fx-border-width: 0 1 1 1;
+    -fx-transition: -fx-pref-height 1000ms, -fx-min-height 1000ms, -fx-max-height 1000ms;
 }

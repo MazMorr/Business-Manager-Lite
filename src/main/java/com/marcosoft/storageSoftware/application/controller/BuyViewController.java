@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -38,11 +39,13 @@ public class BuyViewController {
     private final BuyRegistryServiceImpl buyRegistryService;
     private final ProductServiceImpl productService;
     private final CleanHelper cleanHelper;
+    private final InventoryServiceImpl inventoryService;
 
     public BuyViewController(
             UserLogged userLogged, SceneSwitcher sceneSwitcher, CurrencyServiceImpl currencyService, BuyServiceImpl buyService,
             ParseDataTypes parseDataTypes, BuyAndExpenseSharedMethods buyAndExpenseSharedMethods, DisplayAlerts displayAlerts,
-            GeneralRegistryServiceImpl generalRegistryService, BuyRegistryServiceImpl buyRegistryService, ProductServiceImpl productService, CleanHelper cleanHelper
+            GeneralRegistryServiceImpl generalRegistryService, BuyRegistryServiceImpl buyRegistryService,
+            ProductServiceImpl productService, CleanHelper cleanHelper, InventoryServiceImpl inventoryService
     ) {
         this.userLogged = userLogged;
         this.sceneSwitcher = sceneSwitcher;
@@ -55,6 +58,7 @@ public class BuyViewController {
         this.buyRegistryService = buyRegistryService;
         this.productService = productService;
         this.cleanHelper = cleanHelper;
+        this.inventoryService = inventoryService;
     }
 
     @FXML
@@ -62,7 +66,7 @@ public class BuyViewController {
     @FXML
     private TableView<BuyDataTable> tvBuy;
     @FXML
-    private TableColumn<BuyDataTable, String> tcBuyName, tcBuyType, tcTotalPriceAndCurrency, tcUnitaryPriceAndCurrency;
+    private TableColumn<BuyDataTable, String> tcBuyName, tcTotalPriceAndCurrency, tcUnitaryPriceAndCurrency;
     @FXML
     private TableColumn<BuyDataTable, Long> tcId;
     @FXML
@@ -71,12 +75,11 @@ public class BuyViewController {
     private TableColumn<BuyDataTable, LocalDate> tcDate;
 
     @FXML
-    private MenuButton mbBuyType, mbTotalCurrency, mbUnitaryCurrency;
+    private MenuButton mbTotalCurrency, mbUnitaryCurrency;
 
     @FXML
     private TextField tfMinFilterAmount, tfAddTotalBuyCurrency, tfFilterId, tfFilterName, tfAddUnitaryBuyCurrency,
-            tfAddBuyName, tfAddUnitaryBuyPrice, tfId, tfAddTotalBuyPrice, tfMaxFilterPrice, tfMaxFilterAmount,
-            tfAddBuyType, tfMinFilterPrice, tfAddBuyAmount;
+            tfAddBuyName, tfAddUnitaryBuyPrice, tfId, tfAddTotalBuyPrice, tfMaxFilterPrice, tfMaxFilterAmount, tfMinFilterPrice, tfAddBuyAmount;
 
     @FXML
     private DatePicker dpAddExpenseDate;
@@ -170,7 +173,6 @@ public class BuyViewController {
                 tfAddBuyAmount.setText(buy.getAmount() != null ? String.valueOf(buy.getAmount()) : "");
                 tfAddUnitaryBuyPrice.setText(buy.getBuyUnitaryPrice() != null ? String.valueOf(buy.getBuyUnitaryPrice()) : "");
                 tfAddTotalBuyPrice.setText(buy.getBuyTotalPrice() != null ? String.valueOf(buy.getBuyTotalPrice()) : "");
-                tfAddBuyType.setText(buy.getBuyType());
                 tfAddUnitaryBuyCurrency.setText(buy.getCurrency().getCurrencyName());
                 tfAddTotalBuyCurrency.setText(buy.getCurrency().getCurrencyName());
                 dpAddExpenseDate.setValue(buy.getReceivedDate());
@@ -179,7 +181,6 @@ public class BuyViewController {
     }
 
     private void initMbs() {
-        initMbBuyType();
         initMbCurrency(mbUnitaryCurrency);
         initMbCurrency(mbTotalCurrency);
     }
@@ -193,24 +194,13 @@ public class BuyViewController {
                 tfAddTotalBuyCurrency.setText(item.getText());
                 tfAddUnitaryBuyCurrency.setText(item.getText());
             });
-        }
-
-    }
-
-    private void initMbBuyType() {
-        List<MenuItem> items = mbBuyType.getItems().stream().toList();
-        mbBuyType.getItems().clear();
-
-        for (MenuItem mi : items) {
-            mi.setOnAction(e -> tfAddBuyType.setText(mi.getText()));
-            mbBuyType.getItems().add(mi);
+            mbCurrency.getItems().add(item);
         }
     }
 
     private void initializeTableColumns() {
         tcId.setCellValueFactory(new PropertyValueFactory<>("id"));
         tcBuyName.setCellValueFactory(new PropertyValueFactory<>("buyName"));
-        tcBuyType.setCellValueFactory(new PropertyValueFactory<>("buyType"));
         tcUnitaryPriceAndCurrency.setCellValueFactory(new PropertyValueFactory<>("unitaryPriceAndCurrency"));
         tcTotalPriceAndCurrency.setCellValueFactory(new PropertyValueFactory<>("totalPriceAndCurrency"));
         tcAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
@@ -226,7 +216,6 @@ public class BuyViewController {
             buyList.add(new BuyDataTable(
                     buy.getBuyId(),
                     buy.getBuyName(),
-                    buy.getBuyType(),
                     buy.getBuyUnitaryPrice() + " " + buy.getCurrency().getCurrencyName(),
                     buy.getBuyTotalPrice() + " " + buy.getCurrency().getCurrencyName(),
                     buy.getAmount(),
@@ -239,7 +228,7 @@ public class BuyViewController {
     }
 
     @FXML
-    public void removeBuy(ActionEvent actionEvent) {
+    public void removeBuy() {
         Long buyId = parseDataTypes.parseLong(tfId.getText());
         String registryType = "Eliminación";
 
@@ -258,8 +247,10 @@ public class BuyViewController {
                         null,
                         buyDB.getBuyId(),
                         buyDB.getBuyName(),
+                        buyDB.getBuyUnitaryPrice(),
                         buyDB.getBuyTotalPrice(),
                         buyDB.getCurrency().getCurrencyName(),
+                        buyDB.getAmount(),
                         client,
                         registryType,
                         LocalDateTime.now()
@@ -267,11 +258,7 @@ public class BuyViewController {
                 buyRegistryService.save(buyRegistry);
 
                 GeneralRegistry generalRegistry = new GeneralRegistry(
-                        null,
-                        client,
-                        registryZone,
-                        registryType,
-                        LocalDateTime.now()
+                        null, client, registryZone, registryType, LocalDateTime.now()
                 );
                 generalRegistryService.save(generalRegistry);
                 cleanForm();
@@ -301,36 +288,80 @@ public class BuyViewController {
         Integer amount = parseDataTypes.parseInt(tfAddBuyAmount.getText());
         LocalDate receivedDate = dpAddExpenseDate.getValue();
         String currencyName = tfAddUnitaryBuyCurrency.getText();
-        String buyType = tfAddBuyType.getText();
+        String buyType = "Materias Primas y Materiales";
         String registryType;
 
-        if (!buyService.existsByBuyId(buyId)) {
-            registryType = "Adición";
-        } else {
+        // VERIFICAR SI ES UNA ACTUALIZACIÓN Y SI HAY ASIGNACIONES
+        Integer originalLeftAmount = amount; // Por defecto, leftAmount = amount
+        List<Inventory> existingInventories = new ArrayList<>();
+
+        if (buyId != null && buyService.existsByBuyId(buyId)) {
             registryType = "Actualización";
+            Buy existingBuy = buyService.getBuyById(buyId);
+
+            // OBTENER INVENTARIOS EXISTENTES ASOCIADOS A ESTA COMPRA
+            existingInventories = inventoryService.getInventoriesByBuyId(buyId);
+
+            if (!existingInventories.isEmpty()) {
+                // CALCULAR leftAmount CONSIDERANDO ASIGNACIONES EXISTENTES
+                int totalAssignedAmount = existingInventories.stream()
+                        .mapToInt(Inventory::getAmount)
+                        .sum();
+
+                originalLeftAmount = existingBuy.getLeftAmount();
+
+                // MOSTRAR CONFIRMACIÓN AL USUARIO
+                if (!displayAlerts.showConfirmationAlert(
+                        "Esta compra ya tiene " + totalAssignedAmount + " productos asignados a inventarios. " +
+                                "¿Desea remover estas asignaciones y recalcular el leftAmount?")) {
+                    return; // El usuario canceló la operación
+                }
+
+                // ELIMINAR ASIGNACIONES EXISTENTES
+                for (Inventory inventory : existingInventories) {
+                    inventoryService.deleteInventoryById(inventory.getId());
+                }
+
+                // REGISTRAR LA ELIMINACIÓN DE ASIGNACIONES
+                GeneralRegistry removalRegistry = new GeneralRegistry(
+                        null, client, "Inventario",
+                        "Remoción de asignaciones por actualización de compra: " + buyName,
+                        LocalDateTime.now()
+                );
+                generalRegistryService.save(removalRegistry);
+            }
+        } else {
+            registryType = "Adición";
+        }
+
+        // CALCULAR NUEVO leftAmount
+        Integer newLeftAmount = amount;
+        if (buyId != null && buyService.existsByBuyId(buyId)) {
+            // Si no había asignaciones, mantener la relación original
+            Buy existingBuy = buyService.getBuyById(buyId);
+            int amountDifference = amount - existingBuy.getAmount();
+            newLeftAmount = existingBuy.getLeftAmount() + amountDifference;
+
+            // Asegurar que leftAmount no sea negativo
+            if (newLeftAmount < 0) newLeftAmount = 0;
+            if (newLeftAmount > amount) newLeftAmount = amount;
         }
 
         // Add the buy to DB
         Buy buy = new Buy(
-                buyId,
-                buyName,
-                unitaryPrice,
-                totalPrice,
+                buyId, buyName, unitaryPrice, totalPrice,
                 currencyService.getCurrencyByName(currencyName),
                 amount,
-                amount, // Initially leftAmount equals amount
-                receivedDate,
-                buyType,
-                client
+                newLeftAmount, // ← USAR EL NUEVO leftAmount CALCULADO
+                receivedDate, buyType, client
         );
         buyService.save(buy);
         initializeTableValues();
 
         Buy buyDBValue = buyService.getBuyListByBuyNameAndBuyUnitaryPriceAndBuyTotalPriceAndCurrencyAndAmountAndLeftAmountAndReceivedDateAndBuyTypeAndClientOrderByBuyIdAsc(
-                buyName, unitaryPrice, totalPrice, currencyService.getCurrencyByName(currencyName), amount, amount, receivedDate, buyType, client
-        ).getLast();
+                buyName, unitaryPrice, totalPrice, currencyService.getCurrencyByName(currencyName), amount, amount, receivedDate, buyType, client).getLast();
 
-        if (buyType.equals("Materias Primas y Materiales") && !productService.existsByProductNameAndClient(buyName, client)) {
+        if (!productService.existsByProductNameAndClient(buyName, client)) {
             Product product = new Product(
                     null,
                     buyName,
@@ -343,34 +374,28 @@ public class BuyViewController {
 
         // Add the buy registry to DB
         BuyRegistry buyRegistry = new BuyRegistry(
-                null,
-                buyDBValue.getBuyId(),
-                buyName,
-                totalPrice,
-                currencyName,
-                client,
-                registryType,
-                LocalDateTime.now()
+                null, buyDBValue.getBuyId(), buyName, unitaryPrice, totalPrice,
+                currencyName, amount, client, registryType, LocalDateTime.now()
         );
         buyRegistryService.save(buyRegistry);
 
         // Add the general registry to DB
         GeneralRegistry generalRegistry = new GeneralRegistry(
-                null,
-                client,
-                registryZone,
-                registryType,
-                LocalDateTime.now()
+                null, client, registryZone, registryType, LocalDateTime.now()
         );
         generalRegistryService.save(generalRegistry);
-
-        cleanForm();
+        // MOSTRAR MENSAJE INFORMATIVO
+        if (!existingInventories.isEmpty()) {
+            lblAddDebugForm.setText("Compra actualizada. Se removieron " + existingInventories.size() + " asignaciones de inventario.");
+            lblAddDebugForm.setStyle("-fx-text-fill: #dc2626; -fx-font-weight: bold;");
+        } else {
+            cleanForm();
+        }
     }
 
     private boolean validateAllFields() {
         if (tfAddBuyName.getText().isEmpty() ||
                 tfAddBuyAmount.getText().isEmpty() ||
-                tfAddBuyType.getText().isEmpty() ||
                 tfAddUnitaryBuyPrice.getText().isEmpty() ||
                 tfAddTotalBuyPrice.getText().isEmpty() ||
                 dpAddExpenseDate.getValue() == null) {
@@ -460,13 +485,12 @@ public class BuyViewController {
     @FXML
     public void cleanForm() {
         List<TextField> textFieldList = List.of(
-                tfId, tfAddBuyName, tfAddUnitaryBuyPrice, tfAddUnitaryBuyCurrency, tfAddTotalBuyPrice, tfAddTotalBuyCurrency);
+                tfId, tfAddBuyName, tfAddUnitaryBuyPrice, tfAddUnitaryBuyCurrency, tfAddTotalBuyPrice, tfAddTotalBuyCurrency
+        );
         cleanHelper.cleanTextFields(textFieldList);
-
-        if (mbBuyType.getItems().size() == 1) {
-            tfAddBuyType.setText(mbBuyType.getItems().getFirst().getText());
-        }
         tfAddBuyAmount.setText("1");
+        tfAddUnitaryBuyCurrency.setText("CUP");
+        tfAddTotalBuyCurrency.setText("CUP");
         dpAddExpenseDate.setValue(LocalDate.now());
     }
 

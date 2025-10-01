@@ -25,5 +25,4 @@ public interface ExpenseService {
 
     List<Expense> getAllExpensesByClientAndAmountGreaterThanZeroAndInvestmentType(Client client, String expenseType);
 
-    List<Expense> getAllProductExpensesGreaterThanZeroByClient(Client client);
 }

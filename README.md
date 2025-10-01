@@ -1,6 +1,6 @@
 # Storage Software
 
-Software para la gestión de inventarios en pequeñas empresas como ferreterías o cafeterías, desarrollado con Spring Boot y JavaFX.
+Software para la gestión de inventarios en pequeñas y medianas empresas como ferreterías o cafeterías (o ambas a la vez), desarrollado con Spring Boot y JavaFX.
 
 ## Descripción
 
@@ -16,10 +16,10 @@ Este proyecto es una aplicación de escritorio que permite a los usuarios gestio
 
 ## Requisitos
 
-- Java 21
+- Java 23
 - Maven
-- JavaFX 21.0.0
-- Spring Boot 3.4.3
+- JavaFX 24.0.0
+- Spring Boot 3.5.5
 
 ## Instalación
 
@@ -59,9 +59,6 @@ repository: Interfaces de repositorio de Spring Data JPA.
 service: Clases de servicio que contienen la lógica de negocio.
 src/main/resources: Contiene los archivos de recursos como archivos FXML y propiedades.
 src/test/java/com/marcosoft/storageSoftware: Contiene las pruebas unitarias.
-
-## Contribución
-NO SE ACEPTAN CONTRIBUCIONES
 
 ## Contacto
 Para cualquier pregunta o sugerencia, por favor contacta a marconchelo12@gmail.com.

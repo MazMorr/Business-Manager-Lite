@@ -28,11 +28,17 @@ public class BuyRegistry {
     @Column(name = "buy_name", nullable = false)
     private String buyName;
 
-    @Column(name = "transaction_price", nullable = false)
-    private Double buyPrice;
+    @Column(name = "buy_unit_price", nullable = false)
+    private Double buyUnitaryPrice;
+
+    @Column(name = "buy_total_price", nullable = false)
+    private Double buyTotalPrice;
 
     @Column(name = "currency_name")
     private String currency;
+
+    @Column(name = "amount", nullable = false)
+    private Integer amount;
 
     @ManyToOne
     @JoinColumn(name = "client_id") // This maps the foreign key column

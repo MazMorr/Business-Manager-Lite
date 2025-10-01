@@ -13,10 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "GeneralRegistry", indexes = {
-        @Index(name = "idx_genreg_client_datetime", columnList = "client_id, registry_date_time"),
-        @Index(name = "idx_genreg_client_zone", columnList = "client_id, zone")
-})
+@Table(name = "GeneralRegistry")
 public class GeneralRegistry {
 
     @Id

@@ -61,7 +61,7 @@ public class SupportViewController {
         client = userLogged.getClient();
         lblClientName.setText(client.getClientName());
         initWelcomeLabels();
-        
+
         Platform.runLater(this::initCurrencyDefaultValues);
     }
 

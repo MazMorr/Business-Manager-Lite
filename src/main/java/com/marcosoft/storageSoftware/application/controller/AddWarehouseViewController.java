@@ -13,17 +13,12 @@ import org.springframework.stereotype.Controller;
 
 import java.time.LocalDateTime;
 
-/**
- * Controller for the add warehouse view.
- * Handles logic for creating a new warehouse for the current client.
- */
 @Lazy
 @Controller
 public class AddWarehouseViewController {
     private Client client;
-    private final WarehouseViewController warehouseViewController;
 
-    // Dependencies injected via constructor
+    private final WarehouseViewController warehouseViewController;
     private final UserLogged userLogged;
     private final DisplayAlerts displayAlerts;
     private final WarehouseServiceImpl warehouseService;
@@ -45,7 +40,6 @@ public class AddWarehouseViewController {
         this.userLogged = userLogged;
     }
 
-    // FXML UI component for warehouse name input
     @FXML
     private TextField tfWarehouseName;
 
@@ -54,11 +48,6 @@ public class AddWarehouseViewController {
         client = userLogged.getClient();
     }
 
-
-    /**
-     * Handles the creation of a new warehouse when the user clicks the add button.
-     * Validates input and shows alerts in Spanish if validation fails.
-     */
     @FXML
     public void addWarehouse() {
         LocalDateTime registryMoment = LocalDateTime.now();
@@ -66,6 +55,8 @@ public class AddWarehouseViewController {
             displayAlerts.showAlert("Debe asignar un nombre para el nuevo almacén");
         } else if (tfWarehouseName.getText().length() > 18) {
             displayAlerts.showAlert("El nuevo nombre no puede exceder los 18 carácteres incluyendo espacios");
+        } else if (warehouseService.existsByWarehouseNameAndClient(tfWarehouseName.getText(), client)) {
+            displayAlerts.showAlert("Ya existe un almacén con ese nombre");
         } else {
             try {
                 Warehouse warehouse = new Warehouse(
@@ -75,22 +66,20 @@ public class AddWarehouseViewController {
                 );
                 warehouseService.save(warehouse);
 
-                Inventory inventory = new Inventory(
-                        null,
-                        null,
-                        client,
-                        warehouse,
-                        null,
-                        null,
-                        null
+                // ELIMINAR la creación automática de Inventory - ya no es necesaria
+                // Un almacén vacío no necesita un registro de Inventory
+                // El Inventory se creará cuando se asignen productos al almacén
+                Inventory inventory = new Inventory(null, null, client, warehouse, null,
+                        null, null, null, null, null
                 );
                 inventoryService.save(inventory);
+
 
                 GeneralRegistry generalRegistry = new GeneralRegistry(
                         null,
                         client,
                         "Almacén",
-                        "Adición Almacén",
+                        "Adición Almacén: " + warehouse.getWarehouseName(),
                         registryMoment
                 );
                 generalRegistryService.save(generalRegistry);
@@ -106,22 +95,21 @@ public class AddWarehouseViewController {
                 );
                 warehouseRegistryService.save(warehouseRegistry);
 
-                displayAlerts.showAlert("El nuevo almacén ha sido añadido correctamente");
+                displayAlerts.showAlert("Almacén creado satisfactoriamente");
                 warehouseViewController.initTreeTable();
+
+                // Cerrar la ventana después de crear exitosamente
+                Stage stage = (Stage) tfWarehouseName.getScene().getWindow();
+                stage.close();
             } catch (Exception e) {
                 displayAlerts.showAlert("Ha ocurrido un error: " + e.getMessage());
             }
         }
     }
 
-    /**
-     * Closes the add warehouse window.
-     * @param actionEvent the action event
-     */
     @FXML
     public void goOut(ActionEvent actionEvent) {
         Stage stage = (Stage) tfWarehouseName.getScene().getWindow();
         stage.close();
     }
-
 }

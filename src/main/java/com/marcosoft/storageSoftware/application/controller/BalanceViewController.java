@@ -55,10 +55,10 @@ public class BalanceViewController {
     private final ExcelGenerator excelGenerator;
     private final DisplayAlerts displayAlerts;
 
-
     public BalanceViewController(
             UserLogged userLogged, SceneSwitcher sceneSwitcher, ExpenseServiceImpl expenseService,
-            SellRegistryServiceImpl sellRegistryService, CurrencyServiceImpl currencyService, PdfGenerator pdfGenerator, ExcelGenerator excelGenerator, DisplayAlerts displayAlerts
+            SellRegistryServiceImpl sellRegistryService, CurrencyServiceImpl currencyService, PdfGenerator pdfGenerator,
+            ExcelGenerator excelGenerator, DisplayAlerts displayAlerts
     ) {
         this.sceneSwitcher = sceneSwitcher;
         this.currencyService = currencyService;
@@ -71,8 +71,9 @@ public class BalanceViewController {
     }
 
     @FXML
-    private Label lblTimeLapse, lblTotalExpense, lblProductExpense, lblRentExpense, lblTotalProfit, lblServiceExpense,
-            lblProductProfit, lblPublicityExpense, lblSalaryExpense, lblNetUtilityNumber, lblClientName, lblNetUtility;
+    private Label lblTimeLapse, lblTotalExpense, lblTotalProfit, lblNetUtilityNumber, lblClientName, lblNetUtility,
+            lblExpenseEnergy, lblRawMaterialsAndSupplies, lblExpenseOtherMonetaryExpenses, lblExpenseFuelsAndLubricants,
+            lblStaffExpenses, lblProfitRawMaterialsAndSupplies;
 
     @FXML
     private MenuButton mbDateRange;
@@ -232,19 +233,19 @@ public class BalanceViewController {
 
     private void initExpenseLabels() {
         try {
-            double rent = expenseService.getTotalRentExpense(client, startDate, endDate, currency);
-            double salary = expenseService.getTotalSalaryExpense(client, startDate, endDate, currency);
-            double publicity = expenseService.getTotalPublicityExpense(client, startDate, endDate, currency);
-            double product = expenseService.getTotalProductExpense(client, startDate, endDate, currency);
-            double service = expenseService.getTotalServiceExpense(client, startDate, endDate, currency);
+            double fuelsAndLubricants = expenseService.getTotalFuelsAndLubricantsExpense(client, startDate, endDate, currency);
+            double staff = expenseService.getTotalStaffExpense(client, startDate, endDate, currency);
+            double energy = expenseService.getTotalEnergyExpense(client, startDate, endDate, currency);
+            double rawMaterialsAndSupplies = expenseService.getTotalRawMaterialsAndSuppliesExpense(client, startDate, endDate, currency);
+            double otherMonetaryExpenses = expenseService.getTotalOtherMonetaryExpense(client, startDate, endDate, currency);
 
-            totalExpense = rent + salary + publicity + product + service;
+            totalExpense = fuelsAndLubricants + staff + energy + rawMaterialsAndSupplies + otherMonetaryExpenses;
 
-            lblRentExpense.setText(String.format("$ %.2f", rent));
-            lblSalaryExpense.setText(String.format("$ %.2f", salary));
-            lblPublicityExpense.setText(String.format("$ %.2f", publicity));
-            lblProductExpense.setText(String.format("$ %.2f", product));
-            lblServiceExpense.setText(String.format("$ %.2f", service));
+            lblExpenseFuelsAndLubricants.setText(String.format("$ %.2f", fuelsAndLubricants));
+            lblStaffExpenses.setText(String.format("$ %.2f", staff));
+            lblExpenseEnergy.setText(String.format("$ %.2f", energy));
+            lblRawMaterialsAndSupplies.setText(String.format("$ %.2f", rawMaterialsAndSupplies));
+            lblExpenseOtherMonetaryExpenses.setText(String.format("$ %.2f", otherMonetaryExpenses));
             lblTotalExpense.setText(String.format("$ %.2f", totalExpense));
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -254,11 +255,12 @@ public class BalanceViewController {
 
     private void initProfitLabels() {
         try {
-            double productProfit = sellRegistryService.getTotalProductProfit(client, startDate, endDate, currency);
+            double rawMaterialsAndSuppliesProfit = sellRegistryService.getTotalProfitInDateRange
+                    (client, startDate, endDate, currency.getCurrencyName());
 
-            totalProfit = productProfit;
+            totalProfit = rawMaterialsAndSuppliesProfit;
 
-            lblProductProfit.setText(String.format("$ %.2f", productProfit));
+            lblProfitRawMaterialsAndSupplies.setText(String.format("$ %.2f", rawMaterialsAndSuppliesProfit));
             lblTotalProfit.setText(String.format("$ %.2f", totalProfit));
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -318,7 +320,7 @@ public class BalanceViewController {
     private void exportToExcel() {
         // Preparar los datos para las hojas
         List<String[]> summaryData = getSummaryDataForXls();
-        List<String[]> salesData = getSalesData();
+        List<String[]> salesData = getProfitData();
         List<String[]> expensesData = getExpensesData();
 
         // Definir estilos para el resumen
@@ -330,7 +332,7 @@ public class BalanceViewController {
 
     private static ExcelExportRequest getExcelExportRequest(List<String[]> summaryData, List<String[]> salesData, List<String[]> expensesData) {
         SheetConfig summarySheet = getSheetConfig(summaryData);
-        SheetConfig salesSheet = new SheetConfig("Ventas", salesData, 5, null, null);
+        SheetConfig salesSheet = new SheetConfig("Ingresos", salesData, 5, null, null);
         SheetConfig expensesSheet = new SheetConfig("Gastos", expensesData, 4, null, null);
 
         List<SheetConfig> sheets = List.of(summarySheet, salesSheet, expensesSheet);
@@ -365,28 +367,34 @@ public class BalanceViewController {
     }
 
     private List<String[]> getExpensesData() {
-        // Obtener los gastos del servicio
         List<Expense> expenses = expenseService.getExpensesInDateRange(client, startDate, endDate);
         List<String[]> expensesData = new ArrayList<>();
+
         // Encabezados
-        expensesData.add(new String[]{"Fecha", "Tipo", "Precio", "Monto"});
+        expensesData.add(new String[]{"Fecha", "Tipo",  "Cantidad", "Precio"});
         for (Expense expense : expenses) {
+            Integer amount = expense.getAmount();
+
             expensesData.add(new String[]{
                     expense.getReceivedDate().toString(),
                     expense.getExpenseType(),
-                    expense.getExpensePrice() + " " + expense.getCurrency().getCurrencyName(),
-                    String.valueOf(expense.getAmount())
+                    amount != null ? String.valueOf(amount) : "- Vacio -",
+                    expense.getExpensePrice() + " " + expense.getCurrency().getCurrencyName()
             });
         }
+
+        // Agregar fila de total
+        expensesData.add(new String[]{"", "", "TOTAL", String.format("$ %.2f", totalExpense)});
         return expensesData;
     }
 
-    private List<String[]> getSalesData() {
-        // Obtener las ventas del servicio
+    private List<String[]> getProfitData() {
         List<SellRegistry> sales = sellRegistryService.getSalesInDateRange(client, startDate, endDate);
         List<String[]> salesData = new ArrayList<>();
+
         // Encabezados
-        salesData.add(new String[]{"Fecha", "Producto", "Cantidad", "Precio"});
+        salesData.add(new String[]{"Fecha", "Descripción", "Cantidad", "Precio"});
+
         for (SellRegistry sale : sales) {
             salesData.add(new String[]{
                     sale.getSellDate().toString(),
@@ -395,45 +403,66 @@ public class BalanceViewController {
                     sale.getSellPrice() + " " + sale.getSellCurrency()
             });
         }
+
+        // Agregar fila de total
+        salesData.add(new String[]{"", "", "TOTAL", String.format("$ %.2f", totalProfit)});
         return salesData;
     }
 
     private List<String[]> getSummaryDataForXls() {
-        return List.of(
-                new String[]{"Cliente:", client.getClientName()},
-                new String[]{"Rango de Fechas:", startDate + " - " + endDate},
-                new String[]{"", ""}, // Fila vacía como separador
-                new String[]{"INGRESOS", ""}, // Encabezado principal
-                new String[]{"Ingresos por Productos:", lblProductProfit.getText()},
-                new String[]{"Total de Ingresos:", lblTotalProfit.getText()},
-                new String[]{"", ""}, // Fila vacía como separador
-                new String[]{"GASTOS", ""}, // Encabezado principal
-                new String[]{"Alquiler:", lblRentExpense.getText()},
-                new String[]{"Salarios:", lblSalaryExpense.getText()},
-                new String[]{"Publicidad:", lblPublicityExpense.getText()},
-                new String[]{"Productos:", lblProductExpense.getText()},
-                new String[]{"Servicios:", lblServiceExpense.getText()},
-                new String[]{"Total de Gastos:", lblTotalExpense.getText()},
-                new String[]{"", ""}, // Fila vacía como separador
-                new String[]{"RESULTADO", lblNetUtilityNumber.getText()} // Encabezado principal
-        );
+        List<String[]> summaryData = new ArrayList<>();
+
+        // Información del cliente y fechas
+        summaryData.add(new String[]{"Cliente:", client.getClientName()});
+        summaryData.add(new String[]{"Rango de Fechas:", startDate + " - " + endDate});
+        summaryData.add(new String[]{"", ""}); // Separador
+
+        // SECCIÓN INGRESOS
+        summaryData.add(new String[]{"INGRESOS", ""});
+        summaryData.add(new String[]{"Materias Primas y Materiales:", lblProfitRawMaterialsAndSupplies.getText()});
+        summaryData.add(new String[]{"", ""}); // Separador
+        summaryData.add(new String[]{"TOTAL INGRESOS:", lblTotalProfit.getText()}); // ← NUEVO TOTAL
+        summaryData.add(new String[]{"", ""}); // Separador
+
+        // SECCIÓN GASTOS
+        summaryData.add(new String[]{"GASTOS", ""});
+        summaryData.add(new String[]{"Materias Primas y Materiales:", lblRawMaterialsAndSupplies.getText()});
+        summaryData.add(new String[]{"Combustibles y Lubricantes:", lblExpenseFuelsAndLubricants.getText()});
+        summaryData.add(new String[]{"Energía:", lblExpenseEnergy.getText()});
+        summaryData.add(new String[]{"Gastos de Personal:", lblStaffExpenses.getText()});
+        summaryData.add(new String[]{"Otros Gastos Monetarios:", lblExpenseOtherMonetaryExpenses.getText()});
+        summaryData.add(new String[]{"", ""}); // Separador
+        summaryData.add(new String[]{"TOTAL GASTOS:", lblTotalExpense.getText()}); // ← NUEVO TOTAL
+        summaryData.add(new String[]{"", ""}); // Separador
+
+        // SECCIÓN RESULTADO
+        summaryData.add(new String[]{"RESULTADO", lblNetUtilityNumber.getText()});
+
+        return summaryData;
     }
 
     private List<String[]> getSummaryDataForPDF() {
-        return List.of(
-                new String[]{"INGRESOS", ""}, // Encabezado principal
-                new String[]{"Ingresos por Productos:", lblProductProfit.getText()},
-                new String[]{"Total de Ingresos:", lblTotalProfit.getText()},
-                new String[]{"GASTOS", ""}, // Encabezado principal
-                new String[]{"Alquiler:", lblRentExpense.getText()},
-                new String[]{"Salarios:", lblSalaryExpense.getText()},
-                new String[]{"Publicidad:", lblPublicityExpense.getText()},
-                new String[]{"Productos:", lblProductExpense.getText()},
-                new String[]{"Servicios:", lblServiceExpense.getText()},
-                new String[]{"Total de Gastos:", lblTotalExpense.getText()},
-                new String[]{"RESULTADO", ""},
-                new String[]{"Resultado:", lblNetUtilityNumber.getText()}
-        );
+        List<String[]> summaryData = new ArrayList<>();
+
+        // SECCIÓN INGRESOS
+        summaryData.add(new String[]{"INGRESOS", ""});
+        summaryData.add(new String[]{"Materias Primas y Materiales:", lblProfitRawMaterialsAndSupplies.getText()});
+        summaryData.add(new String[]{"TOTAL INGRESOS:", lblTotalProfit.getText()}); // ← NUEVO TOTAL
+
+        // SECCIÓN GASTOS
+        summaryData.add(new String[]{"GASTOS", ""});
+        summaryData.add(new String[]{"Materias Primas y Materiales:", lblRawMaterialsAndSupplies.getText()});
+        summaryData.add(new String[]{"Combustibles y Lubricantes:", lblExpenseFuelsAndLubricants.getText()});
+        summaryData.add(new String[]{"Energía:", lblExpenseEnergy.getText()});
+        summaryData.add(new String[]{"Gastos de Personal:", lblStaffExpenses.getText()});
+        summaryData.add(new String[]{"Otros Gastos Monetarios:", lblExpenseOtherMonetaryExpenses.getText()});
+        summaryData.add(new String[]{"TOTAL GASTOS:", lblTotalExpense.getText()}); // ← NUEVO TOTAL
+
+        // SECCIÓN RESULTADO
+        summaryData.add(new String[]{"RESULTADO", ""});
+        summaryData.add(new String[]{"Utilidad/Pérdida Neta:", lblNetUtilityNumber.getText()});
+
+        return summaryData;
     }
 
     @FXML
@@ -451,7 +480,7 @@ public class BalanceViewController {
     }
 
     private PdfExportRequest getPdfExportRequest(List<String[]> summaryData) {
-        List<String[]> salesData = getSalesData();
+        List<String[]> salesData = getProfitData();
         List<String[]> expensesData = getExpensesData();
 
         // Crear request para PDF

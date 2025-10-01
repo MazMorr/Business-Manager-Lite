@@ -53,4 +53,20 @@ public class SellRegistry {
 
     @Column(name = "product_amount")
     private Integer productAmount;
+
+    // NUEVOS CAMPOS PARA COSTOS Y GANANCIAS
+    @Column(name = "unit_cost")
+    private Double unitCost;
+
+    @Column(name = "cost_currency")
+    private String costCurrency;
+
+    @Column(name = "total_cost")
+    private Double totalCost;
+
+    @Column(name = "profit")
+    private Double profit;
+
+    @Column(name = "source_buy_id")
+    private Long sourceBuyId;
 }

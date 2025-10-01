@@ -31,6 +31,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public void deleteById(Long id) {
+        productRepository.deleteById(id);
+    }
+
+    @Override
     public Product getByProductNameAndClient(String productName, Client client) {
         return productRepository.findByProductNameAndClient(productName, client);
     }

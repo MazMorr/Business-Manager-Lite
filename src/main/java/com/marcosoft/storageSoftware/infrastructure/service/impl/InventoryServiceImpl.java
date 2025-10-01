@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -72,10 +73,19 @@ public class InventoryServiceImpl implements InventoryService {
         return inventoryRepository.findAllInventoriesByClient(client);
     }
 
+    @Override
+    public List<Inventory> getAllInventoriesByProductAndClient(Product product, Client client) {
+        return inventoryRepository.findByProductAndClient(product, client);
+    }
+
     public Inventory getAndValidateInventory(String warehouseName, String productName, int productAmount, Client client) {
         Product product = productService.getByProductNameAndClient(productName, client);
         Warehouse warehouse = warehouseService.getWarehouseByWarehouseNameAndClient(warehouseName, client);
         Inventory inventory = getByProductAndWarehouseAndClient(product, warehouse, client);
+
+        if (inventory == null) {
+            throw new IllegalStateException("No existe inventario para este producto y almacén");
+        }
 
         if (inventory.getAmount() < productAmount) {
             throw new IllegalStateException("No hay suficiente stock. Stock actual: " + inventory.getAmount());
@@ -110,6 +120,15 @@ public class InventoryServiceImpl implements InventoryService {
         } catch (Exception e) {
             log.error("Error checking warning condition", e);
             return false;
+        }
+    }
+
+    public List<Inventory> getInventoriesByBuyId(Long buyId) {
+        try {
+            return inventoryRepository.findByBuyId(buyId);
+        } catch (Exception e) {
+            log.error("Error getting inventories by buyId: {}", buyId, e);
+            return new ArrayList<>();
         }
     }
 }

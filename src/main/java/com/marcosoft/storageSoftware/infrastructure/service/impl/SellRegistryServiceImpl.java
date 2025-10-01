@@ -15,23 +15,35 @@ import java.util.stream.Collectors;
 @Service
 public class SellRegistryServiceImpl implements SellRegistryService {
 
+    // Constants
+    private static final String REGISTRY_TYPE_SALE = "Venta";
+    private static final String REGISTRY_TYPE_SALE_WITH_COST = "Venta con Costo";
+    private static final String CATEGORY_SALES = "Ventas";
+
+    // Dependencies
     private final SellRegistryRepository sellRegistryRepository;
+    private final BuyRegistryServiceImpl buyRegistryService;
     private final CurrencyRepository currencyRepository;
     private final ParseDataTypes parseDataTypes;
     private final GeneralRegistryServiceImpl generalRegistryService;
     private final InventoryServiceImpl inventoryService;
 
     public SellRegistryServiceImpl(
-            CurrencyRepository currencyRepository, SellRegistryRepository sellRegistryRepository, ParseDataTypes parseDataTypes,
-            GeneralRegistryServiceImpl generalRegistryService, InventoryServiceImpl inventoryService
+            CurrencyRepository currencyRepository,
+            SellRegistryRepository sellRegistryRepository, BuyRegistryServiceImpl buyRegistryService,
+            ParseDataTypes parseDataTypes,
+            GeneralRegistryServiceImpl generalRegistryService,
+            InventoryServiceImpl inventoryService
     ) {
         this.sellRegistryRepository = sellRegistryRepository;
         this.currencyRepository = currencyRepository;
+        this.buyRegistryService = buyRegistryService;
         this.parseDataTypes = parseDataTypes;
         this.generalRegistryService = generalRegistryService;
         this.inventoryService = inventoryService;
     }
 
+    // ===== INTERFACE IMPLEMENTATION =====
     @Override
     public SellRegistry save(SellRegistry sellRegistry) {
         return sellRegistryRepository.save(sellRegistry);
@@ -52,88 +64,160 @@ public class SellRegistryServiceImpl implements SellRegistryService {
         return sellRegistryRepository.existsByIdAndClient(id, client);
     }
 
-    public Double getTotalProductProfit(Client client, LocalDate initDate, LocalDate endDate, Currency currency) {
-        double cup = 0.0, mlc = 0.0, usd = 0.0, eur = 0.0;
+    // ===== SALE PROCESSING METHODS =====
 
-        List<SellRegistry> sellRegistryList = sellRegistryRepository.findAllSellRegistriesByClient(client);
-        for (SellRegistry sell : sellRegistryList) {
-            LocalDate date = sell.getSellDate();
-            if ((date.isEqual(initDate) || date.isAfter(initDate)) &&
-                    (date.isEqual(endDate) || date.isBefore(endDate))) {
+    /**
+     * Processes a sale transaction with inventory management
+     */
+    public void processSale(
+            Inventory inventory,
+            int productAmount,
+            String productName,
+            String sellProductPrice,
+            String sellProductCurrency,
+            LocalDate sellProductDate,
+            String sellWarehouse,
+            Client client
+    ) {
+        updateInventory(inventory, productAmount);
+        registerSaleBasedOnCostAvailability(
+                productAmount, productName, sellProductPrice,
+                sellProductCurrency, sellProductDate, sellWarehouse, client
+        );
+    }
 
-                double price = sell.getSellPrice();
-                String curr = sell.getSellCurrency();
+    /**
+     * Registers a sale transaction without cost information (legacy method)
+     */
+    public void registerSaleTransaction(
+            String productName,
+            int productAmount,
+            String sellProductPrice,
+            String currency,
+            LocalDate date,
+            String sellWarehouse,
+            Client client
+    ) {
+        double price = parseDataTypes.parseDouble(sellProductPrice);
+        SellRegistry sellRegistry = createBasicSaleRegistry(
+                productName, productAmount, price, currency, date, sellWarehouse, client
+        );
 
-                switch (curr) {
-                    case "CUP" -> cup += price;
-                    case "MLC" -> mlc += price;
-                    case "USD" -> usd += price;
-                    case "EUR" -> eur += price;
-                }
-            }
-        }
+        save(sellRegistry);
+        createGeneralRegistry(client, productAmount, productName, null);
+    }
 
-        double mlcRate = currencyRepository.findByCurrencyName("MLC").getCurrencyPriceInCUP();
-        double usdRate = currencyRepository.findByCurrencyName("USD").getCurrencyPriceInCUP();
-        double eurRate = currencyRepository.findByCurrencyName("EUR").getCurrencyPriceInCUP();
+    // ===== QUERY METHODS =====
 
-        double totalInCUP = cup + mlc * mlcRate + usd * usdRate + eur * eurRate;
+    public List<SellRegistry> getSalesInDateRange(Client client, LocalDate startDate, LocalDate endDate) {
+        return getAllSellRegistriesByClient(client).stream()
+                .filter(sale -> isDateInRange(sale.getSellDate(), startDate, endDate))
+                .collect(Collectors.toList());
+    }
 
-        return switch (currency.getCurrencyName()) {
-            case "MLC" -> totalInCUP / mlcRate;
-            case "USD" -> totalInCUP / usdRate;
-            case "EUR" -> totalInCUP / eurRate;
-            default -> totalInCUP;
-        };
+    public Double getTotalProfitInDateRange(Client client, LocalDate startDate, LocalDate endDate, String currency) {
+        return getSalesInDateRange(client, startDate, endDate).stream()
+                .mapToDouble(sale -> calculateProfitForSale(sale, currency))
+                .sum();
     }
 
 
+    // ===== PRIVATE HELPER METHODS =====
 
-    public void registerSaleTransaction(
-            String productName, int productAmount, String sellProductPrice, String currency, LocalDate date,
-            String sellWarehouse, Client client
+    private void updateInventory(Inventory inventory, int soldAmount) {
+        int newAmount = inventory.getAmount() - soldAmount;
+        inventory.setAmount(newAmount);
+        inventoryService.save(inventory);
+    }
+
+    private void registerSaleBasedOnCostAvailability(
+            int productAmount, String productName, String sellProductPrice,
+            String sellProductCurrency, LocalDate sellProductDate, String sellWarehouse, Client client
     ) {
-        // Datos adicionales del formulario
-        double price = parseDataTypes.parseDouble(sellProductPrice);
-
-        SellRegistry sellRegistry = new SellRegistry(
-                null, client, "Venta", LocalDateTime.now(),
-                productName, currency, price, date,
-                sellWarehouse, productAmount
+        registerSaleTransaction(
+                productName, productAmount, sellProductPrice, sellProductCurrency, sellProductDate,
+                sellWarehouse, client
         );
-        save(sellRegistry);
 
-        // Registrar en historial general
+    }
+
+    private SellRegistry createBasicSaleRegistry(
+            String productName, int productAmount, double price, String currency,
+            LocalDate date, String warehouse, Client client
+    ) {
+        SellRegistry registry = new SellRegistry();
+        registry.setClient(client);
+        registry.setRegistryType(REGISTRY_TYPE_SALE);
+        registry.setRegistryDate(LocalDateTime.now());
+        registry.setProductName(productName);
+        registry.setSellCurrency(currency);
+        registry.setSellPrice(price);
+        registry.setSellDate(date);
+        registry.setWarehouseName(warehouse);
+        registry.setProductAmount(productAmount);
+        return registry;
+    }
+
+    private void createGeneralRegistry(Client client, int productAmount, String productName, Double profit) {
+        String description = profit != null
+                ? String.format("Venta con costo de %d unidades de %s - Ganancia: %.2f",
+                productAmount, productName, profit)
+                : String.format("Venta de %d unidades de %s", productAmount, productName);
+
         GeneralRegistry generalRegistry = new GeneralRegistry(
-                null, client, "Ventas",
-                "Venta de " + productAmount + " unidades de " + productName,
-                LocalDateTime.now()
+                null, client, CATEGORY_SALES, description, LocalDateTime.now()
         );
         generalRegistryService.save(generalRegistry);
     }
 
-    public void processSale(
-            Inventory inventory, int productAmount, String productName, String sellProductPrice, String sellProductCurrency,
-            LocalDate sellProductDate, String sellWarehouse, Client client
-    ) {
-        // Actualizar inventario
-        int newAmount = inventory.getAmount() - productAmount;
-
-        inventory.setAmount(newAmount);
-        inventoryService.save(inventory);
-
-        // Registrar venta
-        registerSaleTransaction(
-                productName, productAmount, sellProductPrice, sellProductCurrency, sellProductDate, sellWarehouse, client
-        );
+    private double calculateProfitForSale(SellRegistry sale, String targetCurrency) {
+        double profit = determineProfitAmount(sale);
+        return convertProfitToCurrency(profit, sale.getSellCurrency(), targetCurrency);
     }
 
-    public List<SellRegistry> getSalesInDateRange(Client client, LocalDate startDate, LocalDate endDate) {
-        return getAllSellRegistriesByClient(client).stream()
-                .filter(ex -> {
-                    LocalDate receivedDate = ex.getSellDate();
-                    return !receivedDate.isBefore(startDate) && !receivedDate.isAfter(endDate);
-                })
-                .collect(Collectors.toList());
+    private double determineProfitAmount(SellRegistry sale) {
+        if (sale.getProfit() != null) {
+            return sale.getProfit();
+        } else if (sale.getTotalCost() != null) {
+            return sale.getSellPrice() - sale.getTotalCost();
+        } else {
+            // If no cost information, profit equals sale price
+            return sale.getSellPrice();
+        }
+    }
+
+    private Double convertProfitToCurrency(Double amount, String fromCurrency, String toCurrency) {
+        if (fromCurrency.equals(toCurrency)) {
+            return amount;
+        }
+
+        double amountInCUP = convertToCUP(amount, fromCurrency);
+        return convertFromCUP(amountInCUP, toCurrency);
+    }
+
+    private double convertToCUP(Double amount, String currency) {
+        return amount * getCurrencyRate(currency);
+    }
+
+    private double convertFromCUP(double amountInCUP, String targetCurrency) {
+        return switch (targetCurrency) {
+            case "MLC" -> amountInCUP / getCurrencyRate("MLC");
+            case "USD" -> amountInCUP / getCurrencyRate("USD");
+            case "EUR" -> amountInCUP / getCurrencyRate("EUR");
+            default -> amountInCUP; // CUP
+        };
+    }
+
+    private double getCurrencyRate(String currencyName) {
+        Currency currency = currencyRepository.findByCurrencyName(currencyName);
+        return currency != null ? currency.getCurrencyPriceInCUP() : 1.0;
+    }
+
+    private boolean hasCostInformation(Double unitCost, String costCurrency) {
+        return unitCost != null && costCurrency != null;
+    }
+
+    private boolean isDateInRange(LocalDate date, LocalDate startDate, LocalDate endDate) {
+        return !date.isBefore(startDate) && !date.isAfter(endDate);
     }
 }

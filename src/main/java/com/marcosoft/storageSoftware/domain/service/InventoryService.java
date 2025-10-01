@@ -23,4 +23,6 @@ public interface InventoryService {
     boolean existsByProductAndWarehouseAndClient(Product product, Warehouse warehouse, Client client);
 
     List<Inventory> getAllInventoriesByClient(Client client);
+
+    List<Inventory> getAllInventoriesByProductAndClient(Product product, Client client);
 }
