@@ -1,6 +1,5 @@
 package com.marcosoft.storageSoftware.application.controller;
 
-import com.marcosoft.storageSoftware.infrastructure.util.UserLogged;
 import com.marcosoft.storageSoftware.domain.model.Client;
 import com.marcosoft.storageSoftware.domain.model.Inventory;
 import com.marcosoft.storageSoftware.domain.model.Product;
@@ -9,12 +8,13 @@ import com.marcosoft.storageSoftware.infrastructure.service.impl.InventoryServic
 import com.marcosoft.storageSoftware.infrastructure.service.impl.ProductServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.WarehouseServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
+import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
+import com.marcosoft.storageSoftware.infrastructure.util.UserLogged;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
@@ -36,21 +36,12 @@ public class WarningManagerViewController {
     private final ProductServiceImpl productService;
     private final DisplayAlerts displayAlerts;
     private final SellViewController sellViewController;
+    private final SceneSwitcher sceneSwitcher;
 
-    /**
-     * Instantiates a new Warning manager view controller.
-     *
-     * @param inventoryService   the inventory service
-     * @param userLogged         the user logged
-     * @param warehouseService   the warehouse service
-     * @param displayAlerts      the display alerts
-     * @param productService     the product service
-     * @param sellViewController the sell view controller
-     */
     public WarningManagerViewController(
             InventoryServiceImpl inventoryService, UserLogged userLogged,
             WarehouseServiceImpl warehouseService, DisplayAlerts displayAlerts, ProductServiceImpl productService,
-            SellViewController sellViewController
+            SellViewController sellViewController, SceneSwitcher sceneSwitcher
     ) {
         this.userLogged = userLogged;
         this.sellViewController = sellViewController;
@@ -58,13 +49,13 @@ public class WarningManagerViewController {
         this.productService = productService;
         this.warehouseService = warehouseService;
         this.inventoryService = inventoryService;
+        this.sceneSwitcher = sceneSwitcher;
     }
 
     @FXML
     private MenuButton mbWarehouse, mbProduct;
     @FXML
     private TextField tfWarning, tfProduct, tfWarehouse, tfAlert;
-
 
     @FXML
     private void initialize() {
@@ -355,12 +346,8 @@ public class WarningManagerViewController {
         return true;
     }
 
-    /**
-     * Go out.
-     */
     @FXML
     public void goOut() {
-        Stage stage = (Stage) mbWarehouse.getScene().getWindow();
-        stage.close();
+        sceneSwitcher.closeWindow(tfAlert);
     }
 }

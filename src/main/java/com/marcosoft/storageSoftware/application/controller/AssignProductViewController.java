@@ -4,14 +4,13 @@ import com.marcosoft.storageSoftware.domain.model.*;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.*;
 import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
 import com.marcosoft.storageSoftware.infrastructure.util.ParseDataTypes;
+import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
 import com.marcosoft.storageSoftware.infrastructure.util.UserLogged;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
@@ -38,12 +37,13 @@ public class AssignProductViewController {
     private final WarehouseRegistryServiceImpl warehouseRegistryService;
     private final WarehouseViewController warehouseViewController;
     private final BuyServiceImpl buyService;
+    private final SceneSwitcher sceneSwitcher;
 
     public AssignProductViewController(
             GeneralRegistryServiceImpl generalRegistryService, ParseDataTypes parseDataTypes, DisplayAlerts displayAlerts,
             InventoryServiceImpl inventoryService, UserLogged userLogged, WarehouseServiceImpl warehouseService,
             ProductServiceImpl productService, BuyServiceImpl buyService, WarehouseViewController warehouseViewController,
-            WarehouseRegistryServiceImpl warehouseRegistryService
+            WarehouseRegistryServiceImpl warehouseRegistryService, SceneSwitcher sceneSwitcher
     ) {
         this.productService = productService;
         this.warehouseRegistryService = warehouseRegistryService;
@@ -55,6 +55,7 @@ public class AssignProductViewController {
         this.parseDataTypes = parseDataTypes;
         this.warehouseViewController = warehouseViewController;
         this.buyService = buyService;
+        this.sceneSwitcher = sceneSwitcher;
     }
 
     // FXML UI components
@@ -82,9 +83,8 @@ public class AssignProductViewController {
     }
 
     @FXML
-    public void goOut(ActionEvent actionEvent) {
-        Stage stage = (Stage) tfAmount.getScene().getWindow();
-        stage.close();
+    public void goOut() {
+        sceneSwitcher.closeWindow(tfAmount);
     }
 
     private void clearFields() {
@@ -229,8 +229,8 @@ public class AssignProductViewController {
                 );
                 warehouseRegistryService.save(warehouseRegistry);
 
-                warehouseViewController.initTreeTable();
-                warehouseViewController.initTableValues();
+                warehouseViewController.initializeTreeTable();
+                warehouseViewController.initializeTableValues();
                 clearFields();
 
                 displayAlerts.showAlert("Producto asignado correctamente al almacén");

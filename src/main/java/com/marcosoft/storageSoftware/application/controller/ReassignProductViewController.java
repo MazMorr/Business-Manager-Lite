@@ -142,7 +142,7 @@ public class ReassignProductViewController {
             displayAlerts.showAlert("Se ha reasignado el producto satisfactoriamente");
             cleanFields();
 
-            warehouseViewController.initTreeTable();
+            warehouseViewController.initializeTreeTable();
         } catch (Exception e) {
             displayAlerts.showError("Ha ocurrido un error: " + e.getMessage());
         }

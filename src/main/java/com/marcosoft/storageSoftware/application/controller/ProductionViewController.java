@@ -1,5 +1,7 @@
 package com.marcosoft.storageSoftware.application.controller;
 
+import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
+import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuButton;
@@ -8,13 +10,22 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 public class ProductionViewController {
+
+    private final SceneSwitcher sceneSwitcher;
+    private final DisplayAlerts displayAlerts;
+
     @FXML
     private TextField tfAmount1, tfAmount4, tfAmount3, tfWarehouse4, tfWarehouse3, tfWarehouse2, tfAmount2,
             tfNewProductDestinyWarehouse, tfNewProductAmount, tfProduct2, tfProduct1, tfProduct4, tfProduct3,
             tfNewProductName, tfWarehouse;
     @FXML
-    private MenuButton mbAmunt1, mbAmunt2, mbAmunt3, mbAmunt4, mbProduct2, mbProduct3, mbProduct4, mbProduct1,
+    private MenuButton mbAmount1, mbAmount2, mbAmount3, mbAmount4, mbProduct2, mbProduct3, mbProduct4, mbProduct1,
             mbWarehouse1, mbWarehouse3, mbWarehouse2, mbWarehouse4, mbNewProductDestinyWarehouse;
+
+    public ProductionViewController(SceneSwitcher sceneSwitcher, DisplayAlerts displayAlerts) {
+        this.sceneSwitcher = sceneSwitcher;
+        this.displayAlerts = displayAlerts;
+    }
 
     @FXML
     private void initialize() {
@@ -22,7 +33,8 @@ public class ProductionViewController {
     }
 
     @FXML
-    public void goOut(ActionEvent actionEvent) {
+    public void goOut() {
+        sceneSwitcher.closeWindow(tfAmount1);
     }
 
     @FXML

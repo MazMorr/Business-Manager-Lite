@@ -3,13 +3,12 @@ package com.marcosoft.storageSoftware.application.controller;
 import com.marcosoft.storageSoftware.domain.model.Currency;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.CurrencyServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
+import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
@@ -31,21 +30,16 @@ public class CurrencyValuesViewController {
     private final DisplayAlerts displayAlerts;
     private final CurrencyServiceImpl currencyService;
     private final BalanceViewController balanceViewController;
+    private final SceneSwitcher sceneSwitcher;
 
-    /**
-     * Instantiates a new Currency values view controller.
-     *
-     * @param displayAlerts the display alerts
-     * @param currencyService the currency service
-     * @param balanceViewController the balance view controller
-     */
     public CurrencyValuesViewController(
             DisplayAlerts displayAlerts,
             CurrencyServiceImpl currencyService,
-            BalanceViewController balanceViewController) {
+            BalanceViewController balanceViewController, SceneSwitcher sceneSwitcher) {
         this.currencyService = currencyService;
         this.balanceViewController = balanceViewController;
         this.displayAlerts = displayAlerts;
+        this.sceneSwitcher = sceneSwitcher;
     }
 
     @FXML
@@ -133,15 +127,9 @@ public class CurrencyValuesViewController {
         field.requestFocus();
     }
 
-    /**
-     * Go out.
-     *
-     * @param actionEvent the action event
-     */
     @FXML
-    public void goOut(ActionEvent actionEvent) {
-        Stage stage = (Stage) mbCurrency.getScene().getWindow();
-        stage.close();
+    public void goOut() {
+        sceneSwitcher.closeWindow(tfCurrency);
     }
 
     private void initMbCurrency() {

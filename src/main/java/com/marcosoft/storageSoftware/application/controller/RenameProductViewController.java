@@ -3,14 +3,13 @@ package com.marcosoft.storageSoftware.application.controller;
 import com.marcosoft.storageSoftware.domain.model.*;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.*;
 import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
+import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
 import com.marcosoft.storageSoftware.infrastructure.util.UserLogged;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
@@ -35,11 +34,12 @@ public class RenameProductViewController {
     private final InventoryServiceImpl inventoryService;
     private final BuyServiceImpl buyService;
     private final CurrencyServiceImpl currencyService; // Servicio de monedas agregado
+    private final SceneSwitcher sceneSwitcher;
 
     public RenameProductViewController(
             WarehouseViewController warehouseViewController, GeneralRegistryServiceImpl generalRegistryService,
             DisplayAlerts displayAlerts, UserLogged userLogged, ProductServiceImpl productService,
-            InventoryServiceImpl inventoryService, BuyServiceImpl buyService, CurrencyServiceImpl currencyService
+            InventoryServiceImpl inventoryService, BuyServiceImpl buyService, CurrencyServiceImpl currencyService, SceneSwitcher sceneSwitcher
     ) {
         this.productService = productService;
         this.warehouseViewController = warehouseViewController;
@@ -49,6 +49,7 @@ public class RenameProductViewController {
         this.inventoryService = inventoryService;
         this.buyService = buyService;
         this.currencyService = currencyService;
+        this.sceneSwitcher = sceneSwitcher;
     }
 
     // FXML UI components
@@ -114,8 +115,8 @@ public class RenameProductViewController {
             generalRegistryService.save(generalRegistry);
 
             clearFields();
-            warehouseViewController.initTableValues();
-            warehouseViewController.initTreeTable();
+            warehouseViewController.initializeTableValues();
+            warehouseViewController.initializeTreeTable();
 
         } catch (Exception e) {
             displayAlerts.showAlert("Ha ocurrido un error: " + e.getMessage());
@@ -260,13 +261,11 @@ public class RenameProductViewController {
     }
 
     /**
-     * Closes the change product name window.
-     * @param actionEvent the action event
+     * Closes the window.
      */
     @FXML
-    public void goOut(ActionEvent actionEvent) {
-        Stage stage = (Stage) tfActualName.getScene().getWindow();
-        stage.close();
+    public void goOut() {
+        sceneSwitcher.closeWindow(tfActualName);
     }
 
     /**

@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.springframework.beans.BeansException;
@@ -202,6 +203,10 @@ public class SceneSwitcher {
         }
     }
 
+    public void closeWindow(TextField tf){
+        Stage stage = (Stage) tf.getScene().getWindow();
+        stage.close();
+    }
 
     /**
      * Switch to configuration.

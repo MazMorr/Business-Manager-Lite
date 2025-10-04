@@ -1,12 +1,12 @@
 package com.marcosoft.storageSoftware.application.controller;
 
-import com.marcosoft.storageSoftware.infrastructure.util.UserLogged;
 import com.marcosoft.storageSoftware.domain.model.Client;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
+import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
+import com.marcosoft.storageSoftware.infrastructure.util.UserLogged;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 import org.springframework.stereotype.Controller;
 
 
@@ -18,15 +18,17 @@ public class EstablishCompanyNameViewController {
     private final ClientServiceImpl clientService;
     private final DisplayAlerts displayAlerts;
     private final ConfigurationViewController configurationViewController;
+    private final SceneSwitcher sceneSwitcher;
 
     @FXML
     private TextField tfCompanyName;
 
-    public EstablishCompanyNameViewController(UserLogged userLogged, ClientServiceImpl clientService, DisplayAlerts displayAlerts, ConfigurationViewController configurationViewController) {
+    public EstablishCompanyNameViewController(UserLogged userLogged, ClientServiceImpl clientService, DisplayAlerts displayAlerts, ConfigurationViewController configurationViewController, SceneSwitcher sceneSwitcher) {
         this.userLogged = userLogged;
         this.clientService = clientService;
         this.displayAlerts = displayAlerts;
         this.configurationViewController = configurationViewController;
+        this.sceneSwitcher = sceneSwitcher;
     }
 
     @FXML
@@ -39,8 +41,7 @@ public class EstablishCompanyNameViewController {
 
     @FXML
     public void goOut() {
-        Stage stage = (Stage) tfCompanyName.getScene().getWindow();
-        stage.close();
+        sceneSwitcher.closeWindow(tfCompanyName);
     }
 
     @FXML

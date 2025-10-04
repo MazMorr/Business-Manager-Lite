@@ -114,7 +114,6 @@ Negro:               #0f172a
 
 .btnIndex:hover {
   -fx-opacity: 0.85;
-  -fx-background-color: #1e40af;
 }
 
 .btnGoBackCreateAccount {

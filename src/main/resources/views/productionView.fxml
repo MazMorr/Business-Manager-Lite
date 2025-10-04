@@ -45,7 +45,7 @@
                             </Label>
                             <MenuButton fx:id="mbProduct1" mnemonicParsing="false">
                                 <graphic>
-                                    <TextField fx:id="tfProduct1" promptText="2er Paso" />
+                                    <TextField fx:id="tfProduct1" promptText="2do Paso" />
                                 </graphic>
                                 <padding>
                                     <Insets bottom="-4.0" left="-8.0" top="-4.0" />
@@ -56,7 +56,7 @@
                                     <Insets top="3.0" />
                                 </VBox.margin>
                             </Label>
-                            <MenuButton fx:id="mbAmunt1" mnemonicParsing="false">
+                            <MenuButton fx:id="mbAmount1" mnemonicParsing="false">
                                 <graphic>
                                     <TextField fx:id="tfAmount1" promptText="3er Paso" />
                                 </graphic>
@@ -66,18 +66,16 @@
                             </MenuButton>
                      <Button mnemonicParsing="false" onAction="#cleanProduct1" prefWidth="1000.0" text="Limpiar">
                         <graphic>
-                           <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
-                              <effect>
-                                 <InnerShadow choke="1.0" radius="68.5" width="255.0">
-                                    <color>
-                                       <Color red="1.0" green="1.0" blue="1.0" />
-                                    </color>
-                                 </InnerShadow>
-                              </effect>
-                              <image>
-                                 <Image url="@../images/refresh.png" />
-                              </image>
-                           </ImageView>
+                            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
+                                <effect>
+                                    <InnerShadow choke="1.0" radius="68.5" width="255.0">
+                                        <color>
+                                            <Color red="1.0" green="1.0" blue="1.0"/>
+                                        </color>
+                                    </InnerShadow>
+                                </effect>
+                                <Image url="@../images/refresh.png"/>
+                            </ImageView>
                         </graphic>
                         <VBox.margin>
                            <Insets top="5.0" />
@@ -108,7 +106,7 @@
                             </Label>
                             <MenuButton fx:id="mbProduct2" mnemonicParsing="false">
                                 <graphic>
-                                    <TextField fx:id="tfProduct2" promptText="2er Paso" />
+                                    <TextField fx:id="tfProduct2" promptText="2do Paso" />
                                 </graphic>
                                 <padding>
                                     <Insets bottom="-4.0" left="-8.0" top="-4.0" />
@@ -119,7 +117,7 @@
                                     <Insets top="3.0" />
                                 </VBox.margin>
                             </Label>
-                            <MenuButton fx:id="mbAmunt2" mnemonicParsing="false">
+                            <MenuButton fx:id="mbAmount2" mnemonicParsing="false">
                                 <graphic>
                                     <TextField fx:id="tfAmount2" promptText="3er Paso" />
                                 </graphic>
@@ -129,18 +127,16 @@
                             </MenuButton>
                      <Button mnemonicParsing="false" onAction="#cleanProduct2" prefWidth="1000.0" text="Limpiar">
                         <graphic>
-                           <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
-                              <effect>
-                                 <InnerShadow choke="1.0" radius="68.5" width="255.0">
-                                    <color>
-                                       <Color red="1.0" green="1.0" blue="1.0" />
-                                    </color>
-                                 </InnerShadow>
-                              </effect>
-                              <image>
-                                 <Image url="@../images/refresh.png" />
-                              </image>
-                           </ImageView>
+                            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
+                                <effect>
+                                    <InnerShadow choke="1.0" radius="68.5" width="255.0">
+                                        <color>
+                                            <Color red="1.0" green="1.0" blue="1.0"/>
+                                        </color>
+                                    </InnerShadow>
+                                </effect>
+                                <Image url="@../images/refresh.png"/>
+                            </ImageView>
                         </graphic>
                         <VBox.margin>
                            <Insets top="5.0" />
@@ -171,7 +167,7 @@
                             </Label>
                             <MenuButton fx:id="mbProduct3" mnemonicParsing="false">
                                 <graphic>
-                                    <TextField fx:id="tfProduct3" promptText="2er Paso" />
+                                    <TextField fx:id="tfProduct3" promptText="2do Paso" />
                                 </graphic>
                                 <padding>
                                     <Insets bottom="-4.0" left="-8.0" top="-4.0" />
@@ -182,7 +178,7 @@
                                     <Insets top="3.0" />
                                 </VBox.margin>
                             </Label>
-                            <MenuButton fx:id="mbAmunt3" mnemonicParsing="false">
+                            <MenuButton fx:id="mbAmount3" mnemonicParsing="false">
                                 <graphic>
                                     <TextField fx:id="tfAmount3" promptText="3er Paso" />
                                 </graphic>
@@ -192,18 +188,16 @@
                             </MenuButton>
                      <Button mnemonicParsing="false" onAction="#cleanProduct3" prefWidth="1000.0" text="Limpiar">
                         <graphic>
-                           <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
-                              <effect>
-                                 <InnerShadow choke="1.0" radius="68.5" width="255.0">
-                                    <color>
-                                       <Color red="1.0" green="1.0" blue="1.0" />
-                                    </color>
-                                 </InnerShadow>
-                              </effect>
-                              <image>
-                                 <Image url="@../images/refresh.png" />
-                              </image>
-                           </ImageView>
+                            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
+                                <effect>
+                                    <InnerShadow choke="1.0" radius="68.5" width="255.0">
+                                        <color>
+                                            <Color red="1.0" green="1.0" blue="1.0"/>
+                                        </color>
+                                    </InnerShadow>
+                                </effect>
+                                <Image url="@../images/refresh.png"/>
+                            </ImageView>
                         </graphic>
                         <VBox.margin>
                            <Insets top="5.0" />
@@ -234,7 +228,7 @@
                             </Label>
                             <MenuButton fx:id="mbProduct4" mnemonicParsing="false">
                                 <graphic>
-                                    <TextField fx:id="tfProduct4" promptText="2er Paso" />
+                                    <TextField fx:id="tfProduct4" promptText="2do Paso" />
                                 </graphic>
                                 <padding>
                                     <Insets bottom="-4.0" left="-8.0" top="-4.0" />
@@ -245,7 +239,7 @@
                                     <Insets top="3.0" />
                                 </VBox.margin>
                             </Label>
-                            <MenuButton fx:id="mbAmunt4" mnemonicParsing="false">
+                            <MenuButton fx:id="mbAmount4" mnemonicParsing="false">
                                 <graphic>
                                     <TextField fx:id="tfAmount4" promptText="3er Paso" />
                                 </graphic>
@@ -255,18 +249,16 @@
                             </MenuButton>
                      <Button mnemonicParsing="false" onAction="#cleanProduct4" prefWidth="1000.0" text="Limpiar">
                         <graphic>
-                           <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
-                              <effect>
-                                 <InnerShadow choke="1.0" radius="68.5" width="255.0">
-                                    <color>
-                                       <Color red="1.0" green="1.0" blue="1.0" />
-                                    </color>
-                                 </InnerShadow>
-                              </effect>
-                              <image>
-                                 <Image url="@../images/refresh.png" />
-                              </image>
-                           </ImageView>
+                            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
+                                <effect>
+                                    <InnerShadow choke="1.0" radius="68.5" width="255.0">
+                                        <color>
+                                            <Color red="1.0" green="1.0" blue="1.0"/>
+                                        </color>
+                                    </InnerShadow>
+                                </effect>
+                                <Image url="@../images/refresh.png"/>
+                            </ImageView>
                         </graphic>
                         <VBox.margin>
                            <Insets top="5.0" />
@@ -318,18 +310,16 @@
             </Button>
          <Button mnemonicParsing="false" onAction="#cleanNewProduct" prefWidth="1000.0" text="Limpiar">
             <graphic>
-               <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
-                  <effect>
-                     <InnerShadow choke="1.0" radius="68.5" width="255.0">
-                        <color>
-                           <Color red="1.0" green="1.0" blue="1.0" />
-                        </color>
-                     </InnerShadow>
-                  </effect>
-                  <image>
-                     <Image url="@../images/refresh.png" />
-                  </image>
-               </ImageView>
+                <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true">
+                    <effect>
+                        <InnerShadow choke="1.0" radius="68.5" width="255.0">
+                            <color>
+                                <Color red="1.0" green="1.0" blue="1.0"/>
+                            </color>
+                        </InnerShadow>
+                    </effect>
+                    <Image url="@../images/refresh.png"/>
+                </ImageView>
             </graphic>
          </Button>
             <Button mnemonicParsing="false" onAction="#goOut" prefHeight="40.0" prefWidth="294.0" text="Salir">

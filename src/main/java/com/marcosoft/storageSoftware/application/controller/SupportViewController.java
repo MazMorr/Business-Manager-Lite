@@ -11,7 +11,6 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 
@@ -21,7 +20,6 @@ import java.util.List;
  * Controller for the support view.
  * Handles welcome messages, navigation, and license information display.
  */
-@Lazy
 @Controller
 public class SupportViewController {
     // Reference to the account controller for session management

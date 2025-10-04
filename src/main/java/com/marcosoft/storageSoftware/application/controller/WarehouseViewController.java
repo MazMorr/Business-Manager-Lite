@@ -22,12 +22,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Controlador para la gestión de almacenes y asignación de productos/inversiones.
+ * Maneja la visualización de almacenes, productos asignados y gastos disponibles.
+ */
 @Lazy
 @Controller
 public class WarehouseViewController {
+    private static final String RAW_MATERIALS_TYPE = "Materias Primas y Materiales";
+    private static final String CUP_CURRENCY = "CUP";
+
     private Client client;
 
-    // Service and utility dependencies
+    // Dependencias de servicios y utilidades
     private final WarehouseServiceImpl warehouseService;
     private final UserLogged userLogged;
     private final SceneSwitcher sceneSwitcher;
@@ -38,11 +45,14 @@ public class WarehouseViewController {
     private final BuyServiceImpl buyService;
     private final CurrencyServiceImpl currencyService;
 
+    /**
+     * Constructor con inyección de dependencias.
+     */
     public WarehouseViewController(
             DisplayAlerts displayAlerts, WarehouseServiceImpl warehouseService, BuyServiceImpl buyService,
             UserLogged userLogged, SceneSwitcher sceneSwitcher, InventoryServiceImpl inventoryService,
-            GeneralRegistryServiceImpl generalRegistryService, ExpenseViewController expenseViewController, CurrencyServiceImpl currencyService
-    ) {
+            GeneralRegistryServiceImpl generalRegistryService, ExpenseViewController expenseViewController,
+            CurrencyServiceImpl currencyService) {
         this.inventoryService = inventoryService;
         this.sceneSwitcher = sceneSwitcher;
         this.displayAlerts = displayAlerts;
@@ -54,18 +64,16 @@ public class WarehouseViewController {
         this.currencyService = currencyService;
     }
 
-    // FXML UI components
+    // Componentes de UI FXML
     @FXML
     private TableView<ExpenseWarehouseDataTable> tvExpenses;
     @FXML
     private TreeTableView<WarehouseDataTable> ttvWarehouse;
 
-
     @FXML
     private TreeTableColumn<WarehouseDataTable, String> ttcValue, ttcWarehouseName, ttcProductName;
     @FXML
     private TreeTableColumn<WarehouseDataTable, Integer> ttcProductAmount;
-
 
     @FXML
     private TableColumn<ExpenseWarehouseDataTable, Long> tcIdExpense;
@@ -79,188 +87,262 @@ public class WarehouseViewController {
     @FXML
     private Label lblClientName;
 
+    /**
+     * Inicializa el controlador después de que se hayan inyectado los componentes FXML.
+     * Configura el cliente, etiquetas y inicializa las tablas.
+     */
     @FXML
     public void initialize() {
-        client = userLogged.getClient();
-        lblClientName.setText(client.getClientName());
-        initTableValues();
-        initTreeTable();
-        initTableLabels();
+        initializeClient();
+        initializeTableValues();
+        initializeTreeTable();
+        initializeTablePlaceholders();
     }
 
-    public void initTableValues() {
-        // Clear previous data
+    /**
+     * Inicializa los datos del cliente y los muestra en la UI.
+     */
+    private void initializeClient() {
+        client = userLogged.getClient();
+        lblClientName.setText(client.getClientName());
+    }
+
+    /**
+     * Inicializa y popula la tabla de gastos con compras de materias primas no asignadas.
+     */
+    public void initializeTableValues() {
         tvExpenses.getItems().clear();
 
-        // Obtener todas las compras de tipo "Materias Primas y Materiales" con leftAmount > 0
-        List<Buy> buys = buyService.getAllBuysGreaterThanZeroByClient(client).stream()
-                .filter(buy -> "Materias Primas y Materiales".equals(buy.getBuyType()))
+        List<Buy> rawMaterialBuys = buyService.getAllBuysGreaterThanZeroByClient(client).stream()
+                .filter(buy -> RAW_MATERIALS_TYPE.equals(buy.getBuyType()))
                 .toList();
 
-        // Mapear las compras a ExpenseWarehouseDataTable
-        List<ExpenseWarehouseDataTable> buyData = buys.stream()
+        List<ExpenseWarehouseDataTable> buyData = rawMaterialBuys.stream()
                 .map(buy -> new ExpenseWarehouseDataTable(
                         buy.getBuyId(),
                         buy.getBuyName(),
                         buy.getLeftAmount(),
-                        buy.getReceivedDate()
-                ))
+                        buy.getReceivedDate()))
                 .toList();
 
-        // Configurar columnas
+        configureExpenseTableColumns();
+        tvExpenses.getItems().addAll(buyData);
+    }
+
+    /**
+     * Configura las columnas de la tabla de gastos.
+     */
+    private void configureExpenseTableColumns() {
         tcIdExpense.setCellValueFactory(new PropertyValueFactory<>("expenseId"));
         tcProductName.setCellValueFactory(new PropertyValueFactory<>("expenseName"));
         tcProductAmount.setCellValueFactory(new PropertyValueFactory<>("productAmount"));
         tcProductDate.setCellValueFactory(new PropertyValueFactory<>("expenseDate"));
-
-        // Agregar datos a la tabla
-        tvExpenses.getItems().addAll(buyData);
     }
 
-    private void initTableLabels() {
-        // Placeholder para TreeTableView (ttvWarehouse)
-        ttvWarehouse.setPlaceholder(new Label("""
-                📦 ¡Vaya! No hay almacenes registrados
-                Añade tu primer almacén con el botón\s\s
-                '(+) Agregar Almacén'"""));
-
-        // Placeholder actualizado para TableView (tvExpenses)
-        tvExpenses.setPlaceholder(new Label("""
-                💼 Aquí aparecerán tus compras de Materias Primas
-                Cuando hagas COMPRAS y no hayan sido asignadas,
-                Se mostrarán aquí para su asignación"""));
-
-        // Common style for both placeholders
-        String commonStyle = "-fx-font-family: 'Segoe UI'; " +
+    /**
+     * Inicializa los placeholders de las tablas con mensajes informativos.
+     */
+    private void initializeTablePlaceholders() {
+        String placeholderStyle = "-fx-font-family: 'Segoe UI'; " +
                 "-fx-font-size: 14px; " +
                 "-fx-text-alignment: center; " +
                 "-fx-text-fill: #64748b; " +
                 "-fx-alignment: center; " +
                 "-fx-padding: 10px; ";
 
-        ttvWarehouse.getPlaceholder().setStyle(commonStyle);
-        tvExpenses.getPlaceholder().setStyle(commonStyle);
+        ttvWarehouse.setPlaceholder(createPlaceholderLabel("""
+                📦 ¡Vaya! No hay almacenes registrados
+                Añade tu primer almacén con el botón\s\s
+                '(+) Agregar Almacén'""", placeholderStyle));
+
+        tvExpenses.setPlaceholder(createPlaceholderLabel("""
+                💼 Aquí aparecerán tus compras de Materias Primas
+                Cuando hagas COMPRAS y no hayan sido asignadas,
+                Se mostrarán aquí para su asignación""", placeholderStyle));
     }
 
-    public void initTreeTable() {
-        // Column configuration
+    /**
+     * Crea una etiqueta para el placeholder con el estilo especificado.
+     */
+    private Label createPlaceholderLabel(String text, String style) {
+        Label label = new Label(text);
+        label.setStyle(style);
+        return label;
+    }
+
+    /**
+     * Inicializa y configura el TreeTableView de almacenes y productos.
+     */
+    public void initializeTreeTable() {
+        configureTreeTableColumns();
+
+        List<Inventory> inventory = inventoryService.getAllInventoriesByClient(client);
+        List<Buy> materialBuys = getRawMaterialBuys();
+        Map<String, Double> productAvgPricesInCUP = calculateWeightedAveragePrices(materialBuys);
+
+        TreeItem<WarehouseDataTable> root = buildTreeTableRoot(inventory, productAvgPricesInCUP);
+        ttvWarehouse.setRoot(root);
+        ttvWarehouse.setShowRoot(false);
+    }
+
+    /**
+     * Configura las columnas del TreeTableView.
+     */
+    private void configureTreeTableColumns() {
         ttcWarehouseName.setCellValueFactory(new TreeItemPropertyValueFactory<>("warehouseName"));
         ttcProductName.setCellValueFactory(new TreeItemPropertyValueFactory<>("productName"));
         ttcProductAmount.setCellValueFactory(new TreeItemPropertyValueFactory<>("productAmount"));
         ttcValue.setCellValueFactory(new TreeItemPropertyValueFactory<>("valueInCUP"));
+    }
 
-        List<Inventory> inventory = inventoryService.getAllInventoriesByClient(client);
+    /**
+     * Obtiene las compras de materias primas del cliente.
+     */
+    private List<Buy> getRawMaterialBuys() {
+        return buyService.getAllBuysByClient(client).stream()
+                .filter(buy -> RAW_MATERIALS_TYPE.equals(buy.getBuyType()))
+                .toList();
+    }
 
-        // Obtener todas las compras de Materias Primas y Materiales
-        List<Buy> materialBuys = buyService.getAllBuysByClient(client).stream()
-                .filter(buy -> "Materias Primas y Materiales".equals(buy.getBuyType())).toList();
-
-        // CORRECIÓN: Calcular precio promedio ponderado por producto
-        Map<String, Double> productAvgPricesInCUP = calculateWeightedAveragePrices(materialBuys);
-
-        // Group inventories by warehouse
+    /**
+     * Construye la estructura jerárquica del TreeTableView.
+     */
+    private TreeItem<WarehouseDataTable> buildTreeTableRoot(List<Inventory> inventory,
+                                                            Map<String, Double> productAvgPricesInCUP) {
         Map<Warehouse, List<Inventory>> inventoriesByWarehouse = inventory.stream()
                 .collect(Collectors.groupingBy(Inventory::getWarehouse));
 
         TreeItem<WarehouseDataTable> root = new TreeItem<>();
 
         inventoriesByWarehouse.forEach((warehouse, inventories) -> {
-            // Calcular el valor total del almacén EN CUP
-            double totalWarehouseValue = 0.0;
-
-            for (Inventory inv : inventories) {
-                if (inv.getProduct() != null && inv.getAmount() != null) {
-                    Double avgPriceInCUP = productAvgPricesInCUP.get(inv.getProduct().getProductName());
-                    if (avgPriceInCUP != null) {
-                        totalWarehouseValue += avgPriceInCUP * inv.getAmount();
-                    }
-                }
-            }
-
-            int totalAmount = inventories.stream()
-                    .mapToInt(inv -> inv.getAmount() != null ? inv.getAmount() : 0)
-                    .sum();
-            int invCount = inventories.size() - 1;
-
-            WarehouseDataTable warehouseNode = new WarehouseDataTable(
-                    warehouse.getWarehouseName(),
-                    "Productos: " + invCount,
-                    totalAmount,
-                    String.format("%.2f CUP", totalWarehouseValue) // Valor en CUP
-            );
-
-            TreeItem<WarehouseDataTable> warehouseItem = new TreeItem<>(warehouseNode);
-
-            // Children (products) - con valor individual EN CUP
-            inventories.forEach(inv -> {
-                if (!(inv.getProduct() == null || inv.getAmount() == null)) {
-                    Double avgPriceInCUP = productAvgPricesInCUP.get(inv.getProduct().getProductName());
-                    String productValue = (avgPriceInCUP != null) ?
-                            String.format("%.2f CUP", avgPriceInCUP * inv.getAmount()) : "N/A";
-
-                    WarehouseDataTable productNode = new WarehouseDataTable(
-                            "",
-                            inv.getProduct().getProductName(),
-                            inv.getAmount(),
-                            productValue // Valor individual en CUP
-                    );
-                    warehouseItem.getChildren().add(new TreeItem<>(productNode));
-                }
-            });
-
+            TreeItem<WarehouseDataTable> warehouseItem = createWarehouseTreeItem(
+                    warehouse, inventories, productAvgPricesInCUP);
             root.getChildren().add(warehouseItem);
         });
 
-        ttvWarehouse.setRoot(root);
-        ttvWarehouse.setShowRoot(false);
+        return root;
     }
 
-    // Nuevo método para calcular precios promedio ponderados en CUP
+    /**
+     * Crea un ítem de árbol para un almacén con sus productos.
+     */
+    private TreeItem<WarehouseDataTable> createWarehouseTreeItem(Warehouse warehouse,
+                                                                 List<Inventory> inventories,
+                                                                 Map<String, Double> productAvgPricesInCUP) {
+        WarehouseSummary summary = calculateWarehouseSummary(inventories, productAvgPricesInCUP);
+
+        WarehouseDataTable warehouseNode = new WarehouseDataTable(
+                warehouse.getWarehouseName(),
+                "Productos: " + (inventories.size() - 1),
+                summary.totalAmount,
+                String.format("%.2f CUP", summary.totalValue));
+
+        TreeItem<WarehouseDataTable> warehouseItem = new TreeItem<>(warehouseNode);
+        addProductTreeItems(warehouseItem, inventories, productAvgPricesInCUP);
+
+        return warehouseItem;
+    }
+
+    /**
+     * Calcula el resumen de valores para un almacén.
+     */
+    private WarehouseSummary calculateWarehouseSummary(List<Inventory> inventories,
+                                                       Map<String, Double> productAvgPricesInCUP) {
+        double totalValue = 0.0;
+        int totalAmount = 0;
+
+        for (Inventory inv : inventories) {
+            if (isValidInventory(inv)) {
+                Double avgPriceInCUP = productAvgPricesInCUP.get(inv.getProduct().getProductName());
+                if (avgPriceInCUP != null) {
+                    totalValue += avgPriceInCUP * inv.getAmount();
+                }
+                totalAmount += inv.getAmount();
+            }
+        }
+
+        return new WarehouseSummary(totalValue, totalAmount);
+    }
+
+    /**
+     * Verifica si un inventario es válido para procesar.
+     */
+    private boolean isValidInventory(Inventory inventory) {
+        return inventory.getProduct() != null && inventory.getAmount() != null;
+    }
+
+    /**
+     * Añade los productos como hijos del ítem del almacén.
+     */
+    private void addProductTreeItems(TreeItem<WarehouseDataTable> warehouseItem,
+                                     List<Inventory> inventories,
+                                     Map<String, Double> productAvgPricesInCUP) {
+        inventories.stream()
+                .filter(this::isValidInventory)
+                .forEach(inv -> {
+                    TreeItem<WarehouseDataTable> productItem = createProductTreeItem(inv, productAvgPricesInCUP);
+                    warehouseItem.getChildren().add(productItem);
+                });
+    }
+
+    /**
+     * Crea un ítem de árbol para un producto.
+     */
+    private TreeItem<WarehouseDataTable> createProductTreeItem(Inventory inventory,
+                                                               Map<String, Double> productAvgPricesInCUP) {
+        String productValue = calculateProductValue(inventory, productAvgPricesInCUP);
+
+        WarehouseDataTable productNode = new WarehouseDataTable(
+                "",
+                inventory.getProduct().getProductName(),
+                inventory.getAmount(),
+                productValue);
+
+        return new TreeItem<>(productNode);
+    }
+
+    /**
+     * Calcula el valor de un producto en CUP.
+     */
+    private String calculateProductValue(Inventory inventory, Map<String, Double> productAvgPricesInCUP) {
+        Double avgPriceInCUP = productAvgPricesInCUP.get(inventory.getProduct().getProductName());
+        return (avgPriceInCUP != null) ?
+                String.format("%.2f CUP", avgPriceInCUP * inventory.getAmount()) : "N/A";
+    }
+
+    /**
+     * Calcula los precios promedio ponderados de los productos en CUP.
+     */
     private Map<String, Double> calculateWeightedAveragePrices(List<Buy> buys) {
         Map<String, ProductSummary> productSummaries = new HashMap<>();
 
         for (Buy buy : buys) {
-            ProductSummary summary = productSummaries.getOrDefault(buy.getBuyName(), new ProductSummary());
+            String productName = buy.getBuyName();
+            ProductSummary summary = productSummaries.getOrDefault(productName, new ProductSummary());
 
-            double priceInCUP = convertToCUP(buy.getBuyUnitaryPrice(),
-                    buy.getCurrency().getCurrencyName());
+            double priceInCUP = convertToCUP(buy.getBuyUnitaryPrice(), buy.getCurrency().getCurrencyName());
+            summary.addTransaction(priceInCUP, buy.getAmount());
 
-            summary.totalValue += priceInCUP * buy.getAmount();
-            summary.totalAmount += buy.getAmount();
-            productSummaries.put(buy.getBuyName(), summary);
+            productSummaries.put(productName, summary);
         }
 
-        Map<String, Double> result = new HashMap<>();
-        for (Map.Entry<String, ProductSummary> entry : productSummaries.entrySet()) {
-            ProductSummary summary = entry.getValue();
-            if (summary.totalAmount > 0) {
-                result.put(entry.getKey(), summary.totalValue / summary.totalAmount);
-            }
-        }
-
-        return result;
+        return productSummaries.entrySet().stream()
+                .filter(entry -> entry.getValue().totalAmount > 0)
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        entry -> entry.getValue().totalValue / entry.getValue().totalAmount));
     }
 
-    @FXML
-    public void productionInProgress(ActionEvent actionEvent) {
-        displayAlerts.showAlert("Aún en desarrollo");
-    }
-
-    // Clase auxiliar para el cálculo de promedios
-    private static class ProductSummary {
-        double totalValue = 0.0;
-        int totalAmount = 0;
-    }
-
-    // Método de conversión a CUP (similar al de SellViewController)
+    /**
+     * Convierte un monto a CUP basado en la moneda.
+     */
     private Double convertToCUP(Double amount, String currency) {
         if (amount == null) return 0.0;
-        if ("CUP".equalsIgnoreCase(currency) || currency == null || currency.trim().isEmpty()) {
+        if (CUP_CURRENCY.equalsIgnoreCase(currency) || currency == null || currency.trim().isEmpty()) {
             return amount;
         }
 
         try {
-            // Necesitas inyectar CurrencyService en WarehouseViewController
             Currency currencyEntity = currencyService.getCurrencyByName(currency);
             if (currencyEntity != null && currencyEntity.getCurrencyPriceInCUP() != null) {
                 return amount * currencyEntity.getCurrencyPriceInCUP();
@@ -269,6 +351,12 @@ public class WarehouseViewController {
         } catch (Exception e) {
             return amount;
         }
+    }
+
+    // Métodos de navegación y acciones
+    @FXML
+    public void productionInProgress(ActionEvent actionEvent) {
+        displayAlerts.showAlert("Aún en desarrollo");
     }
 
     @FXML
@@ -281,35 +369,55 @@ public class WarehouseViewController {
         sceneSwitcher.displayWindow("Añadir Almacén", "/images/lc_logo.png", "/views/addWarehouseView.fxml");
     }
 
-
     @FXML
     public void deleteWarehouse() {
         try {
-            WarehouseDataTable warehouseDataTable = ttvWarehouse.getSelectionModel().getSelectedItem().getValue();
-            Warehouse warehouse = warehouseService.getWarehouseByWarehouseNameAndClient(warehouseDataTable.getWarehouseName(), client);
-            if (displayAlerts.showConfirmationAlert("Está seguro de querer eliminar el almacén seleccionado: " +
-                    warehouseDataTable.getWarehouseName() + " junto a todos los productos almacenados en él?")) {
-                List<Inventory> inventories = inventoryService.getAllInventoriesByWarehouseAndClient(warehouse, client);
-                for (Inventory inv : inventories) {
-                    inventoryService.deleteInventoryById(inv.getId());
-                }
-                warehouseService.deleteWarehouseById(warehouse.getId());
-                ttvWarehouse.getSelectionModel().clearSelection();
-                initTreeTable();
+            TreeItem<WarehouseDataTable> selectedItem = ttvWarehouse.getSelectionModel().getSelectedItem();
+            if (selectedItem == null) {
+                displayAlerts.showAlert("Debe seleccionar un almacén de la tabla para poder eliminarlo");
+                return;
+            }
 
-                GeneralRegistry generalRegistry = new GeneralRegistry(
-                        null, client, "Almacén",
-                        "Eliminación de almacén: " + warehouse.getWarehouseName()
-                        , LocalDateTime.now()
-                );
-                generalRegistryService.save(generalRegistry);
+            WarehouseDataTable warehouseData = selectedItem.getValue();
+            Warehouse warehouse = warehouseService.getWarehouseByWarehouseNameAndClient(
+                    warehouseData.getWarehouseName(), client);
+
+            if (displayAlerts.showConfirmationAlert(
+                    "¿Está seguro de querer eliminar el almacén seleccionado: " +
+                            warehouseData.getWarehouseName() + " junto a todos los productos almacenados en él?")) {
+
+                deleteWarehouseAndContents(warehouse);
+                ttvWarehouse.getSelectionModel().clearSelection();
+                initializeTreeTable();
+                logWarehouseDeletion(warehouse);
             } else {
                 ttvWarehouse.getSelectionModel().clearSelection();
             }
         } catch (NullPointerException e) {
             displayAlerts.showAlert("Debe seleccionar un almacén de la tabla para poder eliminarlo");
         }
+    }
 
+    /**
+     * Elimina un almacén y todo su contenido.
+     */
+    private void deleteWarehouseAndContents(Warehouse warehouse) {
+        List<Inventory> inventories = inventoryService.getAllInventoriesByWarehouseAndClient(warehouse, client);
+        for (Inventory inv : inventories) {
+            inventoryService.deleteInventoryById(inv.getId());
+        }
+        warehouseService.deleteWarehouseById(warehouse.getId());
+    }
+
+    /**
+     * Registra la eliminación del almacén en el registro general.
+     */
+    private void logWarehouseDeletion(Warehouse warehouse) {
+        GeneralRegistry generalRegistry = new GeneralRegistry(
+                null, client, "Almacén",
+                "Eliminación de almacén: " + warehouse.getWarehouseName(),
+                LocalDateTime.now());
+        generalRegistryService.save(generalRegistry);
     }
 
     @FXML
@@ -319,12 +427,12 @@ public class WarehouseViewController {
 
     @FXML
     public void checkExpense(ActionEvent actionEvent) {
-        ExpenseWarehouseDataTable expenseWarehouseDataTable = tvExpenses.getSelectionModel().getSelectedItem();
-        if (expenseWarehouseDataTable == null) {
+        ExpenseWarehouseDataTable selectedExpense = tvExpenses.getSelectionModel().getSelectedItem();
+        if (selectedExpense == null) {
             displayAlerts.showAlert("Debe seleccionar un gasto para revisarlo");
         } else {
             switchToExpense(actionEvent);
-            expenseViewController.getTfFilterId().setText(expenseWarehouseDataTable.getExpenseId() + "");
+            expenseViewController.getTfFilterId().setText(String.valueOf(selectedExpense.getExpenseId()));
         }
     }
 
@@ -338,6 +446,7 @@ public class WarehouseViewController {
         sceneSwitcher.displayWindow("Asignar Inversión a un Almacén", "/images/lc_logo.png", "/views/renameProductView.fxml");
     }
 
+    // Métodos de navegación entre vistas
     @FXML
     private void switchToConfiguration(ActionEvent actionEvent) {
         sceneSwitcher.switchToConfiguration(actionEvent);
@@ -371,5 +480,32 @@ public class WarehouseViewController {
     @FXML
     public void switchToBuy(ActionEvent actionEvent) {
         sceneSwitcher.switchToBuy(actionEvent);
+    }
+
+    // Clases auxiliares para cálculos
+    /**
+     * Resumen de valores para un almacén.
+     */
+    private static class WarehouseSummary {
+        final double totalValue;
+        final int totalAmount;
+
+        WarehouseSummary(double totalValue, int totalAmount) {
+            this.totalValue = totalValue;
+            this.totalAmount = totalAmount;
+        }
+    }
+
+    /**
+     * Resumen de transacciones para cálculo de promedios ponderados.
+     */
+    private static class ProductSummary {
+        double totalValue = 0.0;
+        int totalAmount = 0;
+
+        void addTransaction(double value, int amount) {
+            this.totalValue += value * amount;
+            this.totalAmount += amount;
+        }
     }
 }

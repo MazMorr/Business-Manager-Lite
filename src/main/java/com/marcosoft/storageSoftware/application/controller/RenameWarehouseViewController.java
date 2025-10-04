@@ -1,19 +1,19 @@
 package com.marcosoft.storageSoftware.application.controller;
 
-import com.marcosoft.storageSoftware.infrastructure.util.UserLogged;
 import com.marcosoft.storageSoftware.domain.model.Client;
 import com.marcosoft.storageSoftware.domain.model.GeneralRegistry;
 import com.marcosoft.storageSoftware.domain.model.Warehouse;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.GeneralRegistryServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.WarehouseServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
+import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
+import com.marcosoft.storageSoftware.infrastructure.util.UserLogged;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
@@ -35,25 +35,18 @@ public class RenameWarehouseViewController {
     private final DisplayAlerts displayAlerts;
     private final GeneralRegistryServiceImpl generalRegistryService;
     private final WarehouseViewController warehouseViewController;
+    private final SceneSwitcher sceneSwitcher;
 
-    /**
-     * Constructor for dependency injection.
-     * @param userLogged the user logged
-     * @param displayAlerts the display alerts
-     * @param warehouseService the warehouse service
-     * @param generalRegistryService the general registry service
-     * @param warehouseViewController the warehouse view controller
-     */
-    @Lazy
     public RenameWarehouseViewController(
             UserLogged userLogged, DisplayAlerts displayAlerts, WarehouseServiceImpl warehouseService,
-            GeneralRegistryServiceImpl generalRegistryService, WarehouseViewController warehouseViewController
+            GeneralRegistryServiceImpl generalRegistryService, WarehouseViewController warehouseViewController, SceneSwitcher sceneSwitcher
     ) {
         this.warehouseService = warehouseService;
         this.warehouseViewController = warehouseViewController;
         this.generalRegistryService = generalRegistryService;
         this.displayAlerts = displayAlerts;
         this.userLogged = userLogged;
+        this.sceneSwitcher = sceneSwitcher;
     }
 
     // FXML UI components
@@ -62,21 +55,12 @@ public class RenameWarehouseViewController {
     @FXML
     private MenuButton mbActualName;
 
-    /**
-     * Initializes the controller after its root element has been completely processed.
-     * Loads warehouse menu for the current client.
-     */
     @FXML
     public void initialize() {
         client = userLogged.getClient();
-        Platform.runLater(() -> {
-            initMbActualName();
-        });
+        Platform.runLater(this::initMbActualName);
     }
 
-    /**
-     * Initializes the warehouse menu with all warehouses for the current client.
-     */
     private void initMbActualName() {
         mbActualName.getItems().clear();
         List<Warehouse> warehouses = warehouseService.getAllWarehousesByClient(client);
@@ -89,11 +73,6 @@ public class RenameWarehouseViewController {
         }
     }
 
-    /**
-     * Handles the update of a warehouse name when the user clicks the update button.
-     * Validates input and shows alerts in Spanish if validation fails.
-     * @param actionEvent the action event
-     */
     @FXML
     public void updateWarehouseName(ActionEvent actionEvent) {
         try {
@@ -122,25 +101,18 @@ public class RenameWarehouseViewController {
 
                 displayAlerts.showAlert("Nombre actualizado satisfactoriamente");
                 cleanFields();
-                warehouseViewController.initTreeTable();
+                warehouseViewController.initializeTreeTable();
             }
         } catch (Exception e) {
             displayAlerts.showError("Error al actualizar el nombre: " + e.getMessage());
         }
     }
 
-    /**
-     * Clears all input fields in the form.
-     */
     private void cleanFields() {
         tfActualName.clear();
         tfNewName.clear();
     }
 
-    /**
-     * Validates the new warehouse name field.
-     * Shows alerts in Spanish if validation fails.
-     */
     private boolean validateTfNewName() {
         String newName = tfNewName.getText();
         if (newName.isEmpty()) {
@@ -174,12 +146,8 @@ public class RenameWarehouseViewController {
         }
     }
 
-    /**
-     * Closes the update warehouse window.
-     */
     @FXML
     public void goOut() {
-        Stage stage = (Stage) mbActualName.getScene().getWindow();
-        stage.close();
+        sceneSwitcher.closeWindow(tfActualName);
     }
 }

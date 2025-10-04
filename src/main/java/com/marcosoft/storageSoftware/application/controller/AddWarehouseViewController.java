@@ -1,10 +1,13 @@
 package com.marcosoft.storageSoftware.application.controller;
 
-import com.marcosoft.storageSoftware.infrastructure.util.UserLogged;
 import com.marcosoft.storageSoftware.domain.model.*;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.*;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.GeneralRegistryServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.InventoryServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.WarehouseRegistryServiceImpl;
+import com.marcosoft.storageSoftware.infrastructure.service.impl.WarehouseServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
-import javafx.event.ActionEvent;
+import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
+import com.marcosoft.storageSoftware.infrastructure.util.UserLogged;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -25,11 +28,12 @@ public class AddWarehouseViewController {
     private final WarehouseRegistryServiceImpl warehouseRegistryService;
     private final GeneralRegistryServiceImpl generalRegistryService;
     private final InventoryServiceImpl inventoryService;
+    private final SceneSwitcher sceneSwitcher;
 
     public AddWarehouseViewController(
             InventoryServiceImpl inventoryService, WarehouseViewController warehouseViewController,
             WarehouseRegistryServiceImpl warehouseRegistryService, GeneralRegistryServiceImpl generalRegistryService,
-            DisplayAlerts displayAlerts, WarehouseServiceImpl warehouseService, UserLogged userLogged
+            DisplayAlerts displayAlerts, WarehouseServiceImpl warehouseService, UserLogged userLogged, SceneSwitcher sceneSwitcher
     ) {
         this.inventoryService = inventoryService;
         this.warehouseService = warehouseService;
@@ -38,6 +42,7 @@ public class AddWarehouseViewController {
         this.warehouseRegistryService = warehouseRegistryService;
         this.displayAlerts = displayAlerts;
         this.userLogged = userLogged;
+        this.sceneSwitcher = sceneSwitcher;
     }
 
     @FXML
@@ -76,27 +81,19 @@ public class AddWarehouseViewController {
 
 
                 GeneralRegistry generalRegistry = new GeneralRegistry(
-                        null,
-                        client,
-                        "Almacén",
-                        "Adición Almacén: " + warehouse.getWarehouseName(),
-                        registryMoment
+                        null, client, "Almacén",
+                        "Adición Almacén: " + warehouse.getWarehouseName(), registryMoment
                 );
                 generalRegistryService.save(generalRegistry);
 
                 WarehouseRegistry warehouseRegistry = new WarehouseRegistry(
-                        null,
-                        client,
-                        "Adición",
-                        registryMoment,
-                        warehouse.getWarehouseName(),
-                        null,
-                        null
+                        null, client, "Adición", registryMoment,
+                        warehouse.getWarehouseName(), null, null
                 );
                 warehouseRegistryService.save(warehouseRegistry);
 
                 displayAlerts.showAlert("Almacén creado satisfactoriamente");
-                warehouseViewController.initTreeTable();
+                warehouseViewController.initializeTreeTable();
 
                 // Cerrar la ventana después de crear exitosamente
                 Stage stage = (Stage) tfWarehouseName.getScene().getWindow();
@@ -108,8 +105,7 @@ public class AddWarehouseViewController {
     }
 
     @FXML
-    public void goOut(ActionEvent actionEvent) {
-        Stage stage = (Stage) tfWarehouseName.getScene().getWindow();
-        stage.close();
+    public void goOut() {
+        sceneSwitcher.closeWindow(tfWarehouseName);
     }
 }
