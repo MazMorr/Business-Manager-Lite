@@ -1,65 +1,81 @@
-# Storage Software
+# BusinessManager (Storage Software)
 
-Software para la gestión de inventarios en pequeñas y medianas empresas como ferreterías o cafeterías (o ambas a la vez), desarrollado con Spring Boot y JavaFX.
+Software de gestión de inventarios para pequeñas y medianas empresas (ferreterías, cafeterías, etc.), desarrollado con Spring Boot y JavaFX.
 
 ## Descripción
 
-Este proyecto es una aplicación de escritorio que permite a los usuarios gestionar productos, categorías y transacciones en un entorno de inventario. Utiliza Spring Boot para la lógica de negocio y la persistencia de datos, y JavaFX para la interfaz gráfica de usuario.
+BusinessManager es una aplicación de escritorio que permite gestionar productos, categorías, almacenes y transacciones de inventario. Utiliza Spring Boot para la lógica de negocio y persistencia, y JavaFX para la interfaz gráfica.
 
-## Características
+## Características principales
 
-- Gestión de productos
-- Gestión de categorías
-- Registro de transacciones
-- Interfaz gráfica de usuario con JavaFX
-- Persistencia de datos con Spring Data JPA
+- Gestión de productos y categorías
+- Gestión de almacenes
+- Registro y consulta de transacciones (compras, ventas, movimientos)
+- Exportación de datos a PDF y Excel
+- Seguridad y autenticación
+- Interfaz gráfica moderna con JavaFX
+- Persistencia de datos con H2 y Spring Data JPA
 
 ## Requisitos
 
-- Java 23
+- Java 24
 - Maven
-- JavaFX 24.0.0
-- Spring Boot 3.5.5
+- JavaFX 24.0.2
+- Spring Boot 3.5.6
 
 ## Instalación
 
 1. Clona el repositorio:
 
-    ```bash
-    git clone https://github.com/MazMorr/Storage-Software-SpringBoot-Javafx.git
-    cd Storage-Software-SpringBoot-Javafx
-    ```
+     ```bash
+     git clone https://github.com/MazMorr/Storage-Software-SpringBoot-Javafx.git
+     cd Storage-Software-SpringBoot-Javafx
+     ```
 
-2. Configura tu entorno de desarrollo para usar Java 21 y Maven.
-
-3. Asegúrate de tener JavaFX configurado en tu entorno. Puedes descargar JavaFX desde [aquí](https://gluonhq.com/products/javafx/).
-
+2. Configura tu entorno para usar Java 24 y Maven.
+3. Descarga y configura JavaFX 24.0.2 en tu entorno ([descargar JavaFX](https://gluonhq.com/products/javafx/)).
 4. Construye el proyecto con Maven:
 
-    ```bash
-    mvn clean install
-    ```
+     ```bash
+     mvn clean install
+     ```
 
 ## Ejecución
 
-Para ejecutar la aplicación, usa el siguiente comando:
+Para ejecutar la aplicación:
 
 ```bash
 mvn javafx:run
 ```
-## Uso
-Al iniciar la aplicación, verás la ventana principal con opciones para gestionar productos, categorías y transacciones.
-Usa los menús y botones para navegar y realizar operaciones en el inventario.
-Los cambios se guardarán automáticamente en la base de datos.
-Estructura del Proyecto
-src/main/java/com/marcosoft/storageSoftware: Contiene el código fuente de la aplicación.
-controller: Controladores de JavaFX.
-model: Clases de modelo de datos.
-repository: Interfaces de repositorio de Spring Data JPA.
-service: Clases de servicio que contienen la lógica de negocio.
-src/main/resources: Contiene los archivos de recursos como archivos FXML y propiedades.
-src/test/java/com/marcosoft/storageSoftware: Contiene las pruebas unitarias.
+
+O ejecuta el JAR generado:
+
+```bash
+java -jar target/BusinessManager-1.0.1.jar
+```
+
+## Estructura del Proyecto
+
+- `src/main/java/com/marcosoft/storageSoftware/`: Código fuente principal
+  - `application/controller/`: Controladores JavaFX
+    - `application/dto/`: Objetos de transferencia de datos
+    - `application/mapper/`: Mapeadores entre entidades y DTOs
+    - `domain/model/`: Modelos de datos
+    - `domain/repository/`: Repositorios Spring Data JPA
+    - `domain/service/`: Lógica de negocio
+    - `infrastructure/config/`: Configuración de la aplicación
+    - `infrastructure/security/`: Seguridad y autenticación
+    - `infrastructure/service/`: Servicios de infraestructura
+    - `infrastructure/util/`: Utilidades
+- `src/main/resources/`: Recursos (archivos FXML, imágenes, estilos, propiedades)
+- `src/test/java/com/marcosoft/storageSoftware/`: Pruebas unitarias
+- `data/`: Base de datos H2 (`StorageDatabase.mv.db`)
+- `target/`: Archivos generados y JAR ejecutable
+
+## Licencia
+
+Este proyecto está bajo la Licencia Apache 2.0. Consulta el archivo `license.txt` para más detalles.
 
 ## Contacto
-Para cualquier pregunta o sugerencia, por favor contacta a marconchelo12@gmail.com.
 
+Para preguntas o sugerencias: <marconchelo12@gmail.com>
