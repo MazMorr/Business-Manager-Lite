@@ -29,7 +29,7 @@ public class DisplayAlerts {
         DialogPane dialogPane = alert.getDialogPane();
 
         // Cargar CSS usando URL - FORMA CORRECTA para JAR
-        URL cssUrl = getClass().getResource("/Styles.css");
+        URL cssUrl = getClass().getResource("/styles/Styles.css");
         if (cssUrl != null) {
             dialogPane.getStylesheets().add(cssUrl.toExternalForm());
         } else {
