@@ -60,7 +60,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     @Override
     public List<Expense> getAllExpensesByClient(Client client) {
-        return expenseRepository.findAllExpensesByClientOrderByReceivedDateDesc(client);
+        return expenseRepository.findByClientOrderByExpenseIdDesc(client);
     }
 
     @Override

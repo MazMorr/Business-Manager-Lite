@@ -31,7 +31,7 @@ public class BuyServiceImpl implements BuyService {
 
     @Override
     public List<Buy> getAllBuysByClient(Client client) {
-        return buyRepository.findListByClient(client);
+        return buyRepository.findByClientOrderByBuyIdDesc(client);
     }
 
     @Override
