@@ -11,6 +11,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 
@@ -20,11 +21,9 @@ import java.util.List;
  * Controller for the support view.
  * Handles welcome messages, navigation, and license information display.
  */
+@RequiredArgsConstructor
 @Controller
 public class SupportViewController {
-    // Reference to the account controller for session management
-    private Client client;
-    private LoginViewController accountController;
 
     // Service and utility dependencies
     private final UserLogged userLogged;
@@ -33,18 +32,6 @@ public class SupportViewController {
     private final SceneSwitcher sceneSwitcher;
     private final CurrencyServiceImpl currencyService;
     private final Environment env;
-
-    public SupportViewController(
-            CurrencyServiceImpl currencyService, SceneSwitcher sceneSwitcher,
-            UserLogged userLogged, LicenseValidator licenseValidator, DisplayAlerts displayAlerts, Environment env
-    ) {
-        this.userLogged = userLogged;
-        this.licenseValidator = licenseValidator;
-        this.currencyService = currencyService;
-        this.sceneSwitcher = sceneSwitcher;
-        this.displayAlerts = displayAlerts;
-        this.env = env;
-    }
 
     // FXML UI components
     @FXML
@@ -56,7 +43,8 @@ public class SupportViewController {
      */
     @FXML
     private void initialize() {
-        client = userLogged.getClient();
+        // Reference to the account controller for session management
+        Client client = userLogged.getClient();
         lblClientName.setText(client.getClientName());
         initWelcomeLabels();
 
@@ -69,7 +57,6 @@ public class SupportViewController {
      * @param loginViewController the client view controller
      */
     public void setAccountController(LoginViewController loginViewController) {
-        this.accountController = loginViewController;
         System.out.println("Controlador de cuenta configurado: " + loginViewController);
     }
 

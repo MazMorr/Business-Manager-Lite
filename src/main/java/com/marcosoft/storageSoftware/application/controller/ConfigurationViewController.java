@@ -1,15 +1,14 @@
 package com.marcosoft.storageSoftware.application.controller;
 
-import com.marcosoft.storageSoftware.infrastructure.util.UserLogged;
 import com.marcosoft.storageSoftware.domain.model.Client;
 import com.marcosoft.storageSoftware.domain.model.Inventory;
 import com.marcosoft.storageSoftware.infrastructure.config.DatabaseManager;
 import com.marcosoft.storageSoftware.infrastructure.security.LicenseValidator;
-import com.marcosoft.storageSoftware.infrastructure.service.impl.ClientServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.InventoryServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.SellRegistryServiceImpl;
 import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
 import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
+import com.marcosoft.storageSoftware.infrastructure.util.UserLogged;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,7 +22,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import org.springframework.context.annotation.Lazy;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 
 import java.io.File;
@@ -38,12 +37,10 @@ import java.util.Optional;
 
 import static com.marcosoft.storageSoftware.Main.springFXMLLoader;
 
-@Lazy
+@RequiredArgsConstructor
 @Controller
 public class ConfigurationViewController {
-    private Client client;
 
-    private final ClientServiceImpl clientService;
     private final SceneSwitcher sceneSwitcher;
     private final DisplayAlerts displayAlerts;
     private final UserLogged userLogged;
@@ -51,21 +48,6 @@ public class ConfigurationViewController {
     private final LicenseValidator licenseValidator;
     private final SellRegistryServiceImpl sellRegistryService;
     private final DatabaseManager databaseManager;
-
-    public ConfigurationViewController(
-            ClientServiceImpl clientService, SceneSwitcher sceneSwitcher, DisplayAlerts displayAlerts,
-            UserLogged userLogged, LicenseValidator licenseValidator,
-            InventoryServiceImpl inventoryService, SellRegistryServiceImpl sellRegistryService, DatabaseManager databaseManager
-    ) {
-        this.displayAlerts = displayAlerts;
-        this.userLogged = userLogged;
-        this.licenseValidator = licenseValidator;
-        this.sellRegistryService = sellRegistryService;
-        this.clientService = clientService;
-        this.inventoryService = inventoryService;
-        this.sceneSwitcher = sceneSwitcher;
-        this.databaseManager = databaseManager;
-    }
 
     @FXML
     private Label lblSell, lblClientName, lblUser, lblProducts, lblCompany, lblDateLicense;
@@ -129,7 +111,7 @@ public class ConfigurationViewController {
     }
 
     private void initAllLabels() {
-        client = userLogged.getClient();
+        Client client = userLogged.getClient();
         lblClientName.setText(client.getClientName());
         int productCounter = 0;
         int sellCounter;

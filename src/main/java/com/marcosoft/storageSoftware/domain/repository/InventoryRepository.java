@@ -21,4 +21,7 @@ public interface InventoryRepository extends CrudRepository<Inventory, Long> {
     List<Inventory> findByProductAndClient(Product product, Client client);
 
     List<Inventory> findByBuyId(Long buyId);
+
+    Inventory findByProduct_ProductNameAndWarehouseAndClient(String productName, Warehouse warehouse, Client client);
+
 }

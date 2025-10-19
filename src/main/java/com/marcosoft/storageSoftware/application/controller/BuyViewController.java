@@ -11,6 +11,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 
@@ -21,6 +23,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Slf4j
+@RequiredArgsConstructor
 @Controller
 public class BuyViewController {
     // Variable de instancia para controlar eventos circulares
@@ -41,24 +44,6 @@ public class BuyViewController {
     private final ProductServiceImpl productService;
     private final CleanHelper cleanHelper;
 
-    public BuyViewController(UserLogged userLogged, SceneSwitcher sceneSwitcher, CurrencyServiceImpl currencyService,
-                             BuyServiceImpl buyService, ParseDataTypes parseDataTypes,
-                             BuyAndExpenseSharedMethods buyAndExpenseSharedMethods, DisplayAlerts displayAlerts,
-                             GeneralRegistryServiceImpl generalRegistryService, BuyRegistryServiceImpl buyRegistryService,
-                             ProductServiceImpl productService, CleanHelper cleanHelper) {
-        this.userLogged = userLogged;
-        this.sceneSwitcher = sceneSwitcher;
-        this.currencyService = currencyService;
-        this.parseDataTypes = parseDataTypes;
-        this.buyAndExpenseSharedMethods = buyAndExpenseSharedMethods;
-        this.displayAlerts = displayAlerts;
-        this.buyService = buyService;
-        this.generalRegistryService = generalRegistryService;
-        this.buyRegistryService = buyRegistryService;
-        this.productService = productService;
-        this.cleanHelper = cleanHelper;
-    }
-
     @FXML
     private Label lblClientName;
     @FXML
@@ -76,10 +61,12 @@ public class BuyViewController {
     private MenuButton mbTotalCurrency, mbUnitaryCurrency;
 
     @FXML
-    private TextField tfMinFilterAmount, tfAddTotalBuyCurrency, tfFilterId, tfFilterName, tfAddUnitaryBuyCurrency,
+    private TextField tfMinFilterAmount, tfAddTotalBuyCurrency, tfFilterName, tfAddUnitaryBuyCurrency,
             tfAddBuyName, tfAddUnitaryBuyPrice, tfId, tfAddTotalBuyPrice, tfMaxFilterPrice, tfMaxFilterAmount,
             tfMinFilterPrice, tfAddBuyAmount;
-
+    @Getter
+    @FXML
+    private TextField tfFilterId;
     @FXML
     private DatePicker dpAddExpenseDate;
 

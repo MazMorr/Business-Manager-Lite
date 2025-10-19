@@ -21,18 +21,18 @@
         <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
         </padding>
-        <Accordion>
+        <Accordion prefWidth="240.0">
             <panes>
                 <TitledPane contentDisplay="RIGHT" graphicTextGap="50.0" text="Producto 1">
                     <graphic>
-                        <CheckBox disable="true" mnemonicParsing="false" opacity="0.99" text="Hecho" textFill="WHITE" />
+                        <CheckBox fx:id="cbReady1" disable="true" mnemonicParsing="false" opacity="0.99" text="Listo" textFill="WHITE" />
                     </graphic>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                         <VBox alignment="CENTER_LEFT" layoutX="1.0" layoutY="46.0" prefHeight="200.0" prefWidth="100.0" styleClass="filter-background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                             <Label text="Almacén Origen" />
                             <MenuButton fx:id="mbWarehouse1" mnemonicParsing="false">
                                 <graphic>
-                                    <TextField fx:id="tfWarehouse" promptText="1er Paso" />
+                                    <TextField fx:id="tfWarehouse1" promptText="1er Paso" />
                                 </graphic>
                                 <padding>
                                     <Insets bottom="-4.0" left="-8.0" top="-4.0" />
@@ -70,11 +70,11 @@
                                 <effect>
                                     <InnerShadow choke="1.0" radius="68.5" width="255.0">
                                         <color>
-                                            <Color red="1.0" green="1.0" blue="1.0"/>
+                                            <Color red="1.0" green="1.0" blue="1.0" />
                                         </color>
                                     </InnerShadow>
                                 </effect>
-                                <Image url="@../images/refresh.png"/>
+                                <Image url="@../images/refresh.png" />
                             </ImageView>
                         </graphic>
                         <VBox.margin>
@@ -86,7 +86,7 @@
                 </TitledPane>
                 <TitledPane contentDisplay="RIGHT" graphicTextGap="50.0" text="Producto 2">
                     <graphic>
-                        <CheckBox disable="true" mnemonicParsing="false" opacity="0.99" text="Hecho" textFill="WHITE" />
+                        <CheckBox fx:id="cbReady2" disable="true" mnemonicParsing="false" opacity="0.99" text="Listo" textFill="WHITE" />
                     </graphic>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                         <VBox alignment="CENTER_LEFT" layoutX="1.0" layoutY="46.0" prefHeight="200.0" prefWidth="100.0" styleClass="filter-background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -131,11 +131,11 @@
                                 <effect>
                                     <InnerShadow choke="1.0" radius="68.5" width="255.0">
                                         <color>
-                                            <Color red="1.0" green="1.0" blue="1.0"/>
+                                            <Color red="1.0" green="1.0" blue="1.0" />
                                         </color>
                                     </InnerShadow>
                                 </effect>
-                                <Image url="@../images/refresh.png"/>
+                                <Image url="@../images/refresh.png" />
                             </ImageView>
                         </graphic>
                         <VBox.margin>
@@ -147,7 +147,7 @@
                 </TitledPane>
                 <TitledPane contentDisplay="RIGHT" graphicTextGap="50.0" text="Producto 3">
                     <graphic>
-                        <CheckBox disable="true" mnemonicParsing="false" opacity="0.99" text="Hecho" textFill="WHITE" />
+                        <CheckBox fx:id="cbReady3" disable="true" mnemonicParsing="false" opacity="0.99" text="Listo" textFill="WHITE" />
                     </graphic>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                         <VBox alignment="CENTER_LEFT" layoutX="1.0" layoutY="46.0" prefHeight="200.0" prefWidth="100.0" styleClass="filter-background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -192,11 +192,11 @@
                                 <effect>
                                     <InnerShadow choke="1.0" radius="68.5" width="255.0">
                                         <color>
-                                            <Color red="1.0" green="1.0" blue="1.0"/>
+                                            <Color red="1.0" green="1.0" blue="1.0" />
                                         </color>
                                     </InnerShadow>
                                 </effect>
-                                <Image url="@../images/refresh.png"/>
+                                <Image url="@../images/refresh.png" />
                             </ImageView>
                         </graphic>
                         <VBox.margin>
@@ -208,7 +208,7 @@
                 </TitledPane>
                 <TitledPane contentDisplay="RIGHT" graphicTextGap="50.0" text="Producto 4">
                     <graphic>
-                        <CheckBox disable="true" mnemonicParsing="false" opacity="0.99" text="Hecho" textFill="WHITE" />
+                        <CheckBox fx:id="cbReady4" disable="true" mnemonicParsing="false" opacity="0.99" text="Listo" textFill="WHITE" />
                     </graphic>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                         <VBox alignment="CENTER_LEFT" layoutX="1.0" layoutY="46.0" prefHeight="200.0" prefWidth="100.0" styleClass="filter-background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -253,11 +253,11 @@
                                 <effect>
                                     <InnerShadow choke="1.0" radius="68.5" width="255.0">
                                         <color>
-                                            <Color red="1.0" green="1.0" blue="1.0"/>
+                                            <Color red="1.0" green="1.0" blue="1.0" />
                                         </color>
                                     </InnerShadow>
                                 </effect>
-                                <Image url="@../images/refresh.png"/>
+                                <Image url="@../images/refresh.png" />
                             </ImageView>
                         </graphic>
                         <VBox.margin>
@@ -314,11 +314,11 @@
                     <effect>
                         <InnerShadow choke="1.0" radius="68.5" width="255.0">
                             <color>
-                                <Color red="1.0" green="1.0" blue="1.0"/>
+                                <Color red="1.0" green="1.0" blue="1.0" />
                             </color>
                         </InnerShadow>
                     </effect>
-                    <Image url="@../images/refresh.png"/>
+                    <Image url="@../images/refresh.png" />
                 </ImageView>
             </graphic>
          </Button>

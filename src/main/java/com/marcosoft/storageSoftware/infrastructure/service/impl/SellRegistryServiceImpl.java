@@ -210,7 +210,7 @@ public class SellRegistryServiceImpl implements SellRegistryService {
 
     private double getCurrencyRate(String currencyName) {
         Currency currency = currencyRepository.findByCurrencyName(currencyName);
-        return currency != null ? currency.getCurrencyPriceInCUP() : 1.0;
+        return currency != null ? currency.getValueInCUP() : 1.0;
     }
 
     private boolean hasCostInformation(Double unitCost, String costCurrency) {

@@ -14,8 +14,6 @@ public interface ProductService {
 
     Product getByProductNameAndClient(String productName, Client client);
 
-    Product getByProductName(String name);
-
     boolean existsByProductNameAndClient(String productName, Client client);
 
     List<Product> getAllProductsByClient(Client client);

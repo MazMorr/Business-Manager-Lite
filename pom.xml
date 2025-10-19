@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.marcosoft</groupId>
     <artifactId>BusinessManager</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.5</version>
     <name>storageSoftware</name>
     <description>Software for managing little companies like hardware shops or coffee shops</description>
     <url/>
@@ -27,20 +27,20 @@
         <url/>
     </scm>
     <properties>
-        <java.version>24</java.version>
+        <java.version>25</java.version>
     </properties>
     <dependencies>
         <!-- JavaFX -->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
-            <version>24.0.2</version>
+            <version>25-ea+29</version>
         </dependency>
 
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
-            <version>24.0.2</version>
+            <version>25-ea+29</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.itextpdf/itext-core -->

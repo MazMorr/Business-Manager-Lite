@@ -10,7 +10,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
-import org.springframework.context.annotation.Lazy;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 
 import java.time.LocalDateTime;
@@ -20,7 +20,7 @@ import java.util.List;
  * Controller for the change product name view.
  * Handles logic for updating the name of a product for the current client.
  */
-@Lazy
+@RequiredArgsConstructor
 @Controller
 public class RenameProductViewController {
     private Client client;
@@ -35,22 +35,6 @@ public class RenameProductViewController {
     private final BuyServiceImpl buyService;
     private final CurrencyServiceImpl currencyService; // Servicio de monedas agregado
     private final SceneSwitcher sceneSwitcher;
-
-    public RenameProductViewController(
-            WarehouseViewController warehouseViewController, GeneralRegistryServiceImpl generalRegistryService,
-            DisplayAlerts displayAlerts, UserLogged userLogged, ProductServiceImpl productService,
-            InventoryServiceImpl inventoryService, BuyServiceImpl buyService, CurrencyServiceImpl currencyService, SceneSwitcher sceneSwitcher
-    ) {
-        this.productService = productService;
-        this.warehouseViewController = warehouseViewController;
-        this.generalRegistryService = generalRegistryService;
-        this.displayAlerts = displayAlerts;
-        this.userLogged = userLogged;
-        this.inventoryService = inventoryService;
-        this.buyService = buyService;
-        this.currencyService = currencyService;
-        this.sceneSwitcher = sceneSwitcher;
-    }
 
     // FXML UI components
     @FXML
@@ -242,8 +226,8 @@ public class RenameProductViewController {
         try {
             // Obtener la moneda desde el servicio
             Currency currency = currencyService.getCurrencyByName(currencyName);
-            if (currency != null && currency.getCurrencyPriceInCUP() != null) {
-                return amount * currency.getCurrencyPriceInCUP();
+            if (currency != null && currency.getValueInCUP() != null) {
+                return amount * currency.getValueInCUP();
             }
 
             // Si no se encuentra la moneda, usar 1 como fallback

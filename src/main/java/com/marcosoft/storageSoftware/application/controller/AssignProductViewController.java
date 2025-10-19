@@ -1,6 +1,7 @@
 package com.marcosoft.storageSoftware.application.controller;
 
 import com.marcosoft.storageSoftware.domain.model.*;
+import com.marcosoft.storageSoftware.domain.service.CurrencyTransaction;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.*;
 import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
 import com.marcosoft.storageSoftware.infrastructure.util.ParseDataTypes;
@@ -11,18 +12,21 @@ import javafx.fxml.FXML;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
-import org.springframework.context.annotation.Lazy;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Controller for the assign investment view.
  * Handles logic for assigning investments to warehouses and products.
  */
-@Lazy
+@RequiredArgsConstructor
 @Controller
+@Slf4j
 public class AssignProductViewController {
     private Client client;
 
@@ -38,25 +42,7 @@ public class AssignProductViewController {
     private final WarehouseViewController warehouseViewController;
     private final BuyServiceImpl buyService;
     private final SceneSwitcher sceneSwitcher;
-
-    public AssignProductViewController(
-            GeneralRegistryServiceImpl generalRegistryService, ParseDataTypes parseDataTypes, DisplayAlerts displayAlerts,
-            InventoryServiceImpl inventoryService, UserLogged userLogged, WarehouseServiceImpl warehouseService,
-            ProductServiceImpl productService, BuyServiceImpl buyService, WarehouseViewController warehouseViewController,
-            WarehouseRegistryServiceImpl warehouseRegistryService, SceneSwitcher sceneSwitcher
-    ) {
-        this.productService = productService;
-        this.warehouseRegistryService = warehouseRegistryService;
-        this.generalRegistryService = generalRegistryService;
-        this.displayAlerts = displayAlerts;
-        this.inventoryService = inventoryService;
-        this.userLogged = userLogged;
-        this.warehouseService = warehouseService;
-        this.parseDataTypes = parseDataTypes;
-        this.warehouseViewController = warehouseViewController;
-        this.buyService = buyService;
-        this.sceneSwitcher = sceneSwitcher;
-    }
+    private final CurrencyServiceImpl currencyService;
 
     // FXML UI components
     @FXML
@@ -88,6 +74,8 @@ public class AssignProductViewController {
     }
 
     private void clearFields() {
+        tfInvestment.clear();
+        tfProduct.clear();
         tfWarehouse.clear();
         tfAmount.clear();
     }
@@ -229,10 +217,11 @@ public class AssignProductViewController {
                 );
                 warehouseRegistryService.save(warehouseRegistry);
 
+
                 warehouseViewController.initializeTreeTable();
                 warehouseViewController.initializeTableValues();
                 clearFields();
-
+                initMbBuy();
                 displayAlerts.showAlert("Producto asignado correctamente al almacén");
             }
         } catch (NumberFormatException e) {
@@ -242,32 +231,33 @@ public class AssignProductViewController {
         }
     }
 
+
     private Double calculateWeightedAveragePriceForProduct(Product product, Buy newBuy, int newAmount) {
         try {
-            // Obtener todas las compras existentes de este producto
             List<Buy> existingBuys = buyService.getAllBuysByClient(client).stream()
-                    .filter(b -> b.getBuyName().equals(product.getProductName()))
-                    .toList();
+                    .filter(b -> b.getBuyName().equals(product.getProductName())).toList();
 
-            double totalValue = 0.0;
-            int totalAmount = 0;
-
-            // Sumar valores de compras existentes
-            for (Buy existingBuy : existingBuys) {
-                if (existingBuy.getLeftAmount() > 0) {
-                    totalValue += existingBuy.getBuyUnitaryPrice() * existingBuy.getLeftAmount();
-                    totalAmount += existingBuy.getLeftAmount();
-                }
-            }
+            List<CurrencyTransaction> transactions = existingBuys.stream()
+                    .filter(buy -> buy.getLeftAmount() > 0)
+                    .map(buy -> new CurrencyTransaction(
+                            buy.getBuyUnitaryPrice(),
+                            buy.getCurrency().getCurrencyName(),
+                            buy.getLeftAmount().doubleValue()
+                    ))
+                    .collect(Collectors.toList());
 
             // Agregar la nueva compra
-            totalValue += newBuy.getBuyUnitaryPrice() * newAmount;
-            totalAmount += newAmount;
+            transactions.add(new CurrencyTransaction(
+                    newBuy.getBuyUnitaryPrice(),
+                    newBuy.getCurrency().getCurrencyName(),
+                    (double) newAmount
+            ));
 
-            return totalAmount > 0 ? totalValue / totalAmount : newBuy.getBuyUnitaryPrice();
+            return currencyService.calculateWeightedAverage(transactions, "CUP");
 
         } catch (Exception e) {
-            return newBuy.getBuyUnitaryPrice(); // Fallback al precio de la compra actual
+            log.error("Error calculando promedio ponderado: {}", e.getMessage());
+            return currencyService.convertToCUP(newBuy.getBuyUnitaryPrice(), newBuy.getCurrency().getCurrencyName());
         }
     }
 

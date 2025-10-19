@@ -64,6 +64,11 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Override
+    public Inventory getByProductNameAndWarehouseAndClient(String product, Warehouse warehouse, Client client) {
+        return inventoryRepository.findByProduct_ProductNameAndWarehouseAndClient(product, warehouse, client);
+    }
+
+    @Override
     public boolean existsByProductAndWarehouseAndClient(Product product, Warehouse warehouse, Client client) {
         return inventoryRepository.existsByProductAndWarehouseAndClient(product, warehouse, client);
     }

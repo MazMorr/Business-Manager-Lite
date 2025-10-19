@@ -1,6 +1,5 @@
 package com.marcosoft.storageSoftware.application.controller;
 
-import com.marcosoft.storageSoftware.infrastructure.util.UserLogged;
 import com.marcosoft.storageSoftware.domain.model.Client;
 import com.marcosoft.storageSoftware.domain.model.Currency;
 import com.marcosoft.storageSoftware.domain.model.Expense;
@@ -17,10 +16,10 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
 import java.time.DayOfWeek;
@@ -30,7 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Lazy
+@RequiredArgsConstructor
 @Controller
 public class BalanceViewController {
     private Client client;
@@ -54,21 +53,6 @@ public class BalanceViewController {
     private final PdfGenerator pdfGenerator;
     private final ExcelGenerator excelGenerator;
     private final DisplayAlerts displayAlerts;
-
-    public BalanceViewController(
-            UserLogged userLogged, SceneSwitcher sceneSwitcher, ExpenseServiceImpl expenseService,
-            SellRegistryServiceImpl sellRegistryService, CurrencyServiceImpl currencyService, PdfGenerator pdfGenerator,
-            ExcelGenerator excelGenerator, DisplayAlerts displayAlerts
-    ) {
-        this.sceneSwitcher = sceneSwitcher;
-        this.currencyService = currencyService;
-        this.expenseService = expenseService;
-        this.sellRegistryService = sellRegistryService;
-        this.userLogged = userLogged;
-        this.pdfGenerator = pdfGenerator;
-        this.excelGenerator = excelGenerator;
-        this.displayAlerts = displayAlerts;
-    }
 
     @FXML
     private Label lblTimeLapse, lblTotalExpense, lblTotalProfit, lblNetUtilityNumber, lblClientName, lblNetUtility,

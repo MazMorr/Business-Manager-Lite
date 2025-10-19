@@ -9,12 +9,11 @@ import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
 import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
 import com.marcosoft.storageSoftware.infrastructure.util.UserLogged;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
-import org.springframework.context.annotation.Lazy;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 
 import java.time.LocalDateTime;
@@ -24,7 +23,7 @@ import java.util.List;
  * Controller for the update warehouse view.
  * Handles logic for updating the name of a warehouse for the current client.
  */
-@Lazy
+@RequiredArgsConstructor
 @Controller
 public class RenameWarehouseViewController {
     private Client client;
@@ -36,18 +35,6 @@ public class RenameWarehouseViewController {
     private final GeneralRegistryServiceImpl generalRegistryService;
     private final WarehouseViewController warehouseViewController;
     private final SceneSwitcher sceneSwitcher;
-
-    public RenameWarehouseViewController(
-            UserLogged userLogged, DisplayAlerts displayAlerts, WarehouseServiceImpl warehouseService,
-            GeneralRegistryServiceImpl generalRegistryService, WarehouseViewController warehouseViewController, SceneSwitcher sceneSwitcher
-    ) {
-        this.warehouseService = warehouseService;
-        this.warehouseViewController = warehouseViewController;
-        this.generalRegistryService = generalRegistryService;
-        this.displayAlerts = displayAlerts;
-        this.userLogged = userLogged;
-        this.sceneSwitcher = sceneSwitcher;
-    }
 
     // FXML UI components
     @FXML
@@ -74,7 +61,7 @@ public class RenameWarehouseViewController {
     }
 
     @FXML
-    public void updateWarehouseName(ActionEvent actionEvent) {
+    public void updateWarehouseName() {
         try {
             if (validateTfActualName() && validateTfNewName()) {
                 String newName = tfNewName.getText().trim(); // Elimina espacios en blanco

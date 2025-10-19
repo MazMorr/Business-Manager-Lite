@@ -3,17 +3,15 @@ package com.marcosoft.storageSoftware.application.controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import javafx.stage.Stage;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 
 import java.time.LocalDate;
 
+@RequiredArgsConstructor
 @Controller
 public class EstablishBalanceDateViewController {
     private final BalanceViewController balanceViewController;
-
-    public EstablishBalanceDateViewController(BalanceViewController balanceViewController) {
-        this.balanceViewController = balanceViewController;
-    }
 
     @FXML
     private DatePicker dpStartDate, dpEndDate;

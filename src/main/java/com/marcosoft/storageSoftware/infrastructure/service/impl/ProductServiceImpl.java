@@ -41,22 +41,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product getByProductName(String name) {
-        return productRepository.findByProductName(name);
-    }
-
-    @Override
     public boolean existsByProductNameAndClient(String productName, Client client) {
         return productRepository.existsByProductNameAndClient(productName, client);
     }
 
     @Override
     public List<Product> getAllProductsByClient(Client client) {
-        return (List<Product>) productRepository.findByClient(client);
+        return productRepository.findByClient(client);
     }
 
-
-    public boolean productExists(String productName) {
-        return productRepository.findByProductName(productName) != null;
-    }
 }

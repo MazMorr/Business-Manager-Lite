@@ -19,6 +19,7 @@ public interface InventoryService {
     List<Inventory> getAllInventoriesByWarehouseAndClient(Warehouse warehouse, Client client);
 
     Inventory getByProductAndWarehouseAndClient(Product product, Warehouse warehouse, Client client);
+    Inventory getByProductNameAndWarehouseAndClient(String product, Warehouse warehouse, Client client);
 
     boolean existsByProductAndWarehouseAndClient(Product product, Warehouse warehouse, Client client);
 

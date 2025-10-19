@@ -8,7 +8,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import org.springframework.context.annotation.Lazy;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 
 import static javafx.scene.paint.Color.*;
@@ -17,21 +17,12 @@ import static javafx.scene.paint.Color.*;
  * Controller for the create client view.
  * Handles logic for creating a new client account and validating input fields.
  */
-@Lazy
+@RequiredArgsConstructor
 @Controller
 public class CreateClientViewController {
-
     private final ClientServiceImpl clientService;
     private final SceneSwitcher sceneSwitcher;
     private final DisplayAlerts displayAlerts;
-
-    public CreateClientViewController(
-            SceneSwitcher sceneSwitcher, ClientServiceImpl clientService, DisplayAlerts displayAlerts
-    ) {
-        this.clientService = clientService;
-        this.sceneSwitcher = sceneSwitcher;
-        this.displayAlerts = displayAlerts;
-    }
 
     // FXML UI components
     @FXML

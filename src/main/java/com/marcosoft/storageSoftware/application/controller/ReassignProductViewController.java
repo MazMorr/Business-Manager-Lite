@@ -1,27 +1,25 @@
 package com.marcosoft.storageSoftware.application.controller;
 
-import com.marcosoft.storageSoftware.infrastructure.util.UserLogged;
 import com.marcosoft.storageSoftware.domain.model.*;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.*;
 import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
 import com.marcosoft.storageSoftware.infrastructure.util.ParseDataTypes;
+import com.marcosoft.storageSoftware.infrastructure.util.UserLogged;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import org.springframework.context.annotation.Lazy;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Lazy
+@RequiredArgsConstructor
 @Controller
 public class ReassignProductViewController {
-
     private Client client;
 
     // Service and utility dependencies
@@ -34,23 +32,6 @@ public class ReassignProductViewController {
     private final GeneralRegistryServiceImpl generalRegistryService;
     private final WarehouseRegistryServiceImpl warehouseRegistryService;
     private final WarehouseViewController warehouseViewController;
-
-    public ReassignProductViewController(
-            GeneralRegistryServiceImpl generalRegistryService, WarehouseRegistryServiceImpl warehouseRegistryService,
-            ParseDataTypes parseDataTypes, ProductServiceImpl productService, DisplayAlerts displayAlerts,
-            WarehouseServiceImpl warehouseService, UserLogged userLogged,
-            InventoryServiceImpl inventoryService, WarehouseViewController warehouseViewController
-    ) {
-        this.inventoryService = inventoryService;
-        this.warehouseRegistryService = warehouseRegistryService;
-        this.warehouseViewController = warehouseViewController;
-        this.generalRegistryService = generalRegistryService;
-        this.parseDataTypes = parseDataTypes;
-        this.productService = productService;
-        this.displayAlerts = displayAlerts;
-        this.userLogged = userLogged;
-        this.warehouseService = warehouseService;
-    }
 
     @FXML
     private MenuButton mbWarehouse, mbWarehouseReceipt, mbProduct;
@@ -68,13 +49,13 @@ public class ReassignProductViewController {
     }
 
     @FXML
-    public void goOut(ActionEvent actionEvent) {
+    public void goOut() {
         Stage stage = (Stage) tfAmount.getScene().getWindow();
         stage.close();
     }
 
     @FXML
-    public void reassignProduct(ActionEvent actionEvent) {
+    public void reassignProduct() {
         if (!validateAllFields()) return;
 
         try {
@@ -149,7 +130,7 @@ public class ReassignProductViewController {
     }
 
     @FXML
-    public void assignAllProductAmount(ActionEvent actionEvent) {
+    public void assignAllProductAmount() {
         String productName = tfProduct.getText();
         String warehouseGivesName = tfWarehouseGives.getText();
 

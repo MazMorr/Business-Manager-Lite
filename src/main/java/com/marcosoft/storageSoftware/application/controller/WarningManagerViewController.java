@@ -15,7 +15,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
-import org.springframework.context.annotation.Lazy;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 
 import java.util.HashSet;
@@ -25,7 +25,7 @@ import java.util.Set;
 /**
  * The type Warning manager view controller.
  */
-@Lazy
+@RequiredArgsConstructor
 @Controller
 public class WarningManagerViewController {
     private Client client;
@@ -37,20 +37,6 @@ public class WarningManagerViewController {
     private final DisplayAlerts displayAlerts;
     private final SellViewController sellViewController;
     private final SceneSwitcher sceneSwitcher;
-
-    public WarningManagerViewController(
-            InventoryServiceImpl inventoryService, UserLogged userLogged,
-            WarehouseServiceImpl warehouseService, DisplayAlerts displayAlerts, ProductServiceImpl productService,
-            SellViewController sellViewController, SceneSwitcher sceneSwitcher
-    ) {
-        this.userLogged = userLogged;
-        this.sellViewController = sellViewController;
-        this.displayAlerts = displayAlerts;
-        this.productService = productService;
-        this.warehouseService = warehouseService;
-        this.inventoryService = inventoryService;
-        this.sceneSwitcher = sceneSwitcher;
-    }
 
     @FXML
     private MenuButton mbWarehouse, mbProduct;

@@ -18,6 +18,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
@@ -29,6 +30,7 @@ import static javafx.scene.paint.Color.RED;
  * Controller for the client login view.
  * Handles authentication, navigation, and session management for clients.
  */
+@RequiredArgsConstructor
 @Controller
 public class LoginViewController {
 
@@ -39,18 +41,6 @@ public class LoginViewController {
     private final LicenseValidator licenseValidator;
     private final DisplayAlerts displayAlerts;
     private final SceneSwitcher sceneSwitcher;
-
-    public LoginViewController(
-            UserLogged userLogged, LicenseValidator licenseValidator, ClientServiceImpl clientService,
-            SpringFXMLLoader springFXMLLoader, DisplayAlerts displayAlerts, SceneSwitcher sceneSwitcher
-    ) {
-        this.userLogged = userLogged;
-        this.displayAlerts = displayAlerts;
-        this.sceneSwitcher = sceneSwitcher;
-        this.clientService = clientService;
-        this.licenseValidator = licenseValidator;
-        this.springFXMLLoader = springFXMLLoader;
-    }
 
     // FXML UI components
     @FXML

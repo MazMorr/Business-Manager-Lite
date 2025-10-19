@@ -14,6 +14,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -26,6 +27,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Slf4j
+@RequiredArgsConstructor
 @Controller
 public class SellViewController {
     private Client client;
@@ -55,31 +57,6 @@ public class SellViewController {
 
     @FXML
     private Label lblWarning, lblAlerts, lblSellDebug, lblAssignPriceDebug;
-
-    public SellViewController(
-            CurrencyServiceImpl currencyService, DisplayAlerts displayAlerts, SellFieldsValidator sellFieldsValidator,
-            UserLogged userLogged, ParseDataTypes parseDataTypes, SceneSwitcher sceneSwitcher,
-            InventoryServiceImpl inventoryService, ProductServiceImpl productService, WarehouseService warehouseService,
-            SellRegistryServiceImpl sellRegistryService, GeneralRegistryServiceImpl generalRegistryService,
-            CleanHelper cleanHelper, ExpenseServiceImpl expenseService, ExpenseRegistryServiceImpl expenseRegistryService,
-            SellFilterUtilities sellFilterUtilities
-    ) {
-        this.inventoryService = inventoryService;
-        this.expenseService = expenseService;
-        this.expenseRegistryService = expenseRegistryService;
-        this.sellFilterUtilities = sellFilterUtilities;
-        this.sellFieldsValidator = sellFieldsValidator;
-        this.generalRegistryService = generalRegistryService;
-        this.sellRegistryService = sellRegistryService;
-        this.displayAlerts = displayAlerts;
-        this.cleanHelper = cleanHelper;
-        this.sceneSwitcher = sceneSwitcher;
-        this.currencyService = currencyService;
-        this.warehouseService = warehouseService;
-        this.productService = productService;
-        this.parseDataTypes = parseDataTypes;
-        this.userLogged = userLogged;
-    }
 
     // FXML UI components
     @FXML
@@ -125,40 +102,68 @@ public class SellViewController {
 
     // Método para precargar datos
     private void precacheData() {
+        // Inicializar cachés vacías por defecto
+        Map<String, Product> tempProductCache = new HashMap<>();
+        Map<String, Warehouse> tempWarehouseCache = new HashMap<>();
+
         try {
-            // Precargar todos los productos
+            // Precargar todos los productos con manejo de duplicados
             List<Product> products = productService.getAllProductsByClient(client);
-            productCache = products.stream().collect(Collectors.toMap(Product::getProductName, Function.identity()));
-
-            // Precargar todos los almacenes
-            List<Warehouse> warehouses = warehouseService.getWarehousesByClient(client);
-            warehouseCache = warehouses.stream()
-                    .collect(Collectors.toMap(Warehouse::getWarehouseName, Function.identity()));
-        } catch (Exception e) {
-            log.error("Error precaching data", e);
-        }
-    }
-
-    private Double convertToCUP(Double amount, String currency) {
-        if (amount == null) return 0.0;
-
-        // Si ya es CUP o está vacío, no hay conversión
-        if ("CUP".equalsIgnoreCase(currency) || currency == null || currency.trim().isEmpty()) {
-            return amount;
-        }
-
-        try {
-            Currency currencyEntity = currencyService.getCurrencyByName(currency);
-            if (currencyEntity != null && currencyEntity.getCurrencyPriceInCUP() != null) {
-                return amount * currencyEntity.getCurrencyPriceInCUP();
+            if (products != null && !products.isEmpty()) {
+                tempProductCache = products.stream()
+                        .filter(Objects::nonNull) // Filtrar productos nulos
+                        .filter(product -> product.getProductName() != null && !product.getProductName().trim().isEmpty()) // Filtrar nombres vacíos
+                        .collect(Collectors.toMap(
+                                Product::getProductName,
+                                Function.identity(),
+                                (existing, replacement) -> {
+                                    // Manejar duplicados: mantener el existente y loguear advertencia
+                                    log.warn("Producto duplicado encontrado: '{}'. Manteniendo el primero encontrado.", existing.getProductName());
+                                    return existing;
+                                },
+                                LinkedHashMap::new // Usar LinkedHashMap para mantener orden
+                        ));
+                log.info("Precargados {} productos en caché", tempProductCache.size());
+            } else {
+                log.warn("No se encontraron productos para precargar");
             }
 
-            log.warn("No se encontró tasa de cambio para: " + currency);
-            return amount;
+            // Precargar todos los almacenes con manejo de duplicados
+            List<Warehouse> warehouses = warehouseService.getWarehousesByClient(client);
+            if (warehouses != null && !warehouses.isEmpty()) {
+                tempWarehouseCache = warehouses.stream()
+                        .filter(Objects::nonNull) // Filtrar almacenes nulos
+                        .filter(warehouse -> warehouse.getWarehouseName() != null && !warehouse.getWarehouseName().trim().isEmpty()) // Filtrar nombres vacíos
+                        .collect(Collectors.toMap(
+                                Warehouse::getWarehouseName,
+                                Function.identity(),
+                                (existing, replacement) -> {
+                                    // Manejar duplicados: mantener el existente y loguear advertencia
+                                    log.warn("Almacén duplicado encontrado: '{}'. Manteniendo el primero encontrado.", existing.getWarehouseName());
+                                    return existing;
+                                },
+                                LinkedHashMap::new // Usar LinkedHashMap para mantener orden
+                        ));
+                log.info("Precargados {} almacenes en caché", tempWarehouseCache.size());
+            } else {
+                log.warn("No se encontraron almacenes para precargar");
+            }
 
         } catch (Exception e) {
-            log.error("Error convirtiendo a CUP: " + amount + " " + currency, e);
-            return amount;
+            log.error("Error crítico precargando datos. Se usarán cachés vacías.", e);
+            // En caso de error, mantener las cachés temporales (pueden estar parcialmente llenas o vacías)
+        } finally {
+            // Asignar las cachés temporales a las variables de instancia
+            productCache = tempProductCache;
+            warehouseCache = tempWarehouseCache;
+
+            // Verificación final
+            if (productCache.isEmpty()) {
+                log.warn("Cache de productos está vacía después de precargar");
+            }
+            if (warehouseCache.isEmpty()) {
+                log.warn("Cache de almacenes está vacía después de precargar");
+            }
         }
     }
 
@@ -252,7 +257,7 @@ public class SellViewController {
             Product product = productService.getByProductNameAndClient(productName, client);
 
             // Calcular el costo de compra ponderado en CUP
-            Double weightedCostPerUnit = calculateWeightedAverageCostInCUP(product, client);
+            double weightedCostPerUnit = calculateWeightedAverageCostInCUP(product, client);
             if (weightedCostPerUnit <= 0) {
                 log.warn("Costo ponderado no válido para producto: {}", productName);
                 weightedCostPerUnit = 0.0;
@@ -341,7 +346,7 @@ public class SellViewController {
 
             for (Inventory inventory : productInventories) {
                 if (inventory.getUnitPrice() != null && inventory.getAmount() > 0) {
-                    double costInCUP = convertToCUP(inventory.getUnitPrice(), inventory.getCurrency());
+                    double costInCUP = currencyService.convertToCUP(inventory.getUnitPrice(), inventory.getCurrency());
                     totalCostInCUP += costInCUP * inventory.getAmount();
                     totalAmount += inventory.getAmount();
                 }
@@ -452,12 +457,12 @@ public class SellViewController {
                 }
 
                 // Populate form fields
-                tfAssignPriceProductName.setText(productName);
+                tfAssignPriceProductName.setText(product.getProductName());
                 tfAssignPriceCurrency.setText(currency);
                 tfAssignPriceProductPrice.setText(price);
                 tfSellWarehouse.setText(warehouseName); // Solo se llena si es un nodo hijo (almacén)
                 tfSellProductAmount.setText(1 + "");
-                tfSellProductName.setText(productName);
+                tfSellProductName.setText(product.getProductName());
                 tfSellProductPrice.setText(price);
                 tfSellProductCurrency.setText(currency);
                 lblSellDebug.setText("El precio de venta es el de toda la venta, NO PRECIOS INDIVIDUALES");
@@ -778,7 +783,7 @@ public class SellViewController {
         }
 
         // Para registros individuales no consolidados, convertir a CUP
-        double priceInCUP = convertToCUP(inventory.getUnitPrice(), inventory.getCurrency());
+        double priceInCUP = currencyService.convertToCUP(inventory.getUnitPrice(), inventory.getCurrency());
         return String.format("%.2f CUP", priceInCUP);
     }
 
@@ -835,7 +840,7 @@ public class SellViewController {
             InventorySummary summary = consolidated.getOrDefault(warehouse, new InventorySummary());
 
             if (inv.getUnitPrice() != null && inv.getAmount() != null && inv.getAmount() > 0) {
-                double priceInCUP = convertToCUP(inv.getUnitPrice(), inv.getCurrency());
+                double priceInCUP = currencyService.convertToCUP(inv.getUnitPrice(), inv.getCurrency());
                 summary.totalValueInCUP += priceInCUP * inv.getAmount();
                 summary.totalAmount += inv.getAmount();
             }

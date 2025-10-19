@@ -7,9 +7,10 @@ import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
 import com.marcosoft.storageSoftware.infrastructure.util.UserLogged;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 
-
+@RequiredArgsConstructor
 @Controller
 public class EstablishCompanyNameViewController {
     private Client client;
@@ -22,14 +23,6 @@ public class EstablishCompanyNameViewController {
 
     @FXML
     private TextField tfCompanyName;
-
-    public EstablishCompanyNameViewController(UserLogged userLogged, ClientServiceImpl clientService, DisplayAlerts displayAlerts, ConfigurationViewController configurationViewController, SceneSwitcher sceneSwitcher) {
-        this.userLogged = userLogged;
-        this.clientService = clientService;
-        this.displayAlerts = displayAlerts;
-        this.configurationViewController = configurationViewController;
-        this.sceneSwitcher = sceneSwitcher;
-    }
 
     @FXML
     private void initialize() {

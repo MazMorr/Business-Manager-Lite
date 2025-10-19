@@ -15,12 +15,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Controller
 public class RealizedSellsViewController {
     private ObservableList<RealizedSellsDataTable> realizedSellsDataTableList;
@@ -40,26 +42,6 @@ public class RealizedSellsViewController {
     private final CurrencyServiceImpl currencyService;
     @FXML
     private DatePicker dpFilterDate;
-
-    public RealizedSellsViewController(
-            SellFieldsValidator sellFieldsValidator, CleanHelper cleanHelper, SellRegistryServiceImpl sellRegistryService,
-            GeneralRegistryServiceImpl generalRegistryService, UserLogged userLogged, DisplayAlerts displayAlerts,
-            InventoryServiceImpl inventoryService, WarehouseServiceImpl warehouseService, ParseDataTypes parseDataTypes,
-            ProductServiceImpl productService, SellViewController sellViewController, CurrencyServiceImpl currencyService
-    ) {
-        this.sellFieldsValidator = sellFieldsValidator;
-        this.cleanHelper = cleanHelper;
-        this.sellRegistryService = sellRegistryService;
-        this.generalRegistryService = generalRegistryService;
-        this.userLogged = userLogged;
-        this.displayAlerts = displayAlerts;
-        this.inventoryService = inventoryService;
-        this.warehouseService = warehouseService;
-        this.productService = productService;
-        this.parseDataTypes = parseDataTypes;
-        this.sellViewController = sellViewController;
-        this.currencyService = currencyService;
-    }
 
     @FXML
     private MenuButton mbId, mbCurrency;

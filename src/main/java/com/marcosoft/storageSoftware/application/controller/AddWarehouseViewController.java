@@ -11,12 +11,12 @@ import com.marcosoft.storageSoftware.infrastructure.util.UserLogged;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import org.springframework.context.annotation.Lazy;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 
 import java.time.LocalDateTime;
 
-@Lazy
+@RequiredArgsConstructor
 @Controller
 public class AddWarehouseViewController {
     private Client client;
@@ -29,21 +29,6 @@ public class AddWarehouseViewController {
     private final GeneralRegistryServiceImpl generalRegistryService;
     private final InventoryServiceImpl inventoryService;
     private final SceneSwitcher sceneSwitcher;
-
-    public AddWarehouseViewController(
-            InventoryServiceImpl inventoryService, WarehouseViewController warehouseViewController,
-            WarehouseRegistryServiceImpl warehouseRegistryService, GeneralRegistryServiceImpl generalRegistryService,
-            DisplayAlerts displayAlerts, WarehouseServiceImpl warehouseService, UserLogged userLogged, SceneSwitcher sceneSwitcher
-    ) {
-        this.inventoryService = inventoryService;
-        this.warehouseService = warehouseService;
-        this.warehouseViewController = warehouseViewController;
-        this.generalRegistryService = generalRegistryService;
-        this.warehouseRegistryService = warehouseRegistryService;
-        this.displayAlerts = displayAlerts;
-        this.userLogged = userLogged;
-        this.sceneSwitcher = sceneSwitcher;
-    }
 
     @FXML
     private TextField tfWarehouseName;
@@ -92,7 +77,6 @@ public class AddWarehouseViewController {
                 );
                 warehouseRegistryService.save(warehouseRegistry);
 
-                displayAlerts.showAlert("Almacén creado satisfactoriamente");
                 warehouseViewController.initializeTreeTable();
 
                 // Cerrar la ventana después de crear exitosamente

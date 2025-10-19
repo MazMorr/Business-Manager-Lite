@@ -11,7 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 
 import java.time.LocalDate;
@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 /**
  * The type Expense view controller.
  */
+@RequiredArgsConstructor
 @Controller
 public class ExpenseViewController {
 
@@ -45,32 +46,11 @@ public class ExpenseViewController {
     private final BuyAndExpenseSharedMethods buyAndExpenseSharedMethods;
     private final CleanHelper cleanHelper;
 
-    public ExpenseViewController(
-            ProductServiceImpl productService, GeneralRegistryServiceImpl generalRegistryService, DisplayAlerts displayAlerts,
-            ParseDataTypes parseDataTypes, UserLogged userLogged, ExpenseServiceImpl expenseService,
-            CurrencyServiceImpl currencyService, ExpenseRegistryServiceImpl expenseRegistryService, SceneSwitcher sceneSwitcher, BuyAndExpenseSharedMethods buyAndExpenseSharedMethods, CleanHelper cleanHelper
-    ) {
-        this.currencyService = currencyService;
-        this.productService = productService;
-        this.generalRegistryService = generalRegistryService;
-        this.displayAlerts = displayAlerts;
-        this.sceneSwitcher = sceneSwitcher;
-        this.expenseService = expenseService;
-        this.expenseRegistryService = expenseRegistryService;
-        this.userLogged = userLogged;
-        this.parseDataTypes = parseDataTypes;
-        this.buyAndExpenseSharedMethods = buyAndExpenseSharedMethods;
-        this.cleanHelper = cleanHelper;
-    }
-
     // FXML UI components
     @FXML
     private Label lblAddDebugForm, lblClientName;
     @FXML
-    private TextField tfAddProductName, tfId, tfAddExpensePrice, tfAddExpenseCurrency, tfAddExpenseType;
-    @Getter
-    @FXML
-    private TextField tfFilterId;
+    private TextField tfAddProductName, tfId, tfAddExpensePrice, tfAddExpenseCurrency, tfAddExpenseType, tfFilterId;
     @FXML
     private TextField tfFilterName, tfMinFilterAmount, tfMaxFilterAmount, tfMaxFilterPrice, tfMinFilterPrice;
     @FXML

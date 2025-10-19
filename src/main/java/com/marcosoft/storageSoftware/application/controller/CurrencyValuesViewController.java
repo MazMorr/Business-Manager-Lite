@@ -9,7 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
-import org.springframework.context.annotation.Lazy;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 /**
  * The type Currency values view controller.
  */
-@Lazy
+@RequiredArgsConstructor
 @Controller
 public class CurrencyValuesViewController {
 
@@ -31,16 +31,6 @@ public class CurrencyValuesViewController {
     private final CurrencyServiceImpl currencyService;
     private final BalanceViewController balanceViewController;
     private final SceneSwitcher sceneSwitcher;
-
-    public CurrencyValuesViewController(
-            DisplayAlerts displayAlerts,
-            CurrencyServiceImpl currencyService,
-            BalanceViewController balanceViewController, SceneSwitcher sceneSwitcher) {
-        this.currencyService = currencyService;
-        this.balanceViewController = balanceViewController;
-        this.displayAlerts = displayAlerts;
-        this.sceneSwitcher = sceneSwitcher;
-    }
 
     @FXML
     private TextField tfCurrency, tfMLCtoCUP, tfUSDtoCUP, tfEURtoCUP;
@@ -56,9 +46,9 @@ public class CurrencyValuesViewController {
     }
 
     private void initTfValues() {
-        String MLC = currencyService.getCurrencyByName("MLC").getCurrencyPriceInCUP() + "";
-        String USD = currencyService.getCurrencyByName("USD").getCurrencyPriceInCUP() + "";
-        String EUR = currencyService.getCurrencyByName("EUR").getCurrencyPriceInCUP() + "";
+        String MLC = currencyService.getCurrencyByName("MLC").getValueInCUP() + "";
+        String USD = currencyService.getCurrencyByName("USD").getValueInCUP() + "";
+        String EUR = currencyService.getCurrencyByName("EUR").getValueInCUP() + "";
         tfCurrency.setText(balanceViewController.getCurrency().getCurrencyName());
         tfMLCtoCUP.setText(MLC);
         tfUSDtoCUP.setText(USD);
@@ -82,9 +72,9 @@ public class CurrencyValuesViewController {
     private void updateAllCurrencyValues() {
         currencyService.getAllCurrencies().forEach(currency -> {
             switch (currency.getCurrencyName()) {
-                case USD -> currency.setCurrencyPriceInCUP(parseDouble(tfUSDtoCUP));
-                case EUR -> currency.setCurrencyPriceInCUP(parseDouble(tfEURtoCUP));
-                case MLC -> currency.setCurrencyPriceInCUP(parseDouble(tfMLCtoCUP));
+                case USD -> currency.setValueInCUP(parseDouble(tfUSDtoCUP));
+                case EUR -> currency.setValueInCUP(parseDouble(tfEURtoCUP));
+                case MLC -> currency.setValueInCUP(parseDouble(tfMLCtoCUP));
             }
             currencyService.save(currency);
         });

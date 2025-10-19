@@ -13,6 +13,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 
 import java.time.LocalDate;
@@ -20,6 +21,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Controller
 public class LogsViewController {
 
@@ -41,23 +43,6 @@ public class LogsViewController {
     private final ExpenseRegistryServiceImpl expenseRegistryService;
     private final BuyRegistryServiceImpl buyRegistryService;
     private final DisplayAlerts displayAlerts;
-    @FXML
-    private Tab tabBuy;
-
-    public LogsViewController(
-            ExpenseRegistryServiceImpl expenseRegistryService, SellRegistryServiceImpl sellRegistryService,
-            GeneralRegistryServiceImpl generalRegistryService, WarehouseRegistryServiceImpl warehouseRegistryService,
-            UserLogged userLogged, SceneSwitcher sceneSwitcher, BuyRegistryServiceImpl buyRegistryService, DisplayAlerts displayAlerts
-    ) {
-        this.userLogged = userLogged;
-        this.buyRegistryService = buyRegistryService;
-        this.displayAlerts = displayAlerts;
-        this.expenseRegistryService = expenseRegistryService;
-        this.sellRegistryService = sellRegistryService;
-        this.warehouseRegistryService = warehouseRegistryService;
-        this.generalRegistryService = generalRegistryService;
-        this.sceneSwitcher = sceneSwitcher;
-    }
 
     //General Registry Table
     @FXML
@@ -121,7 +106,7 @@ public class LogsViewController {
     @FXML
     private DatePicker dpGeneralFilter, dpExpenseFilter, dpWarehouseFilter, dpSellFilter;
     @FXML
-    private Tab tabGeneral, tabSell, tabInvestment, tabWarehouse;
+    private Tab tabGeneral, tabSell, tabInvestment, tabWarehouse, tabBuy;
     @FXML
     private TabPane tbpRegistry;
 

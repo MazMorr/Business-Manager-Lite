@@ -35,9 +35,9 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     private void initializeCurrencyCache() {
-        currencyRatesCache.put(MLC, currencyRepository.findByCurrencyName(MLC).getCurrencyPriceInCUP());
-        currencyRatesCache.put(USD, currencyRepository.findByCurrencyName(USD).getCurrencyPriceInCUP());
-        currencyRatesCache.put(EUR, currencyRepository.findByCurrencyName(EUR).getCurrencyPriceInCUP());
+        currencyRatesCache.put(MLC, currencyRepository.findByCurrencyName(MLC).getValueInCUP());
+        currencyRatesCache.put(USD, currencyRepository.findByCurrencyName(USD).getValueInCUP());
+        currencyRatesCache.put(EUR, currencyRepository.findByCurrencyName(EUR).getValueInCUP());
         currencyRatesCache.put(CUP, 1.0); // Tasa fija para CUP
     }
 

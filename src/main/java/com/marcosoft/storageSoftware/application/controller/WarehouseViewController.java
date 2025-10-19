@@ -3,6 +3,7 @@ package com.marcosoft.storageSoftware.application.controller;
 import com.marcosoft.storageSoftware.application.dto.ExpenseWarehouseDataTable;
 import com.marcosoft.storageSoftware.application.dto.WarehouseDataTable;
 import com.marcosoft.storageSoftware.domain.model.*;
+import com.marcosoft.storageSoftware.domain.service.CurrencyTransaction;
 import com.marcosoft.storageSoftware.infrastructure.service.impl.*;
 import com.marcosoft.storageSoftware.infrastructure.util.DisplayAlerts;
 import com.marcosoft.storageSoftware.infrastructure.util.SceneSwitcher;
@@ -12,7 +13,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
-import org.springframework.context.annotation.Lazy;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 
 import java.time.LocalDate;
@@ -26,7 +27,7 @@ import java.util.stream.Collectors;
  * Controlador para la gestión de almacenes y asignación de productos/inversiones.
  * Maneja la visualización de almacenes, productos asignados y gastos disponibles.
  */
-@Lazy
+@RequiredArgsConstructor
 @Controller
 public class WarehouseViewController {
     private static final String RAW_MATERIALS_TYPE = "Materias Primas y Materiales";
@@ -41,28 +42,9 @@ public class WarehouseViewController {
     private final DisplayAlerts displayAlerts;
     private final InventoryServiceImpl inventoryService;
     private final GeneralRegistryServiceImpl generalRegistryService;
-    private final ExpenseViewController expenseViewController;
+    private final BuyViewController buyViewController;
     private final BuyServiceImpl buyService;
     private final CurrencyServiceImpl currencyService;
-
-    /**
-     * Constructor con inyección de dependencias.
-     */
-    public WarehouseViewController(
-            DisplayAlerts displayAlerts, WarehouseServiceImpl warehouseService, BuyServiceImpl buyService,
-            UserLogged userLogged, SceneSwitcher sceneSwitcher, InventoryServiceImpl inventoryService,
-            GeneralRegistryServiceImpl generalRegistryService, ExpenseViewController expenseViewController,
-            CurrencyServiceImpl currencyService) {
-        this.inventoryService = inventoryService;
-        this.sceneSwitcher = sceneSwitcher;
-        this.displayAlerts = displayAlerts;
-        this.userLogged = userLogged;
-        this.warehouseService = warehouseService;
-        this.generalRegistryService = generalRegistryService;
-        this.expenseViewController = expenseViewController;
-        this.buyService = buyService;
-        this.currencyService = currencyService;
-    }
 
     // Componentes de UI FXML
     @FXML
@@ -311,52 +293,41 @@ public class WarehouseViewController {
     }
 
     /**
-     * Calcula los precios promedio ponderados de los productos en CUP.
+     * Calcula los precios promedio ponderados de los productos en CUP usando CurrencyServiceImpl.
      */
     private Map<String, Double> calculateWeightedAveragePrices(List<Buy> buys) {
-        Map<String, ProductSummary> productSummaries = new HashMap<>();
+        Map<String, Double> productAvgPrices = new HashMap<>();
 
-        for (Buy buy : buys) {
-            String productName = buy.getBuyName();
-            ProductSummary summary = productSummaries.getOrDefault(productName, new ProductSummary());
+        // Agrupar compras por producto
+        Map<String, List<Buy>> buysByProduct = buys.stream()
+                .collect(Collectors.groupingBy(Buy::getBuyName));
 
-            double priceInCUP = convertToCUP(buy.getBuyUnitaryPrice(), buy.getCurrency().getCurrencyName());
-            summary.addTransaction(priceInCUP, buy.getAmount());
+        // Calcular promedio ponderado para cada producto
+        for (Map.Entry<String, List<Buy>> entry : buysByProduct.entrySet()) {
+            String productName = entry.getKey();
+            List<Buy> productBuys = entry.getValue();
 
-            productSummaries.put(productName, summary);
+            // Convertir las compras a CurrencyTransaction
+            List<CurrencyTransaction> transactions = productBuys.stream()
+                    .map(buy -> new CurrencyTransaction(
+                            buy.getBuyUnitaryPrice(),
+                            buy.getCurrency().getCurrencyName(),
+                            (double) buy.getAmount()
+                    ))
+                    .collect(Collectors.toList());
+
+            // Usar CurrencyServiceImpl para calcular promedio ponderado en CUP
+            Double weightedAverage = currencyService.calculateWeightedAverage(transactions, CUP_CURRENCY);
+            productAvgPrices.put(productName, weightedAverage);
         }
 
-        return productSummaries.entrySet().stream()
-                .filter(entry -> entry.getValue().totalAmount > 0)
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        entry -> entry.getValue().totalValue / entry.getValue().totalAmount));
-    }
-
-    /**
-     * Convierte un monto a CUP basado en la moneda.
-     */
-    private Double convertToCUP(Double amount, String currency) {
-        if (amount == null) return 0.0;
-        if (CUP_CURRENCY.equalsIgnoreCase(currency) || currency == null || currency.trim().isEmpty()) {
-            return amount;
-        }
-
-        try {
-            Currency currencyEntity = currencyService.getCurrencyByName(currency);
-            if (currencyEntity != null && currencyEntity.getCurrencyPriceInCUP() != null) {
-                return amount * currencyEntity.getCurrencyPriceInCUP();
-            }
-            return amount;
-        } catch (Exception e) {
-            return amount;
-        }
+        return productAvgPrices;
     }
 
     // Métodos de navegación y acciones
     @FXML
-    public void productionInProgress(ActionEvent actionEvent) {
-        displayAlerts.showAlert("Aún en desarrollo");
+    public void productionInProgress() throws SceneSwitcher.WindowLoadException {
+        sceneSwitcher.displayWindow("Producción en Proceso", "/images/lc_logo.png", "/views/productionView.fxml");
     }
 
     @FXML
@@ -431,8 +402,8 @@ public class WarehouseViewController {
         if (selectedExpense == null) {
             displayAlerts.showAlert("Debe seleccionar un gasto para revisarlo");
         } else {
-            switchToExpense(actionEvent);
-            expenseViewController.getTfFilterId().setText(String.valueOf(selectedExpense.getExpenseId()));
+            switchToBuy(actionEvent);
+            buyViewController.getTfFilterId().setText(String.valueOf(selectedExpense.getExpenseId()));
         }
     }
 
