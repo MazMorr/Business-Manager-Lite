@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
 
-<AnchorPane prefHeight="230.0" prefWidth="250.0" styleClass="background" stylesheets="@../Styles.css"
+<AnchorPane prefHeight="230.0" prefWidth="250.0" styleClass="background" stylesheets="@../styles/Styles.css"
             xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.marcosoft.storageSoftware.application.controller.EstablishBalanceDateViewController">
     <VBox layoutX="208.0" layoutY="133.0" prefHeight="200.0" prefWidth="400.0" spacing="5.0"

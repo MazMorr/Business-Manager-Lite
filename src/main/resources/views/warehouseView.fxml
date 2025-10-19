@@ -16,7 +16,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="650.0" prefWidth="1024.0" stylesheets="@../Styles.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.WarehouseViewController">
+<AnchorPane prefHeight="650.0" prefWidth="1024.0" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.WarehouseViewController">
     <HBox alignment="CENTER" prefHeight="80.0" prefWidth="800.0" spacing="120.0" styleClass="slogan" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <Label alignment="CENTER" graphicTextGap="14.0" prefHeight="68.0" prefWidth="421.0" styleClass="title" text="Almacenes" textFill="#eeeeee">
             <font>

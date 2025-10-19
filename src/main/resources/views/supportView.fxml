@@ -12,7 +12,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="650.0" prefWidth="1100.0" stylesheets="@../Styles.css" xmlns="http://javafx.com/javafx/24.0.1"
+<AnchorPane prefHeight="650.0" prefWidth="1100.0" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/24.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.marcosoft.storageSoftware.application.controller.SupportViewController">
     <VBox styleClass="index" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="80.0">
@@ -279,7 +279,7 @@
                 <Font name="SansSerif Bold" size="35.0"/>
             </font>
         </Label>
-        <Label fx:id="lblWelcome" alignment="TOP_LEFT" prefWidth="600.0" stylesheets="@../Styles.css"
+        <Label fx:id="lblWelcome" alignment="TOP_LEFT" prefWidth="600.0" stylesheets="@../styles/Styles.css"
                text="text test 1234 JGH" wrapText="true">
             <font>
                 <Font name="SansSerif Regular" size="22.0"/>

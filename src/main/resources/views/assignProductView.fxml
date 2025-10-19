@@ -15,7 +15,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="300.0" prefWidth="300.0" stylesheets="@../Styles.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.AssignProductViewController">
+<AnchorPane prefHeight="300.0" prefWidth="300.0" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.AssignProductViewController">
     <VBox alignment="CENTER" layoutX="88.0" layoutY="87.0" prefHeight="200.0" prefWidth="338.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="10.0">
         <HBox alignment="CENTER_LEFT" spacing="48.0">
             <Label text="ID Compra">

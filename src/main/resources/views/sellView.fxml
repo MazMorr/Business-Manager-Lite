@@ -21,7 +21,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="650.0" prefWidth="1100.0" stylesheets="@../Styles.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.SellViewController">
+<AnchorPane prefHeight="650.0" prefWidth="1100.0" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.SellViewController">
     <AnchorPane prefHeight="130.0" prefWidth="630.0" styleClass="filter-background" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="310.0" AnchorPane.topAnchor="90.0">
         <VBox layoutY="29.0" prefHeight="200.0" prefWidth="290.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <HBox alignment="TOP_RIGHT" prefWidth="200.0">

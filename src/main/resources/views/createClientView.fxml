@@ -21,7 +21,7 @@
 
 <AnchorPane prefHeight="370.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.CreateClientViewController">
     <stylesheets>
-        <URL value="@../Styles.css" />
+        <URL value="@../styles/Styles.css" />
     </stylesheets>
     <HBox alignment="CENTER" layoutX="5.0" prefHeight="64.0" prefWidth="323.0" styleClass="slogan" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <effect>

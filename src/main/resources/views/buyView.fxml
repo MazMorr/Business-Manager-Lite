@@ -21,7 +21,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="650.0" prefWidth="1100.0" stylesheets="@../Styles.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.BuyViewController">
+<AnchorPane prefHeight="650.0" prefWidth="1100.0" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.marcosoft.storageSoftware.application.controller.BuyViewController">
     <HBox alignment="CENTER" layoutX="10.0" layoutY="16.0" prefHeight="80.0" prefWidth="800.0" spacing="120.0" styleClass="slogan" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <Label alignment="CENTER" graphicTextGap="14.0" prefHeight="68.0" prefWidth="421.0" styleClass="title" text="Compras" textFill="#eeeeee">
             <font>
@@ -147,7 +147,7 @@
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
         </padding>
     </TableView>
-    <VBox layoutX="10.0" layoutY="642.0" styleClass="index" stylesheets="@../Styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+    <VBox layoutX="10.0" layoutY="642.0" styleClass="index" stylesheets="@../styles/Styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
         <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToSupport" styleClass="btnIndex" text="Soporte">
             <font>
                 <Font name="System Bold" size="17.0" />
