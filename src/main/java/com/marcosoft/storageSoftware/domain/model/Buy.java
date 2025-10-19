@@ -23,7 +23,8 @@ import java.time.LocalDate;
 public class Buy {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "buy_seq")
+    @SequenceGenerator(name = "buy_seq", sequenceName = "buy_sequence", allocationSize = 1)
     private Long buyId;
 
     @Column(name = "buy_name", nullable = false)
