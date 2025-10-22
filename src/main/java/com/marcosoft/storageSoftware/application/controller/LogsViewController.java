@@ -31,7 +31,6 @@ public class LogsViewController {
     ObservableList<SellRegistryDataTable> sellRegistryDataTables;
     ObservableList<WarehouseRegistryDataTable> warehouseRegistryDataTables;
 
-
     private Client client;
     private DateTimeFormatter formatter;
 
@@ -128,6 +127,7 @@ public class LogsViewController {
     private void establishFilterListener() {
         dpGeneralFilter.valueProperty().addListener((obs, oldVal, newVal) -> loadDataForSelectedTab());
         dpExpenseFilter.valueProperty().addListener((obs, oldVal, newVal) -> loadDataForSelectedTab());
+        dpBuyFilter.valueProperty().addListener((obs, oldVal, newVal) -> loadDataForSelectedTab());
         dpSellFilter.valueProperty().addListener((obs, oldVal, newVal) -> loadDataForSelectedTab());
         dpWarehouseFilter.valueProperty().addListener((obs, oldVal, newVal) -> loadDataForSelectedTab());
     }
@@ -138,14 +138,19 @@ public class LogsViewController {
         if (selectedTab == null) return;
 
         if (selectedTab.equals(tabGeneral)) {
+            initGeneralTableColumns();
             initGeneralRegistryTableValues();
         } else if (selectedTab.equals(tabInvestment)) {
+            initExpenseTableColumns();
             initExpenseRegistryTableValues();
         } else if (selectedTab.equals(tabSell)) {
+            initSellTableColumns();
             initSellRegistryTableValues();
         } else if (selectedTab.equals(tabWarehouse)) {
+            initWarehouseTableColumns();
             initWarehouseRegistryTableValues();
         } else if (selectedTab.equals(tabBuy)) {
+            initBuyTableColumns();
             initBuyRegistryTableValues();
         }
     }
@@ -153,9 +158,16 @@ public class LogsViewController {
     @FXML
     private void cleanDatePickers() {
         dpExpenseFilter.setValue(null);
+        dpBuyFilter.setValue(null);
         dpSellFilter.setValue(null);
         dpWarehouseFilter.setValue(null);
         dpGeneralFilter.setValue(null);
+    }
+
+    private void initGeneralTableColumns(){
+        tcGeneralRegistryZone.setCellValueFactory(new PropertyValueFactory<>("affectedZone"));
+        tcGeneralRegistryType.setCellValueFactory(new PropertyValueFactory<>("registryType"));
+        tcGeneralRegistryDateTime.setCellValueFactory(new PropertyValueFactory<>("registryDateTime"));
     }
 
     private void initGeneralRegistryTableValues() {
@@ -184,10 +196,6 @@ public class LogsViewController {
             }
         }
 
-        tcGeneralRegistryZone.setCellValueFactory(new PropertyValueFactory<>("affectedZone"));
-        tcGeneralRegistryType.setCellValueFactory(new PropertyValueFactory<>("registryType"));
-        tcGeneralRegistryDateTime.setCellValueFactory(new PropertyValueFactory<>("registryDateTime"));
-
         // Formatear LocalDateTime
         tcGeneralRegistryDateTime.setCellFactory(column -> new TableCell<>() {
             @Override
@@ -202,6 +210,17 @@ public class LogsViewController {
         });
 
         tvGeneralRegistry.setItems(generalRegistryDataTables);
+    }
+
+    private void initBuyTableColumns(){
+        tcBuyRegistryType.setCellValueFactory(new PropertyValueFactory<>("registryType"));
+        tcBuyRegistryDateTime.setCellValueFactory(new PropertyValueFactory<>("registryDate"));
+        tcIdBuy.setCellValueFactory(new PropertyValueFactory<>("id"));
+        tcBuyName.setCellValueFactory(new PropertyValueFactory<>("buyName"));
+        tcBuyUnitaryPrice.setCellValueFactory(new PropertyValueFactory<>("unitaryPriceAndCurrency"));
+        tcBuyTotalPrice.setCellValueFactory(new PropertyValueFactory<>("totalPriceAndCurrency"));
+        tcBuyAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
+
     }
 
     private void initBuyRegistryTableValues() {
@@ -240,14 +259,6 @@ public class LogsViewController {
             }
         }
 
-        tcBuyRegistryType.setCellValueFactory(new PropertyValueFactory<>("registryType"));
-        tcBuyRegistryDateTime.setCellValueFactory(new PropertyValueFactory<>("registryDate"));
-        tcIdBuy.setCellValueFactory(new PropertyValueFactory<>("id"));
-        tcBuyName.setCellValueFactory(new PropertyValueFactory<>("buyName"));
-        tcBuyUnitaryPrice.setCellValueFactory(new PropertyValueFactory<>("unitaryPriceAndCurrency"));
-        tcBuyTotalPrice.setCellValueFactory(new PropertyValueFactory<>("totalPriceAndCurrency"));
-        tcBuyAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
-
         // Formatear LocalDateTime
         tcBuyRegistryDateTime.setCellFactory(column -> new TableCell<>() {
             @Override
@@ -262,6 +273,14 @@ public class LogsViewController {
         });
 
         tvBuy.setItems(buyRegistryDataTables);
+    }
+
+    private void initWarehouseTableColumns(){
+        tcWarehouseRegistryType.setCellValueFactory(new PropertyValueFactory<>("registryType"));
+        tcWarehouseDateTime.setCellValueFactory(new PropertyValueFactory<>("registryDateTime"));
+        tcWarehouseName.setCellValueFactory(new PropertyValueFactory<>("warehouseName"));
+        tcWarehouseProduct.setCellValueFactory(new PropertyValueFactory<>("productName"));
+        tcWarehouseAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
     }
 
     private void initWarehouseRegistryTableValues() {
@@ -296,12 +315,6 @@ public class LogsViewController {
             }
         }
 
-        tcWarehouseRegistryType.setCellValueFactory(new PropertyValueFactory<>("registryType"));
-        tcWarehouseDateTime.setCellValueFactory(new PropertyValueFactory<>("registryDateTime"));
-        tcWarehouseName.setCellValueFactory(new PropertyValueFactory<>("warehouseName"));
-        tcWarehouseProduct.setCellValueFactory(new PropertyValueFactory<>("productName"));
-        tcWarehouseAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
-
         // Formatear LocalDateTime
         tcWarehouseDateTime.setCellFactory(column -> new TableCell<>() {
             @Override
@@ -316,6 +329,16 @@ public class LogsViewController {
         });
 
         tvWarehouse.setItems(warehouseRegistryDataTables);
+    }
+
+    private void initSellTableColumns(){
+        tcSellRegistryType.setCellValueFactory(new PropertyValueFactory<>("registryType"));
+        tcSellRegistryDateTime.setCellValueFactory(new PropertyValueFactory<>("registryDate"));
+        tcSellProductName.setCellValueFactory(new PropertyValueFactory<>("productName"));
+        tcSellPriceCurrency.setCellValueFactory(new PropertyValueFactory<>("sellPriceAndCurrency"));
+        tcSellDate.setCellValueFactory(new PropertyValueFactory<>("sellDate"));
+        tcSellWarehouse.setCellValueFactory(new PropertyValueFactory<>("warehouseName"));
+        tcSellAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
     }
 
     private void initSellRegistryTableValues() {
@@ -354,14 +377,6 @@ public class LogsViewController {
             }
         }
 
-        tcSellRegistryType.setCellValueFactory(new PropertyValueFactory<>("registryType"));
-        tcSellRegistryDateTime.setCellValueFactory(new PropertyValueFactory<>("registryDate"));
-        tcSellProductName.setCellValueFactory(new PropertyValueFactory<>("productName"));
-        tcSellPriceCurrency.setCellValueFactory(new PropertyValueFactory<>("sellPriceAndCurrency"));
-        tcSellDate.setCellValueFactory(new PropertyValueFactory<>("sellDate"));
-        tcSellWarehouse.setCellValueFactory(new PropertyValueFactory<>("warehouseName"));
-        tcSellAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
-
         // Formatear LocalDateTime
         tcSellRegistryDateTime.setCellFactory(column -> new TableCell<>() {
             @Override
@@ -376,6 +391,14 @@ public class LogsViewController {
         });
 
         tvSell.setItems(sellRegistryDataTables);
+    }
+
+    private void initExpenseTableColumns(){
+        tcExpenseRegistryType.setCellValueFactory(new PropertyValueFactory<>("registryType"));
+        tcExpenseRegistryDateTime.setCellValueFactory(new PropertyValueFactory<>("registryDate"));
+        tcIdExpense.setCellValueFactory(new PropertyValueFactory<>("expenseId"));
+        tcExpenseName.setCellValueFactory(new PropertyValueFactory<>("expenseName"));
+        tcExpensePriceCurrency.setCellValueFactory(new PropertyValueFactory<>("buyPriceAndCurrency"));
     }
 
     private void initExpenseRegistryTableValues() {
@@ -416,12 +439,6 @@ public class LogsViewController {
                 }
 
             }
-
-            tcExpenseRegistryType.setCellValueFactory(new PropertyValueFactory<>("registryType"));
-            tcExpenseRegistryDateTime.setCellValueFactory(new PropertyValueFactory<>("registryDate"));
-            tcIdExpense.setCellValueFactory(new PropertyValueFactory<>("expenseId"));
-            tcExpenseName.setCellValueFactory(new PropertyValueFactory<>("expenseName"));
-            tcExpensePriceCurrency.setCellValueFactory(new PropertyValueFactory<>("buyPriceAndCurrency"));
 
             // Formatear LocalDateTime
             tcExpenseRegistryDateTime.setCellFactory(column -> new TableCell<>() {
