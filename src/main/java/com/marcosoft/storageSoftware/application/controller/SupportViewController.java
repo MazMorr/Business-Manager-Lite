@@ -69,10 +69,10 @@ public class SupportViewController {
             if (!currencyService.existsByCurrencyName(currencyName)) {
                 Currency currency = new Currency(null, currencyName, 0.0);
                 switch (currencyName) {
-                    case "MLC" -> currency = new Currency(null, currencyName, 195.00);
+                    case "MLC" -> currency = new Currency(null, currencyName, 200.00);
                     case "CUP" -> currency = new Currency(null, currencyName, 1.00);
-                    case "USD" -> currency = new Currency(null, currencyName, 410.00);
-                    case "EUR" -> currency = new Currency(null, currencyName, 460.00);
+                    case "USD" -> currency = new Currency(null, currencyName, 480.00);
+                    case "EUR" -> currency = new Currency(null, currencyName, 540.00);
                 }
                 currencyService.save(currency);
             }
@@ -90,7 +90,7 @@ public class SupportViewController {
         }
         lblLicenseDays.setText(daysRemaining + " Días");
         versionLabel.setText(env.getProperty("app.version"));
-        lblWelcomeTitle.setText("Bienvenid@, " + userLogged.getName());
+        lblWelcomeTitle.setText("Bienvenida/o, " + userLogged.getName());
         lblWelcome.setText(
                 """
                         Este sistema ha sido diseñado para brindarle un control eficiente y seguro sobre los recursos de su negocio. \
