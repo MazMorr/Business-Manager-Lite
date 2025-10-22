@@ -147,7 +147,7 @@
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
         </padding>
     </TableView>
-    <VBox layoutX="10.0" layoutY="642.0" styleClass="index" stylesheets="@../styles/Styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+    <VBox layoutX="10.0" layoutY="642.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
         <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToSupport" styleClass="btnIndex" text="Soporte">
             <font>
                 <Font name="System Bold" size="17.0" />
@@ -317,7 +317,7 @@
         </graphic>
     </Label>
     <AnchorPane layoutX="700.0" layoutY="348.0" prefHeight="200.0" prefWidth="300.0" styleClass="rightIndex" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="80.0">
-        <TabPane layoutX="-83.0" layoutY="-192.0" maxHeight="570.0" prefHeight="570.0" prefWidth="300.0" styleClass="crudOperations" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="10.0">
+        <TabPane layoutX="-83.0" layoutY="-192.0" maxHeight="570.0" prefHeight="570.0" prefWidth="300.0" styleClass="crudOperations" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
             <Tab text="Agregar o Corregir">
                 <tooltip>
                     <Tooltip text="MIra papo esto es para comprar" />
@@ -444,7 +444,7 @@
                                 <Insets top="5.0" />
                             </VBox.margin>
                         </Button>
-                        <Label fx:id="lblAddDebugForm" alignment="TOP_LEFT" prefHeight="118.0" prefWidth="260.0" text="Puede corregir las compras existentes si el ID coincide, para ello debe pinchar el elemento en la tabla, cambiar los valores que desee y presionar el botón" textAlignment="CENTER" wrapText="true">
+                        <Label fx:id="lblAddDebugForm" alignment="TOP_LEFT" prefHeight="118.0" prefWidth="260.0" text="Puede corregir las Compras existentes si el ID coincide, para ello debe pinchar el elemento en la tabla, cambiar los valores que desee y presionar el botón superior" textAlignment="CENTER" wrapText="true">
                             <padding>
                                 <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                             </padding>
@@ -455,8 +455,11 @@
                                 <Font name="System Bold" size="13.0" />
                             </font>
                         </Label>
+                  <padding>
+                     <Insets left="5.0" right="5.0" />
+                  </padding>
                     </VBox>
-                    <Button layoutX="62.0" layoutY="457.0" mnemonicParsing="false" onAction="#cleanForm" prefHeight="30.0" prefWidth="275.0" styleClass="btnStock" text="Vaciar Campos" AnchorPane.bottomAnchor="48.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                    <Button layoutX="62.0" layoutY="457.0" mnemonicParsing="false" onAction="#cleanForm" prefHeight="30.0" prefWidth="275.0" styleClass="btnStock" text="Vaciar Campos" AnchorPane.bottomAnchor="53.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
                         <graphic>
                             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                 <effect>
@@ -470,7 +473,7 @@
                             </ImageView>
                         </graphic>
                     </Button>
-                    <Button layoutX="42.0" layoutY="483.0" mnemonicParsing="false" onAction="#removeBuy" prefHeight="30.0" prefWidth="281.0" style="-fx-background-color: linear-gradient(to bottom, #eb5050, #ec3030);" styleClass="btnDelete" text="Eliminar Gasto" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                    <Button layoutX="42.0" layoutY="483.0" mnemonicParsing="false" onAction="#removeBuy" prefHeight="30.0" prefWidth="281.0" style="-fx-background-color: linear-gradient(to bottom, #eb5050, #ec3030);" styleClass="btnDelete" text="Eliminar Gasto" AnchorPane.bottomAnchor="11.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
                         <graphic>
                             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                 <effect>

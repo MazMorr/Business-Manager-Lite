@@ -108,7 +108,8 @@ Negro:               #0f172a
   -fx-pref-height: 55;
   -fx-font-size: 16;
   -fx-font-weigh: 1200;
-  -fx-background-color: linear-gradient(to bottom, #60a5fa, #2563eb);
+  -fx-background-color: transparent;
+  // -fx-background-color: linear-gradient(to bottom, #60a5fa, #2563eb);
   -fx-text-fill: #fff;
 }
 
@@ -161,10 +162,7 @@ Negro:               #0f172a
 /* TABLAS                    */
 /* ========================= */
 .table {
-  -fx-border-color: #2563eb;
   -fx-background-radius: 10;
-  -fx-border-radius: 10;
-  -fx-border-width: 1;
 }
 
 .table-view,
@@ -241,13 +239,20 @@ tree-table-view .filler {
 /* SECCIONES ADICIONALES     */
 /* ========================= */
 .slogan {
-  -fx-background-color: linear-gradient(to right, #2563eb, #60a5fa);
+  -fx-background-color: linear-gradient(to right,  #2563eb 20%, #60a5fa);
   -fx-text-fill: #fff;
+  -fx-border-width: 0 0 0.5 0;
+  -fx-border-color: #383a3d;
 }
 
-.index,
+
 .rightIndex {
   -fx-background-color: #e0e7ef;
+}
+
+.index{
+  -fx-background-color: linear-gradient(to bottom, #2563eb, #60a5fa);
+
 }
 
 .rightIndex .label {
@@ -259,11 +264,7 @@ tree-table-view .filler {
 .crudOperations {
   -fx-background-color: #f3f4f6;
   -fx-font-size: 13;
-  -fx-border-color: #2563eb;
-  -fx-border-width: 2;
-  -fx-border-radius: 10;
   -fx-background-radius: 10;
-  -fx-padding: 10;
   -fx-font-family: "Segoe UI", sans-serif;
   -fx-font-weight: 800;
 }
@@ -286,11 +287,8 @@ tree-table-view .filler {
 }
 
 .alerts {
-  -fx-background-color: #f3f4f6;
+  -fx-background-color: #fff;
   -fx-font-size: 13;
-  -fx-border-color: #2563eb;
-  -fx-border-width: 2;
-  -fx-border-radius: 10;
   -fx-background-radius: 10;
   -fx-font-family: "Segoe UI", sans-serif;
   -fx-font-weight: 800;
@@ -301,11 +299,8 @@ tree-table-view .filler {
 /* ========================= */
 .tab-pane {
   -fx-background-color: #f3f4f6;
-  -fx-border-color: #2563eb;
-  -fx-border-width: 2;
   -fx-background-radius: 10;
   -fx-border-radius: 10;
-  -fx-padding: 8;
 }
 
 .tab-pane .tab-header-area {

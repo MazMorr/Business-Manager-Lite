@@ -45,7 +45,7 @@
             </graphic>
         </Label>
     </HBox>
-    <VBox layoutX="-9.0" layoutY="88.0" styleClass="index" AnchorPane.bottomAnchor="55.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="80.0">
+    <VBox layoutX="-9.0" layoutY="88.0" styleClass="index" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="80.0">
         <Button alignment="CENTER_LEFT" disable="true" ellipsisString="" graphicTextGap="5.0" mnemonicParsing="false" styleClass="btnIndex" text="Gastos">
             <font>
                 <Font name="System Bold" size="17.0" />
@@ -151,7 +151,7 @@
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
         </padding>
     </TableView>
-    <VBox layoutY="632.0" styleClass="index" stylesheets="@../styles/Styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+    <VBox layoutY="632.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
         <Button alignment="CENTER_LEFT" graphicTextGap="5.0" mnemonicParsing="false" onAction="#switchToSupport" styleClass="btnIndex" text="Soporte">
             <font>
                 <Font name="System Bold" size="17.0" />
@@ -164,11 +164,11 @@
                     <effect>
                         <InnerShadow choke="1.0" height="255.0" radius="127.0" width="255.0">
                             <color>
-                                <Color red="1.0" green="1.0" blue="1.0"/>
+                                <Color red="1.0" green="1.0" blue="1.0" />
                             </color>
                         </InnerShadow>
                     </effect>
-                    <Image url="@../images/support.png"/>
+                    <Image url="@../images/support.png" />
                 </ImageView>
             </graphic>
         </Button>
@@ -187,11 +187,11 @@
                     <effect>
                         <InnerShadow choke="1.0">
                             <color>
-                                <Color red="1.0" green="1.0" blue="1.0"/>
+                                <Color red="1.0" green="1.0" blue="1.0" />
                             </color>
                         </InnerShadow>
                     </effect>
-                    <Image url="@../images/lista-de-la-compra.png"/>
+                    <Image url="@../images/lista-de-la-compra.png" />
                 </ImageView>
             </graphic>
             <padding>
@@ -329,7 +329,7 @@
         </graphic>
     </Label>
     <AnchorPane layoutX="690.0" layoutY="338.0" prefHeight="200.0" prefWidth="300.0" styleClass="rightIndex" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="80.0">
-        <TabPane layoutX="-83.0" layoutY="-192.0" maxHeight="570.0" prefHeight="570.0" prefWidth="300.0" styleClass="crudOperations" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="10.0">
+        <TabPane layoutX="-83.0" layoutY="-192.0" maxHeight="570.0" prefHeight="570.0" prefWidth="300.0" styleClass="crudOperations" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
             <Tab text="Agregar o Corregir">
                 <tooltip>
                     <Tooltip text="MIra papo esto es para comprar" />
@@ -440,7 +440,7 @@
                                 <Insets top="5.0" />
                             </VBox.margin>
                         </Button>
-                        <Label fx:id="lblAddDebugForm" alignment="TOP_LEFT" prefHeight="118.0" prefWidth="260.0" text="Puede corregir los gastos existentes si el ID coincide, para ello debe pinchar el elemento en la tabla, cambiar los valores que desee y presionar el botón" textAlignment="CENTER" wrapText="true">
+                        <Label fx:id="lblAddDebugForm" alignment="TOP_LEFT" prefHeight="118.0" prefWidth="260.0" text="Puede corregir los Gastos existentes si el ID coincide, para ello debe pinchar el elemento en la tabla, cambiar los valores que desee y presionar el botón superior" textAlignment="CENTER" wrapText="true">
                             <padding>
                                 <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                             </padding>
@@ -490,6 +490,9 @@
                             </Tooltip>
                         </tooltip>
                     </Button>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" />
+               </padding>
                 </AnchorPane>
             </Tab>
         </TabPane>

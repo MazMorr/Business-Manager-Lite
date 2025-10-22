@@ -116,7 +116,7 @@
                     </Label>
                     <DatePicker fx:id="dpBuyFilter" prefWidth="180.0" />
                 </HBox>
-                <Button layoutX="836.0" layoutY="18.0" mnemonicParsing="false" style="-fx-background-color: transparent;" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="13.0">
+                <Button layoutX="836.0" layoutY="18.0" mnemonicParsing="false" onAction="#cleanDatePickers" style="-fx-background-color: transparent;" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="13.0">
                     <graphic>
                         <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                             <Image url="@../images/filter.png" />
