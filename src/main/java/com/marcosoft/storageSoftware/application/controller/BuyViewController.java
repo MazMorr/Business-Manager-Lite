@@ -81,11 +81,11 @@ public class BuyViewController {
 
         initializeTableColumns();
         initializeTableValues();
+        setupTextFieldListeners();
 
         Platform.runLater(() -> {
             initCurrencyMenus();
             cleanForm();
-            setupTextFieldListeners();
             setupTableSelectionListener();
         });
     }
@@ -496,4 +496,5 @@ public class BuyViewController {
     public void switchToWarehouse(ActionEvent actionEvent) {
         sceneSwitcher.switchToWarehouse(actionEvent);
     }
+
 }
