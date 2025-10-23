@@ -249,10 +249,73 @@
                         </Label>
                     </VBox>
                 </HBox>
-                <HBox prefHeight="100.0" prefWidth="200.0" />
-                <HBox prefHeight="100.0" prefWidth="200.0" />
-                <HBox prefHeight="100.0" prefWidth="200.0" />
-            <HBox prefHeight="100.0" prefWidth="200.0" />
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+               <padding>
+                  <Insets left="2.0" right="2.0" />
+               </padding>
+            </HBox>
+            <HBox prefHeight="90.0" prefWidth="200.0" style="-fx-border-color: gray; -fx-border-radius: 10px 10px 0px 0px; -fx-border-width: 2px 2px 1px 2px;">
+               <children>
+                  <Label text="Costos" textFill="#ffb200">
+                     <font>
+                        <Font name="System Bold" size="35.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="2.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-border-color: gray; -fx-border-width: 1px 2px 1px 2px;">
+               <padding>
+                  <Insets left="2.0" right="2.0" />
+               </padding>
+               <children>
+                  <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="950.0">
+                     <children>
+                        <Label text="Materias Primas y Materiales">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="830.0">
+                     <children>
+                        <Label fx:id="lblProfitRawMaterialsAndSupplies1" text="0.00 CUP">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-border-color: gray; -fx-border-radius: 0px 0px 10px 10px; -fx-border-width: 1px 2px 2px 2px;">
+               <padding>
+                  <Insets left="2.0" right="2.0" />
+               </padding>
+               <children>
+                  <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="950.0">
+                     <children>
+                        <Label text="Costo Total">
+                           <font>
+                              <Font name="System Bold" size="22.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="1000.0">
+                     <children>
+                        <Label fx:id="lblTotalProfit1" text="0.00 CUP">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
             </VBox>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="3000.0">
                 <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-border-color: gray; -fx-border-radius: 10px 10px 0px 0px; -fx-border-width: 2px 2px 1px 2px;">
