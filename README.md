@@ -1,4 +1,4 @@
-# BusinessManager (Storage Software)
+# Business Manager Lite
 
 Software de gestión de inventarios para pequeñas y medianas empresas (ferreterías, cafeterías, etc.), desarrollado con Spring Boot y JavaFX.
 
